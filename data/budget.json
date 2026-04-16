@@ -1,0 +1,27 @@
+{
+  "last_updated": "2026-04-16",
+  "monthly_income": {
+    "benefits_total": "REPLACE_WITH_AMOUNT",
+    "business_income": "REPLACE_WITH_AMOUNT",
+    "other": "REPLACE_WITH_AMOUNT"
+  },
+  "categories": [
+    { "name": "Housing (rent/mortgage)", "monthly_budget": "REPLACE_WITH_AMOUNT", "colour": "green" },
+    { "name": "Council Tax", "monthly_budget": "REPLACE_WITH_AMOUNT", "colour": "green" },
+    { "name": "Gas & Electric", "monthly_budget": "REPLACE_WITH_AMOUNT", "colour": "green" },
+    { "name": "Water", "monthly_budget": "REPLACE_WITH_AMOUNT", "colour": "green" },
+    { "name": "Internet & Phone", "monthly_budget": "REPLACE_WITH_AMOUNT", "colour": "green" },
+    { "name": "Food & Groceries", "monthly_budget": "REPLACE_WITH_AMOUNT", "colour": "amber" },
+    { "name": "Transport", "monthly_budget": "REPLACE_WITH_AMOUNT", "colour": "amber" },
+    { "name": "Children", "monthly_budget": "REPLACE_WITH_AMOUNT", "colour": "amber" },
+    { "name": "Subscriptions", "monthly_budget": "REPLACE_WITH_AMOUNT", "colour": "amber" },
+    { "name": "Studio / Business", "monthly_budget": "REPLACE_WITH_AMOUNT", "colour": "amber" },
+    { "name": "Investing (ISA / JISA)", "monthly_budget": "REPLACE_WITH_AMOUNT", "colour": "green" },
+    { "name": "Sinking Funds", "monthly_budget": "REPLACE_WITH_AMOUNT", "colour": "green" },
+    { "name": "Personal / Discretionary", "monthly_budget": "REPLACE_WITH_AMOUNT", "colour": "red" }
+  ],
+  "variance_thresholds": {
+    "amber_pct": 10,
+    "red_pct": 20
+  }
+}

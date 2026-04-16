@@ -1,0 +1,54 @@
+{
+  "last_updated": "2026-04-16",
+  "pots": [
+    {
+      "name": "Christmas",
+      "target": "REPLACE_WITH_AMOUNT e.g. 800",
+      "current_balance": "REPLACE_WITH_AMOUNT",
+      "deadline": "2026-12-01",
+      "monthly_contribution": "REPLACE_WITH_AMOUNT",
+      "bank_account": "REPLACE_WITH_POT_NAME e.g. Monzo Pot"
+    },
+    {
+      "name": "Birthdays",
+      "target": "REPLACE_WITH_AMOUNT e.g. 500",
+      "current_balance": "REPLACE_WITH_AMOUNT",
+      "deadline": "rolling",
+      "monthly_contribution": "REPLACE_WITH_AMOUNT",
+      "bank_account": "REPLACE_WITH_POT_NAME",
+      "notes": "Andre — REPLACE_DATE, Ameera — REPLACE_DATE"
+    },
+    {
+      "name": "School Uniforms",
+      "target": "REPLACE_WITH_AMOUNT e.g. 300",
+      "current_balance": "REPLACE_WITH_AMOUNT",
+      "deadline": "2026-08-01",
+      "monthly_contribution": "REPLACE_WITH_AMOUNT",
+      "bank_account": "REPLACE_WITH_POT_NAME"
+    },
+    {
+      "name": "School Trips",
+      "target": "REPLACE_WITH_AMOUNT e.g. 400",
+      "current_balance": "REPLACE_WITH_AMOUNT",
+      "deadline": "rolling",
+      "monthly_contribution": "REPLACE_WITH_AMOUNT",
+      "bank_account": "REPLACE_WITH_POT_NAME"
+    },
+    {
+      "name": "Car Maintenance",
+      "target": "REPLACE_WITH_AMOUNT e.g. 600",
+      "current_balance": "REPLACE_WITH_AMOUNT",
+      "deadline": "rolling",
+      "monthly_contribution": "REPLACE_WITH_AMOUNT",
+      "bank_account": "REPLACE_WITH_POT_NAME"
+    },
+    {
+      "name": "Holiday",
+      "target": "REPLACE_WITH_AMOUNT e.g. 1500",
+      "current_balance": "REPLACE_WITH_AMOUNT",
+      "deadline": "REPLACE_WITH_DATE",
+      "monthly_contribution": "REPLACE_WITH_AMOUNT",
+      "bank_account": "REPLACE_WITH_POT_NAME"
+    }
+  ]
+}

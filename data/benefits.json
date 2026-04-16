@@ -1,0 +1,60 @@
+{
+  "last_updated": "2026-04-16",
+  "benefits": [
+    {
+      "name": "PIP",
+      "full_name": "Personal Independence Payment",
+      "component": "Daily Living + Mobility",
+      "rate": "REPLACE_WITH_YOUR_AMOUNT",
+      "frequency": "4-weekly",
+      "next_payment_date": "REPLACE_WITH_DATE e.g. 2026-04-28",
+      "payment_day": "REPLACE_WITH_DAY e.g. Monday",
+      "bank_account": "REPLACE_WITH_BANK",
+      "notes": ""
+    },
+    {
+      "name": "UC",
+      "full_name": "Universal Credit",
+      "rate": "REPLACE_WITH_YOUR_AMOUNT",
+      "frequency": "monthly",
+      "next_payment_date": "REPLACE_WITH_DATE e.g. 2026-04-22",
+      "assessment_period_end": "REPLACE_WITH_DAY e.g. 15th of each month",
+      "bank_account": "REPLACE_WITH_BANK",
+      "notes": "Includes housing element, child element, etc."
+    },
+    {
+      "name": "DLA",
+      "full_name": "Disability Living Allowance",
+      "component": "REPLACE_WITH_COMPONENT e.g. Care + Mobility",
+      "rate": "REPLACE_WITH_YOUR_AMOUNT",
+      "frequency": "4-weekly",
+      "next_payment_date": "REPLACE_WITH_DATE",
+      "bank_account": "REPLACE_WITH_BANK",
+      "recipient": "REPLACE_WITH_NAME e.g. Andre or Ameera",
+      "notes": ""
+    },
+    {
+      "name": "Child Benefit",
+      "full_name": "Child Benefit",
+      "rate": "REPLACE_WITH_YOUR_AMOUNT",
+      "frequency": "4-weekly",
+      "next_payment_date": "REPLACE_WITH_DATE",
+      "bank_account": "REPLACE_WITH_BANK",
+      "children": ["Andre", "Ameera"],
+      "notes": ""
+    },
+    {
+      "name": "CA",
+      "full_name": "Carer's Allowance",
+      "rate": "REPLACE_WITH_YOUR_AMOUNT",
+      "frequency": "weekly",
+      "next_payment_date": "REPLACE_WITH_DATE",
+      "bank_account": "REPLACE_WITH_BANK",
+      "notes": ""
+    }
+  ],
+  "alerts": {
+    "warn_if_late_days": 3,
+    "flag_amount_variance_pct": 5
+  }
+}

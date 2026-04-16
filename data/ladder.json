@@ -1,0 +1,97 @@
+{
+  "last_updated": "2026-04-16",
+  "monthly_surplus": "REPLACE_WITH_AMOUNT e.g. 350",
+  "current_level": "REPLACE_WITH_LEVEL_NUMBER e.g. 2",
+  "levels": [
+    {
+      "level": 1,
+      "name": "Zero Debt (excl. mortgage)",
+      "description": "All consumer debt cleared — credit cards, loans, BNPL",
+      "target_amount": 0,
+      "current_amount": "REPLACE_WITH_AMOUNT",
+      "status": "REPLACE_WITH: complete / in_progress / pending",
+      "completed_date": null
+    },
+    {
+      "level": 2,
+      "name": "Emergency Fund — 1 Month",
+      "description": "One month of essential expenses in cash savings",
+      "target_amount": "REPLACE_WITH_AMOUNT e.g. 2000",
+      "current_amount": "REPLACE_WITH_AMOUNT",
+      "status": "REPLACE_WITH: complete / in_progress / pending",
+      "completed_date": null
+    },
+    {
+      "level": 3,
+      "name": "Emergency Fund — 3 Months",
+      "description": "Three months of essential expenses in cash savings",
+      "target_amount": "REPLACE_WITH_AMOUNT e.g. 6000",
+      "current_amount": "REPLACE_WITH_AMOUNT",
+      "status": "REPLACE_WITH: complete / in_progress / pending",
+      "completed_date": null
+    },
+    {
+      "level": 4,
+      "name": "Emergency Fund — 6 Months",
+      "description": "Six months of essential expenses in cash savings",
+      "target_amount": "REPLACE_WITH_AMOUNT e.g. 12000",
+      "current_amount": "REPLACE_WITH_AMOUNT",
+      "status": "REPLACE_WITH: complete / in_progress / pending",
+      "completed_date": null
+    },
+    {
+      "level": 5,
+      "name": "First ISA Year — Full Allowance",
+      "description": "First £20,000 in Stocks & Shares ISA",
+      "target_amount": 20000,
+      "current_amount": "REPLACE_WITH_AMOUNT",
+      "status": "REPLACE_WITH: complete / in_progress / pending",
+      "completed_date": null
+    },
+    {
+      "level": 6,
+      "name": "£50,000 Invested",
+      "description": "£50k milestone across ISA + GIA",
+      "target_amount": 50000,
+      "current_amount": "REPLACE_WITH_AMOUNT",
+      "status": "REPLACE_WITH: complete / in_progress / pending",
+      "completed_date": null
+    },
+    {
+      "level": 7,
+      "name": "£100,000 Invested",
+      "description": "Six-figure investment portfolio",
+      "target_amount": 100000,
+      "current_amount": "REPLACE_WITH_AMOUNT",
+      "status": "REPLACE_WITH: complete / in_progress / pending",
+      "completed_date": null
+    },
+    {
+      "level": 8,
+      "name": "£250,000 Invested",
+      "description": "Quarter million milestone",
+      "target_amount": 250000,
+      "current_amount": "REPLACE_WITH_AMOUNT",
+      "status": "REPLACE_WITH: complete / in_progress / pending",
+      "completed_date": null
+    },
+    {
+      "level": 9,
+      "name": "£500,000 Invested",
+      "description": "Half million — partial financial independence",
+      "target_amount": 500000,
+      "current_amount": "REPLACE_WITH_AMOUNT",
+      "status": "REPLACE_WITH: complete / in_progress / pending",
+      "completed_date": null
+    },
+    {
+      "level": 10,
+      "name": "£1,000,000 Invested",
+      "description": "Full financial independence target",
+      "target_amount": 1000000,
+      "current_amount": "REPLACE_WITH_AMOUNT",
+      "status": "REPLACE_WITH: complete / in_progress / pending",
+      "completed_date": null
+    }
+  ]
+}
