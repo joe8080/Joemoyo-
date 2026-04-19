@@ -1,0 +1,3 @@
+# Runtime: zero Python dependencies. Only `ffmpeg` + `ffprobe` on PATH.
+# Dev:
+pytest>=7
