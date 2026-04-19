@@ -1,0 +1,8 @@
+{
+  "clips": [
+    {"image": "01_rome.jpg",    "duration": 9.0, "pan": "left-to-right",  "caption": "Rome, 49 BC"},
+    {"image": "02_rubicon.jpg", "duration": 8.0, "pan": "zoom-in",        "caption": "Crossing the Rubicon"},
+    {"image": "03_senate.jpg",  "duration": 8.5, "pan": "top-to-bottom",  "caption": "The Senate convenes"},
+    {"image": "04_caesar.jpg",  "duration": 10.0, "pan": "zoom-in",       "caption": "Alea iacta est"}
+  ]
+}
