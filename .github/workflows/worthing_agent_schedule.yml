@@ -1,0 +1,50 @@
+name: Worthing Agent Scheduled Run
+
+on:
+  schedule:
+    - cron: '0 7 * * 1'   # Every Monday 07:00 UTC — weekly snapshot
+    - cron: '0 6 1 * *'   # 1st of every month 06:00 UTC — monthly content brief
+  workflow_dispatch:        # Manual trigger from the GitHub UI
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run weekly snapshot
+        if: github.event.schedule == '0 7 * * 1' || github.event_name == 'workflow_dispatch'
+        env:
+          WORTHING_SUPABASE_URL: ${{ secrets.WORTHING_SUPABASE_URL }}
+          WORTHING_SUPABASE_KEY: ${{ secrets.WORTHING_SUPABASE_KEY }}
+          DEBUG: 'false'
+        run: |
+          python -c "
+          from worthing_local_agent_class import WorthingLocalAgent
+          import json
+          agent = WorthingLocalAgent()
+          print(json.dumps(agent.snapshot(), indent=2, default=str))
+          "
+
+      - name: Run monthly content brief
+        if: github.event.schedule == '0 6 1 * *'
+        env:
+          WORTHING_SUPABASE_URL: ${{ secrets.WORTHING_SUPABASE_URL }}
+          WORTHING_SUPABASE_KEY: ${{ secrets.WORTHING_SUPABASE_KEY }}
+          DEBUG: 'false'
+        run: |
+          python -c "
+          from content_pipeline_brief import content_pipeline_brief
+          import json
+          print(json.dumps(content_pipeline_brief(topic='all'), indent=2, default=str))
+          "
