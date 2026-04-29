@@ -11,6 +11,8 @@ class Settings:
     brave_api_key: str
     shopify_shop_name: str
     shopify_access_token: str
+    worthing_supabase_url: str
+    worthing_supabase_key: str
     output_dir: str
 
     # Brand names
@@ -36,6 +38,8 @@ def get_settings() -> Settings:
         brave_api_key=os.environ.get("BRAVE_SEARCH_API_KEY", ""),
         shopify_shop_name=os.environ.get("SHOPIFY_SHOP_NAME", ""),
         shopify_access_token=os.environ.get("SHOPIFY_ACCESS_TOKEN", ""),
+        worthing_supabase_url=os.environ.get("WORTHING_SUPABASE_URL", ""),
+        worthing_supabase_key=os.environ.get("WORTHING_SUPABASE_KEY", ""),
         output_dir=os.environ.get("OUTPUT_DIR", "./outputs"),
         history_channel=os.environ.get("YOUTUBE_HISTORY_CHANNEL_NAME", "Chronicles of Time"),
         finance_channel=os.environ.get("YOUTUBE_FINANCE_CHANNEL_NAME", "Capital Edge"),
