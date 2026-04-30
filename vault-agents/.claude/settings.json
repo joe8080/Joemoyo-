@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__supabase-vault__list_projects",
+      "mcp__supabase-vault__get_project",
+      "mcp__supabase-vault__list_tables",
+      "mcp__supabase-vault__list_extensions",
+      "mcp__supabase-vault__list_migrations",
+      "mcp__supabase-vault__execute_sql",
+      "mcp__supabase-vault__get_logs",
+      "mcp__supabase-vault__get_advisors",
+      "mcp__supabase-vault__search_docs"
+    ],
+    "deny": [
+      "mcp__supabase-vault__apply_migration",
+      "mcp__supabase-vault__deploy_edge_function",
+      "mcp__supabase-vault__merge_branch",
+      "mcp__supabase-vault__delete_branch",
+      "mcp__supabase-vault__reset_branch",
+      "mcp__supabase-vault__pause_project",
+      "mcp__supabase-vault__restore_project"
+    ]
+  }
+}

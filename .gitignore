@@ -19,3 +19,7 @@ env/
 .vscode/
 .idea/
 *.swp
+
+# Claude Code local overrides — never commit local permission grants
+.claude/settings.local.json
+vault-agents/.claude/settings.local.json

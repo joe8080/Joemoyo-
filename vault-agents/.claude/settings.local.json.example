@@ -1,0 +1,17 @@
+{
+  "_comment": "Copy to settings.local.json (gitignored) and uncomment to grant write capability. Do not commit settings.local.json. The base settings.json (committed) is read-only.",
+  "permissions": {
+    "allow": [
+      "//mcp__supabase-vault__apply_migration",
+      "//mcp__supabase-vault__create_branch",
+      "//mcp__supabase-vault__rebase_branch",
+      "//mcp__supabase-vault__merge_branch"
+    ]
+  },
+  "mcpServers": {
+    "supabase-vault": {
+      "type": "url",
+      "url": "https://mcp.supabase.com/mcp"
+    }
+  }
+}
