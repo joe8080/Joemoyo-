@@ -10,7 +10,7 @@ gitignored `.claude/settings.local.json`).
 | # | File | Priority | Status | Touches |
 |---|---|---|---|---|
 | 1 | `001_drop_public_read_policies.draft.sql` | **HIGHEST** (live privacy leak) | **APPLIED** as `drop_anon_read_on_personal_tables` | DROPs 15 anon/public SELECT policies |
-| 2 | `002_add_missing_agent_rules.draft.sql` | Medium (unblocks INVEST agent) | **HELD** — operator values pending final sign-off; not committed with values | INSERTs 5 new `agent_rules` rows |
+| 2 | `002_add_missing_agent_rules.draft.sql` | Medium (unblocks INVEST agent) | **APPLIED** as `add_missing_agent_rules_invest_tax` (final values supplied inline by operator; not committed to git, by design) | INSERTs 5 new `agent_rules` rows |
 | 3 | `003_moddatetime_and_updated_at_triggers.draft.sql` | Low–Medium (fixes spurious staleness flags) | **APPLIED** as `enable_moddatetime_and_fix_defaults` | Installs `moddatetime`, adds 3 triggers, drops `scip_outreach.led_by` default |
 | 4 | `004_add_updated_at_to_research_and_intel.draft.sql` | Low (queued follow-up to Draft 3) | **DRAFT** — not applied | ADDs `updated_at` column + trigger to `ogx_research_claims` and `scip_intelligence` |
 
