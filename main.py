@@ -180,15 +180,22 @@ def cmd_live(args):
     print(f"  Symbols: {', '.join(args.symbols)}")
     print(f"{'='*60}")
 
-    # Show account first
     from trading_agent.broker.alpaca import AlpacaBroker
     broker = AlpacaBroker()
-    print(broker.portfolio_summary())
 
-    if not broker.is_market_open():
-        print("\n[INFO] Market is currently closed. Signals will still be generated.")
+    if args.demo:
+        print("  [DEMO] Skipping live account check — using synthetic data.\n")
+    else:
+        try:
+            print(broker.portfolio_summary())
+            if not broker.is_market_open():
+                print("\n[INFO] Market is currently closed. Signals will still be generated.")
+        except Exception as exc:
+            print(f"\n[ERROR] Could not reach Alpaca: {exc}")
+            print("  Check your internet connection and API keys in .env\n")
+            return
 
-    agent = TradingAgent(symbols=args.symbols, live=True)
+    agent = TradingAgent(symbols=args.symbols, live=not args.demo)
 
     print(f"\nGenerating signals (start={args.start}) …\n")
     results = agent.run_once(start=args.start, demo=args.demo)
