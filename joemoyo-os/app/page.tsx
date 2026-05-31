@@ -21,7 +21,7 @@ const MODULES = [
     icon: "📈",
     title: "Investing",
     desc: "Portfolio, live market data and AI-driven alerts & suggestions.",
-    status: "Phase 3",
+    status: "Live",
   },
   {
     href: "/social",
