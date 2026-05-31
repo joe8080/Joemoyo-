@@ -28,7 +28,7 @@ const MODULES = [
     icon: "📡",
     title: "Social",
     desc: "YouTube & socials analytics, plus draft and schedule posts.",
-    status: "Phase 4",
+    status: "Live",
   },
 ];
 
