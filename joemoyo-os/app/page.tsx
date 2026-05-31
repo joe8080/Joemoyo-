@@ -14,7 +14,7 @@ const MODULES = [
     icon: "🎬",
     title: "Content Studio",
     desc: "Generate video scripts, thumbnail concepts and a content calendar.",
-    status: "Phase 2",
+    status: "Live",
   },
   {
     href: "/investing",
