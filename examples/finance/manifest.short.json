@@ -1,0 +1,8 @@
+{
+  "clips": [
+    {"image": "01_hook.png",     "duration": 2.5, "pan": "zoom-in",       "caption": "The $1T question"},
+    {"image": "02_chart_a.png",  "duration": 3.0, "pan": "left-to-right", "caption": "NVDA 2019-2024"},
+    {"image": "03_chart_b.png",  "duration": 3.0, "pan": "zoom-in",       "caption": "P/E vs peers"},
+    {"image": "04_takeaway.png", "duration": 3.5, "pan": "zoom-out",      "caption": "Follow for more"}
+  ]
+}
