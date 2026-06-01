@@ -110,6 +110,48 @@ python main.py market --brand music_studio --topic "Recording studio services" -
 python main.py ideas --weeks 4
 ```
 
+### 🎬 Video Production Crew
+
+A team of role-specialized agents that take a topic all the way to a finished
+video. Each agent owns one job, and **Supabase (ORIGINEX HUMAN ARCHIVES) is the
+source of truth** — every episode, output, asset, and render is persisted there.
+
+```bash
+# Full crew: research → script → packaging → thumbnail → visuals →
+#            voiceover → motion → manifest, persisted + materialized
+python main.py produce --topic "Great Zimbabwe" --channel history_channel
+
+# Also render the mp4 (needs ElevenLabs narration; uses Remotion, falls back to ffmpeg)
+python main.py produce -t "Great Zimbabwe" -c history_channel --render
+
+# Re-export an existing episode's package from Supabase
+python main.py materialize <episode_id>
+```
+
+The crew:
+
+| Role | Agent | Produces |
+|---|---|---|
+| Research | `ContentResearchAgent` (+ archive) | sourced research outline |
+| Script | `ScriptWriterAgent` | full narration script |
+| Packaging | `TitlePackagingAgent` | titles (A/B), tags, description, chapters |
+| Thumbnail | `ThumbnailAgent` | concept + image-gen prompt |
+| Visuals | `VisualDirectorAgent` | ordered shot list / image prompts |
+| Voiceover | `VoiceoverAgent` | clean narration + ElevenLabs mp3 |
+| Motion | `MotionGraphicsAgent` | Remotion cards (intro, lower-thirds, stats, quotes) |
+| Edit | `ManifestEditorAgent` | `manifest.json` + `captions.srt` (no Ken Burns "pop") |
+| Director | `VideoProducer` | runs all of the above, persists, renders |
+
+Each video becomes a self-contained package under `outputs/videos/<...>/`
+(research/script/packaging/shotlist/manifest/captions/narration + generated
+`img/` and `out.mp4`), mirrored from its Supabase episode row.
+
+**Extra keys** (all optional — without them the crew runs in specs-only mode):
+`SUPABASE_URL` / `SUPABASE_SERVICE_KEY`, `OPENAI_API_KEY` or `GEMINI_API_KEY`
+(`IMAGE_PROVIDER`), `ELEVENLABS_API_KEY` / `ELEVENLABS_VOICE_ID`. See
+`.env.example`. The Remotion compositor lives in `remotion/` (run `npm install`
+there first); the Supabase schema is `migrations/drafts/001_*`.
+
 ---
 
 ## Output Files
@@ -136,13 +178,25 @@ Edit `config/brand_profiles.py` to update your channel names, tone, audience, an
 
 ```
 main.py (CLI)
-    └── orchestrator/orchestrator.py (workflow routing)
-            ├── agents/content_research.py  → tools/web_search.py
-            ├── agents/script_writer.py
-            ├── agents/financial_content.py → tools/web_search.py
-            ├── agents/marketing.py
-            ├── agents/shopify_reporting.py → tools/shopify_client.py
-            └── agents/lead_generator.py   → tools/web_search.py
+    ├── orchestrator/orchestrator.py (business workflows)
+    │       ├── agents/content_research.py  → tools/web_search.py
+    │       ├── agents/script_writer.py
+    │       ├── agents/financial_content.py → tools/web_search.py
+    │       ├── agents/marketing.py
+    │       ├── agents/shopify_reporting.py → tools/shopify_client.py
+    │       └── agents/lead_generator.py   → tools/web_search.py
+    │
+    └── orchestrator/video_producer.py (video crew, Supabase = truth)
+            ├── agents/video/title_packaging.py
+            ├── agents/video/thumbnail.py
+            ├── agents/video/visual_director.py
+            ├── agents/video/motion_graphics.py
+            ├── agents/video/voiceover.py      → tools/elevenlabs.py
+            ├── agents/video/manifest_editor.py
+            ├── tools/supabase_client.py  (ORIGINEX HUMAN ARCHIVES)
+            ├── tools/images.py           (openai / gemini)
+            ├── video_agent/  (ffmpeg Ken Burns render engine)
+            └── remotion/     (motion-graphics render engine)
 ```
 
 All agents inherit from `agents/base_agent.py` which handles the Claude tool-use loop automatically.

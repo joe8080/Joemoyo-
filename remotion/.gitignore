@@ -1,0 +1,4 @@
+node_modules/
+out/
+_props.json
+.remotion/
