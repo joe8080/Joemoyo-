@@ -29,6 +29,7 @@ class Settings:
     image_provider: str = "openai"      # openai | gemini | higgsfield | firefly
     openai_api_key: str = ""
     gemini_api_key: str = ""
+    embedding_model: str = "text-embedding-3-small"   # 1536-dim, matches the archive
     elevenlabs_api_key: str = ""
     elevenlabs_voice_id: str = ""        # Joe's cloned voice
 
@@ -66,6 +67,7 @@ def get_settings() -> Settings:
         image_provider=os.environ.get("IMAGE_PROVIDER", "openai"),
         openai_api_key=os.environ.get("OPENAI_API_KEY", ""),
         gemini_api_key=os.environ.get("GEMINI_API_KEY", ""),
+        embedding_model=os.environ.get("EMBEDDING_MODEL", "text-embedding-3-small"),
         elevenlabs_api_key=os.environ.get("ELEVENLABS_API_KEY", ""),
         elevenlabs_voice_id=os.environ.get("ELEVENLABS_VOICE_ID", ""),
         video_output_dir=os.environ.get("VIDEO_OUTPUT_DIR", "./outputs/videos"),

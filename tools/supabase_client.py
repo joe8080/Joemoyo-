@@ -348,5 +348,172 @@ def format_archive_hits(hits: list[dict]) -> str:
     for h in hits:
         name = h.get("name") or h.get("title") or h.get("slug", "?")
         desc = h.get("significance") or h.get("description") or h.get("biography") or ""
-        lines.append(f"- {name}: {desc[:300]}")
+        sim = h.get("similarity")
+        tag = f" (match {sim:.2f})" if isinstance(sim, (int, float)) else ""
+        lines.append(f"- {name}{tag}: {desc[:300]}")
     return "\n".join(lines)
+
+
+# --------------------------------------------------------------------------- #
+#  Semantic (vector) search — match_archive RPC over halfvec embeddings         #
+# --------------------------------------------------------------------------- #
+
+_SEMANTIC_TABLES = (
+    "people", "events", "places", "civilizations",
+    "documents", "citations", "oral_evidence",
+)
+
+
+def semantic_search(query: str, *, table: str, limit: int = 6) -> list[dict]:
+    """Vector search one archive table via the match_archive RPC.
+
+    Embeds `query` with OpenAI and ranks rows by cosine similarity. Returns []
+    (so callers fall back to ILIKE) when OpenAI/Supabase are unconfigured or
+    the table has no embeddings yet.
+    """
+    client = get_client()
+    if client is None:
+        return []
+    from tools.embeddings import embed_text
+    vec = embed_text(query)
+    if not vec:
+        return []
+    try:
+        result = client.rpc("match_archive", {
+            "query_embedding": vec,
+            "match_table": table,
+            "match_count": limit,
+        }).execute()
+        return result.data or []
+    except Exception:
+        return []
+
+
+def archive_context(query: str, *, tables: tuple[str, ...] | None = None,
+                    per_table: int = 4) -> tuple[str, dict[str, list[str]]]:
+    """Hybrid sourced-facts context for the Research agent.
+
+    Tries semantic (vector) search per table and falls back to ILIKE name
+    matching when embeddings aren't available. Returns (formatted_text,
+    related_ids) where related_ids maps e.g. 'related_people' -> [uuid,...]
+    for linking the episode back to the archive.
+    """
+    client = get_client()
+    if client is None:
+        return "", {}
+    tables = tables or ("places", "people", "events", "civilizations")
+    chunks: list[str] = []
+    related: dict[str, list[str]] = {}
+    for table in tables:
+        hits = semantic_search(query, table=table, limit=per_table)
+        mode = "semantic"
+        if not hits:
+            hits = search_archive(query, table=table, limit=per_table)
+            mode = "name-match"
+        if not hits:
+            continue
+        chunks.append(f"[{table} · {mode}]\n{format_archive_hits(hits)}")
+        ids = [h["id"] for h in hits if h.get("id")]
+        if ids:
+            related[f"related_{table}"] = ids
+    return "\n\n".join(chunks), related
+
+
+# --------------------------------------------------------------------------- #
+#  Content ideas backlog (read + status) — feeds the producer                   #
+# --------------------------------------------------------------------------- #
+
+def list_content_ideas(*, status: str | None = None, limit: int = 20) -> list[dict]:
+    """List backlog ideas, newest first, optionally filtered by status."""
+    client = get_client()
+    if client is None:
+        return []
+    q = client.table("content_ideas").select(
+        "id,title,description,content_type,status,hook,estimated_views,"
+        "related_documents,related_people,related_events,created_at"
+    )
+    if status:
+        q = q.eq("status", status)
+    return q.order("estimated_views", desc=True).limit(limit).execute().data or []
+
+
+def get_content_idea(idea_id: str) -> dict | None:
+    client = get_client()
+    if client is None:
+        return None
+    result = client.table("content_ideas").select("*").eq("id", idea_id).limit(1).execute()
+    return result.data[0] if result.data else None
+
+
+def set_content_idea_status(idea_id: str, status: str) -> None:
+    client = get_client()
+    if client is None:
+        return
+    client.table("content_ideas").update({"status": status}).eq("id", idea_id).execute()
+    log_decision("director", "idea_status", payload={"idea": idea_id, "status": status})
+
+
+# --------------------------------------------------------------------------- #
+#  Embedding queue worker — makes the archive semantically searchable           #
+# --------------------------------------------------------------------------- #
+
+def _vec_literal(vec: list[float]) -> str:
+    """pgvector/halfvec text form: '[0.1,0.2,...]'."""
+    return "[" + ",".join(repr(float(x)) for x in vec) + "]"
+
+
+def drain_embedding_queue(*, batch_size: int = 64, max_rows: int | None = None,
+                          progress=None) -> dict:
+    """Embed pending `embedding_queue` rows and write vectors back to the archive.
+
+    Processes in batches: fetch pending → embed text → UPDATE each source row's
+    `embedding` → mark the queue row done. Returns a summary dict. Requires both
+    Supabase and OpenAI to be configured.
+    """
+    client = get_client()
+    if client is None:
+        return {"error": _unavailable_reason or "Supabase not configured", "done": 0}
+    from tools.embeddings import embed_texts, is_configured as openai_ready
+    if not openai_ready():
+        return {"error": "OPENAI_API_KEY not set", "done": 0}
+
+    done = 0
+    failed = 0
+    while max_rows is None or done + failed < max_rows:
+        remaining = batch_size if max_rows is None else min(batch_size, max_rows - done - failed)
+        pending = (
+            client.table("embedding_queue")
+            .select("id,table_name,row_id,text_to_embed")
+            .eq("status", "pending")
+            .limit(remaining)
+            .execute()
+            .data or []
+        )
+        if not pending:
+            break
+        try:
+            vectors = embed_texts([r["text_to_embed"] or "" for r in pending])
+        except Exception as e:  # batch-level failure — mark and continue
+            ids = [r["id"] for r in pending]
+            client.table("embedding_queue").update(
+                {"status": "error", "error_message": str(e)[:500]}
+            ).in_("id", ids).execute()
+            failed += len(pending)
+            continue
+        for row, vec in zip(pending, vectors):
+            try:
+                client.table(row["table_name"]).update(
+                    {"embedding": _vec_literal(vec)}
+                ).eq("id", row["row_id"]).execute()
+                client.table("embedding_queue").update(
+                    {"status": "done", "embedded_at": "now()"}
+                ).eq("id", row["id"]).execute()
+                done += 1
+            except Exception as e:
+                client.table("embedding_queue").update(
+                    {"status": "error", "error_message": str(e)[:500]}
+                ).eq("id", row["id"]).execute()
+                failed += 1
+        if progress:
+            progress(done, failed)
+    return {"done": done, "failed": failed}

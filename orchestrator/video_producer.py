@@ -52,13 +52,30 @@ class VideoProducer:
     # ------------------------------------------------------------------ #
     def produce(
         self,
-        topic: str,
+        topic: str | None = None,
         *,
+        from_idea_id: str | None = None,
         target_minutes: float = 12,
         do_research: bool = True,
         render: bool = False,
         engine: str = "remotion",
     ) -> dict:
+        # Resolve the topic from a backlog idea, if given.
+        content_idea_id = None
+        idea_related: dict[str, list[str]] = {}
+        if from_idea_id:
+            idea = sb.get_content_idea(from_idea_id)
+            if not idea:
+                raise ValueError(f"content idea {from_idea_id} not found (or no Supabase).")
+            content_idea_id = idea["id"]
+            topic = topic or idea["title"]
+            for k in ("related_documents", "related_people", "related_events"):
+                if idea.get(k):
+                    idea_related[k] = idea[k]
+            console.print(f"[dim]From backlog idea: {idea['title']}[/dim]")
+        if not topic:
+            raise ValueError("produce() needs a topic or a from_idea_id.")
+
         console.print(Panel(
             f"[bold]Video Production Crew[/bold]\nTopic: {topic}\nChannel: {self.channel}",
             style="blue",
@@ -69,21 +86,29 @@ class VideoProducer:
         img_dir = os.path.join(pkg_dir, "img")
         os.makedirs(img_dir, exist_ok=True)
 
+        # --- Archive context (semantic + name-match) -------------------
+        archive_ctx, related = sb.archive_context(topic)
+        for k, v in idea_related.items():  # merge idea links with discovered ones
+            related.setdefault(k, [])
+            related[k] = list(dict.fromkeys(related[k] + v))
+
         # --- Episode row (source of truth) -----------------------------
         episode = sb.create_episode(
             title=topic, slug=f"{slug}-{os.path.basename(pkg_dir)[-6:]}",
             channel=self.channel, topic=topic, target_minutes=target_minutes,
+            content_idea_id=content_idea_id, related=related or None,
         )
         episode_id = episode["id"] if episode else None
         if episode_id:
             console.print(f"[dim]Supabase episode {episode_id}[/dim]")
+            if content_idea_id:
+                sb.set_content_idea_status(content_idea_id, "production")
         else:
             console.print(f"[yellow]{sb.unavailable_reason() or 'No DB'} — specs-only.[/yellow]")
 
         # --- 1. Research (archive + web) --------------------------------
         self._step(1, "Research")
         sb.set_episode_status(episode_id, "researching") if episode_id else None
-        archive_ctx = self._archive_context(topic)
         research_input = topic if not archive_ctx else (
             f"{topic}\n\nKNOWN ARCHIVE FACTS (cite these where relevant):\n{archive_ctx}"
         )
@@ -217,17 +242,6 @@ class VideoProducer:
     def _persist(self, episode_id, role, *, payload=None, content_md=None) -> None:
         if episode_id:
             sb.save_agent_output(episode_id, role, payload=payload, content_md=content_md)
-
-    def _archive_context(self, topic: str) -> str:
-        """Pull sourced facts from the ORIGINEX archive for the Research agent."""
-        if not sb.is_configured():
-            return ""
-        chunks = []
-        for table in ("places", "people", "events", "civilizations"):
-            hits = sb.search_archive(topic, table=table, limit=4)
-            if hits:
-                chunks.append(f"[{table}]\n{sb.format_archive_hits(hits)}")
-        return "\n\n".join(chunks)
 
     def _narration_seconds(self, mp3_path: str | None, narration: str) -> float:
         if mp3_path and os.path.exists(mp3_path):

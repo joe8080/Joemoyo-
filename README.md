@@ -124,8 +124,23 @@ python main.py produce --topic "Great Zimbabwe" --channel history_channel
 # Also render the mp4 (needs ElevenLabs narration; uses Remotion, falls back to ffmpeg)
 python main.py produce -t "Great Zimbabwe" -c history_channel --render
 
+# Produce straight from your content backlog (topic pulled from content_ideas)
+python main.py backlog                      # list ideas (highest est. views first)
+python main.py produce --from-idea <idea_id>
+
 # Re-export an existing episode's package from Supabase
 python main.py materialize <episode_id>
+```
+
+**Semantic archive search.** The Research agent grounds every script in the
+ORIGINEX archive. It uses **vector search** (`match_archive` over the archive's
+`embedding` columns) and falls back to name-matching when a table isn't embedded
+yet — then links the episode back to the matched people/events/places. To make
+the archive searchable, embed it once (drains `embedding_queue` via OpenAI):
+
+```bash
+python main.py embed-archive          # embed all pending rows
+python main.py embed-archive --max-rows 200   # or a capped first pass
 ```
 
 The crew:

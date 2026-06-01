@@ -272,7 +272,9 @@ def get_video_producer(channel: str):
 
 
 @cli.command()
-@click.option("--topic", "-t", required=True, help='Video topic (e.g. "Great Zimbabwe")')
+@click.option("--topic", "-t", default=None, help='Video topic (e.g. "Great Zimbabwe")')
+@click.option("--from-idea", "from_idea", default=None,
+              help="Produce from a content_ideas backlog id (topic optional)")
 @click.option(
     "--channel", "-c",
     default="history_channel",
@@ -290,22 +292,69 @@ def get_video_producer(channel: str):
     show_default=True,
     help="Render engine (falls back to ffmpeg if Remotion isn't set up)",
 )
-def produce(topic, channel, minutes, no_research, render, engine):
+def produce(topic, from_idea, channel, minutes, no_research, render, engine):
     """
     Run the full video production crew for a topic.
 
     Research -> Script -> Packaging -> Thumbnail -> Visuals -> Voiceover ->
     Motion -> Manifest, persisted to Supabase and materialized to
-    outputs/videos/. Use --render to also produce the mp4.
+    outputs/videos/. Pull the topic from your backlog with --from-idea, or
+    pass --topic directly. Use --render to also produce the mp4.
     """
+    if not topic and not from_idea:
+        raise click.UsageError("Provide --topic or --from-idea.")
     producer = get_video_producer(channel)
     result = producer.produce(
-        topic, target_minutes=minutes, do_research=not no_research,
-        render=render, engine=engine,
+        topic, from_idea_id=from_idea, target_minutes=minutes,
+        do_research=not no_research, render=render, engine=engine,
     )
     console.print(f"\n[bold green]Done![/bold green] Package: {result['package_dir']}")
     if result.get("episode_id"):
         console.print(f"Supabase episode: {result['episode_id']}")
+
+
+@cli.command()
+@click.option("--status", default=None, help="Filter by status (idea/researching/scripting/production)")
+@click.option("--limit", "-n", default=20, show_default=True, help="How many ideas to show")
+def backlog(status, limit):
+    """List content_ideas from the archive (highest estimated views first)."""
+    from tools import supabase_client as sb
+    ideas = sb.list_content_ideas(status=status, limit=limit)
+    if not ideas:
+        console.print(f"[yellow]{sb.unavailable_reason() or 'No ideas found.'}[/yellow]")
+        return
+    from rich.table import Table
+    table = Table(title="Content backlog")
+    table.add_column("id", style="dim", no_wrap=True)
+    table.add_column("title")
+    table.add_column("status")
+    table.add_column("est. views", justify="right")
+    for i in ideas:
+        table.add_row(i["id"], i.get("title", ""), i.get("status", ""),
+                      str(i.get("estimated_views") or ""))
+    console.print(table)
+    console.print("\n[dim]Produce one with:[/dim] python main.py produce --from-idea <id>")
+
+
+@cli.command(name="embed-archive")
+@click.option("--batch-size", default=64, show_default=True, help="Texts per OpenAI call")
+@click.option("--max-rows", default=None, type=int, help="Stop after N rows (default: drain all)")
+def embed_archive(batch_size, max_rows):
+    """Drain embedding_queue: embed pending rows so the archive is searchable.
+
+    Needs OPENAI_API_KEY + SUPABASE_*. Safe to re-run; only 'pending' rows are
+    processed. This calls the OpenAI embeddings API (small per-row cost).
+    """
+    from tools import supabase_client as sb
+    console.print("[bold]Embedding the ORIGINEX archive...[/bold]")
+    result = sb.drain_embedding_queue(
+        batch_size=batch_size, max_rows=max_rows,
+        progress=lambda d, f: console.print(f"  embedded={d} failed={f}", end="\r"),
+    )
+    if result.get("error"):
+        console.print(f"[red]{result['error']}[/red]")
+    else:
+        console.print(f"\n[green]Done — embedded {result['done']}, failed {result['failed']}.[/green]")
 
 
 @cli.command()
