@@ -257,5 +257,69 @@ def ideas(weeks: int):
     console.print(result["finance_channel_ideas"])
 
 
+# ------------------------------------------------------------------ #
+#  VIDEO PRODUCTION CREW                                              #
+# ------------------------------------------------------------------ #
+
+def get_video_producer(channel: str):
+    """Lazy-load the video producer with clear setup errors."""
+    try:
+        from orchestrator.video_producer import VideoProducer
+        return VideoProducer(channel=channel)
+    except EnvironmentError as e:
+        console.print(f"[bold red]Setup Error:[/bold red] {e}")
+        sys.exit(1)
+
+
+@cli.command()
+@click.option("--topic", "-t", required=True, help='Video topic (e.g. "Great Zimbabwe")')
+@click.option(
+    "--channel", "-c",
+    default="history_channel",
+    type=click.Choice(["history_channel", "finance_channel"]),
+    show_default=True,
+    help="Which channel preset/voice to use",
+)
+@click.option("--minutes", "-m", default=12, show_default=True, help="Target runtime (minutes)")
+@click.option("--no-research", is_flag=True, help="Skip web research; script from the topic/archive only")
+@click.option("--render", is_flag=True, help="Render the finished mp4 (needs narration audio)")
+@click.option(
+    "--engine",
+    default="remotion",
+    type=click.Choice(["remotion", "ffmpeg"]),
+    show_default=True,
+    help="Render engine (falls back to ffmpeg if Remotion isn't set up)",
+)
+def produce(topic, channel, minutes, no_research, render, engine):
+    """
+    Run the full video production crew for a topic.
+
+    Research -> Script -> Packaging -> Thumbnail -> Visuals -> Voiceover ->
+    Motion -> Manifest, persisted to Supabase and materialized to
+    outputs/videos/. Use --render to also produce the mp4.
+    """
+    producer = get_video_producer(channel)
+    result = producer.produce(
+        topic, target_minutes=minutes, do_research=not no_research,
+        render=render, engine=engine,
+    )
+    console.print(f"\n[bold green]Done![/bold green] Package: {result['package_dir']}")
+    if result.get("episode_id"):
+        console.print(f"Supabase episode: {result['episode_id']}")
+
+
+@cli.command()
+@click.argument("episode_id")
+@click.option(
+    "--channel", "-c",
+    default="history_channel",
+    type=click.Choice(["history_channel", "finance_channel"]),
+)
+def materialize(episode_id, channel):
+    """Re-export an existing episode's package folder from Supabase."""
+    producer = get_video_producer(channel)
+    producer.materialize(episode_id)
+
+
 if __name__ == "__main__":
     cli()
