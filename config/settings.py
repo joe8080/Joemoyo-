@@ -19,6 +19,22 @@ class Settings:
     music_studio: str
     shopify_store: str
 
+    # Supabase — source of truth (ORIGINEX HUMAN ARCHIVES)
+    supabase_url: str = ""
+    supabase_service_key: str = ""
+    supabase_project_id: str = ""
+    supabase_storage_bucket: str = "video-assets"
+
+    # Media generation
+    image_provider: str = "openai"      # openai | gemini | higgsfield | firefly
+    openai_api_key: str = ""
+    gemini_api_key: str = ""
+    elevenlabs_api_key: str = ""
+    elevenlabs_voice_id: str = ""        # Joe's cloned voice
+
+    # Video output
+    video_output_dir: str = "./outputs/videos"
+
     # Model config
     model: str = "claude-sonnet-4-6"
     max_tokens: int = 8096
@@ -41,6 +57,18 @@ def get_settings() -> Settings:
         finance_channel=os.environ.get("YOUTUBE_FINANCE_CHANNEL_NAME", "Capital Edge"),
         music_studio=os.environ.get("MUSIC_STUDIO_NAME", "JoeMoyo Studios"),
         shopify_store=os.environ.get("SHOPIFY_STORE_NAME", "JoeMoyo Store"),
+        # Supabase (ORIGINEX HUMAN ARCHIVES is project qvlllknedilztozxwscj)
+        supabase_url=os.environ.get("SUPABASE_URL", ""),
+        supabase_service_key=os.environ.get("SUPABASE_SERVICE_KEY", ""),
+        supabase_project_id=os.environ.get("SUPABASE_PROJECT_ID", ""),
+        supabase_storage_bucket=os.environ.get("SUPABASE_STORAGE_BUCKET", "video-assets"),
+        # Media generation
+        image_provider=os.environ.get("IMAGE_PROVIDER", "openai"),
+        openai_api_key=os.environ.get("OPENAI_API_KEY", ""),
+        gemini_api_key=os.environ.get("GEMINI_API_KEY", ""),
+        elevenlabs_api_key=os.environ.get("ELEVENLABS_API_KEY", ""),
+        elevenlabs_voice_id=os.environ.get("ELEVENLABS_VOICE_ID", ""),
+        video_output_dir=os.environ.get("VIDEO_OUTPUT_DIR", "./outputs/videos"),
     )
 
 
