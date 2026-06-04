@@ -29,6 +29,11 @@ class Settings:
     image_provider: str = "openai"      # openai | gemini | higgsfield | firefly
     openai_api_key: str = ""
     gemini_api_key: str = ""
+    # Higgsfield (image_provider = "higgsfield") — funded, proven path.
+    higgsfield_api_key: str = ""
+    higgsfield_secret: str = ""
+    higgsfield_base_url: str = "https://platform.higgsfield.ai"
+    higgsfield_model: str = "nano_banana_pro"   # top-quality 16:9 stills
     embedding_model: str = "text-embedding-3-small"   # 1536-dim, matches the archive
     elevenlabs_api_key: str = ""
     elevenlabs_voice_id: str = ""        # Joe's cloned voice
@@ -67,6 +72,10 @@ def get_settings() -> Settings:
         image_provider=os.environ.get("IMAGE_PROVIDER", "openai"),
         openai_api_key=os.environ.get("OPENAI_API_KEY", ""),
         gemini_api_key=os.environ.get("GEMINI_API_KEY", ""),
+        higgsfield_api_key=os.environ.get("HIGGSFIELD_API_KEY", ""),
+        higgsfield_secret=os.environ.get("HIGGSFIELD_SECRET", ""),
+        higgsfield_base_url=os.environ.get("HIGGSFIELD_BASE_URL", "https://platform.higgsfield.ai"),
+        higgsfield_model=os.environ.get("HIGGSFIELD_MODEL", "nano_banana_pro"),
         embedding_model=os.environ.get("EMBEDDING_MODEL", "text-embedding-3-small"),
         elevenlabs_api_key=os.environ.get("ELEVENLABS_API_KEY", ""),
         elevenlabs_voice_id=os.environ.get("ELEVENLABS_VOICE_ID", ""),
