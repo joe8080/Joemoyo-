@@ -12,8 +12,8 @@ build/
 venv/
 env/
 
-# Generated content (optional - remove if you want to track outputs in git)
-# outputs/
+# Generated content (research/scripts/video packages/renders are build artifacts)
+outputs/
 
 # IDE
 .vscode/
