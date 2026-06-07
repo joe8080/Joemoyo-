@@ -17,7 +17,7 @@ class DoneForNow {
 function DetermineNextStep(
     thread: string 
 ) -> HumanTools | CalculatorTools {
-    client "openai/gpt-4o"
+    client CustomSonnet
 
     prompt #"
         {{ _.role("system") }}
