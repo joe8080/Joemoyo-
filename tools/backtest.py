@@ -10,7 +10,7 @@ are modeled (Alpaca is commission-free).
 
 from math import sqrt
 
-from tools.strategies import sma_crossover_signal, position_size
+from tools.strategies import sma, sma_crossover_signal, position_size
 
 
 def run_backtest(
@@ -20,6 +20,7 @@ def run_backtest(
     max_positions: int = 5,
     short_window: int = 20,
     long_window: int = 50,
+    enter_on_trend: bool = False,
 ) -> dict:
     """
     Simulate the strategy over historical bars.
@@ -59,6 +60,17 @@ def run_backtest(
                 history[symbol], short_window=short_window, long_window=long_window
             )
             holding = symbol in positions
+
+            # Regime mode (mirrors AutoTrader): trade the current trend, not
+            # just the crossover bar.
+            if enter_on_trend and signal == "hold":
+                closes = [float(b["close"]) for b in history[symbol]]
+                s, l = sma(closes, short_window), sma(closes, long_window)
+                if s is not None and l is not None:
+                    if not holding and s > l:
+                        signal = "buy"
+                    elif holding and s < l:
+                        signal = "sell"
 
             if signal == "buy" and not holding and len(positions) < max_positions:
                 qty = position_size(cash, cash_per_trade, price)

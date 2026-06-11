@@ -44,3 +44,4 @@ jobs:
           --budget 5000
           --cash-per-trade 1000
           --max-positions 5
+          --enter-on-trend
