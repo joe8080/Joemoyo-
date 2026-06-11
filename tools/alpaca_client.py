@@ -96,6 +96,18 @@ class AlpacaClient:
             "daytrade_count": a.get("daytrade_count", 0),
         }
 
+    def get_portfolio_history(self, period: str = "1M", timeframe: str = "1D") -> dict:
+        """
+        Account equity/P&L history for charting.
+        period examples: 1D, 1W, 1M, 3M, 1A, all. timeframe: 1Min, 15Min, 1H, 1D.
+        Returns {"timestamp": [...], "equity": [...], "profit_loss": [...], ...}.
+        """
+        return self._request(
+            "GET",
+            self._trading_url("account/portfolio/history"),
+            params={"period": period, "timeframe": timeframe},
+        )
+
     # ------------------------------------------------------------------ #
     #  Positions                                                          #
     # ------------------------------------------------------------------ #

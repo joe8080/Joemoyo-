@@ -175,6 +175,22 @@ ALPACA_PAPER=true                # keep "true" for simulated trading
 > Home → Paper Trading → API Keys → Generate New Key.
 > Educational paper trading only — not financial advice.
 
+### Live Trading Dashboard
+
+A Streamlit dashboard for watching the account and the AutoTrader in real time:
+equity / cash / buying power, a 1-month equity curve, open positions with
+unrealized P&L, open and filled orders, candlestick charts with the SMA 20/50
+crossover signal for each watchlist symbol, and a live tail of the auto-trader
+log. Auto-refreshes on an interval you pick in the sidebar.
+
+```bash
+streamlit run dashboard/app.py
+```
+
+Then open http://localhost:8501. Edit the watchlist in the sidebar to match the
+symbols you run `autotrade` with. Set `DASHBOARD_REFRESH_SECS` to change the
+default refresh interval (0 disables auto-refresh).
+
 ---
 
 ## Output Files
