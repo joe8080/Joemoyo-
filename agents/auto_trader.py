@@ -36,8 +36,9 @@ class AutoTrader:
         self,
         symbols: list[str],
         interval_minutes: int = 15,
-        cash_per_trade: float = 5000.0,
+        cash_per_trade: float = 1000.0,
         max_positions: int = 5,
+        budget: float = 5000.0,
         short_window: int = 20,
         long_window: int = 50,
         timeframe: str = "1Day",
@@ -64,6 +65,9 @@ class AutoTrader:
         self.interval_minutes = interval_minutes
         self.cash_per_trade = cash_per_trade
         self.max_positions = max_positions
+        # Total capital the bot may deploy across all positions. The rest of
+        # the account stays untouched. <= 0 means no cap.
+        self.budget = budget
         self.short_window = short_window
         self.long_window = long_window
         self.timeframe = timeframe
@@ -124,14 +128,26 @@ class AutoTrader:
         buying_power = account.get("buying_power", 0.0)
         open_position_count = len(positions)
 
+        # Budget cap: capital already deployed counts against the budget, so
+        # new buys can only spend what's left of it.
+        deployed = sum(p.get("market_value", 0.0) for p in positions.values())
+        if self.budget > 0:
+            remaining_budget = max(0.0, self.budget - deployed)
+            budget_note = f", budget ${remaining_budget:,.0f} of ${self.budget:,.0f} left"
+        else:
+            remaining_budget = float("inf")
+            budget_note = ""
+
         self._log(
             f"Equity ${account.get('equity')}, buying power ${buying_power}, "
             f"{open_position_count} position(s), today P&L ${account.get('todays_pl')}"
+            f"{budget_note}"
         )
 
         # 3. Gather proposals from the deterministic strategy (no orders yet).
         proposals = self._gather_proposals(
-            positions, symbols_with_open_orders, buying_power, open_position_count
+            positions, symbols_with_open_orders, buying_power, open_position_count,
+            remaining_budget,
         )
 
         # 4. Optional LLM risk review — may veto proposals before execution.
@@ -149,7 +165,8 @@ class AutoTrader:
     # ------------------------------------------------------------------ #
 
     def _gather_proposals(
-        self, positions: dict, symbols_with_open_orders: set, buying_power: float, open_position_count: int
+        self, positions: dict, symbols_with_open_orders: set, buying_power: float,
+        open_position_count: int, remaining_budget: float = float("inf"),
     ) -> list[dict]:
         """Compute the strategy's proposed trades without placing any orders."""
         proposals: list[dict] = []
@@ -181,12 +198,17 @@ class AutoTrader:
                 if open_position_count >= self.max_positions:
                     self._log(f"{symbol}: BUY signal but max_positions ({self.max_positions}) reached — skip.")
                     continue
-                qty = position_size(remaining_bp, self.cash_per_trade, last_close, self.cash_buffer)
+                spendable = min(remaining_bp, remaining_budget)
+                qty = position_size(spendable, self.cash_per_trade, last_close, self.cash_buffer)
                 if qty <= 0:
-                    self._log(f"{symbol}: BUY signal but insufficient buying power to size a trade — skip.")
+                    self._log(
+                        f"{symbol}: BUY signal but insufficient budget/buying power "
+                        f"(${spendable:,.0f} spendable) — skip."
+                    )
                     continue
                 est_cost = round(qty * last_close, 2)
                 remaining_bp -= est_cost
+                remaining_budget -= est_cost
                 open_position_count += 1
                 proposals.append({
                     "symbol": symbol,
@@ -332,7 +354,8 @@ class AutoTrader:
         """Run run_once() every interval_minutes until interrupted (Ctrl-C)."""
         self._log(
             f"AutoTrader starting: interval={self.interval_minutes}m, "
-            f"cash_per_trade=${self.cash_per_trade}, max_positions={self.max_positions}, "
+            f"budget=${self.budget}, cash_per_trade=${self.cash_per_trade}, "
+            f"max_positions={self.max_positions}, "
             f"SMA {self.short_window}/{self.long_window} on {self.timeframe}, "
             f"llm_review={self.llm_review}. Log: {self.log_path}"
         )

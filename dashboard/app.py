@@ -37,6 +37,7 @@ os.environ.setdefault("ANTHROPIC_API_KEY", "unused-by-dashboard")
 
 from config.settings import settings  # noqa: E402
 from tools.alpaca_client import AlpacaClient  # noqa: E402
+from tools.backtest import run_backtest  # noqa: E402
 from tools.strategies import sma_crossover_signal  # noqa: E402
 
 st.set_page_config(
@@ -236,6 +237,64 @@ for tab, symbol in zip(tabs, watchlist):
         st.markdown(f"**{badge}** · position: **{state}** · last close: "
                     f"**${bars[-1]['close']:,.2f}**")
         st.plotly_chart(symbol_chart(symbol, bars), width="stretch")
+
+# --- Backtest ----------------------------------------------------------- #
+st.subheader("Strategy backtest")
+st.caption(
+    "Replays the exact SMA-crossover signal and sizing rules the AutoTrader "
+    "uses over historical data — fills at the signal bar's close, no slippage."
+)
+with st.form("backtest_form"):
+    b1, b2, b3 = st.columns(3)
+    bt_days = b1.slider("History (days)", 90, 1000, 365, step=5)
+    bt_budget = b2.number_input("Budget ($)", 500.0, 1_000_000.0, 5000.0, step=500.0)
+    bt_per_trade = b3.number_input("Cash per trade ($)", 100.0, 1_000_000.0, 1000.0, step=100.0)
+    run_bt = st.form_submit_button("▶ Run backtest on watchlist", width="stretch")
+
+if run_bt:
+    bt_bars = {}
+    with st.spinner("Fetching history and replaying the strategy..."):
+        for sym in watchlist:
+            try:
+                bt_bars[sym] = get_client().get_bars(
+                    sym, timeframe="1Day", days_back=bt_days + LONG_WINDOW * 2
+                )
+            except Exception as e:
+                st.warning(f"{sym}: could not fetch bars ({e}) — skipped.")
+        if bt_bars:
+            result = run_backtest(
+                bt_bars, budget=bt_budget, cash_per_trade=bt_per_trade,
+                short_window=SHORT_WINDOW, long_window=LONG_WINDOW,
+            )
+    if not bt_bars:
+        st.error("No data to backtest.")
+    else:
+        m = result["metrics"]
+        r1, r2, r3, r4, r5 = st.columns(5)
+        r1.metric("Strategy return", f"{m['total_return_pct']:+.2f}%",
+                  delta=f"{m['total_return_pct'] - m['buy_hold_return_pct']:+.2f}% vs buy&hold")
+        r2.metric("Final equity", f"${m['final_equity']:,.2f}")
+        r3.metric("Max drawdown", f"{m['max_drawdown_pct']:.2f}%")
+        r4.metric("Trades / win rate",
+                  f"{m['num_trades']} / {m['win_rate_pct'] or 0}%")
+        r5.metric("Sharpe", m["sharpe"] if m["sharpe"] is not None else "n/a")
+
+        dfe = pd.DataFrame(result["equity_curve"])
+        fig = go.Figure(go.Scatter(x=dfe["date"], y=dfe["equity"], mode="lines",
+                                   name="Strategy", line=dict(color="#6c5ce7")))
+        fig.add_hline(y=bt_budget, line_dash="dot", line_color="gray",
+                      annotation_text="starting budget")
+        fig.update_layout(height=300, margin=dict(l=0, r=0, t=10, b=0),
+                          yaxis_title="Equity ($)")
+        st.plotly_chart(fig, width="stretch")
+
+        if result["trades"]:
+            st.dataframe(pd.DataFrame(result["trades"]), width="stretch", hide_index=True)
+        if result["open_positions"]:
+            st.caption("Still open at the end of the test:")
+            st.dataframe(pd.DataFrame(result["open_positions"]), width="stretch", hide_index=True)
+        if not result["trades"] and not result["open_positions"]:
+            st.info("The strategy produced no trades in this window — try a longer history.")
 
 # --- AutoTrader activity log -------------------------------------------- #
 st.subheader("AutoTrader activity log")

@@ -136,9 +136,10 @@ so it's free to run continuously and every decision is logged to
 Claude risk check — see below.)
 
 ```bash
-# Watch a list and trade every 15 min (runs until you press Ctrl-C)
+# Watch a list and trade every 15 min (runs until you press Ctrl-C).
+# The bot may deploy at most $5,000 total, $1,000 per position, 5 positions.
 python main.py autotrade --symbols AAPL,MSFT,SPY,NVDA --interval 15 \
-    --cash-per-trade 5000 --max-positions 5
+    --budget 5000 --cash-per-trade 1000 --max-positions 5
 
 # Single decision cycle, watch what it would do without placing orders
 python main.py autotrade --symbols AAPL,MSFT --once --dry-run
@@ -154,7 +155,35 @@ How it works: for each symbol it pulls recent daily bars and computes a short vs
 long SMA crossover — **buys** on a fresh bullish cross (sized by `--cash-per-trade`,
 capped at `--max-positions`) and **closes** the position on a bearish cross. It
 only trades when the market is open and never spends past your buying power.
-Tune the rule with `--short-window` / `--long-window`.
+`--budget` caps the *total* capital the bot may deploy across all its positions
+(default $5,000) — the rest of the account stays untouched. Tune the rule with
+`--short-window` / `--long-window`.
+
+**Backtesting** — replay the exact same signal and sizing rules over history
+before trusting the bot with capital:
+
+```bash
+python main.py backtest --symbols SPY,QQQ,AAPL,MSFT,NVDA --days 365 \
+    --budget 5000 --cash-per-trade 1000
+```
+
+Reports strategy return vs buy-and-hold, max drawdown, Sharpe, win rate, and
+every closed trade. The same backtester is built into the dashboard
+("Strategy backtest" section), so you can run it from any browser or phone.
+
+**Run the bot in the cloud (no computer needed)** — the repo ships a GitHub
+Actions workflow (`.github/workflows/autotrade.yml`) that runs one trading
+cycle every 30 minutes during US market hours. To enable it:
+
+1. On GitHub: repo → **Settings → Secrets and variables → Actions** →
+   **New repository secret**. Add `ALPACA_API_KEY_ID` and
+   `ALPACA_API_SECRET_KEY` (same values as the dashboard secrets).
+2. Repo → **Actions** tab → enable workflows if prompted.
+3. Optional: trigger a run immediately via **Actions → AutoTrader (paper) →
+   Run workflow** to confirm everything is wired up.
+
+Each run is a single `--once` cycle with the default $5k budget; edit the
+watchlist or caps at the bottom of the workflow file.
 
 With `--llm-review`, each cycle's proposed trades are handed to Claude acting as
 a conservative risk reviewer before any order is placed — it approves sound
