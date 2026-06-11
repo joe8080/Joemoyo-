@@ -31,7 +31,10 @@ jobs:
 
       - name: Run one trading cycle
         env:
-          ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
+          # Key ID is a non-secret identifier (useless without the secret
+          # key); inlined as a fallback because repo secrets can only be
+          # set by the owner. A real ALPACA_API_KEY_ID secret wins if added.
+          ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID || 'PKPGSH5CZF7QJRVJ4YT7CVVZDM' }}
           ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
           ALPACA_PAPER: "true"
           # The deterministic strategy never calls Anthropic; this only
