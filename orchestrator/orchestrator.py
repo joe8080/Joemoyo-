@@ -172,6 +172,74 @@ class BusinessOrchestrator:
         return self.lead_agent.create_sponsorship_pitch(brand_info, channel=channel)
 
     # ------------------------------------------------------------------ #
+    #  WORKFLOW 6b: Alpaca Paper Trading (lazy import - needs API keys)    #
+    # ------------------------------------------------------------------ #
+
+    def trading_overview(self) -> str:
+        """Snapshot of the Alpaca paper account: equity, positions, orders."""
+        console.print(Panel("[bold]Paper Trading Account Overview[/bold]", style="green"))
+        from agents.trading_agent import TradingAgent
+        return TradingAgent().account_overview()
+
+    def trading_analyze(self, symbol: str) -> str:
+        """Analyze a ticker and propose a paper trade (does not place orders)."""
+        console.print(Panel(
+            f"[bold]Trade Analysis[/bold]\nSymbol: {symbol.upper()}",
+            style="green",
+        ))
+        from agents.trading_agent import TradingAgent
+        return TradingAgent().analyze_symbol(symbol)
+
+    def trading_execute(self, instruction: str) -> str:
+        """Execute a natural-language trade instruction in the paper account."""
+        console.print(Panel(
+            f"[bold]Execute Paper Trade[/bold]\n{instruction}",
+            style="green",
+        ))
+        from agents.trading_agent import TradingAgent
+        return TradingAgent().execute_instruction(instruction)
+
+    def run_auto_trader(
+        self,
+        symbols: list[str],
+        interval_minutes: int = 15,
+        cash_per_trade: float = 5000.0,
+        max_positions: int = 5,
+        short_window: int = 20,
+        long_window: int = 50,
+        once: bool = False,
+        dry_run: bool = False,
+    ) -> None:
+        """
+        Run the deterministic SMA-crossover auto-trading loop (paper only).
+
+        once=True runs a single decision cycle; otherwise loops every
+        interval_minutes until interrupted. dry_run logs decisions without
+        placing any orders.
+        """
+        mode = "single cycle" if once else f"every {interval_minutes} min"
+        console.print(Panel(
+            f"[bold]Auto-Trader (paper)[/bold]\n"
+            f"Watchlist: {', '.join(s.upper() for s in symbols)}\n"
+            f"Mode: {mode}{' · DRY-RUN' if dry_run else ''}",
+            style="green",
+        ))
+        from agents.auto_trader import AutoTrader
+        trader = AutoTrader(
+            symbols=symbols,
+            interval_minutes=interval_minutes,
+            cash_per_trade=cash_per_trade,
+            max_positions=max_positions,
+            short_window=short_window,
+            long_window=long_window,
+            dry_run=dry_run,
+        )
+        if once:
+            trader.run_once()
+        else:
+            trader.run_forever()
+
+    # ------------------------------------------------------------------ #
     #  WORKFLOW 6: Content Calendar                                        #
     # ------------------------------------------------------------------ #
 

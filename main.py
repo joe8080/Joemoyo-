@@ -232,6 +232,112 @@ def market(brand: str, topic: str, content_type: str):
 
 
 # ------------------------------------------------------------------ #
+#  ALPACA PAPER TRADING                                                #
+# ------------------------------------------------------------------ #
+
+@cli.command()
+@click.option(
+    "--action", "-a",
+    default="overview",
+    type=click.Choice(["overview", "analyze", "execute"]),
+    show_default=True,
+    help="overview = account snapshot | analyze = research a ticker | execute = place a trade",
+)
+@click.option("--symbol", "-s", default="", help="Ticker symbol (for analyze)")
+@click.option(
+    "--instruction", "-i",
+    default="",
+    help='Natural-language trade (for execute), e.g. "Buy $500 of AAPL at market"',
+)
+def trade(action: str, symbol: str, instruction: str):
+    """
+    Operate your Alpaca PAPER trading account (simulated money, real data).
+
+    Requires ALPACA_API_KEY_ID and ALPACA_API_SECRET_KEY in .env.
+
+    \b
+    python main.py trade --action overview
+    python main.py trade --action analyze --symbol AAPL
+    python main.py trade --action execute --instruction "Buy $500 of AAPL at market"
+    """
+    orch = get_orchestrator()
+    try:
+        if action == "overview":
+            result = orch.trading_overview()
+        elif action == "analyze":
+            if not symbol:
+                console.print("[bold red]--symbol is required for analyze[/bold red]")
+                sys.exit(1)
+            result = orch.trading_analyze(symbol)
+        else:  # execute
+            if not instruction:
+                console.print("[bold red]--instruction is required for execute[/bold red]")
+                sys.exit(1)
+            result = orch.trading_execute(instruction)
+        console.print(result)
+    except EnvironmentError as e:
+        console.print(f"[bold red]Alpaca Error:[/bold red] {e}")
+        sys.exit(1)
+
+
+@cli.command()
+@click.option(
+    "--symbols", "-s",
+    required=True,
+    help='Comma-separated watchlist, e.g. "AAPL,MSFT,SPY,NVDA"',
+)
+@click.option(
+    "--interval", "-i",
+    default=15,
+    show_default=True,
+    help="Minutes between cycles (ignored with --once)",
+)
+@click.option(
+    "--cash-per-trade",
+    default=5000.0,
+    show_default=True,
+    help="Max dollars to spend per buy",
+)
+@click.option(
+    "--max-positions",
+    default=5,
+    show_default=True,
+    help="Max concurrent open positions",
+)
+@click.option("--short-window", default=20, show_default=True, help="Short SMA window")
+@click.option("--long-window", default=50, show_default=True, help="Long SMA window")
+@click.option("--once", is_flag=True, help="Run a single cycle instead of looping")
+@click.option("--dry-run", is_flag=True, help="Log decisions without placing orders")
+def autotrade(symbols, interval, cash_per_trade, max_positions, short_window, long_window, once, dry_run):
+    """
+    Run the automated paper-trading loop (SMA-crossover momentum strategy).
+
+    Deterministic and rule-based — safe to leave running on your paper account.
+    Requires ALPACA_API_KEY_ID and ALPACA_API_SECRET_KEY in .env (paper only).
+
+    \b
+    python main.py autotrade --symbols AAPL,MSFT,SPY --interval 15
+    python main.py autotrade --symbols AAPL,MSFT --once --dry-run
+    """
+    orch = get_orchestrator()
+    symbol_list = [s for s in symbols.split(",") if s.strip()]
+    try:
+        orch.run_auto_trader(
+            symbols=symbol_list,
+            interval_minutes=interval,
+            cash_per_trade=cash_per_trade,
+            max_positions=max_positions,
+            short_window=short_window,
+            long_window=long_window,
+            once=once,
+            dry_run=dry_run,
+        )
+    except (EnvironmentError, ValueError) as e:
+        console.print(f"[bold red]Auto-Trader Error:[/bold red] {e}")
+        sys.exit(1)
+
+
+# ------------------------------------------------------------------ #
 #  CONTENT CALENDAR                                                    #
 # ------------------------------------------------------------------ #
 

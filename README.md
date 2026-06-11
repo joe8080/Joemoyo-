@@ -10,6 +10,7 @@ AI-powered agents for your multi-brand business — built with Python and Claude
 | YouTube Finance Channel | FinancialContentAgent + ScriptWriterAgent |
 | Music Studio | LeadGeneratorAgent |
 | Shopify Store | ShopifyReportingAgent |
+| Paper Trading (Alpaca) | TradingAgent |
 
 All brands → **MarketingAgent**
 
@@ -110,6 +111,59 @@ python main.py market --brand music_studio --topic "Recording studio services" -
 python main.py ideas --weeks 4
 ```
 
+### Alpaca Paper Trading
+
+Practice auto-trading with **simulated money and real market data** before
+risking a cent. Defaults to Alpaca's paper environment
+(`https://paper-api.alpaca.markets`).
+
+```bash
+# Account snapshot: equity, buying power, positions, open orders, market status
+python main.py trade --action overview
+
+# Research a ticker and get a proposed paper trade (does NOT place an order)
+python main.py trade --action analyze --symbol AAPL
+
+# Execute a trade described in plain English
+python main.py trade --action execute --instruction "Buy $500 of AAPL at market"
+python main.py trade --action execute --instruction "Sell half my TSLA position"
+```
+
+**Automated loop** — a deterministic SMA-crossover momentum strategy you can
+leave running unattended on the paper account. No LLM call per cycle, so it's
+free to run continuously and every decision is logged to
+`outputs/reports/autotrade_log_<date>.md`.
+
+```bash
+# Watch a list and trade every 15 min (runs until you press Ctrl-C)
+python main.py autotrade --symbols AAPL,MSFT,SPY,NVDA --interval 15 \
+    --cash-per-trade 5000 --max-positions 5
+
+# Single decision cycle, watch what it would do without placing orders
+python main.py autotrade --symbols AAPL,MSFT --once --dry-run
+
+# Single real cycle
+python main.py autotrade --symbols AAPL,MSFT --once
+```
+
+How it works: for each symbol it pulls recent daily bars and computes a short vs
+long SMA crossover — **buys** on a fresh bullish cross (sized by `--cash-per-trade`,
+capped at `--max-positions`) and **closes** the position on a bearish cross. It
+only trades when the market is open and never spends past your buying power.
+Tune the rule with `--short-window` / `--long-window`.
+
+**Setup:** add your Alpaca paper keys to `.env`:
+
+```
+ALPACA_API_KEY_ID=PK...          # Key ID from app.alpaca.markets (Paper Trading)
+ALPACA_API_SECRET_KEY=...        # Secret — shown only once at creation
+ALPACA_PAPER=true                # keep "true" for simulated trading
+```
+
+> Get free paper keys at [app.alpaca.markets](https://app.alpaca.markets) →
+> Home → Paper Trading → API Keys → Generate New Key.
+> Educational paper trading only — not financial advice.
+
 ---
 
 ## Output Files
@@ -142,7 +196,9 @@ main.py (CLI)
             ├── agents/financial_content.py → tools/web_search.py
             ├── agents/marketing.py
             ├── agents/shopify_reporting.py → tools/shopify_client.py
-            └── agents/lead_generator.py   → tools/web_search.py
+            ├── agents/lead_generator.py   → tools/web_search.py
+            ├── agents/trading_agent.py    → tools/alpaca_client.py
+            └── agents/auto_trader.py      → tools/alpaca_client.py + tools/strategies.py
 ```
 
 All agents inherit from `agents/base_agent.py` which handles the Claude tool-use loop automatically.
