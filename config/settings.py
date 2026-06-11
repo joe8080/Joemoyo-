@@ -11,6 +11,9 @@ class Settings:
     brave_api_key: str
     shopify_shop_name: str
     shopify_access_token: str
+    alpaca_api_key_id: str
+    alpaca_api_secret_key: str
+    alpaca_paper: bool
     output_dir: str
 
     # Brand names
@@ -36,6 +39,10 @@ def get_settings() -> Settings:
         brave_api_key=os.environ.get("BRAVE_SEARCH_API_KEY", ""),
         shopify_shop_name=os.environ.get("SHOPIFY_SHOP_NAME", ""),
         shopify_access_token=os.environ.get("SHOPIFY_ACCESS_TOKEN", ""),
+        alpaca_api_key_id=os.environ.get("ALPACA_API_KEY_ID", ""),
+        alpaca_api_secret_key=os.environ.get("ALPACA_API_SECRET_KEY", ""),
+        # Paper trading is the safe default. Set ALPACA_PAPER=false to go live.
+        alpaca_paper=os.environ.get("ALPACA_PAPER", "true").lower() != "false",
         output_dir=os.environ.get("OUTPUT_DIR", "./outputs"),
         history_channel=os.environ.get("YOUTUBE_HISTORY_CHANNEL_NAME", "Chronicles of Time"),
         finance_channel=os.environ.get("YOUTUBE_FINANCE_CHANNEL_NAME", "Capital Edge"),

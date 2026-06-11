@@ -1,0 +1,46 @@
+name: AutoTrader (paper)
+
+on:
+  schedule:
+    # Every 30 min, 13:00–20:59 UTC, Mon–Fri — covers US market hours
+    # (9:30–16:00 ET) year-round. The bot itself skips when the market
+    # is closed, so off-hours/holiday runs are harmless no-ops.
+    - cron: "*/30 13-20 * * 1-5"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: autotrade
+  cancel-in-progress: false
+
+jobs:
+  trade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Run one trading cycle
+        env:
+          ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
+          ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
+          ALPACA_PAPER: "true"
+          # The deterministic strategy never calls Anthropic; this only
+          # satisfies the settings module's startup check.
+          ANTHROPIC_API_KEY: "unused-by-autotrader"
+        run: >
+          python main.py autotrade
+          --symbols SPY,QQQ,AAPL,MSFT,NVDA
+          --once
+          --budget 5000
+          --cash-per-trade 1000
+          --max-positions 5

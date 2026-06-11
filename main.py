@@ -232,6 +232,207 @@ def market(brand: str, topic: str, content_type: str):
 
 
 # ------------------------------------------------------------------ #
+#  ALPACA PAPER TRADING                                                #
+# ------------------------------------------------------------------ #
+
+@cli.command()
+@click.option(
+    "--action", "-a",
+    default="overview",
+    type=click.Choice(["overview", "analyze", "execute"]),
+    show_default=True,
+    help="overview = account snapshot | analyze = research a ticker | execute = place a trade",
+)
+@click.option("--symbol", "-s", default="", help="Ticker symbol (for analyze)")
+@click.option(
+    "--instruction", "-i",
+    default="",
+    help='Natural-language trade (for execute), e.g. "Buy $500 of AAPL at market"',
+)
+def trade(action: str, symbol: str, instruction: str):
+    """
+    Operate your Alpaca PAPER trading account (simulated money, real data).
+
+    Requires ALPACA_API_KEY_ID and ALPACA_API_SECRET_KEY in .env.
+
+    \b
+    python main.py trade --action overview
+    python main.py trade --action analyze --symbol AAPL
+    python main.py trade --action execute --instruction "Buy $500 of AAPL at market"
+    """
+    orch = get_orchestrator()
+    try:
+        if action == "overview":
+            result = orch.trading_overview()
+        elif action == "analyze":
+            if not symbol:
+                console.print("[bold red]--symbol is required for analyze[/bold red]")
+                sys.exit(1)
+            result = orch.trading_analyze(symbol)
+        else:  # execute
+            if not instruction:
+                console.print("[bold red]--instruction is required for execute[/bold red]")
+                sys.exit(1)
+            result = orch.trading_execute(instruction)
+        console.print(result)
+    except EnvironmentError as e:
+        console.print(f"[bold red]Alpaca Error:[/bold red] {e}")
+        sys.exit(1)
+
+
+@cli.command()
+@click.option(
+    "--symbols", "-s",
+    required=True,
+    help='Comma-separated watchlist, e.g. "AAPL,MSFT,SPY,NVDA"',
+)
+@click.option(
+    "--interval", "-i",
+    default=15,
+    show_default=True,
+    help="Minutes between cycles (ignored with --once)",
+)
+@click.option(
+    "--cash-per-trade",
+    default=1000.0,
+    show_default=True,
+    help="Max dollars to spend per buy",
+)
+@click.option(
+    "--budget",
+    default=5000.0,
+    show_default=True,
+    help="Total capital the bot may deploy across all positions (0 = no cap)",
+)
+@click.option(
+    "--max-positions",
+    default=5,
+    show_default=True,
+    help="Max concurrent open positions",
+)
+@click.option("--short-window", default=20, show_default=True, help="Short SMA window")
+@click.option("--long-window", default=50, show_default=True, help="Long SMA window")
+@click.option("--once", is_flag=True, help="Run a single cycle instead of looping")
+@click.option("--dry-run", is_flag=True, help="Log decisions without placing orders")
+@click.option(
+    "--llm-review",
+    is_flag=True,
+    help="Have Claude sanity-check (and veto risky) trades each cycle before placing them",
+)
+def autotrade(symbols, interval, cash_per_trade, budget, max_positions, short_window, long_window, once, dry_run, llm_review):
+    """
+    Run the automated paper-trading loop (SMA-crossover momentum strategy).
+
+    Deterministic and rule-based — safe to leave running on your paper account.
+    Requires ALPACA_API_KEY_ID and ALPACA_API_SECRET_KEY in .env (paper only).
+
+    \b
+    python main.py autotrade --symbols AAPL,MSFT,SPY --interval 15
+    python main.py autotrade --symbols AAPL,MSFT --once --dry-run
+    """
+    orch = get_orchestrator()
+    symbol_list = [s for s in symbols.split(",") if s.strip()]
+    try:
+        orch.run_auto_trader(
+            symbols=symbol_list,
+            interval_minutes=interval,
+            cash_per_trade=cash_per_trade,
+            max_positions=max_positions,
+            budget=budget,
+            short_window=short_window,
+            long_window=long_window,
+            once=once,
+            dry_run=dry_run,
+            llm_review=llm_review,
+        )
+    except (EnvironmentError, ValueError) as e:
+        console.print(f"[bold red]Auto-Trader Error:[/bold red] {e}")
+        sys.exit(1)
+
+
+@cli.command()
+@click.option(
+    "--symbols", "-s",
+    required=True,
+    help='Comma-separated watchlist, e.g. "AAPL,MSFT,SPY,NVDA"',
+)
+@click.option("--days", default=365, show_default=True, help="History length in calendar days")
+@click.option("--budget", default=5000.0, show_default=True, help="Starting capital")
+@click.option("--cash-per-trade", default=1000.0, show_default=True, help="Max dollars per buy")
+@click.option("--max-positions", default=5, show_default=True, help="Max concurrent positions")
+@click.option("--short-window", default=20, show_default=True, help="Short SMA window")
+@click.option("--long-window", default=50, show_default=True, help="Long SMA window")
+def backtest(symbols, days, budget, cash_per_trade, max_positions, short_window, long_window):
+    """
+    Backtest the AutoTrader's SMA-crossover strategy on historical data.
+
+    Replays the exact signal and sizing rules the live bot uses, so you can
+    see what the bot would have done before giving it real (paper) capital.
+
+    \b
+    python main.py backtest --symbols SPY,QQQ,AAPL --days 365 --budget 5000
+    """
+    from tools.alpaca_client import AlpacaClient
+    from tools.backtest import run_backtest
+
+    symbol_list = [s.strip().upper() for s in symbols.split(",") if s.strip()]
+    try:
+        client = AlpacaClient()
+    except EnvironmentError as e:
+        console.print(f"[bold red]Alpaca Error:[/bold red] {e}")
+        sys.exit(1)
+
+    # Extra history so the long SMA is warmed up before the test window starts.
+    bars_by_symbol = {}
+    for sym in symbol_list:
+        try:
+            bars_by_symbol[sym] = client.get_bars(sym, timeframe="1Day",
+                                                  days_back=days + long_window * 2)
+        except RuntimeError as e:
+            console.print(f"[yellow]{sym}: could not fetch bars ({e}) — skipped.[/yellow]")
+    if not bars_by_symbol:
+        console.print("[bold red]No bar data for any symbol — nothing to backtest.[/bold red]")
+        sys.exit(1)
+
+    result = run_backtest(
+        bars_by_symbol,
+        budget=budget,
+        cash_per_trade=cash_per_trade,
+        max_positions=max_positions,
+        short_window=short_window,
+        long_window=long_window,
+    )
+    m = result["metrics"]
+
+    from rich.table import Table
+    table = Table(title=f"Backtest — SMA {short_window}/{long_window} on "
+                        f"{', '.join(bars_by_symbol)} ({m['trading_days']} trading days)")
+    table.add_column("Metric")
+    table.add_column("Value", justify="right")
+    table.add_row("Starting budget", f"${m['starting_budget']:,.2f}")
+    table.add_row("Final equity", f"${m['final_equity']:,.2f}")
+    table.add_row("Strategy return", f"{m['total_return_pct']:+.2f}%")
+    table.add_row("Buy & hold return", f"{m['buy_hold_return_pct']:+.2f}%")
+    table.add_row("Max drawdown", f"{m['max_drawdown_pct']:.2f}%")
+    table.add_row("Sharpe (annualized)", str(m["sharpe"]) if m["sharpe"] is not None else "n/a")
+    table.add_row("Closed trades", str(m["num_trades"]))
+    table.add_row("Win rate", f"{m['win_rate_pct']}%" if m["win_rate_pct"] is not None else "n/a")
+    table.add_row("Realized P&L", f"${m['realized_pnl']:,.2f}")
+    table.add_row("Unrealized P&L (open)", f"${m['unrealized_pnl']:,.2f}")
+    console.print(table)
+
+    if result["trades"]:
+        trades_table = Table(title="Closed trades")
+        for col in ("symbol", "qty", "entry_date", "entry", "exit_date", "exit", "pnl", "pnl_pct"):
+            trades_table.add_column(col, justify="right")
+        for t in result["trades"]:
+            trades_table.add_row(*(str(t[c]) for c in
+                                   ("symbol", "qty", "entry_date", "entry",
+                                    "exit_date", "exit", "pnl", "pnl_pct")))
+        console.print(trades_table)
+
+
+# ------------------------------------------------------------------ #
 #  CONTENT CALENDAR                                                    #
 # ------------------------------------------------------------------ #
 

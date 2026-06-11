@@ -10,6 +10,7 @@ AI-powered agents for your multi-brand business — built with Python and Claude
 | YouTube Finance Channel | FinancialContentAgent + ScriptWriterAgent |
 | Music Studio | LeadGeneratorAgent |
 | Shopify Store | ShopifyReportingAgent |
+| Paper Trading (Alpaca) | TradingAgent |
 
 All brands → **MarketingAgent**
 
@@ -110,6 +111,137 @@ python main.py market --brand music_studio --topic "Recording studio services" -
 python main.py ideas --weeks 4
 ```
 
+### Alpaca Paper Trading
+
+Practice auto-trading with **simulated money and real market data** before
+risking a cent. Defaults to Alpaca's paper environment
+(`https://paper-api.alpaca.markets`).
+
+```bash
+# Account snapshot: equity, buying power, positions, open orders, market status
+python main.py trade --action overview
+
+# Research a ticker and get a proposed paper trade (does NOT place an order)
+python main.py trade --action analyze --symbol AAPL
+
+# Execute a trade described in plain English
+python main.py trade --action execute --instruction "Buy $500 of AAPL at market"
+python main.py trade --action execute --instruction "Sell half my TSLA position"
+```
+
+**Automated loop** — a deterministic SMA-crossover momentum strategy you can
+leave running unattended on the paper account. No LLM call per cycle by default,
+so it's free to run continuously and every decision is logged to
+`outputs/reports/autotrade_log_<date>.md`. (Add `--llm-review` to layer in a
+Claude risk check — see below.)
+
+```bash
+# Watch a list and trade every 15 min (runs until you press Ctrl-C).
+# The bot may deploy at most $5,000 total, $1,000 per position, 5 positions.
+python main.py autotrade --symbols AAPL,MSFT,SPY,NVDA --interval 15 \
+    --budget 5000 --cash-per-trade 1000 --max-positions 5
+
+# Single decision cycle, watch what it would do without placing orders
+python main.py autotrade --symbols AAPL,MSFT --once --dry-run
+
+# Single real cycle
+python main.py autotrade --symbols AAPL,MSFT --once
+
+# Add a Claude risk-review layer: it vetoes risky trades before they fire
+python main.py autotrade --symbols AAPL,MSFT,SPY --interval 15 --llm-review
+```
+
+How it works: for each symbol it pulls recent daily bars and computes a short vs
+long SMA crossover — **buys** on a fresh bullish cross (sized by `--cash-per-trade`,
+capped at `--max-positions`) and **closes** the position on a bearish cross. It
+only trades when the market is open and never spends past your buying power.
+`--budget` caps the *total* capital the bot may deploy across all its positions
+(default $5,000) — the rest of the account stays untouched. Tune the rule with
+`--short-window` / `--long-window`.
+
+**Backtesting** — replay the exact same signal and sizing rules over history
+before trusting the bot with capital:
+
+```bash
+python main.py backtest --symbols SPY,QQQ,AAPL,MSFT,NVDA --days 365 \
+    --budget 5000 --cash-per-trade 1000
+```
+
+Reports strategy return vs buy-and-hold, max drawdown, Sharpe, win rate, and
+every closed trade. The same backtester is built into the dashboard
+("Strategy backtest" section), so you can run it from any browser or phone.
+
+**Run the bot in the cloud (no computer needed)** — the repo ships a GitHub
+Actions workflow (`.github/workflows/autotrade.yml`) that runs one trading
+cycle every 30 minutes during US market hours. To enable it:
+
+1. On GitHub: repo → **Settings → Secrets and variables → Actions** →
+   **New repository secret**. Add `ALPACA_API_KEY_ID` and
+   `ALPACA_API_SECRET_KEY` (same values as the dashboard secrets).
+2. Repo → **Actions** tab → enable workflows if prompted.
+3. Optional: trigger a run immediately via **Actions → AutoTrader (paper) →
+   Run workflow** to confirm everything is wired up.
+
+Each run is a single `--once` cycle with the default $5k budget; edit the
+watchlist or caps at the bottom of the workflow file.
+
+With `--llm-review`, each cycle's proposed trades are handed to Claude acting as
+a conservative risk reviewer before any order is placed — it approves sound
+momentum trades and vetoes anything reckless or oversized. This is the one place
+the loop spends tokens (one short call per cycle, only when there's something to
+trade) and it's **fail-safe**: if the review errors or can't be parsed, it vetoes
+rather than trades.
+
+**Setup:** add your Alpaca paper keys to `.env`:
+
+```
+ALPACA_API_KEY_ID=PK...          # Key ID from app.alpaca.markets (Paper Trading)
+ALPACA_API_SECRET_KEY=...        # Secret — shown only once at creation
+ALPACA_PAPER=true                # keep "true" for simulated trading
+```
+
+> Get free paper keys at [app.alpaca.markets](https://app.alpaca.markets) →
+> Home → Paper Trading → API Keys → Generate New Key.
+> Educational paper trading only — not financial advice.
+
+### Live Trading Dashboard
+
+A Streamlit dashboard for watching the account and the AutoTrader in real time:
+equity / cash / buying power, a 1-month equity curve, open positions with
+unrealized P&L, open and filled orders, candlestick charts with the SMA 20/50
+crossover signal for each watchlist symbol, and a live tail of the auto-trader
+log. Auto-refreshes on an interval you pick in the sidebar.
+
+```bash
+streamlit run dashboard/app.py
+```
+
+Then open http://localhost:8501. Edit the watchlist in the sidebar to match the
+symbols you run `autotrade` with. Set `DASHBOARD_REFRESH_SECS` to change the
+default refresh interval (0 disables auto-refresh).
+
+#### Free hosting on Streamlit Community Cloud
+
+To get a permanent URL you can check from any device (no computer required):
+
+1. Go to [share.streamlit.io](https://share.streamlit.io) and sign in with GitHub.
+2. Click **Create app** → pick this repo, your branch, and `dashboard/app.py`
+   as the main file.
+3. In **Advanced settings → Secrets**, paste your keys (see
+   `.streamlit/secrets.toml.example`):
+
+   ```toml
+   ALPACA_API_KEY_ID = "your-paper-key-id"
+   ALPACA_API_SECRET_KEY = "your-paper-secret-key"
+   ALPACA_PAPER = "true"
+   ```
+
+4. Deploy. The app redeploys automatically on every push to the branch.
+
+The hosted dashboard shows account, positions, orders, and signal charts; the
+auto-trader log panel stays empty there since the bot writes logs on whatever
+machine runs `autotrade`.
+
 ---
 
 ## Output Files
@@ -142,7 +274,9 @@ main.py (CLI)
             ├── agents/financial_content.py → tools/web_search.py
             ├── agents/marketing.py
             ├── agents/shopify_reporting.py → tools/shopify_client.py
-            └── agents/lead_generator.py   → tools/web_search.py
+            ├── agents/lead_generator.py   → tools/web_search.py
+            ├── agents/trading_agent.py    → tools/alpaca_client.py
+            └── agents/auto_trader.py      → tools/alpaca_client.py + tools/strategies.py
 ```
 
 All agents inherit from `agents/base_agent.py` which handles the Claude tool-use loop automatically.
