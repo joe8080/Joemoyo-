@@ -308,7 +308,12 @@ def trade(action: str, symbol: str, instruction: str):
 @click.option("--long-window", default=50, show_default=True, help="Long SMA window")
 @click.option("--once", is_flag=True, help="Run a single cycle instead of looping")
 @click.option("--dry-run", is_flag=True, help="Log decisions without placing orders")
-def autotrade(symbols, interval, cash_per_trade, max_positions, short_window, long_window, once, dry_run):
+@click.option(
+    "--llm-review",
+    is_flag=True,
+    help="Have Claude sanity-check (and veto risky) trades each cycle before placing them",
+)
+def autotrade(symbols, interval, cash_per_trade, max_positions, short_window, long_window, once, dry_run, llm_review):
     """
     Run the automated paper-trading loop (SMA-crossover momentum strategy).
 
@@ -331,6 +336,7 @@ def autotrade(symbols, interval, cash_per_trade, max_positions, short_window, lo
             long_window=long_window,
             once=once,
             dry_run=dry_run,
+            llm_review=llm_review,
         )
     except (EnvironmentError, ValueError) as e:
         console.print(f"[bold red]Auto-Trader Error:[/bold red] {e}")

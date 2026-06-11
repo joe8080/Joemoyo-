@@ -130,9 +130,10 @@ python main.py trade --action execute --instruction "Sell half my TSLA position"
 ```
 
 **Automated loop** — a deterministic SMA-crossover momentum strategy you can
-leave running unattended on the paper account. No LLM call per cycle, so it's
-free to run continuously and every decision is logged to
-`outputs/reports/autotrade_log_<date>.md`.
+leave running unattended on the paper account. No LLM call per cycle by default,
+so it's free to run continuously and every decision is logged to
+`outputs/reports/autotrade_log_<date>.md`. (Add `--llm-review` to layer in a
+Claude risk check — see below.)
 
 ```bash
 # Watch a list and trade every 15 min (runs until you press Ctrl-C)
@@ -144,6 +145,9 @@ python main.py autotrade --symbols AAPL,MSFT --once --dry-run
 
 # Single real cycle
 python main.py autotrade --symbols AAPL,MSFT --once
+
+# Add a Claude risk-review layer: it vetoes risky trades before they fire
+python main.py autotrade --symbols AAPL,MSFT,SPY --interval 15 --llm-review
 ```
 
 How it works: for each symbol it pulls recent daily bars and computes a short vs
@@ -151,6 +155,13 @@ long SMA crossover — **buys** on a fresh bullish cross (sized by `--cash-per-t
 capped at `--max-positions`) and **closes** the position on a bearish cross. It
 only trades when the market is open and never spends past your buying power.
 Tune the rule with `--short-window` / `--long-window`.
+
+With `--llm-review`, each cycle's proposed trades are handed to Claude acting as
+a conservative risk reviewer before any order is placed — it approves sound
+momentum trades and vetoes anything reckless or oversized. This is the one place
+the loop spends tokens (one short call per cycle, only when there's something to
+trade) and it's **fail-safe**: if the review errors or can't be parsed, it vetoes
+rather than trades.
 
 **Setup:** add your Alpaca paper keys to `.env`:
 

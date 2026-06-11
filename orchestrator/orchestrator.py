@@ -209,13 +209,15 @@ class BusinessOrchestrator:
         long_window: int = 50,
         once: bool = False,
         dry_run: bool = False,
+        llm_review: bool = False,
     ) -> None:
         """
         Run the deterministic SMA-crossover auto-trading loop (paper only).
 
         once=True runs a single decision cycle; otherwise loops every
         interval_minutes until interrupted. dry_run logs decisions without
-        placing any orders.
+        placing any orders. llm_review has Claude sanity-check each cycle's
+        proposed trades (and veto risky ones) before execution.
         """
         mode = "single cycle" if once else f"every {interval_minutes} min"
         console.print(Panel(
@@ -233,6 +235,7 @@ class BusinessOrchestrator:
             short_window=short_window,
             long_window=long_window,
             dry_run=dry_run,
+            llm_review=llm_review,
         )
         if once:
             trader.run_once()

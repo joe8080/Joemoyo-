@@ -17,14 +17,16 @@ Flow per cycle (run_once):
 Requires ALPACA_API_KEY_ID and ALPACA_API_SECRET_KEY in .env.
 """
 
+import json
 import os
+import re
 import time
 from datetime import datetime
 
 from rich.console import Console
 
 from config.settings import settings
-from tools.strategies import sma_crossover_signal, position_size
+from tools.strategies import sma, sma_crossover_signal, position_size
 
 console = Console()
 
@@ -41,6 +43,7 @@ class AutoTrader:
         timeframe: str = "1Day",
         cash_buffer: float = 0.0,
         dry_run: bool = False,
+        llm_review: bool = False,
         paper: bool | None = None,
     ):
         # Lazy import so missing credentials only error when the trader is used.
@@ -66,6 +69,8 @@ class AutoTrader:
         self.timeframe = timeframe
         self.cash_buffer = cash_buffer
         self.dry_run = dry_run
+        self.llm_review = llm_review
+        self._llm_client = None  # lazy Anthropic client for the review layer
 
         os.makedirs(os.path.join(settings.output_dir, "reports"), exist_ok=True)
         self.log_path = os.path.join(
@@ -92,7 +97,8 @@ class AutoTrader:
     def run_once(self) -> dict:
         """Run a single decision cycle. Returns a summary dict."""
         mode = "DRY-RUN" if self.dry_run else "LIVE-PAPER"
-        self._log(f"**Cycle start** ({mode}) watching {', '.join(self.symbols)}")
+        review = " +LLM-review" if self.llm_review else ""
+        self._log(f"**Cycle start** ({mode}{review}) watching {', '.join(self.symbols)}")
 
         # 1. Market hours gate.
         try:
@@ -123,9 +129,32 @@ class AutoTrader:
             f"{open_position_count} position(s), today P&L ${account.get('todays_pl')}"
         )
 
-        actions = []
+        # 3. Gather proposals from the deterministic strategy (no orders yet).
+        proposals = self._gather_proposals(
+            positions, symbols_with_open_orders, buying_power, open_position_count
+        )
 
-        # 3. Evaluate each symbol.
+        # 4. Optional LLM risk review — may veto proposals before execution.
+        if self.llm_review and proposals:
+            proposals = self._apply_llm_review(proposals, account, positions)
+
+        # 5. Execute the surviving proposals (or log them under --dry-run).
+        executed = self._execute_proposals(proposals)
+
+        self._log(f"**Cycle end** — {len(executed)} action(s) of {len(proposals)} proposed.")
+        return {"skipped": False, "proposals": proposals, "executed": executed, "account": account}
+
+    # ------------------------------------------------------------------ #
+    #  Proposal gathering (deterministic)                                 #
+    # ------------------------------------------------------------------ #
+
+    def _gather_proposals(
+        self, positions: dict, symbols_with_open_orders: set, buying_power: float, open_position_count: int
+    ) -> list[dict]:
+        """Compute the strategy's proposed trades without placing any orders."""
+        proposals: list[dict] = []
+        remaining_bp = buying_power
+
         for symbol in self.symbols:
             if symbol in symbols_with_open_orders:
                 self._log(f"{symbol}: open order already pending — skip.")
@@ -143,47 +172,157 @@ class AutoTrader:
                 bars, short_window=self.short_window, long_window=self.long_window
             )
             holding = symbol in positions
+            closes = [float(b["close"]) for b in bars if b.get("close") is not None]
+            last_close = closes[-1] if closes else 0.0
+            short_sma = sma(closes, self.short_window)
+            long_sma = sma(closes, self.long_window)
 
             if signal == "buy" and not holding:
                 if open_position_count >= self.max_positions:
                     self._log(f"{symbol}: BUY signal but max_positions ({self.max_positions}) reached — skip.")
                     continue
-                last_close = float(bars[-1]["close"])
-                qty = position_size(buying_power, self.cash_per_trade, last_close, self.cash_buffer)
+                qty = position_size(remaining_bp, self.cash_per_trade, last_close, self.cash_buffer)
                 if qty <= 0:
                     self._log(f"{symbol}: BUY signal but insufficient buying power to size a trade — skip.")
                     continue
                 est_cost = round(qty * last_close, 2)
-                actions.append({"symbol": symbol, "side": "buy", "qty": qty, "est_cost": est_cost})
-                if self.dry_run:
-                    self._log(f"{symbol}: [DRY-RUN] would BUY {qty} @ ~${last_close} (~${est_cost})")
-                else:
-                    try:
-                        order = self.alpaca.submit_order(symbol=symbol, side="buy", qty=qty)
-                        self._log(f"{symbol}: BUY {qty} submitted (order {order.get('id')}, status {order.get('status')})")
-                        buying_power -= est_cost
-                        open_position_count += 1
-                    except (RuntimeError, ValueError) as e:
-                        self._log(f"{symbol}: BUY rejected: {e}")
+                remaining_bp -= est_cost
+                open_position_count += 1
+                proposals.append({
+                    "symbol": symbol,
+                    "action": "buy",
+                    "qty": qty,
+                    "est_cost": est_cost,
+                    "last_price": round(last_close, 2),
+                    "signal": signal,
+                    "short_sma": round(short_sma, 2) if short_sma else None,
+                    "long_sma": round(long_sma, 2) if long_sma else None,
+                    "reason": "bullish SMA crossover",
+                })
 
             elif signal == "sell" and holding:
-                qty = positions[symbol]["qty"]
-                actions.append({"symbol": symbol, "side": "sell", "qty": qty})
-                if self.dry_run:
-                    self._log(f"{symbol}: [DRY-RUN] would CLOSE position of {qty} shares")
-                else:
-                    try:
-                        self.alpaca.close_position(symbol)
-                        self._log(f"{symbol}: position CLOSED (bearish crossover)")
-                        open_position_count = max(0, open_position_count - 1)
-                    except RuntimeError as e:
-                        self._log(f"{symbol}: close failed: {e}")
+                proposals.append({
+                    "symbol": symbol,
+                    "action": "close",
+                    "qty": positions[symbol]["qty"],
+                    "last_price": round(last_close, 2),
+                    "signal": signal,
+                    "short_sma": round(short_sma, 2) if short_sma else None,
+                    "long_sma": round(long_sma, 2) if long_sma else None,
+                    "reason": "bearish SMA crossover",
+                })
             else:
                 state = "holding" if holding else "flat"
                 self._log(f"{symbol}: signal={signal}, {state} — no action.")
 
-        self._log(f"**Cycle end** — {len(actions)} action(s).")
-        return {"skipped": False, "actions": actions, "account": account}
+        return proposals
+
+    # ------------------------------------------------------------------ #
+    #  Execution                                                          #
+    # ------------------------------------------------------------------ #
+
+    def _execute_proposals(self, proposals: list[dict]) -> list[dict]:
+        """Place orders for approved proposals (or log them under dry_run)."""
+        executed: list[dict] = []
+        for p in proposals:
+            symbol, action, qty = p["symbol"], p["action"], p["qty"]
+            if action == "buy":
+                if self.dry_run:
+                    self._log(f"{symbol}: [DRY-RUN] would BUY {qty} @ ~${p['last_price']} (~${p['est_cost']})")
+                    executed.append(p)
+                    continue
+                try:
+                    order = self.alpaca.submit_order(symbol=symbol, side="buy", qty=qty)
+                    self._log(f"{symbol}: BUY {qty} submitted (order {order.get('id')}, status {order.get('status')})")
+                    executed.append(p)
+                except (RuntimeError, ValueError) as e:
+                    self._log(f"{symbol}: BUY rejected: {e}")
+            elif action == "close":
+                if self.dry_run:
+                    self._log(f"{symbol}: [DRY-RUN] would CLOSE position of {qty} shares")
+                    executed.append(p)
+                    continue
+                try:
+                    self.alpaca.close_position(symbol)
+                    self._log(f"{symbol}: position CLOSED (bearish crossover)")
+                    executed.append(p)
+                except RuntimeError as e:
+                    self._log(f"{symbol}: close failed: {e}")
+        return executed
+
+    # ------------------------------------------------------------------ #
+    #  LLM risk review (optional)                                         #
+    # ------------------------------------------------------------------ #
+
+    def _apply_llm_review(self, proposals: list[dict], account: dict, positions: dict) -> list[dict]:
+        """
+        Ask Claude to sanity-check the proposed trades as a conservative risk
+        reviewer. Returns only the proposals Claude approves. Fail-safe: if the
+        review errors or can't be parsed, the trades are VETOED (we don't trade
+        on an unreviewed signal when review was explicitly requested).
+        """
+        import anthropic
+
+        if self._llm_client is None:
+            self._llm_client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
+
+        payload = {
+            "account": {
+                "equity": account.get("equity"),
+                "buying_power": account.get("buying_power"),
+                "todays_pl": account.get("todays_pl"),
+                "open_positions": len(positions),
+                "max_positions": self.max_positions,
+            },
+            "proposed_trades": proposals,
+        }
+        system = (
+            "You are a conservative risk reviewer for an automated PAPER trading bot "
+            "that uses an SMA-crossover momentum strategy. You are given the account "
+            "state and a list of proposed trades. Approve trades that are reasonable "
+            "and well-sized; veto trades that look risky, oversized relative to equity, "
+            "or where the crossover looks weak/noisy. This is paper money, so bias "
+            "toward letting sound momentum trades through, but block anything reckless. "
+            "Respond with ONLY a JSON object of the form: "
+            '{"verdicts": [{"symbol": "AAPL", "approved": true, "reason": "..."}]}. '
+            "Include one verdict per proposed trade. No prose outside the JSON."
+        )
+        try:
+            resp = self._llm_client.messages.create(
+                model=settings.model,
+                max_tokens=1024,
+                system=system,
+                messages=[{"role": "user", "content": json.dumps(payload, indent=2)}],
+            )
+            text = "".join(b.text for b in resp.content if hasattr(b, "text"))
+            verdicts = self._parse_verdicts(text)
+        except Exception as e:
+            self._log(f"LLM review failed ({e}) — vetoing all proposals this cycle (fail-safe).")
+            return []
+
+        approved: list[dict] = []
+        for p in proposals:
+            v = verdicts.get(p["symbol"])
+            if v is None:
+                self._log(f"{p['symbol']}: no LLM verdict returned — vetoed (fail-safe).")
+                continue
+            if v.get("approved"):
+                self._log(f"{p['symbol']}: LLM APPROVED — {v.get('reason', '')}")
+                approved.append(p)
+            else:
+                self._log(f"{p['symbol']}: LLM VETOED — {v.get('reason', '')}")
+        return approved
+
+    @staticmethod
+    def _parse_verdicts(text: str) -> dict:
+        """Extract {symbol: verdict} from the model's JSON reply, tolerating fences."""
+        cleaned = re.sub(r"^```(?:json)?|```$", "", text.strip(), flags=re.MULTILINE).strip()
+        # Fall back to grabbing the outermost JSON object if there's stray text.
+        if not cleaned.startswith("{"):
+            match = re.search(r"\{.*\}", cleaned, flags=re.DOTALL)
+            cleaned = match.group(0) if match else cleaned
+        data = json.loads(cleaned)
+        return {v["symbol"].upper(): v for v in data.get("verdicts", []) if "symbol" in v}
 
     # ------------------------------------------------------------------ #
     #  Continuous loop                                                    #
@@ -194,8 +333,8 @@ class AutoTrader:
         self._log(
             f"AutoTrader starting: interval={self.interval_minutes}m, "
             f"cash_per_trade=${self.cash_per_trade}, max_positions={self.max_positions}, "
-            f"SMA {self.short_window}/{self.long_window} on {self.timeframe}. "
-            f"Log: {self.log_path}"
+            f"SMA {self.short_window}/{self.long_window} on {self.timeframe}, "
+            f"llm_review={self.llm_review}. Log: {self.log_path}"
         )
         try:
             while True:
