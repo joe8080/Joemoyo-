@@ -24,6 +24,17 @@ import streamlit as st
 # Allow `streamlit run dashboard/app.py` from the repo root or anywhere else.
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# On Streamlit Community Cloud credentials arrive via st.secrets, not .env.
+# Mirror them into the environment before config.settings reads it.
+try:
+    for _key in ("ALPACA_API_KEY_ID", "ALPACA_API_SECRET_KEY", "ALPACA_PAPER"):
+        if _key not in os.environ and _key in st.secrets:
+            os.environ[_key] = str(st.secrets[_key])
+except FileNotFoundError:
+    pass  # no secrets.toml — running locally off .env
+# The dashboard never calls Anthropic; don't let settings' key check kill it.
+os.environ.setdefault("ANTHROPIC_API_KEY", "unused-by-dashboard")
+
 from config.settings import settings  # noqa: E402
 from tools.alpaca_client import AlpacaClient  # noqa: E402
 from tools.strategies import sma_crossover_signal  # noqa: E402

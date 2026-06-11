@@ -191,6 +191,28 @@ Then open http://localhost:8501. Edit the watchlist in the sidebar to match the
 symbols you run `autotrade` with. Set `DASHBOARD_REFRESH_SECS` to change the
 default refresh interval (0 disables auto-refresh).
 
+#### Free hosting on Streamlit Community Cloud
+
+To get a permanent URL you can check from any device (no computer required):
+
+1. Go to [share.streamlit.io](https://share.streamlit.io) and sign in with GitHub.
+2. Click **Create app** → pick this repo, your branch, and `dashboard/app.py`
+   as the main file.
+3. In **Advanced settings → Secrets**, paste your keys (see
+   `.streamlit/secrets.toml.example`):
+
+   ```toml
+   ALPACA_API_KEY_ID = "your-paper-key-id"
+   ALPACA_API_SECRET_KEY = "your-paper-secret-key"
+   ALPACA_PAPER = "true"
+   ```
+
+4. Deploy. The app redeploys automatically on every push to the branch.
+
+The hosted dashboard shows account, positions, orders, and signal charts; the
+auto-trader log panel stays empty there since the bot writes logs on whatever
+machine runs `autotrade`.
+
 ---
 
 ## Output Files
