@@ -43,6 +43,7 @@ class AutoTrader:
         long_window: int = 50,
         timeframe: str = "1Day",
         cash_buffer: float = 0.0,
+        enter_on_trend: bool = False,
         dry_run: bool = False,
         llm_review: bool = False,
         paper: bool | None = None,
@@ -72,6 +73,11 @@ class AutoTrader:
         self.long_window = long_window
         self.timeframe = timeframe
         self.cash_buffer = cash_buffer
+        # Regime mode: also enter when already in an uptrend (short SMA above
+        # long) and exit when in a downtrend, instead of trading only on the
+        # exact crossover bar. Without it, a freshly started bot can wait
+        # months for the next cross before its first trade.
+        self.enter_on_trend = enter_on_trend
         self.dry_run = dry_run
         self.llm_review = llm_review
         self._llm_client = None  # lazy Anthropic client for the review layer
@@ -194,6 +200,14 @@ class AutoTrader:
             short_sma = sma(closes, self.short_window)
             long_sma = sma(closes, self.long_window)
 
+            # Regime mode: trade the current trend, not just the cross bar.
+            reason = {"buy": "bullish SMA crossover", "sell": "bearish SMA crossover"}.get(signal, "")
+            if self.enter_on_trend and signal == "hold" and short_sma and long_sma:
+                if not holding and short_sma > long_sma:
+                    signal, reason = "buy", "bullish regime (short SMA above long)"
+                elif holding and short_sma < long_sma:
+                    signal, reason = "sell", "bearish regime (short SMA below long)"
+
             if signal == "buy" and not holding:
                 if open_position_count >= self.max_positions:
                     self._log(f"{symbol}: BUY signal but max_positions ({self.max_positions}) reached — skip.")
@@ -219,7 +233,7 @@ class AutoTrader:
                     "signal": signal,
                     "short_sma": round(short_sma, 2) if short_sma else None,
                     "long_sma": round(long_sma, 2) if long_sma else None,
-                    "reason": "bullish SMA crossover",
+                    "reason": reason,
                 })
 
             elif signal == "sell" and holding:
@@ -231,7 +245,7 @@ class AutoTrader:
                     "signal": signal,
                     "short_sma": round(short_sma, 2) if short_sma else None,
                     "long_sma": round(long_sma, 2) if long_sma else None,
-                    "reason": "bearish SMA crossover",
+                    "reason": reason,
                 })
             else:
                 state = "holding" if holding else "flat"

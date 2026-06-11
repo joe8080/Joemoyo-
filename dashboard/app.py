@@ -249,6 +249,9 @@ with st.form("backtest_form"):
     bt_days = b1.slider("History (days)", 90, 1000, 365, step=5)
     bt_budget = b2.number_input("Budget ($)", 500.0, 1_000_000.0, 5000.0, step=500.0)
     bt_per_trade = b3.number_input("Cash per trade ($)", 100.0, 1_000_000.0, 1000.0, step=100.0)
+    bt_regime = st.checkbox(
+        "Regime mode (enter existing uptrends, don't wait for a fresh cross)", value=True,
+    )
     run_bt = st.form_submit_button("▶ Run backtest on watchlist", width="stretch")
 
 if run_bt:
@@ -265,6 +268,7 @@ if run_bt:
             result = run_backtest(
                 bt_bars, budget=bt_budget, cash_per_trade=bt_per_trade,
                 short_window=SHORT_WINDOW, long_window=LONG_WINDOW,
+                enter_on_trend=bt_regime,
             )
     if not bt_bars:
         st.error("No data to backtest.")

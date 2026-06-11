@@ -209,6 +209,7 @@ class BusinessOrchestrator:
         short_window: int = 20,
         long_window: int = 50,
         once: bool = False,
+        enter_on_trend: bool = False,
         dry_run: bool = False,
         llm_review: bool = False,
     ) -> None:
@@ -236,6 +237,7 @@ class BusinessOrchestrator:
             budget=budget,
             short_window=short_window,
             long_window=long_window,
+            enter_on_trend=enter_on_trend,
             dry_run=dry_run,
             llm_review=llm_review,
         )
