@@ -12,6 +12,7 @@ Get paper keys free at https://app.alpaca.markets (Paper Trading > API Keys).
 """
 
 import json
+import os
 from datetime import datetime, timedelta
 
 import requests
@@ -39,6 +40,10 @@ class AlpacaClient:
             )
         # Default to whatever .env says; explicit arg wins.
         self.paper = settings.alpaca_paper if paper is None else paper
+        # Market data feed: "sip" (full consolidated tape, paid plans like
+        # Algo Trader Plus) or "iex" (free). get_bars auto-falls-back to iex
+        # if the account isn't entitled to the configured feed.
+        self.data_feed = os.environ.get("ALPACA_DATA_FEED", "sip").strip().lower()
         self.base_url = PAPER_BASE_URL if self.paper else LIVE_BASE_URL
         self.headers = {
             "APCA-API-KEY-ID": settings.alpaca_api_key_id,
@@ -242,13 +247,28 @@ class AlpacaClient:
         """
         Historical OHLCV bars for a symbol.
         timeframe examples: 1Min, 5Min, 15Min, 1Hour, 1Day.
+
+        Uses the consolidated SIP feed (full-market prices and volume) when
+        the account's data plan allows it, and falls back to the free IEX
+        feed otherwise. IEX volume is only a few percent of real market
+        volume, so SIP matters for anything volume-based.
         """
         start = (datetime.utcnow() - timedelta(days=days_back)).strftime("%Y-%m-%d")
-        data = self._request(
-            "GET",
-            self._data_url(f"v2/stocks/{symbol.upper()}/bars"),
-            params={"timeframe": timeframe, "start": start, "limit": 1000, "adjustment": "raw"},
-        )
+        params = {"timeframe": timeframe, "start": start, "limit": 1000, "adjustment": "raw"}
+        data = None
+        for feed in (self.data_feed, "iex"):
+            try:
+                data = self._request(
+                    "GET",
+                    self._data_url(f"v2/stocks/{symbol.upper()}/bars"),
+                    params={**params, "feed": feed},
+                )
+                if feed != self.data_feed:
+                    self.data_feed = feed  # remember the downgrade for this session
+                break
+            except RuntimeError as e:
+                if feed == "iex" or "40" not in str(e)[:30]:
+                    raise
         bars = data.get("bars", [])
         return [
             {
