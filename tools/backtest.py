@@ -10,7 +10,7 @@ are modeled (Alpaca is commission-free).
 
 from math import sqrt
 
-from tools.strategies import sma, sma_crossover_signal, position_size
+from tools.strategies import sma, sma_crossover_signal, position_size, volume_confirmed
 
 
 def run_backtest(
@@ -21,6 +21,9 @@ def run_backtest(
     short_window: int = 20,
     long_window: int = 50,
     enter_on_trend: bool = False,
+    confirm_volume: bool = False,
+    volume_mult: float = 1.5,
+    regime_bars: list[dict] | None = None,
 ) -> dict:
     """
     Simulate the strategy over historical bars.
@@ -47,7 +50,22 @@ def run_backtest(
     equity_curve: list[dict] = []
     last_close: dict[str, float] = {}
 
+    # Market regime by date (mirrors AutoTrader's market filter): new buys
+    # are only allowed while the benchmark's short SMA is above its long SMA.
+    market_ok_by_date: dict[str, bool] = {}
+    if regime_bars:
+        closes: list[float] = []
+        for b in regime_bars:
+            if b.get("close") is None:
+                continue
+            closes.append(float(b["close"]))
+            s, l = sma(closes, short_window), sma(closes, long_window)
+            market_ok_by_date[b["t"]] = s is not None and l is not None and s > l
+    market_ok = True
+
     for day in calendar:
+        if regime_bars:
+            market_ok = market_ok_by_date.get(day, market_ok)
         for symbol, day_map in by_date.items():
             bar = day_map.get(day)
             if bar is None:
@@ -60,6 +78,7 @@ def run_backtest(
                 history[symbol], short_window=short_window, long_window=long_window
             )
             holding = symbol in positions
+            from_crossover = signal == "buy"
 
             # Regime mode (mirrors AutoTrader): trade the current trend, not
             # just the crossover bar.
@@ -71,6 +90,14 @@ def run_backtest(
                         signal = "buy"
                     elif holding and s < l:
                         signal = "sell"
+
+            # Entry gates (exits are never gated).
+            if signal == "buy":
+                if not market_ok:
+                    signal = "hold"
+                elif (confirm_volume and from_crossover
+                      and not volume_confirmed(history[symbol], mult=volume_mult)):
+                    signal = "hold"
 
             if signal == "buy" and not holding and len(positions) < max_positions:
                 qty = position_size(cash, cash_per_trade, price)

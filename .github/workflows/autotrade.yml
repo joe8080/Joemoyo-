@@ -42,9 +42,9 @@ jobs:
           ANTHROPIC_API_KEY: "unused-by-autotrader"
         run: >
           python main.py autotrade
-          --symbols SPY,QQQ,AAPL,MSFT,NVDA
+          --symbols SPY,QQQ,AAPL,MSFT,NVDA,GOOGL,AMZN,META,TSLA,AMD
           --once
-          --budget 5000
-          --cash-per-trade 1000
-          --max-positions 5
+          --budget 50000
+          --cash-per-trade 5000
+          --max-positions 10
           --enter-on-trend

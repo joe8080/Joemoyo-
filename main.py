@@ -319,13 +319,25 @@ def trade(action: str, symbol: str, instruction: str):
     help="Also enter when already in an uptrend (and exit in a downtrend), "
          "instead of trading only on the exact crossover bar",
 )
+@click.option(
+    "--confirm-volume",
+    is_flag=True,
+    help="Only take crossover buys that fire on >=1.5x average volume "
+         "(experimental — backtests showed it reduces returns on mega-caps)",
+)
+@click.option(
+    "--market-filter",
+    is_flag=True,
+    help="Block new buys while SPY's short SMA is below its long SMA "
+         "(experimental — backtests showed it reduces returns 2022-2026)",
+)
 @click.option("--dry-run", is_flag=True, help="Log decisions without placing orders")
 @click.option(
     "--llm-review",
     is_flag=True,
     help="Have Claude sanity-check (and veto risky) trades each cycle before placing them",
 )
-def autotrade(symbols, interval, cash_per_trade, budget, max_positions, short_window, long_window, once, enter_on_trend, dry_run, llm_review):
+def autotrade(symbols, interval, cash_per_trade, budget, max_positions, short_window, long_window, once, enter_on_trend, confirm_volume, market_filter, dry_run, llm_review):
     """
     Run the automated paper-trading loop (SMA-crossover momentum strategy).
 
@@ -349,6 +361,8 @@ def autotrade(symbols, interval, cash_per_trade, budget, max_positions, short_wi
             long_window=long_window,
             once=once,
             enter_on_trend=enter_on_trend,
+            confirm_volume=confirm_volume,
+            market_filter=market_filter,
             dry_run=dry_run,
             llm_review=llm_review,
         )

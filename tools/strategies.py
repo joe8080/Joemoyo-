@@ -82,3 +82,48 @@ def position_size(
     if spendable < price:
         return 0
     return floor(spendable / price)
+
+
+def atr(bars: list[dict], n: int = 14) -> float | None:
+    """Average true range of the last n bars. None if not enough data."""
+    if len(bars) < n + 1:
+        return None
+    trs = []
+    for prev, curr in zip(bars[-(n + 1):-1], bars[-n:]):
+        high, low = float(curr["high"]), float(curr["low"])
+        prev_close = float(prev["close"])
+        trs.append(max(high - low, abs(high - prev_close), abs(low - prev_close)))
+    return sum(trs) / n
+
+
+def volume_confirmed(bars: list[dict], n: int = 20, mult: float = 1.5) -> bool:
+    """
+    True when the latest bar's volume is at least `mult` times the average of
+    the previous n bars. Filters out signals that fire on dead volume — a
+    pattern without participation is usually noise.
+    """
+    vols = [float(b["volume"]) for b in bars if b.get("volume") is not None]
+    if len(vols) < n + 1:
+        return False
+    avg = sum(vols[-(n + 1):-1]) / n
+    return avg > 0 and vols[-1] >= mult * avg
+
+
+def participation_ok(
+    bars: list[dict],
+    min_avg_volume: float = 2_000_000,
+    min_atr: float = 1.0,
+    n: int = 20,
+) -> bool:
+    """
+    True when the symbol trades enough shares and has enough daily range to
+    be worth trading at all ("is the stock in play?"). Thin, rangeless names
+    produce random-looking signals with no follow-through.
+    """
+    vols = [float(b["volume"]) for b in bars if b.get("volume") is not None]
+    if len(vols) < n:
+        return False
+    if sum(vols[-n:]) / n < min_avg_volume:
+        return False
+    a = atr(bars)
+    return a is not None and a >= min_atr

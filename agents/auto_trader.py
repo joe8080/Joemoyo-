@@ -17,6 +17,7 @@ Flow per cycle (run_once):
 Requires ALPACA_API_KEY_ID and ALPACA_API_SECRET_KEY in .env.
 """
 
+import csv
 import json
 import os
 import re
@@ -26,7 +27,10 @@ from datetime import datetime
 from rich.console import Console
 
 from config.settings import settings
-from tools.strategies import sma, sma_crossover_signal, position_size
+from tools.strategies import (
+    sma, sma_crossover_signal, position_size,
+    volume_confirmed, participation_ok,
+)
 
 console = Console()
 
@@ -44,6 +48,15 @@ class AutoTrader:
         timeframe: str = "1Day",
         cash_buffer: float = 0.0,
         enter_on_trend: bool = False,
+        # Backtests (2022-2026, 10 mega-caps, daily bars) showed these two
+        # filters reduce both return and Sharpe for this strategy, so they
+        # default OFF and are opt-in for experimentation.
+        confirm_volume: bool = False,
+        volume_mult: float = 1.5,
+        market_filter: bool = False,
+        regime_symbol: str = "SPY",
+        min_avg_volume: float = 2_000_000,
+        min_atr: float = 1.0,
         dry_run: bool = False,
         llm_review: bool = False,
         paper: bool | None = None,
@@ -78,6 +91,16 @@ class AutoTrader:
         # exact crossover bar. Without it, a freshly started bot can wait
         # months for the next cross before its first trade.
         self.enter_on_trend = enter_on_trend
+        # Participation filters ("only trade stocks in play"): a buy signal
+        # must fire on above-average volume, the broad market must be in an
+        # uptrend, and the symbol must have enough liquidity and range.
+        # Exits are never gated — risk reduction always goes through.
+        self.confirm_volume = confirm_volume
+        self.volume_mult = volume_mult
+        self.market_filter = market_filter
+        self.regime_symbol = regime_symbol
+        self.min_avg_volume = min_avg_volume
+        self.min_atr = min_atr
         self.dry_run = dry_run
         self.llm_review = llm_review
         self._llm_client = None  # lazy Anthropic client for the review layer
@@ -99,6 +122,27 @@ class AutoTrader:
         console.print(f"[dim]{stamp}[/dim] {message}")
         with open(self.log_path, "a", encoding="utf-8") as f:
             f.write(line + "\n")
+
+    def _log_trade(self, p: dict, status: str) -> None:
+        """Append one executed/attempted trade to a CSV ready for analysis."""
+        path = os.path.join(settings.output_dir, "reports", "trades.csv")
+        fields = ["timestamp", "symbol", "action", "qty", "price", "est_cost",
+                  "reason", "status"]
+        new_file = not os.path.exists(path)
+        with open(path, "a", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=fields)
+            if new_file:
+                w.writeheader()
+            w.writerow({
+                "timestamp": datetime.now().isoformat(timespec="seconds"),
+                "symbol": p["symbol"],
+                "action": p["action"],
+                "qty": p["qty"],
+                "price": p.get("last_price"),
+                "est_cost": p.get("est_cost"),
+                "reason": p.get("reason", ""),
+                "status": status,
+            })
 
     # ------------------------------------------------------------------ #
     #  One cycle                                                          #
@@ -178,6 +222,28 @@ class AutoTrader:
         proposals: list[dict] = []
         remaining_bp = buying_power
 
+        # Market regime gate: only open new longs when the broad market's own
+        # short SMA is above its long SMA. Exits are never blocked by this.
+        market_ok = True
+        if self.market_filter:
+            try:
+                mkt_bars = self.alpaca.get_bars(
+                    self.regime_symbol, timeframe=self.timeframe,
+                    days_back=self.long_window * 3 + 10,
+                )
+                mkt_closes = [float(b["close"]) for b in mkt_bars if b.get("close") is not None]
+                ms, ml = sma(mkt_closes, self.short_window), sma(mkt_closes, self.long_window)
+                market_ok = ms is not None and ml is not None and ms > ml
+                if not market_ok:
+                    self._log(
+                        f"Market filter: {self.regime_symbol} SMA{self.short_window} below "
+                        f"SMA{self.long_window} — no NEW buys this cycle (exits still active)."
+                    )
+            except RuntimeError as e:
+                self._log(f"Market filter: could not fetch {self.regime_symbol} bars ({e}) — "
+                          "blocking new buys this cycle (fail-safe).")
+                market_ok = False
+
         for symbol in self.symbols:
             if symbol in symbols_with_open_orders:
                 self._log(f"{symbol}: open order already pending — skip.")
@@ -209,6 +275,22 @@ class AutoTrader:
                     signal, reason = "sell", "bearish regime (short SMA below long)"
 
             if signal == "buy" and not holding:
+                if not market_ok:
+                    self._log(f"{symbol}: BUY blocked — market regime filter ({self.regime_symbol} downtrend).")
+                    continue
+                if not participation_ok(bars, self.min_avg_volume, self.min_atr):
+                    self._log(
+                        f"{symbol}: BUY blocked — not enough participation "
+                        f"(needs avg vol ≥ {self.min_avg_volume:,.0f} and ATR ≥ ${self.min_atr})."
+                    )
+                    continue
+                if (self.confirm_volume and "crossover" in reason
+                        and not volume_confirmed(bars, mult=self.volume_mult)):
+                    self._log(
+                        f"{symbol}: BUY blocked — crossover fired on weak volume "
+                        f"(needs ≥ {self.volume_mult}x the 20-day average)."
+                    )
+                    continue
                 if open_position_count >= self.max_positions:
                     self._log(f"{symbol}: BUY signal but max_positions ({self.max_positions}) reached — skip.")
                     continue
@@ -247,6 +329,31 @@ class AutoTrader:
                     "long_sma": round(long_sma, 2) if long_sma else None,
                     "reason": reason,
                 })
+            elif (holding and self.enter_on_trend and market_ok
+                  and short_sma and long_sma and short_sma > long_sma
+                  and positions[symbol].get("market_value", 0.0) < self.cash_per_trade * 0.6):
+                # Top up an under-sized position toward cash_per_trade so a
+                # raised budget actually gets deployed into existing trends.
+                gap = self.cash_per_trade - positions[symbol].get("market_value", 0.0)
+                spendable = min(remaining_bp, remaining_budget)
+                qty = position_size(spendable, gap, last_close, self.cash_buffer)
+                if qty > 0:
+                    est_cost = round(qty * last_close, 2)
+                    remaining_bp -= est_cost
+                    remaining_budget -= est_cost
+                    proposals.append({
+                        "symbol": symbol,
+                        "action": "buy",
+                        "qty": qty,
+                        "est_cost": est_cost,
+                        "last_price": round(last_close, 2),
+                        "signal": "buy",
+                        "short_sma": round(short_sma, 2),
+                        "long_sma": round(long_sma, 2),
+                        "reason": "top-up to target position size",
+                    })
+                else:
+                    self._log(f"{symbol}: under-sized but no budget left to top up.")
             else:
                 state = "holding" if holding else "flat"
                 self._log(f"{symbol}: signal={signal}, {state} — no action.")
@@ -270,9 +377,11 @@ class AutoTrader:
                 try:
                     order = self.alpaca.submit_order(symbol=symbol, side="buy", qty=qty)
                     self._log(f"{symbol}: BUY {qty} submitted (order {order.get('id')}, status {order.get('status')})")
+                    self._log_trade(p, "submitted")
                     executed.append(p)
                 except (RuntimeError, ValueError) as e:
                     self._log(f"{symbol}: BUY rejected: {e}")
+                    self._log_trade(p, f"rejected: {e}")
             elif action == "close":
                 if self.dry_run:
                     self._log(f"{symbol}: [DRY-RUN] would CLOSE position of {qty} shares")
@@ -280,10 +389,12 @@ class AutoTrader:
                     continue
                 try:
                     self.alpaca.close_position(symbol)
-                    self._log(f"{symbol}: position CLOSED (bearish crossover)")
+                    self._log(f"{symbol}: position CLOSED ({p.get('reason', 'bearish signal')})")
+                    self._log_trade(p, "submitted")
                     executed.append(p)
                 except RuntimeError as e:
                     self._log(f"{symbol}: close failed: {e}")
+                    self._log_trade(p, f"failed: {e}")
         return executed
 
     # ------------------------------------------------------------------ #
