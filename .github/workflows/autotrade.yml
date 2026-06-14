@@ -37,6 +37,8 @@ jobs:
           ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID || 'PKPGSH5CZF7QJRVJ4YT7CVVZDM' }}
           ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
           ALPACA_PAPER: "true"
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           # The deterministic strategy never calls Anthropic; this only
           # satisfies the settings module's startup check.
           ANTHROPIC_API_KEY: "unused-by-autotrader"
