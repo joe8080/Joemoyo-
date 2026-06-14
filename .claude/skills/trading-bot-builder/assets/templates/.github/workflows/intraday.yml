@@ -1,0 +1,53 @@
+name: AutoTrader Intraday (paper)
+
+# Day-trading engine: 5-min bars, fast SMAs, end-of-day flatten. Separate
+# sub-budget and a watchlist DISJOINT from the swing book so the two engines
+# share one account without colliding. Cron is approximate — the --flatten-eod
+# safeguard closes everything near the bell regardless.
+
+on:
+  schedule:
+    - cron: "*/5 13-20 * * 1-5"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: autotrade-intraday
+  cancel-in-progress: false
+
+jobs:
+  trade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Run one intraday cycle
+        env:
+          ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
+          ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
+          ALPACA_PAPER: "true"
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          ANTHROPIC_API_KEY: "unused-by-autotrader"
+        run: >
+          python main.py autotrade
+          --symbols NFLX,AVGO,COIN,IWM,SMH
+          --once
+          --mode intraday
+          --timeframe 5Min
+          --short-window 9
+          --long-window 20
+          --budget 10000
+          --cash-per-trade 2000
+          --max-positions 5
+          --enter-on-trend
+          --trailing-stop-pct 2
+          --daily-loss-limit 500
+          --flatten-eod
