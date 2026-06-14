@@ -459,6 +459,43 @@ def validate(symbols, start):
 
 
 @cli.command()
+@click.option("--symbols", "-s",
+              default="SPY,QQQ,AAPL,MSFT,NVDA,GOOGL,AMZN,META,TSLA,AMD",
+              show_default=True, help="The engine's watchlist")
+@click.option("--budget", default=50000.0, show_default=True, help="Engine budget")
+@click.option("--start", default="2026-06-15", show_default=True,
+              help="Campaign start date (for day count)")
+def scorecard(symbols, budget, start):
+    """
+    Evaluate the strategy against its PASS/FAIL criteria (see docs/STRATEGY.md)
+    and print the verdict: PASS / WATCH / FAIL / IN PROGRESS.
+    """
+    from tools.alpaca_client import AlpacaClient
+    from tools import scorecard as SC
+    from rich.table import Table
+    try:
+        client = AlpacaClient()
+    except EnvironmentError as e:
+        console.print(f"[bold red]Alpaca Error:[/bold red] {e}")
+        sys.exit(1)
+    syms = [s.strip().upper() for s in symbols.split(",") if s.strip()]
+    inputs = SC.build_inputs(client, budget=budget, symbols=syms, start_date=start)
+    card = SC.evaluate(**inputs)
+    color = {"PASS": "green", "WATCH": "yellow", "FAIL": "red",
+             "IN PROGRESS": "cyan"}.get(card["verdict"], "white")
+    console.print(Panel(f"[bold]{card['verdict']}[/bold] — {card['summary']}",
+                        style=color, title="Strategy Scorecard"))
+    if card["criteria"]:
+        t = Table()
+        for c in ("criterion", "target", "actual", "pass"):
+            t.add_column(c)
+        for c in card["criteria"]:
+            t.add_row(c["criterion"], c["target"], str(c["actual"]),
+                      "✅" if c["pass"] else "❌")
+        console.print(t)
+
+
+@cli.command()
 def coach():
     """
     Generate the trading-journal coach report from the account's trade history.

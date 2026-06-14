@@ -42,6 +42,7 @@ from tools.backtest import run_backtest  # noqa: E402
 from tools.strategies import sma_crossover_signal  # noqa: E402
 from tools.journal import build_ledger, ledger_stats, exit_reasons_from_csv  # noqa: E402
 from tools import supabase_store  # noqa: E402
+from tools import scorecard as scorecard_mod  # noqa: E402
 
 st.set_page_config(
     page_title="JoeMoyo Trading Dashboard",
@@ -351,6 +352,25 @@ jtab1, jtab2, jtab3, jtab4 = st.tabs(
     ["Performance", "Round-trip trades", "Coach & Tendencies", "My journal"])
 
 with jtab1:
+    # Strategy scorecard (docs/STRATEGY.md): PASS / WATCH / FAIL / IN PROGRESS.
+    try:
+        sc_inputs = scorecard_mod.build_inputs(
+            get_client(), budget=50000.0, symbols=DEFAULT_WATCHLIST,
+            start_date="2026-06-15")
+        card = scorecard_mod.evaluate(**sc_inputs)
+        badge = {"PASS": "🟢", "WATCH": "🟡", "FAIL": "🔴", "IN PROGRESS": "🔵"}.get(card["verdict"], "")
+        st.markdown(f"### {badge} Scorecard: **{card['verdict']}** — {card['summary']}")
+        if card["criteria"]:
+            st.dataframe(pd.DataFrame([
+                {"criterion": c["criterion"], "target": c["target"],
+                 "actual": c["actual"], "pass": "✅" if c["pass"] else "❌"}
+                for c in card["criteria"]
+            ]), width="stretch", hide_index=True)
+        st.caption("Criteria defined in docs/STRATEGY.md.")
+        st.markdown("---")
+    except Exception as e:
+        st.caption(f"Scorecard unavailable: {e}")
+
     if jstats.get("num_trades", 0) == 0:
         st.info("No completed round-trip trades yet. Stats appear once the bot "
                 "(or you) close a position — entries alone don't count.")

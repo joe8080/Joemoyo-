@@ -275,12 +275,28 @@ class AutoTrader:
             f"{open_position_count} position(s), today P&L ${todays_pl}"
             f"{budget_note}"
         )
-        # Durable daily equity snapshot (upsert by date; best-effort).
+        # Durable daily equity snapshot (upsert by date; best-effort). Records
+        # the BOT's own P&L vs its budget — realized round-trips (this mode's
+        # symbols) plus unrealized on current positions — so the scorecard can
+        # measure drawdown/return on the bot, not the diluted account.
+        bot_pnl = None
+        if supabase_store.enabled():
+            try:
+                from tools.journal import build_ledger
+                orders = self.alpaca.simplify_orders(self.alpaca.get_orders(status="all", limit=500))
+                mine = set(self.symbols)
+                realized = sum(t["pnl"] for t in build_ledger(orders) if t["symbol"] in mine)
+                unrealized = sum(p.get("unrealized_pl", 0.0) for p in positions.values())
+                bot_pnl = round(realized + unrealized, 2)
+            except Exception:
+                bot_pnl = None
         supabase_store.snapshot_equity({
             "snapshot_date": datetime.now().strftime("%Y-%m-%d"),
             "equity": account.get("equity"), "cash": account.get("cash"),
             "buying_power": buying_power, "positions": open_position_count,
-            "todays_pl": todays_pl,
+            "todays_pl": todays_pl, "budget": self.budget, "bot_pnl": bot_pnl,
+            "bot_return_pct": round(bot_pnl / self.budget * 100, 2)
+            if (bot_pnl is not None and self.budget) else None,
         })
 
         # End-of-day flatten: within the final minutes of the session, close
