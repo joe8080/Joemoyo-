@@ -127,3 +127,42 @@ def participation_ok(
         return False
     a = atr(bars)
     return a is not None and a >= min_atr
+
+
+def risk_exit(
+    entry_price: float,
+    last_price: float,
+    peak_price: float | None = None,
+    stop_pct: float = 0.0,
+    take_profit_pct: float = 0.0,
+    trail_pct: float = 0.0,
+) -> str | None:
+    """
+    Decide whether a long position should be exited on a risk rule, independent
+    of the strategy signal. Pure and deterministic.
+
+    Percentages are whole numbers (5 == 5%). A value of 0 disables that rule.
+
+      stop_pct        — exit if price falls this far below the entry price
+      take_profit_pct — exit if price rises this far above the entry price
+      trail_pct       — exit if price falls this far below the highest price
+                        seen since entry (peak_price). Falls back to entry
+                        price if no peak is supplied.
+
+    Returns "stop" | "take_profit" | "trailing" | None. Stop-loss is checked
+    first (capital protection beats profit-taking).
+    """
+    if entry_price <= 0 or last_price <= 0:
+        return None
+
+    change_pct = (last_price - entry_price) / entry_price * 100
+
+    if stop_pct > 0 and change_pct <= -stop_pct:
+        return "stop"
+    if take_profit_pct > 0 and change_pct >= take_profit_pct:
+        return "take_profit"
+    if trail_pct > 0:
+        peak = max(peak_price or 0.0, entry_price, last_price)
+        if peak > 0 and (last_price - peak) / peak * 100 <= -trail_pct:
+            return "trailing"
+    return None

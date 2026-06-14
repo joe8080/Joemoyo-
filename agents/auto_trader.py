@@ -22,14 +22,14 @@ import json
 import os
 import re
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 
 from rich.console import Console
 
 from config.settings import settings
 from tools.strategies import (
     sma, sma_crossover_signal, position_size,
-    volume_confirmed, participation_ok,
+    volume_confirmed, participation_ok, risk_exit,
 )
 
 console = Console()
@@ -57,6 +57,15 @@ class AutoTrader:
         regime_symbol: str = "SPY",
         min_avg_volume: float = 2_000_000,
         min_atr: float = 1.0,
+        # Risk-managed exits (percentages; 0 disables each). These exit a
+        # position regardless of the SMA signal, so a trade can open and close
+        # the same day when a stop or target is hit intraday.
+        stop_loss_pct: float = 0.0,
+        take_profit_pct: float = 0.0,
+        trailing_stop_pct: float = 0.0,
+        flatten_eod: bool = False,
+        daily_loss_limit: float = 0.0,
+        mode: str = "swing",
         dry_run: bool = False,
         llm_review: bool = False,
         paper: bool | None = None,
@@ -101,6 +110,12 @@ class AutoTrader:
         self.regime_symbol = regime_symbol
         self.min_avg_volume = min_avg_volume
         self.min_atr = min_atr
+        self.stop_loss_pct = stop_loss_pct
+        self.take_profit_pct = take_profit_pct
+        self.trailing_stop_pct = trailing_stop_pct
+        self.flatten_eod = flatten_eod
+        self.daily_loss_limit = daily_loss_limit
+        self.mode = mode
         self.dry_run = dry_run
         self.llm_review = llm_review
         self._llm_client = None  # lazy Anthropic client for the review layer
@@ -127,10 +142,10 @@ class AutoTrader:
         """Append one executed/attempted trade to a CSV ready for analysis."""
         path = os.path.join(settings.output_dir, "reports", "trades.csv")
         fields = ["timestamp", "symbol", "action", "qty", "price", "est_cost",
-                  "reason", "status"]
+                  "entry_price", "pnl_pct", "exit_reason", "mode", "reason", "status"]
         new_file = not os.path.exists(path)
         with open(path, "a", newline="", encoding="utf-8") as f:
-            w = csv.DictWriter(f, fieldnames=fields)
+            w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
             if new_file:
                 w.writeheader()
             w.writerow({
@@ -140,9 +155,62 @@ class AutoTrader:
                 "qty": p["qty"],
                 "price": p.get("last_price"),
                 "est_cost": p.get("est_cost"),
+                "entry_price": p.get("entry_price"),
+                "pnl_pct": p.get("pnl_pct"),
+                "exit_reason": p.get("exit_reason", ""),
+                "mode": self.mode,
                 "reason": p.get("reason", ""),
                 "status": status,
             })
+
+    # ------------------------------------------------------------------ #
+    #  Exit helpers                                                       #
+    # ------------------------------------------------------------------ #
+
+    @staticmethod
+    def _minutes_to_close(clock: dict) -> float:
+        """Minutes until the market closes, from the Alpaca clock. inf if unknown."""
+        nxt = clock.get("next_close")
+        if not nxt:
+            return float("inf")
+        try:
+            close = datetime.fromisoformat(nxt.replace("Z", "+00:00"))
+            return (close - datetime.now(timezone.utc)).total_seconds() / 60.0
+        except (ValueError, AttributeError):
+            return float("inf")
+
+    def _peak_since_entry(self, symbol: str, bars: list[dict], fallback: float) -> float:
+        """
+        Highest price reached since the current position was opened, used for
+        the trailing stop. Derived statelessly: find when the current net-long
+        streak began from filled order history, then take the high of the bars
+        on/after that date. Falls back to the recent bar high (or `fallback`)
+        if order history is unavailable.
+        """
+        recent_high = max((float(b["high"]) for b in bars if b.get("high")), default=fallback)
+        try:
+            orders = self.alpaca.get_orders(status="all", limit=200)
+        except RuntimeError:
+            return recent_high
+        fills = sorted(
+            (o for o in orders
+             if o.get("symbol") == symbol and o.get("filled_qty")
+             and float(o.get("filled_qty", 0)) > 0 and o.get("submitted_at")),
+            key=lambda o: o["submitted_at"],
+        )
+        # Walk forward; record the date the position last crossed from flat to long.
+        net = 0.0
+        entry_date = None
+        for o in fills:
+            q = float(o["filled_qty"]) * (1 if o.get("side") == "buy" else -1)
+            if net <= 0 and net + q > 0:
+                entry_date = o["submitted_at"][:10]
+            net += q
+        if entry_date is None:
+            return recent_high
+        highs = [float(b["high"]) for b in bars
+                 if b.get("high") and b.get("t", "")[:10] >= entry_date]
+        return max(highs) if highs else recent_high
 
     # ------------------------------------------------------------------ #
     #  One cycle                                                          #
@@ -188,11 +256,35 @@ class AutoTrader:
             remaining_budget = float("inf")
             budget_note = ""
 
+        todays_pl = account.get("todays_pl", 0.0)
         self._log(
             f"Equity ${account.get('equity')}, buying power ${buying_power}, "
-            f"{open_position_count} position(s), today P&L ${account.get('todays_pl')}"
+            f"{open_position_count} position(s), today P&L ${todays_pl}"
             f"{budget_note}"
         )
+
+        # End-of-day flatten: within the final minutes of the session, close
+        # every open position so nothing is held overnight (intraday mode).
+        if self.flatten_eod and self._minutes_to_close(clock) <= 5 and positions:
+            self._log("Flatten-EOD: closing all positions before the bell.")
+            proposals = [{
+                "symbol": s, "action": "close", "qty": p["qty"],
+                "last_price": p.get("current_price"),
+                "signal": "sell", "exit_reason": "eod_flatten",
+                "reason": "end-of-day flatten",
+            } for s, p in positions.items()]
+            executed = self._execute_proposals(proposals)
+            self._log(f"**Cycle end** — flattened {len(executed)} position(s).")
+            return {"skipped": False, "proposals": proposals, "executed": executed, "account": account}
+
+        # Daily-loss circuit breaker: once the day's loss hits the limit, stop
+        # opening/adding (set budget to 0) but still allow risk exits to fire.
+        if self.daily_loss_limit > 0 and todays_pl <= -abs(self.daily_loss_limit):
+            self._log(
+                f"Daily-loss limit hit (today P&L ${todays_pl} ≤ -${self.daily_loss_limit}). "
+                "No new buys this cycle; exits still active."
+            )
+            remaining_budget = 0.0
 
         # 3. Gather proposals from the deterministic strategy (no orders yet).
         proposals = self._gather_proposals(
@@ -265,6 +357,36 @@ class AutoTrader:
             last_close = closes[-1] if closes else 0.0
             short_sma = sma(closes, self.short_window)
             long_sma = sma(closes, self.long_window)
+
+            # Risk-managed exits take priority over the SMA signal: a stop,
+            # take-profit, or trailing stop closes the position regardless of
+            # trend, and can fire the same day the position was opened.
+            if holding and last_close > 0 and (
+                self.stop_loss_pct or self.take_profit_pct or self.trailing_stop_pct
+            ):
+                entry = float(positions[symbol].get("avg_entry_price") or 0.0)
+                peak = self._peak_since_entry(symbol, bars, last_close)
+                rexit = risk_exit(
+                    entry, last_close, peak,
+                    stop_pct=self.stop_loss_pct,
+                    take_profit_pct=self.take_profit_pct,
+                    trail_pct=self.trailing_stop_pct,
+                )
+                if rexit:
+                    pnl_pct = (last_close - entry) / entry * 100 if entry else 0.0
+                    label = {"stop": "stop-loss", "take_profit": "take-profit",
+                             "trailing": "trailing stop"}[rexit]
+                    self._log(f"{symbol}: EXIT — {label} ({pnl_pct:+.1f}% vs entry ${entry:.2f}).")
+                    proposals.append({
+                        "symbol": symbol, "action": "close",
+                        "qty": positions[symbol]["qty"],
+                        "last_price": round(last_close, 2),
+                        "entry_price": round(entry, 2),
+                        "pnl_pct": round(pnl_pct, 2),
+                        "signal": "sell", "exit_reason": rexit,
+                        "reason": f"{label} ({pnl_pct:+.1f}% vs entry)",
+                    })
+                    continue
 
             # Regime mode: trade the current trend, not just the cross bar.
             reason = {"buy": "bullish SMA crossover", "sell": "bearish SMA crossover"}.get(signal, "")
