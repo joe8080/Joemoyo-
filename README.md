@@ -215,6 +215,25 @@ update themselves. The "My journal" tab also lets you log your own discretionary
 notes and grades. (Add an `ANTHROPIC_API_KEY` repo secret for the written coach
 note; without it you still get the full deterministic stats.)
 
+**Battle-testing** — validate a config out-of-sample before trusting it:
+
+```bash
+python main.py validate --start 2022-01-01
+```
+
+Runs walk-forward (rolling 90-day out-of-sample windows), market-regime slices,
+and a parameter-robustness sweep so you can see whether an edge is consistent
+and broad (robust) or a single lucky peak (overfit). Powered by paginated SIP
+history (`AlpacaClient.fetch_bars`), which also enables intraday backtests.
+
+**Durable memory (Supabase)** — point the bot at a Supabase project and every
+trade, daily equity snapshot, round-trip, coach note, tendency, and journal
+entry is persisted to isolated `public.bot_*` tables, so history survives
+restarts and the coach builds on past learning. Set `SUPABASE_URL` and
+`SUPABASE_SERVICE_KEY` (service-role key) as repo + Streamlit secrets; without
+them the bot logs to CSV only and never breaks. See `docs/TRADING_PLAN.md` for
+the 90-day battle-test schedule.
+
 **Run the bot in the cloud (no computer needed)** — the repo ships a GitHub
 Actions workflow (`.github/workflows/autotrade.yml`) that runs one trading
 cycle every 30 minutes during US market hours. To enable it:

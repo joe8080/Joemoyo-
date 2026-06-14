@@ -31,6 +31,7 @@ from tools.strategies import (
     sma, sma_crossover_signal, position_size,
     volume_confirmed, participation_ok, risk_exit,
 )
+from tools import supabase_store
 
 console = Console()
 
@@ -167,6 +168,9 @@ class AutoTrader:
                 "reason": p.get("reason", ""),
                 "status": status,
             })
+        # Mirror to Supabase for durable history (best-effort; never blocks).
+        supabase_store.log_trade({**p, "mode": self.mode, "status": status,
+                                  "price": p.get("last_price")})
 
     # ------------------------------------------------------------------ #
     #  Exit helpers                                                       #
@@ -271,6 +275,13 @@ class AutoTrader:
             f"{open_position_count} position(s), today P&L ${todays_pl}"
             f"{budget_note}"
         )
+        # Durable daily equity snapshot (upsert by date; best-effort).
+        supabase_store.snapshot_equity({
+            "snapshot_date": datetime.now().strftime("%Y-%m-%d"),
+            "equity": account.get("equity"), "cash": account.get("cash"),
+            "buying_power": buying_power, "positions": open_position_count,
+            "todays_pl": todays_pl,
+        })
 
         # End-of-day flatten: within the final minutes of the session, close
         # this bot's open positions so nothing is held overnight (intraday mode).

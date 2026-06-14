@@ -36,7 +36,12 @@ def generate_coach_report(orders: list[dict], reports_dir: str) -> dict:
     trips = build_ledger(orders, exit_reasons_from_csv(csv_rows))
     stats = ledger_stats(trips)
 
-    note, tendencies = _ask_claude(trips, stats)
+    # Feed prior tendencies back in so the coach builds on past learning.
+    from tools import supabase_store
+    prior = [t.get("tendency") for t in supabase_store.get_tendencies(limit=15)] \
+        if supabase_store.enabled() else []
+
+    note, tendencies = _ask_claude(trips, stats, prior)
 
     today = datetime.now().strftime("%Y%m%d")
     with open(os.path.join(reports_dir, f"coach_{today}.md"), "w", encoding="utf-8") as f:
@@ -48,10 +53,20 @@ def generate_coach_report(orders: list[dict], reports_dir: str) -> dict:
         json.dump({"updated": datetime.now().isoformat(timespec="seconds"),
                    "stats": stats, "trades": trips}, f, indent=2)
 
+    # Persist to Supabase for durable, queryable memory (best-effort).
+    from tools import supabase_store
+    if supabase_store.enabled():
+        supabase_store.save_round_trips(trips)
+        supabase_store.save_pattern_performance(stats)
+        if stats.get("num_trades", 0) > 0:
+            supabase_store.save_coach_note(note, stats)
+            supabase_store.save_tendencies(tendencies)
+
     return {"stats": stats, "note": note, "tendencies": tendencies, "trades": trips}
 
 
-def _ask_claude(trips: list[dict], stats: dict) -> tuple[str, list[str]]:
+def _ask_claude(trips: list[dict], stats: dict,
+                prior_tendencies: list[str] | None = None) -> tuple[str, list[str]]:
     """Return (coach_note, tendencies). Stats-only fallback on any failure."""
     if stats.get("num_trades", 0) == 0:
         return ("No closed round trips yet — the coach note appears once the "
@@ -66,6 +81,7 @@ def _ask_claude(trips: list[dict], stats: dict) -> tuple[str, list[str]]:
             "stats": stats,
             # cap the trade list so the prompt stays small
             "recent_trades": trips[-60:],
+            "previous_tendencies": prior_tendencies or [],
         }
         system = (
             "You are a trading performance coach reviewing an AUTOMATED bot's "
@@ -76,8 +92,10 @@ def _ask_claude(trips: list[dict], stats: dict) -> tuple[str, list[str]]:
             "on what's working and what isn't — win rate, profit factor, which "
             "symbols and which exit reasons drive P&L, hold times; (2) list 2-5 "
             "recurring 'tendencies' (patterns worth watching, e.g. 'trailing "
-            "stops exit NVDA early in choppy weeks'). Respond ONLY as JSON: "
-            '{"note": "...", "tendencies": ["...", "..."]}.'
+            "stops exit NVDA early in choppy weeks'). You are also given "
+            "previous_tendencies from earlier reviews — note which still hold or "
+            "have resolved so the analysis builds over time. Respond ONLY as "
+            'JSON: {"note": "...", "tendencies": ["...", "..."]}.'
         )
         resp = client.messages.create(
             model=settings.model, max_tokens=1200, system=system,

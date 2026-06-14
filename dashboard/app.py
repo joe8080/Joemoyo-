@@ -27,7 +27,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # On Streamlit Community Cloud credentials arrive via st.secrets, not .env.
 # Mirror them into the environment before config.settings reads it.
 try:
-    for _key in ("ALPACA_API_KEY_ID", "ALPACA_API_SECRET_KEY", "ALPACA_PAPER"):
+    for _key in ("ALPACA_API_KEY_ID", "ALPACA_API_SECRET_KEY", "ALPACA_PAPER",
+                 "SUPABASE_URL", "SUPABASE_SERVICE_KEY", "SUPABASE_KEY"):
         if _key not in os.environ and _key in st.secrets:
             os.environ[_key] = str(st.secrets[_key])
 except FileNotFoundError:
@@ -40,6 +41,7 @@ from tools.alpaca_client import AlpacaClient  # noqa: E402
 from tools.backtest import run_backtest  # noqa: E402
 from tools.strategies import sma_crossover_signal  # noqa: E402
 from tools.journal import build_ledger, ledger_stats, exit_reasons_from_csv  # noqa: E402
+from tools import supabase_store  # noqa: E402
 
 st.set_page_config(
     page_title="JoeMoyo Trading Dashboard",
@@ -388,28 +390,47 @@ with jtab2:
         st.info("No closed round trips yet.")
 
 with jtab3:
-    note = latest_coach_note()
+    if supabase_store.enabled():
+        st.caption("📡 Reading durable history from Supabase.")
+    # Coach note: prefer Supabase (survives restarts), else local file.
+    note = None
+    if supabase_store.enabled():
+        notes = supabase_store.get_coach_notes(limit=1)
+        note = notes[0].get("note") if notes else None
+    note = note or latest_coach_note()
     if note:
         st.markdown(note)
     else:
         st.info("No coach note yet. The daily-close workflow (or "
                 "`python main.py coach`) generates it after trades close.")
-    tpath = os.path.join(REPORTS_DIR, "tendencies.json")
-    if os.path.exists(tpath):
-        import json as _json
-        tend = _json.load(open(tpath)).get("tendencies", [])
-        if tend:
-            st.subheader("Tendencies to watch")
-            for t in tend:
-                st.markdown(f"- {t}")
+    # Tendencies: Supabase first, else local file.
+    tend = []
+    if supabase_store.enabled():
+        tend = [t.get("tendency") for t in supabase_store.get_tendencies(limit=12)]
+    if not tend:
+        tpath = os.path.join(REPORTS_DIR, "tendencies.json")
+        if os.path.exists(tpath):
+            import json as _json
+            tend = _json.load(open(tpath)).get("tendencies", [])
+    if tend:
+        st.subheader("Tendencies to watch")
+        for t in tend:
+            st.markdown(f"- {t}")
 
 with jtab4:
-    st.caption("Log your own discretionary observations. Note: on Streamlit "
-               "Cloud the filesystem is ephemeral, so use Download to keep a copy.")
+    use_db = supabase_store.enabled()
+    st.caption("Log your own discretionary observations. "
+               + ("📡 Saved to Supabase — persists across restarts."
+                  if use_db else
+                  "Note: no Supabase configured, so on Streamlit Cloud these "
+                  "reset on restart — use Download to keep a copy."))
     os.makedirs(JOURNAL_DIR, exist_ok=True)
     mpath = os.path.join(JOURNAL_DIR, "manual_entries.json")
     import json as _json
-    entries = _json.load(open(mpath)) if os.path.exists(mpath) else []
+    if use_db:
+        entries = supabase_store.get_manual_entries()
+    else:
+        entries = _json.load(open(mpath)) if os.path.exists(mpath) else []
     with st.form("manual_journal"):
         e1, e2, e3 = st.columns(3)
         m_symbol = e1.text_input("Symbol")
@@ -417,15 +438,20 @@ with jtab4:
         m_grade = e3.selectbox("Grade", ["A+", "A", "B", "C", "D"], index=1)
         m_note = st.text_area("Note / what you saw")
         if st.form_submit_button("Add entry") and (m_symbol or m_note):
-            entries.append({"date": datetime.now().strftime("%Y-%m-%d %H:%M"),
-                            "symbol": m_symbol.upper(), "setup": m_setup,
-                            "grade": m_grade, "note": m_note})
-            _json.dump(entries, open(mpath, "w"), indent=2)
+            entry = {"entry_date": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                     "symbol": m_symbol.upper(), "setup": m_setup,
+                     "grade": m_grade, "note": m_note}
+            if use_db:
+                supabase_store.save_manual_entry(entry)
+            else:
+                entries.append(entry)
+                _json.dump(entries, open(mpath, "w"), indent=2)
             st.success("Saved.")
+            st.rerun()
     if entries:
-        st.dataframe(pd.DataFrame(reversed(entries)), width="stretch", hide_index=True)
+        st.dataframe(pd.DataFrame(entries), width="stretch", hide_index=True)
         st.download_button("⬇ Download journal (JSON)",
-                           _json.dumps(entries, indent=2), "manual_entries.json")
+                           _json.dumps(entries, indent=2, default=str), "manual_entries.json")
 
 # --- Auto-refresh -------------------------------------------------------- #
 if refresh_secs > 0:

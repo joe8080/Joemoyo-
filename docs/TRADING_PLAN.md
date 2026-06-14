@@ -1,69 +1,66 @@
-# JoeMoyo AutoTrader — One-Month Trading Plan ($50k paper)
+# JoeMoyo AutoTrader — 90-Day Battle-Test Plan ($50k paper)
 
-Start: 2026-06-12 · Review: weekly · Final review: 2026-07-10
-Account: Alpaca paper ($100k) · Bot allocation: **$50,000**
+Start: 2026-06-15 · Reviews: weekly · Final review: ~2026-09-13
+Account: Alpaca paper ($100k) · Swing budget: **$50,000** · Intraday budget: **$10,000**
 
-## The setup
+## The two engines
 
-| Parameter | Value |
-|---|---|
-| Watchlist | SPY, QQQ, AAPL, MSFT, NVDA, GOOGL, AMZN, META, TSLA, AMD |
-| Strategy | SMA 20/50 trend following on daily bars, regime mode |
-| Position size | $5,000 target per name, max 10 positions |
-| Budget cap | $50,000 total — the bot cannot deploy more |
-| Schedule | One cycle every 30 min during US market hours (GitHub Actions) |
-| Entry gates | Liquidity/range participation check (avg vol ≥ 2M, ATR ≥ $1) |
-| Exits | Bearish crossover or bearish regime — never blocked by any filter |
+| | Swing engine | Intraday engine |
+|---|---|---|
+| Workflow | `autotrade.yml` (every ~30 min) | `intraday.yml` (every ~5 min, market hours) |
+| Watchlist | SPY QQQ AAPL MSFT NVDA GOOGL AMZN META TSLA AMD | NFLX AVGO COIN IWM SMH (disjoint) |
+| Bars / SMAs | daily, 20/50, regime mode | 5-min, 9/20, regime mode |
+| Exit | **trailing stop 8%** + SMA signal | trailing 2% + **EOD flatten** + $500 daily-loss limit |
+| Sizing | $5k/position, max 10 | $2k/position, max 5 |
 
-Rationale for what's ON and OFF (from the 2022–2026 backtest, 10 names,
-$50k, regime mode): baseline returned **+70.4%** (Sharpe 0.94, max DD 20.1%).
-Adding volume confirmation and/or a SPY market filter *reduced* return and
-Sharpe in every combination, so both ship **off by default** (available as
-`--confirm-volume` / `--market-filter` for experiments). Buy-and-hold beat
-the strategy in this bull window (+122%) — trend following pays its way in
-downtrends, which this window mostly lacked; that's a known trade-off, not a
-bug.
+Both share one Alpaca account safely (budget/positions/flatten scoped per bot).
 
-## Week 1 (Jun 12–19) — Deploy and observe
+## Why this config (battle-testing done up front)
 
-- Bot trades the full $50k: tops up the five starter positions to ~$5k each
-  and opens the five new names as their trends allow.
-- Daily (2 min, phone): open the dashboard — equity curve, positions, last
-  cycle's log. Confirm the Actions runs are green.
-- No parameter changes this week, no matter how it performs. Day-to-day noise
-  is not signal.
+`python main.py validate` ran walk-forward, regime, and parameter tests on
+2022–2026 SIP data. Findings:
+- **Walk-forward:** 11/17 out-of-sample 90-day windows positive (avg +6.8%).
+- **Regimes:** 2022 bear −23% vs buy-and-hold −57% (trailing stop cutting
+  losses); lags raw buy-and-hold in rips, as trend-following does.
+- **Robustness:** a broad plateau of similar Sharpes around the live config —
+  not an overfit spike. (A faster 10/40–10/50 scored marginally higher Sharpe;
+  it's the **Week-4 walk-forward candidate**, not adopted blindly.)
 
-## Week 2 (Jun 19–26) — First data review
+## Durable memory (Supabase)
 
-- Pull `outputs/reports/trades.csv` and ask Claude for the SMB-style
-  "autopsy": win rate, P&L by symbol, did any exit fire, did the budget stay
-  ≤ $50k.
-- Compare bot equity vs. SPY over the same window (dashboard backtest tab
-  gives the benchmark).
-- Allowed change: drop a symbol that's chronically choppy. Nothing else.
+Every trade, daily equity snapshot, round-trip, coach note, tendency, pattern
+stat, and manual journal entry is written to `public.bot_*` tables in the
+Investment Supabase project (isolated from real holdings/ISA data). The coach
+feeds prior tendencies back in, so analysis compounds over the 90 days. Requires
+`SUPABASE_URL` + `SUPABASE_SERVICE_KEY` secrets; the bot no-ops cleanly without
+them (still logs to CSV).
 
-## Week 3 (Jun 26–Jul 3) — One experiment, isolated
+## The 90 days
 
-- Run backtests (not live changes) on one variation: e.g. SMA 10/30 vs 20/50,
-  or `--market-filter` on, or a different 10-name watchlist.
-- The live bot keeps running untouched. An experiment earns its way into the
-  live config only by beating the baseline on return AND Sharpe over the
-  4-year backtest.
+**Weeks 1–2 — Deploy & observe.** Both engines live. Daily: glance at the
+dashboard (equity, positions, Journal & Coach tabs). No parameter changes.
+Confirm Supabase rows accumulate and the daily-close coach note appears.
 
-## Week 4 (Jul 3–10) — Monthly review and decision
+**Weeks 3–4 — First real read.** Enough closed round-trips to judge. Weekly
+coach review: win rate, profit factor, P&L by symbol and by exit reason, swing
+vs intraday. Allowed change: drop a chronically choppy symbol. End of Week 4:
+walk-forward the 10/40 candidate; adopt only if it beats the live config on
+return AND Sharpe out-of-sample.
 
-- Full review: realized + unrealized P&L vs. $50k, vs. SPY buy-and-hold,
-  max drawdown, number of trades, win rate, any failed/rejected orders.
-- Decide one of: keep as is / adopt the Week-3 winner / scale allocation.
-- Write the next month's plan from what the data says — not from how the
-  month felt.
+**Weeks 5–8 — Stress & refine.** One isolated experiment at a time, each
+backtested first. Watch behavior through any market drawdown — this is where the
+trailing stop earns its keep. Track max drawdown vs the $50k.
+
+**Weeks 9–12 — Verdict.** Full review from Supabase history: realized +
+unrealized P&L vs $50k, vs SPY buy-and-hold, max drawdown, win rate, profit
+factor, swing vs intraday contribution. Decide: keep / adopt the best validated
+variant / rescale / retire an engine. Write the go-forward plan from the data.
 
 ## Standing rules
-
-1. **Paper only.** The bot hard-refuses live trading in this version.
-2. **Exits are never filtered.** Any gate we add applies to entries only.
-3. **One change at a time**, and only after a backtest supports it.
-4. **Drawdown brake:** if bot equity drops more than 10% of budget ($5k)
-   from its peak, halve `--cash-per-trade` until the weekly review.
-5. Every trade and every blocked trade is logged (`trades.csv` + daily
-   markdown log) — the review process depends on this record.
+1. **Paper only** — the bot hard-refuses live trading in this version.
+2. **Exits are never filtered**; risk reduction always goes through.
+3. **One change at a time**, only after a backtest/walk-forward supports it.
+4. **Drawdown brake:** if swing equity falls >10% of budget ($5k) from peak,
+   halve `--cash-per-trade` until the next weekly review.
+5. Everything is logged (Supabase + CSV + daily markdown). The review process
+   depends on that record — never trade blind.
