@@ -393,6 +393,40 @@ def autotrade(symbols, interval, cash_per_trade, budget, max_positions, short_wi
 
 
 @cli.command()
+def coach():
+    """
+    Generate the trading-journal coach report from the account's trade history.
+
+    Builds the round-trip ledger from Alpaca order history, computes performance
+    stats, and asks Claude for a coach note + recurring tendencies. Writes
+    coach_<date>.md, tendencies.json, and ledger.json under outputs/reports/.
+    Run on the close (the daily-close workflow does this automatically).
+    """
+    from tools.alpaca_client import AlpacaClient
+    from agents.coach import generate_coach_report
+    import os as _os
+    try:
+        client = AlpacaClient()
+    except EnvironmentError as e:
+        console.print(f"[bold red]Alpaca Error:[/bold red] {e}")
+        sys.exit(1)
+    orders = client.simplify_orders(client.get_orders(status="all", limit=500))
+    from config.settings import settings as _settings
+    reports_dir = _os.path.join(_settings.output_dir, "reports")
+    result = generate_coach_report(orders, reports_dir)
+    st = result["stats"]
+    console.print(Panel(
+        f"[bold]Coach report[/bold]\n"
+        f"Closed trades: {st.get('num_trades', 0)} · "
+        f"Win rate: {st.get('win_rate_pct', 'n/a')}% · "
+        f"Total P&L: ${st.get('total_pnl', 0):,.2f}\n\n{result['note']}",
+        style="cyan",
+    ))
+    for t in result["tendencies"]:
+        console.print(f"  • {t}")
+
+
+@cli.command()
 @click.option(
     "--symbols", "-s",
     required=True,
