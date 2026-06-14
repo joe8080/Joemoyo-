@@ -94,6 +94,11 @@ class AutoTrader:
         self.short_window = short_window
         self.long_window = long_window
         self.timeframe = timeframe
+        # How many calendar days of history to pull. Daily bars need a long
+        # window; intraday bars (5Min etc.) pack ~78 bars/day, so a short span
+        # keeps Alpaca's 1000-bar page on RECENT data instead of truncating to
+        # stale bars from the start date.
+        self.bars_days_back = (long_window * 3 + 10) if timeframe == "1Day" else 7
         self.cash_buffer = cash_buffer
         # Regime mode: also enter when already in an uptrend (short SMA above
         # long) and exit when in a downtrend, instead of trading only on the
@@ -240,14 +245,18 @@ class AutoTrader:
             self._log("Account is blocked from trading. Aborting cycle.")
             return {"skipped": True, "reason": "account_blocked"}
 
-        positions = {p["symbol"]: p for p in self.alpaca.simplify_positions(self.alpaca.get_positions())}
+        all_positions = {p["symbol"]: p for p in self.alpaca.simplify_positions(self.alpaca.get_positions())}
+        # Scope to THIS bot's symbols only, so a second bot (e.g. intraday)
+        # sharing the account never sees, sizes against, or flattens the other
+        # bot's positions. Watchlists must be disjoint between bots.
+        positions = {s: p for s, p in all_positions.items() if s in set(self.symbols)}
         open_orders = self.alpaca.get_orders(status="open")
         symbols_with_open_orders = {o.get("symbol") for o in open_orders}
         buying_power = account.get("buying_power", 0.0)
         open_position_count = len(positions)
 
-        # Budget cap: capital already deployed counts against the budget, so
-        # new buys can only spend what's left of it.
+        # Budget cap: capital already deployed in THIS bot's symbols counts
+        # against the budget, so new buys can only spend what's left of it.
         deployed = sum(p.get("market_value", 0.0) for p in positions.values())
         if self.budget > 0:
             remaining_budget = max(0.0, self.budget - deployed)
@@ -264,9 +273,9 @@ class AutoTrader:
         )
 
         # End-of-day flatten: within the final minutes of the session, close
-        # every open position so nothing is held overnight (intraday mode).
+        # this bot's open positions so nothing is held overnight (intraday mode).
         if self.flatten_eod and self._minutes_to_close(clock) <= 5 and positions:
-            self._log("Flatten-EOD: closing all positions before the bell.")
+            self._log("Flatten-EOD: closing this bot's positions before the bell.")
             proposals = [{
                 "symbol": s, "action": "close", "qty": p["qty"],
                 "last_price": p.get("current_price"),
@@ -321,7 +330,7 @@ class AutoTrader:
             try:
                 mkt_bars = self.alpaca.get_bars(
                     self.regime_symbol, timeframe=self.timeframe,
-                    days_back=self.long_window * 3 + 10,
+                    days_back=self.bars_days_back,
                 )
                 mkt_closes = [float(b["close"]) for b in mkt_bars if b.get("close") is not None]
                 ms, ml = sma(mkt_closes, self.short_window), sma(mkt_closes, self.long_window)
@@ -343,7 +352,7 @@ class AutoTrader:
 
             try:
                 bars = self.alpaca.get_bars(
-                    symbol, timeframe=self.timeframe, days_back=self.long_window * 3 + 10
+                    symbol, timeframe=self.timeframe, days_back=self.bars_days_back
                 )
             except RuntimeError as e:
                 self._log(f"{symbol}: bar fetch failed: {e}")
