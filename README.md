@@ -226,6 +226,18 @@ and a parameter-robustness sweep so you can see whether an edge is consistent
 and broad (robust) or a single lucky peak (overfit). Powered by paginated SIP
 history (`AlpacaClient.fetch_bars`), which also enables intraday backtests.
 
+**Strategy spec & pass/fail scorecard** — `docs/STRATEGY.md` is the bot's
+contract: the rules plus measurable PASS/WATCH/FAIL criteria (profitability,
+Sharpe, drawdown, downside edge vs SPY, profit factor, working risk controls).
+The scorecard is evaluated in code so the bot knows its own verdict:
+
+```bash
+python main.py scorecard
+```
+
+It reports `PASS / WATCH / FAIL / IN PROGRESS` (measured on the bot's P&L vs its
+budget, not the diluted account) and shows on the dashboard's Performance tab.
+
 **Durable memory (Supabase)** — point the bot at a Supabase project and every
 trade, daily equity snapshot, round-trip, coach note, tendency, and journal
 entry is persisted to isolated `public.bot_*` tables, so history survives
