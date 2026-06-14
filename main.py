@@ -393,6 +393,72 @@ def autotrade(symbols, interval, cash_per_trade, budget, max_positions, short_wi
 
 
 @cli.command()
+@click.option("--symbols", "-s",
+              default="SPY,QQQ,AAPL,MSFT,NVDA,GOOGL,AMZN,META,TSLA,AMD",
+              show_default=True, help="Watchlist to validate")
+@click.option("--start", default="2022-01-01", show_default=True,
+              help="History start date for the battery")
+def validate(symbols, start):
+    """
+    Battle-test the live config: walk-forward (out-of-sample) windows, market
+    regimes, and a parameter-robustness sweep. Read-only — places no orders.
+    """
+    from tools.alpaca_client import AlpacaClient
+    from tools import validate as V
+    from rich.table import Table
+
+    symbol_list = [s.strip().upper() for s in symbols.split(",") if s.strip()]
+    try:
+        client = AlpacaClient()
+    except EnvironmentError as e:
+        console.print(f"[bold red]Alpaca Error:[/bold red] {e}")
+        sys.exit(1)
+
+    console.print(f"[dim]Fetching daily history since {start} for "
+                  f"{len(symbol_list)} symbols...[/dim]")
+    bars = {}
+    for s in symbol_list:
+        try:
+            bars[s] = client.fetch_bars(s, "1Day", start=start)
+        except RuntimeError as e:
+            console.print(f"[yellow]{s}: {e} — skipped[/yellow]")
+    if not bars:
+        console.print("[bold red]No history fetched.[/bold red]")
+        sys.exit(1)
+
+    def _table(title, rows, cols):
+        t = Table(title=title)
+        for c in cols:
+            t.add_column(c, justify="right")
+        for r in rows:
+            t.add_row(*(str(r.get(c, "")) for c in cols))
+        console.print(t)
+
+    wf = V.walk_forward(bars, test_days=90)
+    _table("Walk-forward (90-day out-of-sample windows)", wf,
+           ["window", "return_pct", "buyhold_pct", "max_dd_pct", "sharpe", "trades", "win_pct"])
+    s = V.summarize(wf)
+    if s:
+        console.print(f"  [bold]Consistency:[/bold] {s['positive_windows']}/{s['windows']} "
+                      f"windows positive · avg {s['avg']}% · range {s['min']}%..{s['max']}%\n")
+
+    regimes = {
+        "2022 bear": ("2022-01-01", "2022-12-31"),
+        "2023-24 bull": ("2023-01-01", "2024-12-31"),
+        "recent": ("2025-01-01", "2026-12-31"),
+    }
+    _table("Regime slices", V.regime_test(bars, regimes),
+           ["window", "return_pct", "buyhold_pct", "max_dd_pct", "sharpe", "trades", "win_pct"])
+
+    sweep = V.param_sweep(bars, short_windows=[10, 20, 30],
+                          long_windows=[40, 50, 60], trails=[6, 8, 10, 12])
+    _table("Parameter robustness (top 12 by Sharpe)", sweep[:12],
+           ["short", "long", "trail", "return_pct", "max_dd_pct", "sharpe", "trades"])
+    console.print("[dim]A broad cluster of similar Sharpes around the live config "
+                  "(20/50, trail 8) = robust, not overfit.[/dim]")
+
+
+@cli.command()
 def coach():
     """
     Generate the trading-journal coach report from the account's trade history.

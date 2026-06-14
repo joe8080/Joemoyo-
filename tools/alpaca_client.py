@@ -245,42 +245,69 @@ class AlpacaClient:
 
     def get_bars(self, symbol: str, timeframe: str = "1Day", days_back: int = 30) -> list[dict]:
         """
-        Historical OHLCV bars for a symbol.
-        timeframe examples: 1Min, 5Min, 15Min, 1Hour, 1Day.
+        Historical OHLCV bars for a symbol (most recent `days_back` days).
 
-        Uses the consolidated SIP feed (full-market prices and volume) when
-        the account's data plan allows it, and falls back to the free IEX
-        feed otherwise. IEX volume is only a few percent of real market
-        volume, so SIP matters for anything volume-based.
+        Uses the consolidated SIP feed when the data plan allows it, falling
+        back to free IEX otherwise. Daily bars carry a date `t`; intraday bars
+        carry the full ISO timestamp so they sort/key uniquely.
         """
         start = (datetime.utcnow() - timedelta(days=days_back)).strftime("%Y-%m-%d")
-        params = {"timeframe": timeframe, "start": start, "limit": 1000, "adjustment": "raw"}
-        data = None
-        for feed in (self.data_feed, "iex"):
-            try:
-                data = self._request(
-                    "GET",
-                    self._data_url(f"v2/stocks/{symbol.upper()}/bars"),
-                    params={**params, "feed": feed},
-                )
-                if feed != self.data_feed:
-                    self.data_feed = feed  # remember the downgrade for this session
+        return self.fetch_bars(symbol, timeframe=timeframe, start=start)
+
+    def fetch_bars(
+        self,
+        symbol: str,
+        timeframe: str = "1Day",
+        start: str | None = None,
+        end: str | None = None,
+        max_bars: int = 50_000,
+    ) -> list[dict]:
+        """
+        Paginated historical bars between `start` and `end` (ISO dates/times).
+
+        Follows Alpaca's `next_page_token` so requests spanning more than one
+        1000-bar page (long histories, intraday minute data) come back whole.
+        Daily `t` is truncated to the date for backward compatibility; intraday
+        keeps the full timestamp.
+        """
+        if start is None:
+            start = (datetime.utcnow() - timedelta(days=30)).strftime("%Y-%m-%d")
+        daily = timeframe.lower().endswith("day")
+        out: list[dict] = []
+        page_token: str | None = None
+
+        while len(out) < max_bars:
+            params = {"timeframe": timeframe, "start": start, "limit": 1000,
+                      "adjustment": "raw"}
+            if end:
+                params["end"] = end
+            if page_token:
+                params["page_token"] = page_token
+            data = None
+            for feed in (self.data_feed, "iex"):
+                try:
+                    data = self._request(
+                        "GET",
+                        self._data_url(f"v2/stocks/{symbol.upper()}/bars"),
+                        params={**params, "feed": feed},
+                    )
+                    if feed != self.data_feed:
+                        self.data_feed = feed
+                    break
+                except RuntimeError as e:
+                    if feed == "iex" or "40" not in str(e)[:30]:
+                        raise
+            for b in (data.get("bars") or []):
+                ts = b.get("t", "")
+                out.append({
+                    "t": ts[:10] if daily else ts,
+                    "open": b.get("o"), "high": b.get("h"), "low": b.get("l"),
+                    "close": b.get("c"), "volume": b.get("v"),
+                })
+            page_token = data.get("next_page_token")
+            if not page_token:
                 break
-            except RuntimeError as e:
-                if feed == "iex" or "40" not in str(e)[:30]:
-                    raise
-        bars = data.get("bars", [])
-        return [
-            {
-                "t": b.get("t", "")[:10],
-                "open": b.get("o"),
-                "high": b.get("h"),
-                "low": b.get("l"),
-                "close": b.get("c"),
-                "volume": b.get("v"),
-            }
-            for b in bars
-        ]
+        return out
 
     # ------------------------------------------------------------------ #
     #  Clock / market status                                              #
