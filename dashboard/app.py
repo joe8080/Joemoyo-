@@ -39,6 +39,7 @@ from config.settings import settings  # noqa: E402
 from tools.alpaca_client import AlpacaClient  # noqa: E402
 from tools.backtest import run_backtest  # noqa: E402
 from tools.strategies import sma_crossover_signal  # noqa: E402
+from tools.journal import build_ledger, ledger_stats, exit_reasons_from_csv  # noqa: E402
 
 st.set_page_config(
     page_title="JoeMoyo Trading Dashboard",
@@ -311,6 +312,120 @@ if log_path:
 else:
     st.info("No auto-trader log yet. Start the bot with "
             "`python main.py autotrade` and its decisions will appear here.")
+
+# --- Journal, Coach & Tendencies --------------------------------------- #
+st.markdown("---")
+st.header("📓 Trading Journal & Coach")
+
+REPORTS_DIR = os.path.join(settings.output_dir, "reports")
+JOURNAL_DIR = os.path.join(settings.output_dir, "journal")
+
+
+@st.cache_data(ttl=120, show_spinner=False)
+def load_ledger():
+    c = get_client()
+    orders = c.simplify_orders(c.get_orders(status="all", limit=500))
+    csv_path = os.path.join(REPORTS_DIR, "trades.csv")
+    reasons = {}
+    if os.path.exists(csv_path):
+        import csv as _csv
+        with open(csv_path, newline="", encoding="utf-8") as f:
+            reasons = exit_reasons_from_csv(list(_csv.DictReader(f)))
+    trips = build_ledger(orders, reasons)
+    return trips, ledger_stats(trips)
+
+
+def read_text(path):
+    return open(path, encoding="utf-8").read() if os.path.exists(path) else None
+
+
+def latest_coach_note():
+    notes = sorted(glob.glob(os.path.join(REPORTS_DIR, "coach_*.md")))
+    return read_text(notes[-1]) if notes else None
+
+
+trips, jstats = load_ledger()
+jtab1, jtab2, jtab3, jtab4 = st.tabs(
+    ["Performance", "Round-trip trades", "Coach & Tendencies", "My journal"])
+
+with jtab1:
+    if jstats.get("num_trades", 0) == 0:
+        st.info("No completed round-trip trades yet. Stats appear once the bot "
+                "(or you) close a position — entries alone don't count.")
+    else:
+        m1, m2, m3, m4, m5 = st.columns(5)
+        m1.metric("Closed trades", jstats["num_trades"])
+        m2.metric("Win rate", f"{jstats['win_rate_pct']}%")
+        m3.metric("Total P&L", f"${jstats['total_pnl']:,.2f}")
+        m4.metric("Profit factor", jstats.get("profit_factor") or "n/a")
+        m5.metric("Avg hold", f"{jstats['avg_hold_days']}d")
+        c1, c2 = st.columns(2)
+        with c1:
+            st.caption("P&L by symbol")
+            st.dataframe(pd.DataFrame([
+                {"symbol": k, "trades": v["trades"], "wins": v["wins"], "P&L $": v["pnl"]}
+                for k, v in sorted(jstats["by_symbol"].items(),
+                                   key=lambda kv: kv[1]["pnl"], reverse=True)
+            ]), width="stretch", hide_index=True)
+        with c2:
+            st.caption("P&L by exit reason")
+            st.dataframe(pd.DataFrame([
+                {"exit reason": k or "—", "trades": v["trades"], "wins": v["wins"], "P&L $": v["pnl"]}
+                for k, v in jstats["by_exit_reason"].items()
+            ]), width="stretch", hide_index=True)
+        if jstats.get("daily_pnl"):
+            st.caption("Daily realized P&L")
+            dfd = pd.DataFrame(sorted(jstats["daily_pnl"].items()), columns=["date", "pnl"])
+            fig = go.Figure(go.Bar(x=dfd["date"], y=dfd["pnl"],
+                                   marker_color=["#00b894" if v >= 0 else "#d63031" for v in dfd["pnl"]]))
+            fig.update_layout(height=240, margin=dict(l=0, r=0, t=10, b=0), yaxis_title="P&L ($)")
+            st.plotly_chart(fig, width="stretch")
+
+with jtab2:
+    if trips:
+        st.dataframe(pd.DataFrame(reversed(trips)), width="stretch", hide_index=True)
+    else:
+        st.info("No closed round trips yet.")
+
+with jtab3:
+    note = latest_coach_note()
+    if note:
+        st.markdown(note)
+    else:
+        st.info("No coach note yet. The daily-close workflow (or "
+                "`python main.py coach`) generates it after trades close.")
+    tpath = os.path.join(REPORTS_DIR, "tendencies.json")
+    if os.path.exists(tpath):
+        import json as _json
+        tend = _json.load(open(tpath)).get("tendencies", [])
+        if tend:
+            st.subheader("Tendencies to watch")
+            for t in tend:
+                st.markdown(f"- {t}")
+
+with jtab4:
+    st.caption("Log your own discretionary observations. Note: on Streamlit "
+               "Cloud the filesystem is ephemeral, so use Download to keep a copy.")
+    os.makedirs(JOURNAL_DIR, exist_ok=True)
+    mpath = os.path.join(JOURNAL_DIR, "manual_entries.json")
+    import json as _json
+    entries = _json.load(open(mpath)) if os.path.exists(mpath) else []
+    with st.form("manual_journal"):
+        e1, e2, e3 = st.columns(3)
+        m_symbol = e1.text_input("Symbol")
+        m_setup = e2.text_input("Setup / pattern")
+        m_grade = e3.selectbox("Grade", ["A+", "A", "B", "C", "D"], index=1)
+        m_note = st.text_area("Note / what you saw")
+        if st.form_submit_button("Add entry") and (m_symbol or m_note):
+            entries.append({"date": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                            "symbol": m_symbol.upper(), "setup": m_setup,
+                            "grade": m_grade, "note": m_note})
+            _json.dump(entries, open(mpath, "w"), indent=2)
+            st.success("Saved.")
+    if entries:
+        st.dataframe(pd.DataFrame(reversed(entries)), width="stretch", hide_index=True)
+        st.download_button("⬇ Download journal (JSON)",
+                           _json.dumps(entries, indent=2), "manual_entries.json")
 
 # --- Auto-refresh -------------------------------------------------------- #
 if refresh_secs > 0:

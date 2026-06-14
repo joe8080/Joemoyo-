@@ -159,6 +159,35 @@ only trades when the market is open and never spends past your buying power.
 (default $5,000) — the rest of the account stays untouched. Tune the rule with
 `--short-window` / `--long-window`.
 
+**Risk-managed exits** — the bot no longer waits for the slow SMA to cross back
+before selling. Add any of these (percentages; 0 = off):
+
+```bash
+python main.py autotrade --symbols ... --trailing-stop-pct 8   # exit 8% below peak
+                                       --stop-loss-pct 5        # hard stop below entry
+                                       --take-profit-pct 15     # profit target
+```
+
+The live swing bot runs `--trailing-stop-pct 8`. Backtesting (2022–2026, 10
+mega-caps) picked it because it beat the SMA-only bot on return (74.9% vs 70.6%),
+Sharpe (1.19 vs 0.97), and max drawdown (14.2% vs 16.2%); fixed take-profits and
+stops both *hurt* (they cut winners / eject from dips that recover). A trailing
+stop also produces same-day exits when a spike reverses.
+
+**Intraday / day-trading mode** — 5-minute bars, fast SMAs, and an end-of-day
+flatten so nothing is held overnight:
+
+```bash
+python main.py autotrade --symbols NFLX,AVGO,COIN,IWM,SMH --mode intraday \
+    --timeframe 5Min --short-window 9 --long-window 20 \
+    --trailing-stop-pct 2 --flatten-eod --daily-loss-limit 500
+```
+
+This runs as its own scheduled workflow with a separate sub-budget and a
+watchlist kept *disjoint* from the swing book, so the two bots share one Alpaca
+account without interfering. (GitHub Actions timing is approximate, so this is
+minutes-to-hours intraday, not true scalping.)
+
 **Backtesting** — replay the exact same signal and sizing rules over history
 before trusting the bot with capital:
 
@@ -170,6 +199,21 @@ python main.py backtest --symbols SPY,QQQ,AAPL,MSFT,NVDA --days 365 \
 Reports strategy return vs buy-and-hold, max drawdown, Sharpe, win rate, and
 every closed trade. The same backtester is built into the dashboard
 ("Strategy backtest" section), so you can run it from any browser or phone.
+
+**Journal & AI coach** — the system logs and reviews itself. It pairs filled
+orders into round trips (entry/exit/P&L/hold/exit-reason), and a Claude "coach"
+writes a plain-English performance note plus recurring *tendencies* to watch:
+
+```bash
+python main.py coach   # writes outputs/reports/{coach_<date>.md, tendencies.json, ledger.json}
+```
+
+A scheduled **daily-close ritual** (`.github/workflows/daily-close.yml`) runs
+this after the bell and commits the results, so the dashboard's **Journal &
+Coach** tabs (Performance · Round-trip trades · Coach & Tendencies · My journal)
+update themselves. The "My journal" tab also lets you log your own discretionary
+notes and grades. (Add an `ANTHROPIC_API_KEY` repo secret for the written coach
+note; without it you still get the full deterministic stats.)
 
 **Run the bot in the cloud (no computer needed)** — the repo ships a GitHub
 Actions workflow (`.github/workflows/autotrade.yml`) that runs one trading
