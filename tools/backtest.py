@@ -24,6 +24,9 @@ def run_backtest(
     confirm_volume: bool = False,
     volume_mult: float = 1.5,
     regime_bars: list[dict] | None = None,
+    stop_loss_pct: float = 0.0,
+    take_profit_pct: float = 0.0,
+    trailing_stop_pct: float = 0.0,
 ) -> dict:
     """
     Simulate the strategy over historical bars.
@@ -73,11 +76,40 @@ def run_backtest(
             history[symbol].append(bar)
             price = float(bar["close"])
             last_close[symbol] = price
+            holding = symbol in positions
+
+            # Risk-managed exits modeled intrabar against the bar's high/low,
+            # taking priority over the signal. Stop is checked first (worst
+            # case when a bar spans both stop and target).
+            if holding and (stop_loss_pct or take_profit_pct or trailing_stop_pct):
+                pos = positions[symbol]
+                hi, lo = float(bar.get("high", price)), float(bar.get("low", price))
+                pos["peak"] = max(pos.get("peak", pos["entry"]), hi)
+                entry = pos["entry"]
+                exit_px = exit_reason = None
+                if stop_loss_pct and lo <= entry * (1 - stop_loss_pct / 100):
+                    exit_px, exit_reason = min(entry * (1 - stop_loss_pct / 100), hi), "stop"
+                elif take_profit_pct and hi >= entry * (1 + take_profit_pct / 100):
+                    exit_px, exit_reason = max(entry * (1 + take_profit_pct / 100), lo), "take_profit"
+                elif trailing_stop_pct and lo <= pos["peak"] * (1 - trailing_stop_pct / 100):
+                    exit_px, exit_reason = pos["peak"] * (1 - trailing_stop_pct / 100), "trailing"
+                if exit_reason:
+                    positions.pop(symbol)
+                    cash += pos["qty"] * exit_px
+                    pnl = pos["qty"] * (exit_px - entry)
+                    trades.append({
+                        "symbol": symbol, "qty": pos["qty"],
+                        "entry_date": pos["entry_date"], "entry": round(entry, 2),
+                        "exit_date": day, "exit": round(exit_px, 2),
+                        "pnl": round(pnl, 2),
+                        "pnl_pct": round(pnl / (pos["qty"] * entry) * 100, 2),
+                        "exit_reason": exit_reason,
+                    })
+                    continue
 
             signal = sma_crossover_signal(
                 history[symbol], short_window=short_window, long_window=long_window
             )
-            holding = symbol in positions
             from_crossover = signal == "buy"
 
             # Regime mode (mirrors AutoTrader): trade the current trend, not
@@ -103,7 +135,8 @@ def run_backtest(
                 qty = position_size(cash, cash_per_trade, price)
                 if qty > 0:
                     cash -= qty * price
-                    positions[symbol] = {"qty": qty, "entry": price, "entry_date": day}
+                    positions[symbol] = {"qty": qty, "entry": price,
+                                         "entry_date": day, "peak": price}
             elif signal == "sell" and holding:
                 pos = positions.pop(symbol)
                 proceeds = pos["qty"] * price
@@ -118,6 +151,7 @@ def run_backtest(
                     "exit": round(price, 2),
                     "pnl": round(pnl, 2),
                     "pnl_pct": round(pnl / (pos["qty"] * pos["entry"]) * 100, 2),
+                    "exit_reason": "signal",
                 })
 
         equity = cash + sum(

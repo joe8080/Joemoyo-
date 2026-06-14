@@ -48,3 +48,4 @@ jobs:
           --cash-per-trade 5000
           --max-positions 10
           --enter-on-trend
+          --trailing-stop-pct 8

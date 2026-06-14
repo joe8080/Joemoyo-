@@ -331,13 +331,27 @@ def trade(action: str, symbol: str, instruction: str):
     help="Block new buys while SPY's short SMA is below its long SMA "
          "(experimental — backtests showed it reduces returns 2022-2026)",
 )
+@click.option("--timeframe", default="1Day", show_default=True,
+              help="Bar size for signals: 1Day, 1Hour, 15Min, 5Min, 1Min")
+@click.option("--stop-loss-pct", default=0.0, show_default=True,
+              help="Exit a position if it falls this %% below entry (0 = off)")
+@click.option("--take-profit-pct", default=0.0, show_default=True,
+              help="Exit a position if it rises this %% above entry (0 = off)")
+@click.option("--trailing-stop-pct", default=0.0, show_default=True,
+              help="Exit if price falls this %% below its peak since entry (0 = off)")
+@click.option("--flatten-eod", is_flag=True,
+              help="Close all positions ~5 min before the close (intraday mode)")
+@click.option("--daily-loss-limit", default=0.0, show_default=True,
+              help="Stop opening new trades once the day's loss hits this $ amount (0 = off)")
+@click.option("--mode", default="swing", show_default=True,
+              help="Tag for the trade log: swing or intraday")
 @click.option("--dry-run", is_flag=True, help="Log decisions without placing orders")
 @click.option(
     "--llm-review",
     is_flag=True,
     help="Have Claude sanity-check (and veto risky) trades each cycle before placing them",
 )
-def autotrade(symbols, interval, cash_per_trade, budget, max_positions, short_window, long_window, once, enter_on_trend, confirm_volume, market_filter, dry_run, llm_review):
+def autotrade(symbols, interval, cash_per_trade, budget, max_positions, short_window, long_window, once, enter_on_trend, confirm_volume, market_filter, timeframe, stop_loss_pct, take_profit_pct, trailing_stop_pct, flatten_eod, daily_loss_limit, mode, dry_run, llm_review):
     """
     Run the automated paper-trading loop (SMA-crossover momentum strategy).
 
@@ -363,6 +377,13 @@ def autotrade(symbols, interval, cash_per_trade, budget, max_positions, short_wi
             enter_on_trend=enter_on_trend,
             confirm_volume=confirm_volume,
             market_filter=market_filter,
+            timeframe=timeframe,
+            stop_loss_pct=stop_loss_pct,
+            take_profit_pct=take_profit_pct,
+            trailing_stop_pct=trailing_stop_pct,
+            flatten_eod=flatten_eod,
+            daily_loss_limit=daily_loss_limit,
+            mode=mode,
             dry_run=dry_run,
             llm_review=llm_review,
         )
