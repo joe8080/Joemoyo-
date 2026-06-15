@@ -10,7 +10,10 @@ are modeled (Alpaca is commission-free).
 
 from math import sqrt
 
-from tools.strategies import sma, sma_crossover_signal, position_size, volume_confirmed
+from tools.strategies import (
+    sma, sma_crossover_signal, position_size, volume_confirmed,
+    opening_range, orb_signal,
+)
 
 
 def run_backtest(
@@ -27,6 +30,7 @@ def run_backtest(
     stop_loss_pct: float = 0.0,
     take_profit_pct: float = 0.0,
     trailing_stop_pct: float = 0.0,
+    flatten_eod: bool = False,
 ) -> dict:
     """
     Simulate the strategy over historical bars.
@@ -46,6 +50,11 @@ def run_backtest(
     }
     calendar = sorted({d for day_map in by_date.values() for d in day_map})
     history: dict[str, list[dict]] = {s: [] for s in by_date}
+    # For the intraday engine: the last bar timestamp of each calendar date, so
+    # we can flatten everything before the close (no overnight holds).
+    last_ts_of_date: dict[str, str] = {}
+    for d in calendar:
+        last_ts_of_date[d[:10]] = d
 
     cash = budget
     positions: dict[str, dict] = {}
@@ -154,6 +163,23 @@ def run_backtest(
                     "exit_reason": "signal",
                 })
 
+        # End-of-day flatten (intraday engine): close everything on the last
+        # bar of the trading day so nothing is held overnight.
+        if flatten_eod and day == last_ts_of_date.get(day[:10]):
+            for s, p in list(positions.items()):
+                px = last_close.get(s, p["entry"])
+                positions.pop(s)
+                cash += p["qty"] * px
+                pnl = p["qty"] * (px - p["entry"])
+                trades.append({
+                    "symbol": s, "qty": p["qty"],
+                    "entry_date": p["entry_date"], "entry": round(p["entry"], 2),
+                    "exit_date": day, "exit": round(px, 2),
+                    "pnl": round(pnl, 2),
+                    "pnl_pct": round(pnl / (p["qty"] * p["entry"]) * 100, 2),
+                    "exit_reason": "eod_flatten",
+                })
+
         equity = cash + sum(
             p["qty"] * last_close.get(s, p["entry"]) for s, p in positions.items()
         )
@@ -234,4 +260,124 @@ def _metrics(equity_curve, trades, open_positions, by_date, budget) -> dict:
         "unrealized_pnl": unrealized_pnl,
         "open_positions": len(open_positions),
         "trading_days": len(equity_curve),
+    }
+
+
+def run_orb_backtest(
+    bars_by_symbol: dict[str, list[dict]],
+    spy_bars: list[dict] | None = None,
+    budget: float = 10000.0,
+    cash_per_trade: float = 2000.0,
+    max_positions: int = 5,
+    or_bars: int = 6,
+    vol_mult: float = 1.5,
+    trail_pct: float = 3.0,
+    market_filter: bool = True,
+    slip_bps: float = 5.0,
+) -> dict:
+    """
+    Opening-range-breakout intraday backtest, sharing the exact entry logic the
+    live bot uses (tools.strategies.orb_signal / opening_range). Models: a
+    breakout entry above the opening-range high on volume; an initial stop at the
+    opening-range low; a trailing stop; an optional market-green filter (only
+    enter when SPY is above its session open); one entry per symbol per day; a
+    proper budget / max-position concurrency cap; and an end-of-day flatten.
+    Bars must be regular-trading-hours, in order. slip_bps applies to fills.
+    """
+    spy_open: dict[str, float] = {}
+    spy_px: dict[str, float] = {}
+    if spy_bars:
+        byd: dict[str, list[dict]] = {}
+        for b in spy_bars:
+            byd.setdefault(b["t"][:10], []).append(b)
+        for d, day in byd.items():
+            spy_open[d] = float(day[0]["open"])
+            for b in day:
+                spy_px[b["t"]] = float(b["close"])
+
+    by_ts = {s: {b["t"]: b for b in bars} for s, bars in bars_by_symbol.items()}
+    calendar = sorted({t for m in by_ts.values() for t in m})
+    last_ts_of_date: dict[str, str] = {}
+    for t in calendar:
+        last_ts_of_date[t[:10]] = t
+
+    cash = budget
+    positions: dict[str, dict] = {}
+    trades: list[dict] = []
+    equity_curve: list[dict] = []
+    last_close: dict[str, float] = {}
+    today_bars: dict[str, list[dict]] = {s: [] for s in by_ts}
+    traded_today: set = set()
+    cur_date = None
+
+    def _record(s, p, px, reason):
+        pnl = p["qty"] * (px - p["entry"])
+        trades.append({
+            "symbol": s, "qty": p["qty"], "entry_date": p["entry_date"],
+            "entry": round(p["entry"], 2), "exit_date": ts, "exit": round(px, 2),
+            "pnl": round(pnl, 2),
+            "pnl_pct": round((px - p["entry"]) / p["entry"] * 100, 2),
+            "exit_reason": reason,
+        })
+
+    for ts in calendar:
+        d = ts[:10]
+        if d != cur_date:
+            today_bars = {s: [] for s in by_ts}
+            traded_today = set()
+            cur_date = d
+        for s, m in by_ts.items():
+            bar = m.get(ts)
+            if bar is None:
+                continue
+            today_bars[s].append(bar)
+            price = float(bar["close"])
+            last_close[s] = price
+            if s in positions:
+                pos = positions[s]
+                hi, lo = float(bar["high"]), float(bar["low"])
+                pos["peak"] = max(pos["peak"], hi)
+                rng = opening_range(today_bars[s], or_bars)
+                xp = reason = None
+                if rng and lo <= rng["low"]:
+                    xp, reason = rng["low"] * (1 - slip_bps / 1e4), "orb_stop"
+                elif lo <= pos["peak"] * (1 - trail_pct / 100):
+                    xp, reason = pos["peak"] * (1 - trail_pct / 100), "trailing"
+                if reason:
+                    positions.pop(s)
+                    cash += pos["qty"] * xp
+                    _record(s, pos, xp, reason)
+                    continue
+            else:
+                if s in traded_today or len(positions) >= max_positions:
+                    continue
+                if orb_signal(today_bars[s], or_bars, vol_mult) == "buy":
+                    rng = opening_range(today_bars[s], or_bars)
+                    mkt_ok = (not market_filter) or (spy_px.get(ts, 0) > spy_open.get(d, 1e18))
+                    if rng and mkt_ok:
+                        entry = rng["high"] * (1 + slip_bps / 1e4)
+                        qty = position_size(cash, cash_per_trade, entry)
+                        if qty > 0:
+                            cash -= qty * entry
+                            positions[s] = {"qty": qty, "entry": entry,
+                                            "entry_date": ts, "peak": float(bar["high"])}
+                            traded_today.add(s)
+        if ts == last_ts_of_date[d]:
+            for s, p in list(positions.items()):
+                px = last_close.get(s, p["entry"])
+                positions.pop(s)
+                cash += p["qty"] * px
+                _record(s, p, px, "eod_flatten")
+        equity = cash + sum(p["qty"] * last_close.get(s, p["entry"]) for s, p in positions.items())
+        equity_curve.append({"date": ts, "equity": round(equity, 2)})
+
+    open_positions = [
+        {"symbol": s, "qty": p["qty"], "entry_date": p["entry_date"],
+         "entry": round(p["entry"], 2), "last": round(last_close.get(s, p["entry"]), 2),
+         "unrealized_pnl": round(p["qty"] * (last_close.get(s, p["entry"]) - p["entry"]), 2)}
+        for s, p in positions.items()
+    ]
+    return {
+        "equity_curve": equity_curve, "trades": trades, "open_positions": open_positions,
+        "metrics": _metrics(equity_curve, trades, open_positions, by_ts, budget),
     }

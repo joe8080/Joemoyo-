@@ -345,13 +345,17 @@ def trade(action: str, symbol: str, instruction: str):
               help="Stop opening new trades once the day's loss hits this $ amount (0 = off)")
 @click.option("--mode", default="swing", show_default=True,
               help="Tag for the trade log: swing or intraday")
+@click.option("--strategy", default="sma", show_default=True,
+              help="sma (daily trend) or orb (intraday opening-range breakout)")
+@click.option("--or-bars", default=6, show_default=True,
+              help="ORB: number of opening-range bars (6 x 5min = first 30 min)")
 @click.option("--dry-run", is_flag=True, help="Log decisions without placing orders")
 @click.option(
     "--llm-review",
     is_flag=True,
     help="Have Claude sanity-check (and veto risky) trades each cycle before placing them",
 )
-def autotrade(symbols, interval, cash_per_trade, budget, max_positions, short_window, long_window, once, enter_on_trend, confirm_volume, market_filter, timeframe, stop_loss_pct, take_profit_pct, trailing_stop_pct, flatten_eod, daily_loss_limit, mode, dry_run, llm_review):
+def autotrade(symbols, interval, cash_per_trade, budget, max_positions, short_window, long_window, once, enter_on_trend, confirm_volume, market_filter, timeframe, stop_loss_pct, take_profit_pct, trailing_stop_pct, flatten_eod, daily_loss_limit, mode, strategy, or_bars, dry_run, llm_review):
     """
     Run the automated paper-trading loop (SMA-crossover momentum strategy).
 
@@ -384,6 +388,8 @@ def autotrade(symbols, interval, cash_per_trade, budget, max_positions, short_wi
             flatten_eod=flatten_eod,
             daily_loss_limit=daily_loss_limit,
             mode=mode,
+            strategy=strategy,
+            or_bars=or_bars,
             dry_run=dry_run,
             llm_review=llm_review,
         )

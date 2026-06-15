@@ -22,10 +22,18 @@ Judge it on drawdown control and risk-adjusted return, not raw return vs SPY.
 (regime mode), size $5,000/position, max 10 positions, $50,000 total budget.
 Exit on an **8% trailing stop** or a bearish SMA crossover — whichever first.
 
-**Intraday engine** (5-min bars): 9/20 SMAs, $2,000/position, max 5, $10,000
-budget, 2% trailing stop, **flatten all positions before the close**, and a
-$500 daily-loss circuit breaker. Disjoint watchlist so it never collides with
-the swing book.
+**Intraday engine** (5-min bars, **opening-range breakout**): buy when price
+breaks above the first 30 minutes' high on volume ≥ 1.5× the opening-range
+average, **only while the market (SPY) is green on the day**; initial stop at the
+opening-range low, then a 3% trailing stop, **flatten before the close**, one
+entry per name per day, $2,000/position, max 5, $10,000 budget, $500 daily-loss
+breaker. Disjoint watchlist so it never collides with the swing book.
+
+Why ORB and not an intraday SMA crossover: validated on a year of 5-min data,
+the SMA crossover had **no intraday edge** (profit factor ~1.0); opening-range
+breakout with the market filter was **positive in all four quarters** even at
+doubled slippage. It is now in a **paper trial** before going to a real-time
+runner — see TRADING_PLAN.md.
 
 **Always:** paper only; budget/positions scoped per engine; exits are never
 filtered by entry gates; every action logged (Supabase + CSV).
