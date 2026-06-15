@@ -219,6 +219,8 @@ class BusinessOrchestrator:
         flatten_eod: bool = False,
         daily_loss_limit: float = 0.0,
         mode: str = "swing",
+        strategy: str = "sma",
+        or_bars: int = 6,
         dry_run: bool = False,
         llm_review: bool = False,
     ) -> None:
@@ -256,6 +258,8 @@ class BusinessOrchestrator:
             flatten_eod=flatten_eod,
             daily_loss_limit=daily_loss_limit,
             mode=mode,
+            strategy=strategy,
+            or_bars=or_bars,
             dry_run=dry_run,
             llm_review=llm_review,
         )

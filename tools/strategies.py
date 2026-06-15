@@ -166,3 +166,51 @@ def risk_exit(
         if peak > 0 and (last_price - peak) / peak * 100 <= -trail_pct:
             return "trailing"
     return None
+
+
+# --------------------------------------------------------------------- #
+#  Opening-Range Breakout (intraday day-trading) — pure functions       #
+# --------------------------------------------------------------------- #
+
+def session_bars(bars: list[dict], date: str, rth_start: str = "13:30", rth_end: str = "20:00") -> list[dict]:
+    """
+    The regular-trading-hours bars for one session date (UTC `t` timestamps),
+    in order. `date` is "YYYY-MM-DD". RTH window defaults to ~9:30-16:00 ET.
+    """
+    return [b for b in bars
+            if b.get("t", "")[:10] == date and rth_start <= b.get("t", "")[11:16] <= rth_end]
+
+
+def opening_range(day_bars: list[dict], or_bars: int = 6) -> dict | None:
+    """
+    High, low, and average volume of the first `or_bars` bars of the session
+    (e.g. 6 five-minute bars = the first 30 minutes). None if too few bars.
+    """
+    if len(day_bars) < or_bars:
+        return None
+    first = day_bars[:or_bars]
+    return {
+        "high": max(float(b["high"]) for b in first),
+        "low": min(float(b["low"]) for b in first),
+        "avg_vol": sum(float(b.get("volume", 0) or 0) for b in first) / or_bars,
+    }
+
+
+def orb_signal(day_bars: list[dict], or_bars: int = 6, vol_mult: float = 1.5) -> str:
+    """
+    "buy" when the latest bar is AFTER the opening range and breaks above the
+    opening-range high on volume >= vol_mult x the opening-range average volume;
+    otherwise "hold". `day_bars` are this session's bars in order (last = now).
+
+    This is the entry edge that backtested with a real, market-filtered edge —
+    the live bot and the backtester both call this so they stay identical.
+    """
+    if len(day_bars) <= or_bars:
+        return "hold"
+    rng = opening_range(day_bars, or_bars)
+    if not rng or rng["avg_vol"] <= 0:
+        return "hold"
+    last = day_bars[-1]
+    if float(last["high"]) > rng["high"] and float(last.get("volume", 0) or 0) >= vol_mult * rng["avg_vol"]:
+        return "buy"
+    return "hold"

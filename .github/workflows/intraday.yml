@@ -44,13 +44,13 @@ jobs:
           --symbols NFLX,AVGO,COIN,IWM,SMH
           --once
           --mode intraday
+          --strategy orb
           --timeframe 5Min
-          --short-window 9
-          --long-window 20
+          --or-bars 6
           --budget 10000
           --cash-per-trade 2000
           --max-positions 5
-          --enter-on-trend
-          --trailing-stop-pct 2
+          --market-filter
+          --trailing-stop-pct 3
           --daily-loss-limit 500
           --flatten-eod

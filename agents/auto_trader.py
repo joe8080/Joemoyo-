@@ -30,6 +30,7 @@ from config.settings import settings
 from tools.strategies import (
     sma, sma_crossover_signal, position_size,
     volume_confirmed, participation_ok, risk_exit,
+    session_bars, opening_range, orb_signal,
 )
 from tools import supabase_store
 
@@ -67,6 +68,12 @@ class AutoTrader:
         flatten_eod: bool = False,
         daily_loss_limit: float = 0.0,
         mode: str = "swing",
+        # strategy: "sma" (daily trend) or "orb" (intraday opening-range
+        # breakout). ORB uses or_bars (count of opening-range bars), volume_mult
+        # (breakout volume vs OR average), market_filter (only enter when the
+        # market is green on the day), and trailing_stop_pct for the trail.
+        strategy: str = "sma",
+        or_bars: int = 6,
         dry_run: bool = False,
         llm_review: bool = False,
         paper: bool | None = None,
@@ -122,6 +129,8 @@ class AutoTrader:
         self.flatten_eod = flatten_eod
         self.daily_loss_limit = daily_loss_limit
         self.mode = mode
+        self.strategy = strategy
+        self.or_bars = or_bars
         self.dry_run = dry_run
         self.llm_review = llm_review
         self._llm_client = None  # lazy Anthropic client for the review layer
@@ -347,6 +356,12 @@ class AutoTrader:
         open_position_count: int, remaining_budget: float = float("inf"),
     ) -> list[dict]:
         """Compute the strategy's proposed trades without placing any orders."""
+        if self.strategy == "orb":
+            return self._gather_orb_proposals(
+                positions, symbols_with_open_orders, buying_power,
+                open_position_count, remaining_budget,
+            )
+
         proposals: list[dict] = []
         remaining_bp = buying_power
 
@@ -516,6 +531,118 @@ class AutoTrader:
                 state = "holding" if holding else "flat"
                 self._log(f"{symbol}: signal={signal}, {state} — no action.")
 
+        return proposals
+
+    # ------------------------------------------------------------------ #
+    #  Opening-range-breakout proposals (intraday)                        #
+    # ------------------------------------------------------------------ #
+
+    def _gather_orb_proposals(
+        self, positions: dict, symbols_with_open_orders: set, buying_power: float,
+        open_position_count: int, remaining_budget: float = float("inf"),
+    ) -> list[dict]:
+        """
+        Intraday opening-range breakout (validated edge): enter above the first
+        30 minutes' high on volume while the market is green; exit on the
+        opening-range low, a trailing stop, or the end-of-day flatten. Long-only,
+        one entry per symbol per day. Shares tools.strategies.orb_signal with the
+        backtester so live and tested behaviour match.
+        """
+        proposals: list[dict] = []
+        remaining_bp = buying_power
+
+        # Market-green filter: SPY above its session open.
+        market_ok = True
+        session_date = None
+        try:
+            mkt = self.alpaca.get_bars(self.regime_symbol, timeframe=self.timeframe,
+                                       days_back=self.bars_days_back)
+            if mkt:
+                session_date = mkt[-1]["t"][:10]
+                mday = session_bars(mkt, session_date)
+                if mday and self.market_filter:
+                    market_ok = float(mday[-1]["close"]) > float(mday[0]["open"])
+                    if not market_ok:
+                        self._log(f"ORB: {self.regime_symbol} below its session open — "
+                                  "no new breakouts this cycle (exits still active).")
+        except RuntimeError as e:
+            if self.market_filter:
+                self._log(f"ORB: market data fetch failed ({e}) — blocking new entries.")
+                market_ok = False
+
+        # One breakout entry per symbol per day.
+        traded_today: set = set()
+        if session_date:
+            try:
+                for o in self.alpaca.get_orders(status="all", limit=200):
+                    if (o.get("side") == "buy" and float(o.get("filled_qty") or 0) > 0
+                            and (o.get("submitted_at") or "")[:10] == session_date):
+                        traded_today.add(o.get("symbol"))
+            except RuntimeError:
+                pass
+
+        for symbol in self.symbols:
+            try:
+                bars = self.alpaca.get_bars(symbol, timeframe=self.timeframe,
+                                            days_back=self.bars_days_back)
+            except RuntimeError as e:
+                self._log(f"{symbol}: bar fetch failed: {e}")
+                continue
+            sdate = session_date or (bars[-1]["t"][:10] if bars else None)
+            day = session_bars(bars, sdate) if sdate else []
+            if not day:
+                continue
+            last_close = float(day[-1]["close"])
+            rng = opening_range(day, self.or_bars)
+
+            if symbol in positions:
+                # Exit: opening-range-low stop first, then trailing stop.
+                entry = float(positions[symbol].get("avg_entry_price") or 0.0)
+                peak = max((float(b["high"]) for b in day), default=last_close)
+                reason = None
+                if rng and last_close <= rng["low"]:
+                    reason = "orb_stop"
+                elif (self.trailing_stop_pct and peak > 0
+                      and (last_close - peak) / peak * 100 <= -self.trailing_stop_pct):
+                    reason = "trailing"
+                if reason:
+                    pnl_pct = (last_close - entry) / entry * 100 if entry else 0.0
+                    self._log(f"{symbol}: ORB EXIT — {reason} ({pnl_pct:+.1f}% vs entry).")
+                    proposals.append({
+                        "symbol": symbol, "action": "close", "qty": positions[symbol]["qty"],
+                        "last_price": round(last_close, 2), "entry_price": round(entry, 2),
+                        "pnl_pct": round(pnl_pct, 2), "signal": "sell",
+                        "exit_reason": reason, "reason": f"ORB {reason}",
+                    })
+                continue
+
+            # Entry gates: not already traded today, no pending order, market
+            # green, a fresh breakout, and room under the caps/budget.
+            if symbol in symbols_with_open_orders or symbol in traded_today:
+                continue
+            if not market_ok:
+                continue
+            if orb_signal(day, self.or_bars, self.volume_mult) != "buy":
+                continue
+            if open_position_count >= self.max_positions:
+                self._log(f"{symbol}: ORB breakout but max_positions ({self.max_positions}) reached — skip.")
+                continue
+            spendable = min(remaining_bp, remaining_budget)
+            qty = position_size(spendable, self.cash_per_trade, last_close, self.cash_buffer)
+            if qty <= 0:
+                self._log(f"{symbol}: ORB breakout but insufficient budget/buying power — skip.")
+                continue
+            est_cost = round(qty * last_close, 2)
+            remaining_bp -= est_cost
+            remaining_budget -= est_cost
+            open_position_count += 1
+            orh = rng["high"] if rng else last_close
+            self._log(f"{symbol}: ORB BREAKOUT — buy {qty} @ ~${last_close:.2f} (OR high ${orh:.2f}).")
+            proposals.append({
+                "symbol": symbol, "action": "buy", "qty": qty, "est_cost": est_cost,
+                "last_price": round(last_close, 2), "signal": "buy",
+                "reason": "opening-range breakout",
+            })
         return proposals
 
     # ------------------------------------------------------------------ #
