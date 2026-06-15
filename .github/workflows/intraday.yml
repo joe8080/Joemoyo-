@@ -1,15 +1,16 @@
 name: AutoTrader Intraday (paper)
 
-# Day-trading engine: 5-minute bars, fast SMAs, end-of-day flatten so nothing
-# is held overnight. Separate small sub-budget so it doesn't fight the swing
-# book. NOTE: GitHub Actions cron is approximate and can be delayed several
-# minutes, so this is minutes-to-hours intraday trading, not true scalping.
-# The --flatten-eod safeguard closes everything near the bell regardless.
+# Day-trading engine: opening-range breakout, validated. Runs as a SESSION
+# RUNNER, not a per-5-min cron: GitHub silently drops high-frequency (*/5)
+# schedules, so instead we fire ONCE per day at 14:00 UTC (10:00 ET — exactly
+# when the 30-min opening range has formed and the first breakouts can occur)
+# and then loop internally every 5 minutes for the rest of the session,
+# flattening before the close. One reliable daily trigger >> an unreliable
+# every-5-min schedule. (A real-time host is the eventual upgrade.)
 
 on:
   schedule:
-    # Every 5 min during US market hours (13:30-20:00 UTC ~ 9:30-16:00 ET).
-    - cron: "*/5 13-20 * * 1-5"
+    - cron: "0 14 * * 1-5"   # 10:00 ET, after the opening range forms
   workflow_dispatch: {}
 
 permissions:
@@ -17,12 +18,12 @@ permissions:
 
 concurrency:
   group: autotrade-intraday
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   trade:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 360        # ~6h: 10:00 ET -> 16:00 ET close
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -30,8 +31,7 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-
-      - name: Run one intraday cycle
+      - name: Run the intraday session (loops every 5 min, flattens at close)
         env:
           ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID || 'PKPGSH5CZF7QJRVJ4YT7CVVZDM' }}
           ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
@@ -42,7 +42,7 @@ jobs:
         run: >
           python main.py autotrade
           --symbols NFLX,AVGO,COIN,IWM,SMH
-          --once
+          --interval 5
           --mode intraday
           --strategy orb
           --timeframe 5Min
