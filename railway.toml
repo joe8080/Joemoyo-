@@ -1,0 +1,10 @@
+# Railway deploy config for the always-on intraday day-trade engine.
+# Builds the realtime Dockerfile and keeps the process running 24/7; the bot's
+# own loop gates on market hours and flattens at the close.
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "realtime/Dockerfile"
+
+[deploy]
+restartPolicyType = "ALWAYS"
+restartPolicyMaxRetries = 10
