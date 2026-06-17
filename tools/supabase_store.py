@@ -140,3 +140,8 @@ def get_equity_snapshots() -> list:
 
 def get_manual_entries() -> list:
     return _get("bot_manual_journal", "select=*&order=created_at.desc")
+
+
+def heartbeat(note: str, mode: str = "") -> bool:
+    """Liveness ping — lets us confirm the runner is up and Supabase is reachable."""
+    return _post("bot_heartbeats", {"note": note, "mode": mode})

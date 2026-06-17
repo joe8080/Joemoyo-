@@ -769,6 +769,11 @@ class AutoTrader:
             f"SMA {self.short_window}/{self.long_window} on {self.timeframe}, "
             f"llm_review={self.llm_review}. Log: {self.log_path}"
         )
+        # Liveness ping so we can confirm the always-on runner booted and its
+        # Supabase connection works without waiting for the market to open.
+        supabase_store.heartbeat(
+            f"runner up: {self.strategy}/{self.mode} {','.join(self.symbols)}",
+            mode=self.mode)
         try:
             while True:
                 result = {}
