@@ -771,12 +771,17 @@ class AutoTrader:
         )
         try:
             while True:
+                result = {}
                 try:
-                    self.run_once()
+                    result = self.run_once() or {}
                 except Exception as e:  # keep the loop alive across transient errors
                     self._log(f"Cycle error (continuing): {e}")
-                console.print(f"[dim]Sleeping {self.interval_minutes} min...[/dim]")
-                time.sleep(self.interval_minutes * 60)
+                # When the market is closed, idle in longer naps so an always-on
+                # host isn't doing 5-minute no-ops (and spamming logs) overnight.
+                closed = result.get("skipped") and result.get("reason") == "market_closed"
+                nap = 15 if closed else self.interval_minutes
+                console.print(f"[dim]Sleeping {nap} min...[/dim]")
+                time.sleep(nap * 60)
         except KeyboardInterrupt:
             self._log("AutoTrader stopped by user (KeyboardInterrupt).")
             console.print("\n[bold yellow]AutoTrader stopped.[/bold yellow]")

@@ -1,0 +1,1 @@
+worker: python main.py autotrade --symbols NFLX,AVGO,COIN,IWM,SMH --interval 5 --mode intraday --strategy orb --timeframe 5Min --or-bars 6 --budget 10000 --cash-per-trade 2000 --max-positions 5 --market-filter --trailing-stop-pct 3 --daily-loss-limit 500 --flatten-eod
