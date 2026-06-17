@@ -1,16 +1,11 @@
 name: AutoTrader Intraday (paper)
 
-# Day-trading engine: opening-range breakout, validated. Runs as a SESSION
-# RUNNER, not a per-5-min cron: GitHub silently drops high-frequency (*/5)
-# schedules, so instead we fire ONCE per day at 14:00 UTC (10:00 ET — exactly
-# when the 30-min opening range has formed and the first breakouts can occur)
-# and then loop internally every 5 minutes for the rest of the session,
-# flattening before the close. One reliable daily trigger >> an unreliable
-# every-5-min schedule. (A real-time host is the eventual upgrade.)
+# DISABLED schedule: the intraday engine now runs as an always-on process on
+# Railway (realtime/Dockerfile), which is reliable — unlike GitHub's dropped
+# crons. Kept here for manual fallback only (Run workflow), so it can never
+# double-trade against the Railway runner on the same account.
 
 on:
-  schedule:
-    - cron: "0 14 * * 1-5"   # 10:00 ET, after the opening range forms
   workflow_dispatch: {}
 
 permissions:
