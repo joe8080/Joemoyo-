@@ -41,6 +41,9 @@ class Settings:
     # Model config
     model: str = "claude-sonnet-4-6"
     max_tokens: int = 8096
+    # Max tool-use iterations per agent run (Factor 8: own your control flow).
+    # Prevents runaway tool-calling loops and unbounded API cost.
+    max_tool_iterations: int = 10
 
 
 def get_settings() -> Settings:
@@ -64,6 +67,7 @@ def get_settings() -> Settings:
         finance_channel=os.environ.get("YOUTUBE_FINANCE_CHANNEL_NAME", "Capital Edge"),
         music_studio=os.environ.get("MUSIC_STUDIO_NAME", "JoeMoyo Studios"),
         shopify_store=os.environ.get("SHOPIFY_STORE_NAME", "JoeMoyo Store"),
+        max_tool_iterations=int(os.environ.get("MAX_TOOL_ITERATIONS", "10")),
     )
 
 
