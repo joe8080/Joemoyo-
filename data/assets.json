@@ -1,0 +1,34 @@
+{
+  "last_updated": "2026-04-16",
+  "studio_name": "REPLACE_WITH_STUDIO_NAME",
+  "insurance_policy_number": "REPLACE_WITH_POLICY_NUMBER",
+  "insurer": "REPLACE_WITH_INSURER",
+  "total_insured_value": 0,
+  "items": [
+    {
+      "id": "ASSET-001",
+      "category": "REPLACE_WITH_CATEGORY e.g. Console / Microphone / Monitor / Outboard / Instrument / Computer / Acoustic",
+      "make": "REPLACE_WITH_MAKE e.g. SSL",
+      "model": "REPLACE_WITH_MODEL e.g. 4000 G Series",
+      "serial_number": "REPLACE_WITH_SERIAL or UNKNOWN",
+      "condition": "REPLACE_WITH: Mint / Excellent / Good / Fair / Poor",
+      "purchase_date": "REPLACE_WITH_DATE or UNKNOWN",
+      "purchase_price": 0,
+      "current_market_value": 0,
+      "insured_value": 0,
+      "notes": ""
+    }
+  ],
+  "categories": [
+    "Console",
+    "Microphone",
+    "Monitor",
+    "Outboard",
+    "Instrument",
+    "Computer / Hardware",
+    "Software / Plugins",
+    "Acoustic Treatment",
+    "Cables / Accessories",
+    "Furniture"
+  ]
+}

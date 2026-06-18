@@ -1,0 +1,38 @@
+{
+  "last_updated": "2026-04-16",
+  "tax_year": "2026-27",
+  "annual_jisa_allowance_per_child": 9000,
+  "children": [
+    {
+      "name": "Andre",
+      "dob": "REPLACE_WITH_DOB",
+      "jisa_accounts": [
+        {
+          "provider": "REPLACE_WITH_PROVIDER e.g. Hargreaves Lansdown",
+          "type": "Stocks & Shares JISA",
+          "balance": "REPLACE_WITH_AMOUNT",
+          "contributed_this_year": "REPLACE_WITH_AMOUNT"
+        }
+      ],
+      "total_balance": "REPLACE_WITH_AMOUNT",
+      "total_contributed_this_year": "REPLACE_WITH_AMOUNT",
+      "allowance_remaining": 9000
+    },
+    {
+      "name": "Ameera",
+      "dob": "REPLACE_WITH_DOB",
+      "jisa_accounts": [
+        {
+          "provider": "REPLACE_WITH_PROVIDER e.g. Trading 212",
+          "type": "Stocks & Shares JISA",
+          "balance": "REPLACE_WITH_AMOUNT",
+          "contributed_this_year": "REPLACE_WITH_AMOUNT"
+        }
+      ],
+      "total_balance": "REPLACE_WITH_AMOUNT",
+      "total_contributed_this_year": "REPLACE_WITH_AMOUNT",
+      "allowance_remaining": 9000
+    }
+  ],
+  "equalisation_target": "REPLACE_WITH_NOTES e.g. Keep both within 10% of each other"
+}

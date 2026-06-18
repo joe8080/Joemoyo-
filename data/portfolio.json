@@ -1,0 +1,46 @@
+{
+  "last_updated": "2026-04-16",
+  "target_total": 1000000,
+  "accounts": [
+    {
+      "name": "Stocks & Shares ISA",
+      "provider": "REPLACE_WITH_PROVIDER e.g. Trading 212",
+      "type": "ISA",
+      "balance": "REPLACE_WITH_AMOUNT",
+      "holdings": [
+        {
+          "ticker": "REPLACE_WITH_TICKER",
+          "name": "REPLACE_WITH_NAME",
+          "units": "REPLACE_WITH_UNITS",
+          "value": "REPLACE_WITH_VALUE",
+          "allocation_pct": "REPLACE_WITH_PCT"
+        }
+      ]
+    },
+    {
+      "name": "GIA",
+      "provider": "REPLACE_WITH_PROVIDER",
+      "type": "GIA",
+      "balance": "REPLACE_WITH_AMOUNT",
+      "holdings": []
+    },
+    {
+      "name": "JISA — Andre",
+      "provider": "REPLACE_WITH_PROVIDER e.g. Hargreaves Lansdown",
+      "type": "JISA",
+      "balance": "REPLACE_WITH_AMOUNT",
+      "holdings": []
+    },
+    {
+      "name": "JISA — Ameera",
+      "provider": "REPLACE_WITH_PROVIDER e.g. Trading 212",
+      "type": "JISA",
+      "balance": "REPLACE_WITH_AMOUNT",
+      "holdings": []
+    }
+  ],
+  "concentration_thresholds": {
+    "single_holding_max_pct": 25,
+    "single_sector_max_pct": 40
+  }
+}
