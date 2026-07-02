@@ -1,0 +1,30 @@
+name: Watchdog
+
+# Daily liveness check: keeps the Supabase project from auto-pausing and goes
+# RED (which emails the repo owner) if the bot hasn't logged an equity snapshot
+# in several days — so a dead runner or rotated key can never hide for weeks
+# behind green no-op runs again.
+
+on:
+  schedule:
+    - cron: "0 12 * * 1-5"   # weekdays, before the US open
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests python-dotenv
+      - name: Keep-alive + freshness check
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: python -m tools.watchdog

@@ -244,6 +244,16 @@ class AutoTrader:
         try:
             clock = self.alpaca.get_clock()
         except RuntimeError as e:
+            if "401" in str(e) or "403" in str(e):
+                # Bad/rotated credentials must FAIL LOUDLY, not look like a
+                # quiet skipped cycle — a green run that trades nothing is how
+                # a dead engine hides for weeks.
+                self._log(f"ALPACA AUTH FAILED: {e}")
+                raise EnvironmentError(
+                    "Alpaca rejected the API keys (401/403). Update "
+                    "ALPACA_API_KEY_ID / ALPACA_API_SECRET_KEY wherever this "
+                    "bot runs (GitHub secrets, Railway variables, Streamlit)."
+                ) from e
             self._log(f"Could not fetch market clock: {e}. Skipping cycle.")
             return {"skipped": True, "reason": "clock_error"}
 

@@ -28,7 +28,7 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Run the intraday session (loops every 5 min, flattens at close)
         env:
-          ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID || 'PKPGSH5CZF7QJRVJ4YT7CVVZDM' }}
+          ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
           ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
           ALPACA_PAPER: "true"
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
