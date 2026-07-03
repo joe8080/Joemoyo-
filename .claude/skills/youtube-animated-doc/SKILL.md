@@ -29,17 +29,28 @@ for abstract concepts. This is the affordable, scalable look modern history chan
 
 Credits are finite. Follow these or you'll blow a month's budget on one video:
 
-1. **Cheap-first visuals.** Default = AI **stills** + Ken Burns/parallax (`vidiq_compose`
-   ≈ 1 credit / 4s) + motion graphics. These carry ~85% of screen time.
-2. **Ration AI video.** True AI video clips (`vidiq_generate_video`, Highfield
-   `generate_video`) are the expensive line item (duration × per-sec rate × 20). Cap at
-   **6–10 hero clips, 4–6s each** per episode. Never fill 15 min with generated video.
-3. **Estimate gate.** Before any generate step, call `vidiq_balance`, compute an exact
-   per-video estimate, and confirm the number with the user. Nothing big runs unapproved.
-4. **Cheapest capable tool per stage.** Highfield `explainer_video` assembly is free;
-   `vidiq_compose` is cheap. Prefer them over pricier paths when quality is equal.
-5. **Batchable.** Write the script and all image prompts first, then generate in batches so
-   nothing is regenerated. Poll async jobs with `vidiq_job_poll` (refunds on failure).
+> 📕 **Read `references/higgsfield-playbook.md` before any generation** — it has the
+> per-model economics and the cheap routing that cuts an episode from ~900 to ~250–450 credits.
+
+1. **Cheap-first visuals.** Default = AI **stills** + Ken Burns/parallax + motion graphics.
+   These carry ~85% of screen time.
+2. **Hero motion = image-to-video, not text-to-video.** Animate our own stills via
+   Higgsfield image-to-video (DoP lite/turbo ~2–6.5 credits, `kling3_0_turbo` ~6) instead
+   of prompting Sora/Veo from text (~40–70 credits/clip). Cap at **6–10 hero clips,
+   4–6s each**; at most 1–2 marquee Sora/Veo shots per episode, if any.
+3. **Preflight gate.** Higgsfield `generate_*` accept `get_cost: true` — a FREE exact
+   quote without submitting. Preflight every batch; also check `vidiq_balance` /
+   Higgsfield `balance`, and confirm big numbers with the user before running.
+4. **Cheapest capable tool per stage.** Higgsfield `explainer_video` assembly is FREE
+   (subtitles ~0.05/block, 180-block cap ≈ 30 min); prefer it for long-form assembly.
+   `vidiq_compose` (≈1 credit/4s) for Ken Burns segments. If the plan includes an
+   unlimited low-tier video model, use it for drafts at zero marginal cost.
+5. **Free knowledge first.** `models_explore(recommend)`, `get_workflow_instructions`
+   ('video-explainer' etc.), and `get_youtube_explainer_presets` are free — load them
+   before building; never guess a model.
+6. **Batchable.** Write the script and all image prompts first; test-render 2–3 stills
+   before a 40-image batch (completed-but-ugly still charges). Poll async jobs
+   (`vidiq_job_poll` / `job_display`); failures auto-refund.
 
 ## Pipeline (work these phases in order)
 
