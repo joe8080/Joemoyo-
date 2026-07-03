@@ -33,6 +33,16 @@ per-block audio).
 | 9 | B49 dawn stelae | _queued (slot cap)_ | |
 | 10 | GUD1 city burns | _queued (slot cap)_ | |
 
+## RESULT (2026-07-03)
+- ✅ Final MP4: **9:16, 1920×1080, h264+AAC, 596MB** — delivered to user for review.
+- All 7 compose segments rendered (S1 80s / S2 99s / S3 92s / S4 84s / S5 77s / S6 46s / S7 78s).
+- Stitch: Higgsfield import hit its 50MB cap → downloaded segments (S3 host allowed by
+  proxy; cloudfront is not) and concatenated locally with static ffmpeg (imageio-ffmpeg),
+  lossless stream copy. LESSON for the skill: final stitch = local ffmpeg concat, free.
+- QA frames verified: title card, mint scene, manuscript scene — cinematic, on-style.
+- Pending user decisions: approve for upload; pick thumbnail v1/v2; music (none in v1);
+  optional v2 extension to hit 10-15 min (add 1-2 deep-dive chapters, ~40-60 credits).
+
 ## Spend tracker (approx)
 Stills 3+88+12=103 · VO ~130 · titles 15 · thumbs 44 · cards ~10 · heroes 100 ·
 compose ~139 · misc 5 → **~545 total** (balance was 2,453; resets Jul 6)

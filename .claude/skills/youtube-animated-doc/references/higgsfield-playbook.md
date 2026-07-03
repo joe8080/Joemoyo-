@@ -60,6 +60,25 @@ pipeline. Numbers are indicative — ALWAYS preflight with `get_cost: true` befo
 - Cards ×5: ~20 credits (vidiq_motion_graphics)
 - **Total target: ~250–450 credits** (vs 700–900+ in the vidIQ-only routing)
 
+## Lessons from episode 1 (Aksum, July 2026)
+
+- **Final stitch: use local ffmpeg, not Higgsfield.** `media_import_url` caps at 50MB;
+  1080p compose segments run 50–110MB. Download the segment MP4s (the remotionlambda S3
+  host is proxy-allowed; cloudfront is NOT) and concat with the static ffmpeg from
+  `pip install imageio-ffmpeg` using `-f concat -c copy` — lossless and free.
+- **George (ElevenLabs JBFqnCBsd6RMkjVDRZzb) reads ~15 chars/sec**, much faster than
+  140wpm plans. Budget ~950–1,000 chars of script per minute of narration.
+- **Segments must map 1:1 to VO chunks** (compose takes ONE voiceover per call, played
+  from t=0). Write VO chunks to match act boundaries, each ≤240s of scenes.
+- Cinema Studio 2.5 stills: 2 credits each, ~5s render, superb quality with the OrigineX
+  art-direction suffix. Kling 3 Turbo image-to-video 1080p 5s: 10 credits, ~2 min render.
+- Max 8 concurrent Higgsfield jobs (ultra plan) — throttle batches; rate-limit rejections
+  cost nothing.
+- Signed URLs (vidIQ VO/cards ~12h, Higgsfield cloudfront long-lived): do the whole
+  produce-assemble run in one session; transcribe URLs EXACTLY (a 1-char typo 403s).
+- vidIQ thumbnail self-scorer is biased toward vlogger thumbs (arrows/faces/smiles);
+  don't chase its score for documentary art — 2 iterations max, then human judgment.
+
 ## Sources
 - github.com/geopopos/higgsfield_ai_mcp (DoP image-to-video quality tiers & credit costs)
 - github.com/jfikrat/higgsfield-mcp, github.com/Hikhakk/higgsfield-mcp-unified (tool surface, cost preflight pattern)
