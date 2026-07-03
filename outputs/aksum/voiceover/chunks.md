@@ -1,9 +1,12 @@
 # Aksum VO — Generation-ready chunks
 
-Voice spec: deep, measured, documentary narrator; UK English; unhurried, ~140 wpm.
-Three chunks, each ≤5,000 chars (vidIQ cap). Generate in order; keep the returned MP3
-URLs listed at the bottom. Alternative: per-beat takes for explainer_video block sync
-(split at the `‖` marks which match beat boundaries in script.md).
+Voice: **George (JBFqnCBsd6RMkjVDRZzb)** — warm, captivating storyteller.
+**FOUR chunks** (revised from three), each aligned to one compose segment ≤240s:
+Seg1 = Cold open + Act I · Seg2 = Act II + Act III(first half) · Seg3 = Act III(rest) +
+Act IV · Seg4 = Act V + Close. Chunk boundaries: split Chunk 2 below at the "But to see
+how ambitious…" line (start of Act III) and again after the 2008 obelisk return (B31).
+The `‖` marks = beat boundaries in script.md; use them to time compose scene durations
+to the narration.
 
 ---
 

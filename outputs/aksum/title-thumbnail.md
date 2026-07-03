@@ -6,8 +6,9 @@
 3. Erased: The African Superpower Rome Feared
 4. Aksum: The Empire History Books Skipped
 
-**Locked (pending score):** *Aksum: The African Empire That Outlasted Rome*
-- 6 words, curiosity gap, names the subject, sets up the "erased" angle. On-brand.
+**LOCKED: "Erased: The African Superpower That Outlasted Rome" — vidIQ score 81/100**
+(vs 71 for "Aksum: The African Empire That Outlasted Rome"). Fits the channel's existing
+"Erased:" series branding; "Aksum" goes in description + tags for search.
 
 ## Thumbnail concept (generate → score → refine)
 - **Subject:** a towering Aksumite granite stele (obelisk) against a dramatic dawn sky,
