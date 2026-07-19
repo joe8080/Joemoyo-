@@ -4,10 +4,11 @@ name: Daily Close Ritual
 # and tendencies — then commit them so the hosted Streamlit dashboard updates
 # itself with no manual step (the SMB "daily close ritual" idea, automated).
 
+# DISABLED schedule: this job now runs inside the always-on Railway
+# container (realtime/supervisor.py) — GitHub's copy of the Alpaca keys
+# went stale after rotation and every run silently 401'd. Kept for
+# manual fallback only (Run workflow) once repo secrets are refreshed.
 on:
-  schedule:
-    # 20:20 UTC ~ 16:20 ET, a few minutes after the US close, weekdays.
-    - cron: "20 20 * * 1-5"
   workflow_dispatch: {}
 
 permissions:

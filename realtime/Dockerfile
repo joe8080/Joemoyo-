@@ -12,10 +12,8 @@ COPY . .
 ENV ALPACA_PAPER=true PYTHONUNBUFFERED=1
 # Intraday ORB engine, validated config. Credentials come from host env vars:
 # ALPACA_API_KEY_ID, ALPACA_API_SECRET_KEY, and optionally SUPABASE_URL/_KEY.
-CMD ["python", "main.py", "autotrade", \
-     "--symbols", "NFLX,AVGO,COIN,IWM,SMH", \
-     "--interval", "5", "--mode", "intraday", "--strategy", "orb", \
-     "--timeframe", "5Min", "--or-bars", "6", \
-     "--budget", "10000", "--cash-per-trade", "2000", "--max-positions", "5", \
-     "--market-filter", "--trailing-stop-pct", "3", \
-     "--daily-loss-limit", "500", "--flatten-eod"]
+# The supervisor runs every job in this one container: the intraday ORB
+# loop, swing cycles every 30 min in market hours, and the daily coach.
+# (The swing engine moved here from GitHub Actions after its copy of the
+# rotated Alpaca keys went stale — one host, one set of credentials.)
+CMD ["python", "realtime/supervisor.py"]

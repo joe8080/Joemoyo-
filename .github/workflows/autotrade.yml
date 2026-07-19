@@ -1,11 +1,10 @@
 name: AutoTrader (paper)
 
+# DISABLED schedule: this job now runs inside the always-on Railway
+# container (realtime/supervisor.py) — GitHub's copy of the Alpaca keys
+# went stale after rotation and every run silently 401'd. Kept for
+# manual fallback only (Run workflow) once repo secrets are refreshed.
 on:
-  schedule:
-    # Every 30 min, 13:00–20:59 UTC, Mon–Fri — covers US market hours
-    # (9:30–16:00 ET) year-round. The bot itself skips when the market
-    # is closed, so off-hours/holiday runs are harmless no-ops.
-    - cron: "*/30 13-20 * * 1-5"
   workflow_dispatch: {}
 
 permissions:
