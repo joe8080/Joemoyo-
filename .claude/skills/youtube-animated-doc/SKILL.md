@@ -79,11 +79,11 @@ Credits are finite. Follow these or you'll blow a month's budget on one video:
 - Save to `outputs/<topic>/script.md`. This beat sheet drives every later phase.
 
 ### Phase 3 — Voiceover
-- Default: `vidiq_voiceover_generate` with a chosen `voiceId` from
-  `vidiq_voiceover_list_voices` (deep, documentary tone). ~14 credits / 1,000 chars.
+- **Default voice = Joe's cloned "Joe OGX"** (find it in `vidiq_voiceover_list_voices`,
+  `isCustom: true`). Generate with `vidiq_voiceover_generate`. ~14 credits / 1,000 chars.
 - Script > 5,000 chars → split into chunks, generate each, keep the ordered MP3 URLs.
-- Optional upgrade: clone the user's own voice via `vidiq_voiceover_clone_start` /
-  `vidiq_voiceover_clone` once they provide a sample.
+- To (re)clone: `vidiq_voiceover_clone_start(youtubeUrl, name)` from a YouTube video of
+  Joe speaking (1 credit) — cheaper than the 50-credit audio-sample route.
 
 ### Phase 4 — Visuals
 - **Stills (bulk):** one cinematic, period-accurate image per beat (~40–70). Generate via
@@ -119,8 +119,42 @@ Credits are finite. Follow these or you'll blow a month's budget on one video:
   historically accurate [era/region], rich earth-and-gold palette, film grain, shallow
   depth of field, epic scale, museum-documentary realism." Match ethnicity and material
   culture to the real history — this is the channel's whole point.
+
+### 🔒 LOCKED RULE — authentic African representation (non-negotiable)
+This is the channel's identity. It applies to EVERY still and clip prompt, no exceptions:
+- **People are visibly African / Black**, with African facial features and **dark-to-brown
+  skin tones**. Never European-ised, lightened, or racially ambiguous faces. When a scene
+  has people, state the ethnicity explicitly in the prompt (e.g. "dark-skinned Habesha
+  people", "West African Mandé men and women").
+- **Region- and era-accurate material culture** — dress, textiles, colours, patterns,
+  hairstyles, jewellery, weapons, architecture must match the specific people, not a
+  generic "ancient" look. Africa is not one place: match the civilization.
+- **Consistency within an episode:** reuse the SAME art-direction string (below) verbatim on
+  every prompt so faces, palette, and grain stay uniform end to end.
+- Negative prompt where the model supports it: "no European features, no lightened skin,
+  no anachronistic clothing."
+
+**Region reference (extend as needed):**
+
+| Civilization | People | Signature dress / colour / material culture |
+|---|---|---|
+| Aksum | Habesha (Ethiopian/Eritrean) | white shamma with woven borders, gold, stone stelae, rock churches |
+| Mali / Songhai | West African Mandé | indigo & earth-tone boubou robes, gold ornaments, mudbrick (Djenné) |
+| Kush / Nubia | Nubian | linen kilts, gold & ivory, pyramids of Meroë, ram iconography |
+| Great Zimbabwe | Shona | animal-hide & woven cloth, soapstone birds, dry-stone walls |
+| Kongo / Benin | Central & West African | raffia cloth, brass/bronze plaques, coral beads |
+| Ancient Egypt (Kemet) | North-East African | linen, gold, kohl, nemes headdress — brown-skinned |
+
+**Locked art-direction suffix** (append to every prompt; mirrored in
+`references/higgsfield-playbook.md`):
+`cinematic, dramatic volumetric lighting, historically accurate [ERA/REGION], visibly
+African/Black people with dark-to-brown skin and African features in region-accurate dress,
+rich earth-and-gold palette, film grain, shallow depth of field, epic scale,
+museum-documentary realism, 16:9`
+
 - **Tone:** authoritative, revelatory, respectful; "the history you were never taught."
-- **Voice:** deep, measured, documentary narrator (until the user's own voice is cloned).
+- **Voice:** **Joe's cloned voice** (vidIQ custom voice "Joe OGX") is the default OrigineX
+  narrator. Fallback: George (`JBFqnCBsd6RMkjVDRZzb`), a deep documentary narrator.
 - **Title card & lower-thirds:** heavy condensed serif/impact font, gold-on-dark.
 - **Pacing:** a visual change every 5–8 seconds; never hold a static frame.
 - **Cadence:** 1–2 flagship videos/week — not the old 5-a-day firehose.

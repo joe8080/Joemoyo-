@@ -60,6 +60,20 @@ pipeline. Numbers are indicative — ALWAYS preflight with `get_cost: true` befo
 - Cards ×5: ~20 credits (vidiq_motion_graphics)
 - **Total target: ~250–450 credits** (vs 700–900+ in the vidIQ-only routing)
 
+## 🔒 Locked art-direction suffix (authentic African representation)
+
+Append verbatim to EVERY still/clip prompt; swap only `[ERA/REGION]`:
+
+`cinematic, dramatic volumetric lighting, historically accurate [ERA/REGION], visibly
+African/Black people with dark-to-brown skin and African features in region-accurate dress,
+rich earth-and-gold palette, film grain, shallow depth of field, epic scale,
+museum-documentary realism, 16:9`
+
+Non-negotiable: dark-to-brown skin, African features, region-accurate dress/hairstyles/
+architecture (never generic or European-ised). See the region table in SKILL.md Part H.
+Cinema Studio 2.5 has no negative-prompt field — bake the constraints into the positive
+prompt as above (this worked cleanly for the Aksum Habesha renders).
+
 ## Lessons from episode 1 (Aksum, July 2026)
 
 - **Final stitch: use local ffmpeg, not Higgsfield.** `media_import_url` caps at 50MB;
