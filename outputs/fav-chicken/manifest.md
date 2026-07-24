@@ -20,3 +20,18 @@ kling3_0 std, sound on, 16:9, ~12cr each. Clips on cloudfront (fetched server-si
 Cards (remotion, signed ~12h): opening sting job_2229735b (3s), end-card job_8834c9a0 (8s).
 VO: Adam 655edd67 (40.8s). Music: 4e0c00f7 WAV (89.4s).
 Spend so far: VO 7 + music 25 + 12 clips×12=144 + 2 cards ~8 = ~184 credits.
+
+## BRANDED version (2026-07-24) — real logo integrated, disclaimer removed
+Real logo sourced from https://favorite.co.uk/assets/img/logo.png (469x101 transparent PNG,
+rooster mascot + "Britain's Tastiest Chicken!"). Integrated via pixel-exact overlays/composites:
+- **Shopfront fascia band** — real logo composited onto the storefront hero shot.
+- **Corner logo "bug"** — small real-logo overlay held across the whole ad (top corner).
+- **Branded end-card** — full-screen real logo, tagline, CTA; the "concept spec ad" disclaimer REMOVED.
+Branded assets (cloudfront d2ol7oe51mr4n9, user_39AwNqqHnEuHKHkz07Lufl4IL4u/): branded_shop
+5be39a2d-793b-4d00-8486-56425a464c00.png, endcard a138320b-4171-420b-8ff7-e680251ad750.png,
+bug 77ad4d66-352b-4f66-a12c-e087ead639ac.png.
+Render: remotionlambda renders/af24xw3yiq/out.mp4 (79s, 1920x1080). Preview:
+`favchicken-advert-BRANDED-720p.mp4` (16MB, browser-playable).
+Note: AI video can't retro-stamp an exact logo onto MOVING footage — the exact logo is
+guaranteed only on the overlays/near-static composites above (which is where a brand logo
+belongs anyway). Branding spend ~90 credits.
