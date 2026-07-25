@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trick or Trade 2024 — Collection</title>
+<meta name="description" content="Complete Pokémon TCG Trick or Trade BOOster Bundle 2024 set — keep / sell tracker and valuation board.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2305070E'/><path d='M16 6l8 4.5v9L16 24l-8-4.5v-9z' fill='none' stroke='%23FF7A2F' stroke-width='2.4'/><circle cx='16' cy='15' r='3' fill='%2338BDF8'/></svg>">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="grid-bg" aria-hidden="true"></div>
+<div class="glow glow-a" aria-hidden="true"></div>
+<div class="glow glow-b" aria-hidden="true"></div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow reveal"><span class="dot"></span> <span id="set-code">TRT-2024</span> · COMPLETE SET</p>
+    <h1 class="reveal">Trick or Trade<span class="thin"> 2024</span></h1>
+    <p class="lede reveal">The full Halloween BOOster Bundle set, catalogued card by card. Sort it, filter it, decide what stays and what goes.</p>
+
+    <div class="stats reveal" id="stats">
+      <div class="stat"><span class="stat-num" data-count="0" id="s-total">0</span><span class="stat-lab">Cards</span></div>
+      <div class="stat"><span class="stat-num" data-count="0" id="s-keep">0</span><span class="stat-lab">Keeping</span></div>
+      <div class="stat"><span class="stat-num" data-count="0" id="s-sell">0</span><span class="stat-lab">Selling</span></div>
+      <div class="stat value"><span class="stat-num" id="s-value">—</span><span class="stat-lab" id="s-value-lab">Sell value</span></div>
+    </div>
+
+    <div class="price-banner reveal" id="price-banner" hidden>
+      <strong>No prices loaded.</strong>
+      <span>Nothing on this page is an estimate — every value is blank until you enter a real one. <button class="linkbtn" id="open-help">How to price these</button></span>
+    </div>
+  </div>
+</header>
+
+<nav class="toolbar" id="toolbar">
+  <div class="wrap tb">
+    <div class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input type="search" id="q" placeholder="Search name or number…" autocomplete="off" aria-label="Search cards">
+    </div>
+    <div class="chips" role="group" aria-label="Filter by status">
+      <button class="chip on" data-filter="all">All</button>
+      <button class="chip" data-filter="keep">Keep</button>
+      <button class="chip" data-filter="sell">Sell</button>
+      <button class="chip" data-filter="undecided">Undecided</button>
+      <button class="chip" data-filter="unpriced">Unpriced</button>
+    </div>
+    <div class="spacer"></div>
+    <label class="sortwrap">
+      <span>Sort</span>
+      <select id="sort" aria-label="Sort cards">
+        <option value="number">Number</option>
+        <option value="name">Name</option>
+        <option value="value-desc">Value — high to low</option>
+        <option value="value-asc">Value — low to high</option>
+        <option value="rarity">Rarity</option>
+      </select>
+    </label>
+    <button class="btn ghost" id="btn-import">Add cards</button>
+    <button class="btn" id="btn-export">Export</button>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section id="empty" class="empty" hidden>
+    <div class="empty-card">
+      <h2>No cards yet</h2>
+      <p>Paste your checklist and this fills itself in. One card per line — the parser handles <code>001 Pikachu</code>, <code>001, Pikachu, Common</code>, or just names.</p>
+      <button class="btn big" id="btn-import-2">Add your cards</button>
+    </div>
+  </section>
+
+  <section id="board" class="board" aria-live="polite"></section>
+
+  <p class="count" id="count"></p>
+</main>
+
+<section class="valuation wrap" id="valuation" hidden>
+  <h2>Valuation board</h2>
+  <p class="sub">Computed from the prices you entered. Nothing here is modelled or inferred.</p>
+  <div class="vgrid" id="vgrid"></div>
+  <p class="stale" id="stale" hidden></p>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <p><strong>Trick or Trade 2024</strong> — personal collection board.</p>
+    <p class="dim">Card names and images are property of The Pokémon Company. This is a personal, non-commercial catalogue. Prices are the owner's own research, not a market quote or an appraisal.</p>
+    <p class="dim" id="built"></p>
+  </div>
+</footer>
+
+<!-- import dialog -->
+<dialog id="dlg-import" class="dlg">
+  <form method="dialog">
+    <h3>Add cards</h3>
+    <p class="dlg-sub">Paste one card per line. Recognised: <code>012 Gengar Rare</code> · <code>012, Gengar, Rare</code> · <code>Gengar</code></p>
+    <textarea id="paste" rows="12" placeholder="001 Pikachu Common&#10;002 Gengar Rare&#10;…"></textarea>
+    <label class="chk"><input type="checkbox" id="replace"> Replace existing list (otherwise append)</label>
+    <menu>
+      <button value="cancel" class="btn ghost">Cancel</button>
+      <button value="ok" class="btn" id="do-import">Add cards</button>
+    </menu>
+  </form>
+</dialog>
+
+<!-- pricing help -->
+<dialog id="dlg-help" class="dlg">
+  <form method="dialog">
+    <h3>Pricing these properly</h3>
+    <p class="dlg-sub">I could not look up a single price — this machine's network blocks every card-price source, and a guessed price on a card you're about to sell is worse than no price.</p>
+    <ol class="help">
+      <li><strong>eBay sold listings</strong> — filter to <em>Sold items</em>, not active. Active asking prices are fiction; sold is what someone actually paid.</li>
+      <li><strong>Cardmarket</strong> (best for UK/EU) — use <em>Trend price</em>, not the lowest listing. The lowest is usually damaged or overseas.</li>
+      <li><strong>TCGplayer Market Price</strong> — US-centric, so convert and expect a gap.</li>
+      <li><strong>Price by exact variant.</strong> Trick or Trade cards carry a Halloween stamp; a stamped card and its base-set twin are different products and can differ a lot.</li>
+      <li><strong>Condition drives the number.</strong> NM to LP is often a 20–40% drop on modern cards.</li>
+    </ol>
+    <p class="dlg-sub">Enter what you find in each card's price field. The board records the source and date, and marks anything older than 30 days as stale.</p>
+    <menu><button value="ok" class="btn">Got it</button></menu>
+  </form>
+</dialog>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

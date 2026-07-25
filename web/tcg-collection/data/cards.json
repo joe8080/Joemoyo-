@@ -1,0 +1,40 @@
+{
+  "$comment": [
+    "Your collection lives here. The site reads this file on load.",
+    "",
+    "You do NOT have to hand-edit this. Open the site, click ADD CARDS, and",
+    "paste your list — it builds the rows for you and exports this file back.",
+    "",
+    "PRICES ARE DELIBERATELY null. No price in this file was guessed or",
+    "AI-generated. Fill priceGBP from a real source (TCGplayer, Cardmarket,",
+    "eBay sold listings), record WHERE in priceSource and WHEN in priceChecked.",
+    "The site refuses to show a portfolio total until prices are real, and",
+    "flags anything checked more than 30 days ago as stale."
+  ],
+
+  "set": {
+    "name": "Trick or Trade BOOster Bundle 2024",
+    "code": "TRT-2024",
+    "year": 2024,
+    "cardCount": null,
+    "currency": "GBP",
+    "$note": "Confirm cardCount against the official checklist before claiming a complete set on the page."
+  },
+
+  "cards": [
+    {
+      "number": "001",
+      "name": "EXAMPLE — replace or delete this row",
+      "rarity": "Common",
+      "variant": "Pumpkin stamp",
+      "condition": "NM",
+      "qty": 1,
+      "status": "undecided",
+      "priceGBP": null,
+      "priceSource": "",
+      "priceChecked": "",
+      "image": "",
+      "notes": "status is one of: keep · sell · undecided"
+    }
+  ]
+}
