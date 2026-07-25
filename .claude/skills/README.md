@@ -60,3 +60,32 @@ Then copy the refreshed skills back into this directory and commit.
 
 Alpaca paper-trading bot scaffold — SMA trend strategy, backtesting, Streamlit
 dashboard, GitHub Actions automation, Supabase memory.
+
+## YouTube craft skills (TheCraigHewitt/skills, MIT)
+
+Packaging and scriptcraft that complement HyperFrames — HyperFrames renders, these
+decide what to say and how to frame it. Each reads `.agents/youtube-context.md`,
+so run `/yt-youtube-context` once per channel first.
+
+| Skill | Use for |
+|---|---|
+| `/yt-youtube-context` | define niche, audience, pillars — bootstrap the others |
+| `/yt-hook-writing` | first 30 seconds, retention hooks, reducing early drop-off |
+| `/yt-script-structure` | full script structure, pacing, retention beats |
+| `/yt-retention-editing` | pattern interrupts, pacing, mid-video drop-off |
+| `/yt-title-craft` | titles, CTR, search vs browse, A/B variants |
+
+Source: https://github.com/TheCraigHewitt/skills (MIT)
+
+### Not committed — install locally
+
+**`youtube-scripting`** (https://github.com/laurentickner/youtube-scripting-skill)
+is the strongest scriptcraft artefact I found — 4,500 lines encoding the
+Educate.io process, including a banned-AI-language sweep list and a failure-pattern
+catalogue. **It ships no LICENCE file, so it is all-rights-reserved and cannot be
+redistributed in this repo.** Personal use is fine. Install it per machine:
+
+```bash
+git clone https://github.com/laurentickner/youtube-scripting-skill.git \
+  ~/.claude/skills/youtube-scripting
+```
