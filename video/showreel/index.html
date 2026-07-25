@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>JoeMoyo — Portfolio Showreel</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Archivo Black";
+        src: url("assets/fonts/archivo-black-latin-400-normal.woff2") format("woff2");
+        font-weight: 400;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/inter-latin-400-normal.woff2") format("woff2");
+        font-weight: 400;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/inter-latin-600-normal.woff2") format("woff2");
+        font-weight: 600;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/inter-latin-700-normal.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+      body { font-family: "Inter", sans-serif; }
+
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; }
+
+      /* Opaque stage ground. Lives on a full-bleed child, never on #root itself —
+         the producer can drop the root's own background and render black. */
+      #stage-ground {
+        position: absolute;
+        inset: 0;
+        background: #1A1A2E;
+      }
+
+      .shot { position: absolute; inset: 0; overflow: hidden; }
+      .shot-fade { position: absolute; inset: 0; will-change: opacity; }
+      .plate {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        transform-origin: center center;
+        will-change: transform;
+      }
+
+      /* Grade: crush toward the brand near-black and keep type legible over any plate. */
+      #grade {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(ellipse 78% 68% at 50% 46%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.42) 72%, rgba(0,0,0,0.78) 100%),
+          linear-gradient(180deg, rgba(26,26,46,0.30) 0%, rgba(26,26,46,0.06) 34%, rgba(26,26,46,0.42) 100%);
+      }
+
+      .card { position: absolute; inset: 0; display: grid; }
+
+      /* Guarantees the gold label clears contrast over any plate, however bright.
+         Fades with the card copy so it never pops at a clip boundary. */
+      .card-scrim { position: absolute; inset: 0; will-change: opacity; }
+      .card--act .card-scrim {
+        background: linear-gradient(0deg, rgba(10,10,20,0.92) 0%, rgba(10,10,20,0.72) 22%, rgba(10,10,20,0.28) 44%, rgba(10,10,20,0) 62%);
+      }
+      .card--opening .card-scrim,
+      .card--closing .card-scrim {
+        background: radial-gradient(ellipse 62% 46% at 50% 50%, rgba(10,10,20,0.88) 0%, rgba(10,10,20,0.66) 46%, rgba(10,10,20,0) 78%);
+      }
+      .card-inner { align-self: end; justify-self: start; padding: 0 0 120px 132px; max-width: 1280px; }
+      .card--opening .card-inner,
+      .card--closing .card-inner { align-self: center; justify-self: center; text-align: center; padding: 0 132px; }
+
+      .card-label {
+        font-family: "Inter", sans-serif;
+        font-weight: 600;
+        font-size: 26px;
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        color: #C9A84C;
+        margin-bottom: 22px;
+        will-change: transform, opacity;
+      }
+      .card-hook {
+        font-family: "Archivo Black", "Inter", sans-serif;
+        font-weight: 400;
+        font-size: 116px;
+        line-height: 1.0;
+        letter-spacing: -0.02em;
+        color: #FFFFFF;
+        text-shadow: 0 6px 48px rgba(0,0,0,0.75);
+        will-change: transform, opacity;
+      }
+      .card--opening .card-hook,
+      .card--closing .card-hook { font-size: 168px; letter-spacing: 0.02em; }
+
+      .card-rule {
+        display: block;
+        width: 232px;
+        height: 3px;
+        background: #C9A84C;
+        margin: 34px 0 0;
+        transform-origin: left center;
+        will-change: transform;
+      }
+      .card--opening .card-rule,
+      .card--closing .card-rule { margin: 34px auto 0; transform-origin: center center; }
+
+      .card-sub {
+        font-family: "Inter", sans-serif;
+        font-weight: 400;
+        font-size: 30px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.74);
+        margin-top: 30px;
+        will-change: transform, opacity;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="240"
+      data-width="1920"
+      data-height="1080"
+    >
+      <section id="ground" class="clip" data-start="0" data-duration="240" data-track-index="0">
+        <div id="stage-ground"></div>
+      </section>
+
+      <section id="s01" class="clip shot" data-start="0" data-duration="9.5" data-track-index="1">
+        <div class="shot-fade" id="s01-fade">
+          <div class="plate" id="s01-plate" style="background-image: url('assets/images/open-goldleaf.png')"></div>
+        </div>
+      </section>
+      <section id="s02" class="clip shot" data-start="8.6" data-duration="9.4" data-track-index="2">
+        <div class="shot-fade" id="s02-fade">
+          <div class="plate" id="s02-plate" style="background-image: url('assets/images/close-converge.png')"></div>
+        </div>
+      </section>
+      <section id="s03" class="clip shot" data-start="17.1" data-duration="8.9" data-track-index="1">
+        <div class="shot-fade" id="s03-fade">
+          <div class="plate" id="s03-plate" style="background-image: url('assets/images/hist-monolith.png')"></div>
+        </div>
+      </section>
+      <section id="s04" class="clip shot" data-start="25.1" data-duration="8.9" data-track-index="2">
+        <div class="shot-fade" id="s04-fade">
+          <div class="plate" id="s04-plate" style="background-image: url('assets/images/hist-relief-a.png')"></div>
+        </div>
+      </section>
+      <section id="s05" class="clip shot" data-start="33.1" data-duration="8.9" data-track-index="1">
+        <div class="shot-fade" id="s05-fade">
+          <div class="plate" id="s05-plate" style="background-image: url('assets/images/hist-papyrus.png')"></div>
+        </div>
+      </section>
+      <section id="s06" class="clip shot" data-start="41.1" data-duration="9.9" data-track-index="2">
+        <div class="shot-fade" id="s06-fade">
+          <div class="plate" id="s06-plate" style="background-image: url('assets/images/hist-mask.png')"></div>
+        </div>
+      </section>
+      <section id="s07" class="clip shot" data-start="50.1" data-duration="8.9" data-track-index="1">
+        <div class="shot-fade" id="s07-fade">
+          <div class="plate" id="s07-plate" style="background-image: url('assets/images/hist-colonnade.png')"></div>
+        </div>
+      </section>
+      <section id="s08" class="clip shot" data-start="58.1" data-duration="9.9" data-track-index="2">
+        <div class="shot-fade" id="s08-fade">
+          <div class="plate" id="s08-plate" style="background-image: url('assets/images/hist-relief-b.png')"></div>
+        </div>
+      </section>
+      <section id="s09" class="clip shot" data-start="67.1" data-duration="9.9" data-track-index="1">
+        <div class="shot-fade" id="s09-fade">
+          <div class="plate" id="s09-plate" style="background-image: url('assets/images/fin-chart-a.png')"></div>
+        </div>
+      </section>
+      <section id="s10" class="clip shot" data-start="76.1" data-duration="9.9" data-track-index="2">
+        <div class="shot-fade" id="s10-fade">
+          <div class="plate" id="s10-plate" style="background-image: url('assets/images/fin-skyline.png')"></div>
+        </div>
+      </section>
+      <section id="s11" class="clip shot" data-start="85.1" data-duration="9.9" data-track-index="1">
+        <div class="shot-fade" id="s11-fade">
+          <div class="plate" id="s11-plate" style="background-image: url('assets/images/fin-ribbons-a.png')"></div>
+        </div>
+      </section>
+      <section id="s12" class="clip shot" data-start="94.1" data-duration="10.9" data-track-index="2">
+        <div class="shot-fade" id="s12-fade">
+          <div class="plate" id="s12-plate" style="background-image: url('assets/images/fin-chart-b.png')"></div>
+        </div>
+      </section>
+      <section id="s13" class="clip shot" data-start="104.1" data-duration="10.9" data-track-index="1">
+        <div class="shot-fade" id="s13-fade">
+          <div class="plate" id="s13-plate" style="background-image: url('assets/images/fin-ribbons-b.png')"></div>
+        </div>
+      </section>
+      <section id="s14" class="clip shot" data-start="114.1" data-duration="8.9" data-track-index="2">
+        <div class="shot-fade" id="s14-fade">
+          <div class="plate" id="s14-plate" style="background-image: url('assets/images/mus-console-a.png')"></div>
+        </div>
+      </section>
+      <section id="s15" class="clip shot" data-start="122.1" data-duration="8.9" data-track-index="1">
+        <div class="shot-fade" id="s15-fade">
+          <div class="plate" id="s15-plate" style="background-image: url('assets/images/mus-mic-a.png')"></div>
+        </div>
+      </section>
+      <section id="s16" class="clip shot" data-start="130.1" data-duration="8.9" data-track-index="2">
+        <div class="shot-fade" id="s16-fade">
+          <div class="plate" id="s16-plate" style="background-image: url('assets/images/mus-wave-a.png')"></div>
+        </div>
+      </section>
+      <section id="s17" class="clip shot" data-start="138.1" data-duration="8.9" data-track-index="1">
+        <div class="shot-fade" id="s17-fade">
+          <div class="plate" id="s17-plate" style="background-image: url('assets/images/mus-console-b.png')"></div>
+        </div>
+      </section>
+      <section id="s18" class="clip shot" data-start="146.1" data-duration="8.9" data-track-index="2">
+        <div class="shot-fade" id="s18-fade">
+          <div class="plate" id="s18-plate" style="background-image: url('assets/images/mus-mic-b.png')"></div>
+        </div>
+      </section>
+      <section id="s19" class="clip shot" data-start="154.1" data-duration="11.9" data-track-index="1">
+        <div class="shot-fade" id="s19-fade">
+          <div class="plate" id="s19-plate" style="background-image: url('assets/images/com-box-a.png')"></div>
+        </div>
+      </section>
+      <section id="s20" class="clip shot" data-start="165.1" data-duration="12.9" data-track-index="2">
+        <div class="shot-fade" id="s20-fade">
+          <div class="plate" id="s20-plate" style="background-image: url('assets/images/com-warehouse.png')"></div>
+        </div>
+      </section>
+      <section id="s21" class="clip shot" data-start="177.1" data-duration="12.9" data-track-index="1">
+        <div class="shot-fade" id="s21-fade">
+          <div class="plate" id="s21-plate" style="background-image: url('assets/images/com-box-b.png')"></div>
+        </div>
+      </section>
+      <section id="s22" class="clip shot" data-start="189.1" data-duration="11.9" data-track-index="2">
+        <div class="shot-fade" id="s22-fade">
+          <div class="plate" id="s22-plate" style="background-image: url('assets/images/sys-server.png')"></div>
+        </div>
+      </section>
+      <section id="s23" class="clip shot" data-start="200.1" data-duration="11.9" data-track-index="1">
+        <div class="shot-fade" id="s23-fade">
+          <div class="plate" id="s23-plate" style="background-image: url('assets/images/sys-nodes.png')"></div>
+        </div>
+      </section>
+      <section id="s24" class="clip shot" data-start="211.1" data-duration="10.9" data-track-index="2">
+        <div class="shot-fade" id="s24-fade">
+          <div class="plate" id="s24-plate" style="background-image: url('assets/images/fin-ribbons-b.png')"></div>
+        </div>
+      </section>
+      <section id="s25" class="clip shot" data-start="221.1" data-duration="10.9" data-track-index="1">
+        <div class="shot-fade" id="s25-fade">
+          <div class="plate" id="s25-plate" style="background-image: url('assets/images/close-converge.png')"></div>
+        </div>
+      </section>
+      <section id="s26" class="clip shot" data-start="231.1" data-duration="8.9" data-track-index="2">
+        <div class="shot-fade" id="s26-fade">
+          <div class="plate" id="s26-plate" style="background-image: url('assets/images/open-goldleaf.png')"></div>
+        </div>
+      </section>
+
+      <section id="grade-clip" class="clip" data-start="0" data-duration="240" data-track-index="4">
+        <div id="grade"></div>
+      </section>
+
+      <section id="c0" class="clip card card--opening" data-start="2" data-duration="14" data-track-index="5">
+        <div class="card-scrim" id="c0-scrim"></div>
+        <div class="card-inner">
+          <p class="card-label" id="c0-label">PORTFOLIO · 2026</p>
+          <h2 class="card-hook" id="c0-hook">JOEMOYO</h2>
+          <span class="card-rule" id="c0-rule"></span>
+          <p class="card-sub" id="c0-sub">Media · Markets · Machines</p>
+        </div>
+      </section>
+      <section id="c1" class="clip card card--act" data-start="21" data-duration="13.5" data-track-index="5">
+        <div class="card-scrim" id="c1-scrim"></div>
+        <div class="card-inner">
+          <p class="card-label" id="c1-label">ORIGINEX HUMAN ARCHIVES</p>
+          <h2 class="card-hook" id="c1-hook">History, Restored</h2>
+          <span class="card-rule" id="c1-rule"></span>
+          <p class="card-sub" id="c1-sub">Long-form documentary · YouTube</p>
+        </div>
+      </section>
+      <section id="c2" class="clip card card--act" data-start="71" data-duration="13.5" data-track-index="5">
+        <div class="card-scrim" id="c2-scrim"></div>
+        <div class="card-inner">
+          <p class="card-label" id="c2-label">FINANCE CHANNEL &amp; AI TOOLKIT</p>
+          <h2 class="card-hook" id="c2-hook">Money, Explained</h2>
+          <span class="card-rule" id="c2-rule"></span>
+          <p class="card-sub" id="c2-sub">Education · Research · Tools</p>
+        </div>
+      </section>
+      <section id="c3" class="clip card card--act" data-start="118" data-duration="13.5" data-track-index="5">
+        <div class="card-scrim" id="c3-scrim"></div>
+        <div class="card-inner">
+          <p class="card-label" id="c3-label">MUSIC STUDIO</p>
+          <h2 class="card-hook" id="c3-hook">Sound, Built</h2>
+          <span class="card-rule" id="c3-rule"></span>
+          <p class="card-sub" id="c3-sub">Recording · Production</p>
+        </div>
+      </section>
+      <section id="c4" class="clip card card--act" data-start="158" data-duration="13.5" data-track-index="5">
+        <div class="card-scrim" id="c4-scrim"></div>
+        <div class="card-inner">
+          <p class="card-label" id="c4-label">COMMERCE</p>
+          <h2 class="card-hook" id="c4-hook">Product, Shipped</h2>
+          <span class="card-rule" id="c4-rule"></span>
+          <p class="card-sub" id="c4-sub">Shopify · Retail operations</p>
+        </div>
+      </section>
+      <section id="c5" class="clip card card--act" data-start="193" data-duration="13.5" data-track-index="5">
+        <div class="card-scrim" id="c5-scrim"></div>
+        <div class="card-inner">
+          <p class="card-label" id="c5-label">AGENT SYSTEMS</p>
+          <h2 class="card-hook" id="c5-hook">Work, Automated</h2>
+          <span class="card-rule" id="c5-rule"></span>
+          <p class="card-sub" id="c5-sub">AI agents · Algorithmic trading</p>
+        </div>
+      </section>
+      <section id="c6" class="clip card card--closing" data-start="225" data-duration="14" data-track-index="5">
+        <div class="card-scrim" id="c6-scrim"></div>
+        <div class="card-inner">
+          <p class="card-label" id="c6-label">FIVE VENTURES · ONE OPERATOR</p>
+          <h2 class="card-hook" id="c6-hook">JOEMOYO</h2>
+          <span class="card-rule" id="c6-rule"></span>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+  tl.fromTo("#s01-plate", {"scale":1.04,"xPercent":0,"yPercent":0}, { ...{"scale":1.2,"xPercent":0,"yPercent":0}, duration: 9.5, ease: "none" }, 0);
+  tl.fromTo("#s01-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 0);
+  tl.to("#s01-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 8.6);
+  tl.fromTo("#s02-plate", {"scale":1.2,"xPercent":0,"yPercent":0}, { ...{"scale":1.04,"xPercent":0,"yPercent":0}, duration: 9.4, ease: "none" }, 8.6);
+  tl.fromTo("#s02-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 8.6);
+  tl.to("#s02-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 17.1);
+  tl.fromTo("#s03-plate", {"scale":1.06,"xPercent":0,"yPercent":2}, { ...{"scale":1.18,"xPercent":0,"yPercent":-2}, duration: 8.9, ease: "none" }, 17.1);
+  tl.fromTo("#s03-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 17.1);
+  tl.to("#s03-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 25.1);
+  tl.fromTo("#s04-plate", {"scale":1.14,"xPercent":2.5,"yPercent":0}, { ...{"scale":1.14,"xPercent":-2.5,"yPercent":0}, duration: 8.9, ease: "none" }, 25.1);
+  tl.fromTo("#s04-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 25.1);
+  tl.to("#s04-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 33.1);
+  tl.fromTo("#s05-plate", {"scale":1.04,"xPercent":0,"yPercent":0}, { ...{"scale":1.2,"xPercent":0,"yPercent":0}, duration: 8.9, ease: "none" }, 33.1);
+  tl.fromTo("#s05-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 33.1);
+  tl.to("#s05-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 41.1);
+  tl.fromTo("#s06-plate", {"scale":1.18,"xPercent":0,"yPercent":-2}, { ...{"scale":1.06,"xPercent":0,"yPercent":2}, duration: 9.9, ease: "none" }, 41.1);
+  tl.fromTo("#s06-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 41.1);
+  tl.to("#s06-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 50.1);
+  tl.fromTo("#s07-plate", {"scale":1.14,"xPercent":-2.5,"yPercent":0}, { ...{"scale":1.14,"xPercent":2.5,"yPercent":0}, duration: 8.9, ease: "none" }, 50.1);
+  tl.fromTo("#s07-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 50.1);
+  tl.to("#s07-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 58.1);
+  tl.fromTo("#s08-plate", {"scale":1.2,"xPercent":0,"yPercent":0}, { ...{"scale":1.04,"xPercent":0,"yPercent":0}, duration: 9.9, ease: "none" }, 58.1);
+  tl.fromTo("#s08-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 58.1);
+  tl.to("#s08-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 67.1);
+  tl.fromTo("#s09-plate", {"scale":1.06,"xPercent":0,"yPercent":2}, { ...{"scale":1.18,"xPercent":0,"yPercent":-2}, duration: 9.9, ease: "none" }, 67.1);
+  tl.fromTo("#s09-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 67.1);
+  tl.to("#s09-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 76.1);
+  tl.fromTo("#s10-plate", {"scale":1.14,"xPercent":2.5,"yPercent":0}, { ...{"scale":1.14,"xPercent":-2.5,"yPercent":0}, duration: 9.9, ease: "none" }, 76.1);
+  tl.fromTo("#s10-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 76.1);
+  tl.to("#s10-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 85.1);
+  tl.fromTo("#s11-plate", {"scale":1.04,"xPercent":0,"yPercent":0}, { ...{"scale":1.2,"xPercent":0,"yPercent":0}, duration: 9.9, ease: "none" }, 85.1);
+  tl.fromTo("#s11-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 85.1);
+  tl.to("#s11-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 94.1);
+  tl.fromTo("#s12-plate", {"scale":1.18,"xPercent":0,"yPercent":-2}, { ...{"scale":1.06,"xPercent":0,"yPercent":2}, duration: 10.9, ease: "none" }, 94.1);
+  tl.fromTo("#s12-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 94.1);
+  tl.to("#s12-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 104.1);
+  tl.fromTo("#s13-plate", {"scale":1.14,"xPercent":-2.5,"yPercent":0}, { ...{"scale":1.14,"xPercent":2.5,"yPercent":0}, duration: 10.9, ease: "none" }, 104.1);
+  tl.fromTo("#s13-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 104.1);
+  tl.to("#s13-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 114.1);
+  tl.fromTo("#s14-plate", {"scale":1.14,"xPercent":2.5,"yPercent":0}, { ...{"scale":1.14,"xPercent":-2.5,"yPercent":0}, duration: 8.9, ease: "none" }, 114.1);
+  tl.fromTo("#s14-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 114.1);
+  tl.to("#s14-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 122.1);
+  tl.fromTo("#s15-plate", {"scale":1.04,"xPercent":0,"yPercent":0}, { ...{"scale":1.2,"xPercent":0,"yPercent":0}, duration: 8.9, ease: "none" }, 122.1);
+  tl.fromTo("#s15-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 122.1);
+  tl.to("#s15-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 130.1);
+  tl.fromTo("#s16-plate", {"scale":1.2,"xPercent":0,"yPercent":0}, { ...{"scale":1.04,"xPercent":0,"yPercent":0}, duration: 8.9, ease: "none" }, 130.1);
+  tl.fromTo("#s16-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 130.1);
+  tl.to("#s16-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 138.1);
+  tl.fromTo("#s17-plate", {"scale":1.14,"xPercent":-2.5,"yPercent":0}, { ...{"scale":1.14,"xPercent":2.5,"yPercent":0}, duration: 8.9, ease: "none" }, 138.1);
+  tl.fromTo("#s17-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 138.1);
+  tl.to("#s17-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 146.1);
+  tl.fromTo("#s18-plate", {"scale":1.06,"xPercent":0,"yPercent":2}, { ...{"scale":1.18,"xPercent":0,"yPercent":-2}, duration: 8.9, ease: "none" }, 146.1);
+  tl.fromTo("#s18-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 146.1);
+  tl.to("#s18-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 154.1);
+  tl.fromTo("#s19-plate", {"scale":1.04,"xPercent":0,"yPercent":0}, { ...{"scale":1.2,"xPercent":0,"yPercent":0}, duration: 11.9, ease: "none" }, 154.1);
+  tl.fromTo("#s19-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 154.1);
+  tl.to("#s19-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 165.1);
+  tl.fromTo("#s20-plate", {"scale":1.14,"xPercent":2.5,"yPercent":0}, { ...{"scale":1.14,"xPercent":-2.5,"yPercent":0}, duration: 12.9, ease: "none" }, 165.1);
+  tl.fromTo("#s20-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 165.1);
+  tl.to("#s20-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 177.1);
+  tl.fromTo("#s21-plate", {"scale":1.18,"xPercent":0,"yPercent":-2}, { ...{"scale":1.06,"xPercent":0,"yPercent":2}, duration: 12.9, ease: "none" }, 177.1);
+  tl.fromTo("#s21-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 177.1);
+  tl.to("#s21-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 189.1);
+  tl.fromTo("#s22-plate", {"scale":1.04,"xPercent":0,"yPercent":0}, { ...{"scale":1.2,"xPercent":0,"yPercent":0}, duration: 11.9, ease: "none" }, 189.1);
+  tl.fromTo("#s22-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 189.1);
+  tl.to("#s22-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 200.1);
+  tl.fromTo("#s23-plate", {"scale":1.14,"xPercent":-2.5,"yPercent":0}, { ...{"scale":1.14,"xPercent":2.5,"yPercent":0}, duration: 11.9, ease: "none" }, 200.1);
+  tl.fromTo("#s23-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 200.1);
+  tl.to("#s23-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 211.1);
+  tl.fromTo("#s24-plate", {"scale":1.2,"xPercent":0,"yPercent":0}, { ...{"scale":1.04,"xPercent":0,"yPercent":0}, duration: 10.9, ease: "none" }, 211.1);
+  tl.fromTo("#s24-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 211.1);
+  tl.to("#s24-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 221.1);
+  tl.fromTo("#s25-plate", {"scale":1.04,"xPercent":0,"yPercent":0}, { ...{"scale":1.2,"xPercent":0,"yPercent":0}, duration: 10.9, ease: "none" }, 221.1);
+  tl.fromTo("#s25-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 221.1);
+  tl.to("#s25-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 231.1);
+  tl.fromTo("#s26-plate", {"scale":1.2,"xPercent":0,"yPercent":0}, { ...{"scale":1.04,"xPercent":0,"yPercent":0}, duration: 8.9, ease: "none" }, 231.1);
+  tl.fromTo("#s26-fade", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.inOut" }, 231.1);
+  tl.to("#s26-fade", { opacity: 0, duration: 0.9, ease: "power2.inOut" }, 239.1);
+
+  tl.fromTo("#c0-scrim", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.out" }, 2);
+  tl.fromTo("#c0-label", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 2);
+  tl.fromTo("#c0-hook", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 2.18);
+  tl.fromTo("#c0-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.inOut" }, 2.42);
+  tl.fromTo("#c0-sub", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 2.6);
+  tl.to(["#c0-label", "#c0-hook", "#c0-rule", "#c0-sub"], { opacity: 0, y: -12, duration: 0.8, ease: "power2.in" }, 14.9);
+  tl.to("#c0-scrim", { opacity: 0, duration: 0.9, ease: "power2.in" }, 14.9);
+  tl.fromTo("#c1-scrim", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.out" }, 21);
+  tl.fromTo("#c1-label", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 21);
+  tl.fromTo("#c1-hook", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 21.18);
+  tl.fromTo("#c1-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.inOut" }, 21.42);
+  tl.fromTo("#c1-sub", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 21.6);
+  tl.to(["#c1-label", "#c1-hook", "#c1-rule", "#c1-sub"], { opacity: 0, y: -12, duration: 0.8, ease: "power2.in" }, 33.4);
+  tl.to("#c1-scrim", { opacity: 0, duration: 0.9, ease: "power2.in" }, 33.4);
+  tl.fromTo("#c2-scrim", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.out" }, 71);
+  tl.fromTo("#c2-label", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 71);
+  tl.fromTo("#c2-hook", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 71.18);
+  tl.fromTo("#c2-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.inOut" }, 71.42);
+  tl.fromTo("#c2-sub", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 71.6);
+  tl.to(["#c2-label", "#c2-hook", "#c2-rule", "#c2-sub"], { opacity: 0, y: -12, duration: 0.8, ease: "power2.in" }, 83.4);
+  tl.to("#c2-scrim", { opacity: 0, duration: 0.9, ease: "power2.in" }, 83.4);
+  tl.fromTo("#c3-scrim", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.out" }, 118);
+  tl.fromTo("#c3-label", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 118);
+  tl.fromTo("#c3-hook", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 118.18);
+  tl.fromTo("#c3-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.inOut" }, 118.42);
+  tl.fromTo("#c3-sub", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 118.6);
+  tl.to(["#c3-label", "#c3-hook", "#c3-rule", "#c3-sub"], { opacity: 0, y: -12, duration: 0.8, ease: "power2.in" }, 130.4);
+  tl.to("#c3-scrim", { opacity: 0, duration: 0.9, ease: "power2.in" }, 130.4);
+  tl.fromTo("#c4-scrim", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.out" }, 158);
+  tl.fromTo("#c4-label", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 158);
+  tl.fromTo("#c4-hook", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 158.18);
+  tl.fromTo("#c4-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.inOut" }, 158.42);
+  tl.fromTo("#c4-sub", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 158.6);
+  tl.to(["#c4-label", "#c4-hook", "#c4-rule", "#c4-sub"], { opacity: 0, y: -12, duration: 0.8, ease: "power2.in" }, 170.4);
+  tl.to("#c4-scrim", { opacity: 0, duration: 0.9, ease: "power2.in" }, 170.4);
+  tl.fromTo("#c5-scrim", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.out" }, 193);
+  tl.fromTo("#c5-label", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 193);
+  tl.fromTo("#c5-hook", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 193.18);
+  tl.fromTo("#c5-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.inOut" }, 193.42);
+  tl.fromTo("#c5-sub", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 193.6);
+  tl.to(["#c5-label", "#c5-hook", "#c5-rule", "#c5-sub"], { opacity: 0, y: -12, duration: 0.8, ease: "power2.in" }, 205.4);
+  tl.to("#c5-scrim", { opacity: 0, duration: 0.9, ease: "power2.in" }, 205.4);
+  tl.fromTo("#c6-scrim", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.out" }, 225);
+  tl.fromTo("#c6-label", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 225);
+  tl.fromTo("#c6-hook", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" }, 225.18);
+  tl.fromTo("#c6-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.inOut" }, 225.42);
+  tl.to(["#c6-label", "#c6-hook", "#c6-rule"], { opacity: 0, y: -12, duration: 0.8, ease: "power2.in" }, 237.9);
+  tl.to("#c6-scrim", { opacity: 0, duration: 0.9, ease: "power2.in" }, 237.9);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

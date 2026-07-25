@@ -1,0 +1,46 @@
+{
+  "_comment": "Higgsfield-generated plates for the JoeMoyo showreel. Model nano_banana_pro (nano_banana_2), 2k, 16:9, 2752x1536. Run ./fetch-images.sh to download all of these into this directory.",
+  "base": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/",
+  "images": {
+    "open-goldleaf": "hf_20260725_054031_71572d00-1f62-4a9e-b8ea-1b6257b68d8a.png",
+
+    "hist-monolith": "hf_20260725_054035_7bc41265-a7ef-48f8-ab02-31884f9b8057.png",
+    "hist-papyrus": "hf_20260725_054040_b1b3d4fd-f870-495f-806a-2d6309e46106.png",
+    "hist-mask": "hf_20260725_054047_ad3cf9f7-a672-4eb6-9e28-69d0c92d4e1f.png",
+    "hist-colonnade": "hf_20260725_054052_1b70ad58-1dea-4230-b765-99be50d5023d.png",
+    "hist-relief-a": "hf_20260725_054106_b5522237-ed5a-411d-960c-a33d77911096.png",
+    "hist-relief-b": "hf_20260725_054106_da0c1266-1906-45bf-a0ce-f8abbc07e6c9.png",
+
+    "fin-chart-a": "hf_20260725_054245_2727f056-bc7e-4c3b-8d10-357444bb1c85.png",
+    "fin-chart-b": "hf_20260725_054245_147a9453-b96f-47af-80a6-0093471a13e0.png",
+    "fin-skyline": "hf_20260725_054251_39790575-f3fb-4ff9-9a7d-7e5250863329.png",
+    "fin-ribbons-a": "hf_20260725_054256_24ddd9a1-1eb2-4935-8840-415c0939a15b.png",
+    "fin-ribbons-b": "hf_20260725_054256_5ea4b973-e094-4f5e-9a47-0cf7ff82b428.png",
+
+    "mus-console-a": "hf_20260725_054300_aeea035a-4ac6-461a-b8f8-0661f1b003c8.png",
+    "mus-console-b": "hf_20260725_054300_bb45d9cd-559f-45ec-a60f-57fdbdacd44f.png",
+    "mus-mic-a": "hf_20260725_054305_ae9bea0a-0daa-46c5-a325-804133335979.png",
+    "mus-mic-b": "hf_20260725_054305_6c9afa6e-ca7a-4482-81ca-c93ff3645b1d.png",
+    "mus-wave-a": "hf_20260725_054310_60795797-0374-45b9-b25b-71bdd3ebdb1a.png",
+    "mus-wave-b": "hf_20260725_054310_f6d190e1-f204-468c-b6f6-f9dfb7f1cd1c.png",
+
+    "com-box-a": "hf_20260725_054315_051c9d15-e70b-4924-9390-2c0d881781d1.png",
+    "com-box-b": "hf_20260725_054315_78616686-908c-419d-9fea-9f7b1d0096dc.png",
+    "com-warehouse": "hf_20260725_054320_4ba19249-f4ae-437f-bd85-85bee0973fe7.png",
+
+    "sys-server": "hf_20260725_054325_183eaba6-4be2-42dc-8583-a834267aae6e.png",
+    "sys-nodes": "hf_20260725_054329_fbb5a25b-956f-4fc7-b707-055cb3f58ce5.png",
+
+    "close-converge": "hf_20260725_054334_f601b767-26bd-4986-84b4-06df48bd43ce.png"
+  },
+  "pending": {
+    "_comment": "Generated but URL not captured in the authoring session. Resolve from the Higgsfield generation history by job id if you want the alternates.",
+    "open-dust-a": "14f6a5d3-ea57-4c52-98ca-7bb0bda3e1e7",
+    "open-dust-b": "1d978567-f107-4500-92cf-b350cb78e697",
+    "fin-skyline-alt": "c5d58638-b558-4fd6-9566-d5196f89ab73",
+    "com-warehouse-alt": "1a42e01c-ed6f-45cd-950d-daad3bdf7713",
+    "sys-server-alt": "4e09076b-5b8a-4ca5-9567-767e4726839c",
+    "sys-nodes-alt": "e81bee61-bc04-4253-840d-c66a1b472d18",
+    "close-converge-alt": "0e7aaf26-33c9-4075-8feb-4c75ed97d773"
+  }
+}
