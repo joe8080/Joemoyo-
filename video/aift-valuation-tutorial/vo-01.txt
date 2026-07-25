@@ -1,0 +1,23 @@
+This spreadsheet says a stock is worth two dollars nine.
+
+The market says one twenty-five.
+
+That's sixty-seven percent upside, sitting in a cell, looking very confident.
+
+I don't believe it yet. And by the end of this you won't either — not until you've seen what's holding it up.
+
+Because I opened this model this morning and found a bug that broke the two cells everything depends on. The upside number. And the verdict.
+
+So this isn't a tour. We're going to build the thing, break it, fix it, and work out how much of that sixty-seven percent survives.
+
+This is the Own-Price Valuation Engine from the AI Finance Toolkit. It works on any listed company. Today it's pointed at a small uranium producer called enCore Energy.
+
+Let's open it up.
+
+Here's the whole idea in one line.
+
+You take three separate estimates of what a share is worth. You weight them. Then you take a haircut for the fact that you can't sell instantly at a fair price. What comes out is your own price.
+
+Not the analyst's price. Not the market's price. Yours — because you set every assumption underneath it.
+
+Leg one is a discounted cash flow. What the business generates, discounted back to today.

@@ -1,0 +1,19 @@
+Add up the present value of five years of operating cash flow and you get minus fifty-three and a half million.
+
+The operating business, across the entire forecast, subtracts fifty-three million from the valuation.
+
+So where does a two dollar price come from?
+
+Terminal value. All of it. Every penny of enCore's worth in this model sits past 2030.
+
+That's not automatically wrong. Mines cost money before they make money. But you need to say it out loud, because it changes what you're actually betting on. You're not buying five years of cash flow. You're buying the assumption that something valuable exists at the end of them.
+
+Since terminal value is carrying the entire valuation, how you calculate it stops being a detail.
+
+Method one, Gordon growth. Take normalised cash flow, grow it forever at two percent, discount it. Three hundred and fifty million.
+
+Method two, exit multiple. The market pays roughly twelve dollars per pound of resource in the ground. enCore has fifty-one and a half million pounds. Six hundred and eighteen million.
+
+Same company. Same day. Same sheet. Two hundred and sixty-eight million apart.
+
+The exit multiple is seventy-six percent higher.

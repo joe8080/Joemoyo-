@@ -1,0 +1,21 @@
+Leg two is peers. What the market pays for comparable companies, applied to this one.
+
+Leg three is the analyst target. Someone else's homework, used as a sanity check, not gospel.
+
+For enCore those three come out at one twenty-five, three seventeen, and three seventy-five.
+
+Look at that spread. The low estimate is a third of the high one. That's not a flaw in the model — that's the honest answer for a company this early. Three reasonable methods disagree violently.
+
+A model that hid that spread would be lying to you. This one puts it on the front page.
+
+Everything starts on the Inputs sheet. Blue cells are yours to edit. Everything else is calculated.
+
+Section A is the company. Share price. Share count. Cash. Debt.
+
+enCore has forty-one point six million in cash, seventy point one in marketable securities — that includes a stake in another uranium company — and a hundred and fifteen million convertible note.
+
+Add those up and net cash is minus three point three million. Slightly negative. The model uses the note's face value, which is the conservative choice.
+
+Now watch this cell. Share price. One dollar twenty-five.
+
+It looks like a number. It's formatted like a number. It's text.

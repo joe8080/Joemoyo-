@@ -1,0 +1,17 @@
+And a liquidity discount, taken off the final price. This one's about whether you can actually get out. Micro-cap default is twenty-five percent.
+
+enCore is micro on market cap. But look — the liquidity discount has been overridden down to ten percent.
+
+That's a judgement call, and it's the right one. Twenty-five percent comes from studies of restricted stock you genuinely can't sell. enCore trades on NASDAQ every day. Charging it a private-company haircut would be wrong.
+
+The model lets you override. It also shows you what you overrode. That's the part that matters — the default is still sitting there in the cell next door.
+
+The discount rate decides almost everything in a DCF, so it gets built in the open rather than typed in as one number.
+
+Start with the risk-free rate. US ten-year, four point five five percent.
+
+Add the equity risk premium — what investors want on top for holding stocks at all. Five percent here.
+
+Multiply that premium by beta. Beta is how violently this thing moves against the market. One point three, because micro-cap uranium is not a utility.
+
+Four point five five, plus one point three times five, gives eleven point oh five percent. That's the base cost of equity.

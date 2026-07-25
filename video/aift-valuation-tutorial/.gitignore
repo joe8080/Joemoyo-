@@ -1,0 +1,13 @@
+node_modules/
+
+# Derived audio — regenerate with `node build-audio.mjs`. Large and reproducible.
+assets/audio/narration.wav
+assets/audio/final-mix.wav
+assets/audio/music-bed-loop.wav
+
+# Render outputs, scratch frame captures, verification frames
+*.mp4
+work-*/
+.snap/
+.snap2/
+snapshots/

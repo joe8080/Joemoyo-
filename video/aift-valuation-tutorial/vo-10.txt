@@ -1,0 +1,3 @@
+So: fix the text cell. Split the shared lever if you want two real opinions. Flip the terminal value method and see what survives. And log every run.
+
+The workbook's linked below, bug already fixed. Tell me which company you'd point it at first.

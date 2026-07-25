@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>AIFT — Own-Price Valuation Engine Tutorial</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face { font-family:"Archivo Black"; src:url("assets/fonts/archivo-black-latin-400-normal.woff2") format("woff2"); font-weight:400; font-display:block; }
+      @font-face { font-family:"Inter"; src:url("assets/fonts/inter-latin-400-normal.woff2") format("woff2"); font-weight:400; font-display:block; }
+      @font-face { font-family:"Inter"; src:url("assets/fonts/inter-latin-600-normal.woff2") format("woff2"); font-weight:600; font-display:block; }
+      @font-face { font-family:"Inter"; src:url("assets/fonts/inter-latin-700-normal.woff2") format("woff2"); font-weight:700; font-display:block; }
+      @font-face { font-family:"JBMono"; src:url("assets/fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2"); font-weight:400; font-display:block; }
+
+      * { margin:0; padding:0; box-sizing:border-box; }
+      html, body { width:1920px; height:1080px; overflow:hidden; background:#000; }
+      body { font-family:"Inter",sans-serif; color:#E8EDF5; }
+      #root { position:relative; width:1920px; height:1080px; overflow:hidden; }
+
+      #ground { position:absolute; inset:0; background:
+        radial-gradient(ellipse 62% 52% at 50% 0%, #101B33 0%, #070B14 62%),
+        #070B14; }
+      #vign { position:absolute; inset:0; background:
+        radial-gradient(ellipse 78% 70% at 50% 48%, rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%); }
+
+      .scene { position:absolute; inset:0; display:grid; place-items:center; }
+      .fade { position:absolute; inset:0; display:grid; place-items:center; padding:96px 120px; will-change:opacity; }
+      .stack { display:flex; flex-direction:column; gap:26px; width:100%; align-items:center; }
+      .stack.center { text-align:center; }
+      /* Tab bar tracks its panel's width so the tabs sit flush to the panel's
+         left edge while the pair stays centred in frame. */
+      .stack:has(.panel) .tabbar { width:1420px; }
+      .stack:has(.panel.wide) .tabbar { width:1620px; }
+
+      .kicker { font-size:24px; font-weight:600; letter-spacing:.32em; text-transform:uppercase; color:#38BDF8; }
+      .h1 { font-family:"Archivo Black",sans-serif; font-weight:400; font-size:104px; line-height:1.04; letter-spacing:-.02em; }
+      .h1.tight { font-size:92px; }
+      .rule { display:block; width:200px; height:3px; background:#C9A84C; transform-origin:center; }
+      .sub { font-size:30px; color:#8A9AB5; letter-spacing:.02em; }
+      .sub.wide { max-width:1180px; line-height:1.45; }
+      .huge { font-family:"Archivo Black",sans-serif; font-size:186px; line-height:1; letter-spacing:-.03em; }
+      .gold { color:#C9A84C; } .red { color:#F0553F; } .good, .green { color:#4ADE80; }
+      .dim { color:#8A9AB5; }
+
+      .vrow { display:flex; align-items:center; gap:64px; }
+      .vcell { display:flex; flex-direction:column; gap:10px; }
+      .vnum { font-family:"Archivo Black",sans-serif; font-size:150px; line-height:1; }
+      .vlab { font-size:22px; letter-spacing:.28em; color:#8A9AB5; }
+      .vsep { font-size:34px; color:#8A9AB5; }
+      .updelta { font-size:44px; font-weight:700; color:#4ADE80; letter-spacing:.02em; }
+
+      .flowrow { display:flex; gap:38px; justify-content:center; }
+      .fnode { display:flex; flex-direction:column; gap:10px; padding:30px 42px; min-width:352px;
+               background:#0E1626; border:1px solid #1B2740; border-radius:14px; }
+      .fnode.tall { padding:46px 52px; }
+      .fname { font-size:20px; letter-spacing:.26em; color:#38BDF8; }
+      .fval { font-family:"Archivo Black",sans-serif; font-size:58px; }
+      .fval.big { font-size:82px; }
+      .fsub { font-size:19px; color:#8A9AB5; }
+      .farrow { font-size:22px; letter-spacing:.16em; color:#8A9AB5; }
+      .fblend, .fown { display:flex; flex-direction:column; gap:8px; padding:26px 60px;
+                       background:#0E1626; border:1px solid #1B2740; border-radius:14px; }
+      .fown { border-color:#C9A84C; }
+
+      .tabbar { display:flex; gap:6px; margin-bottom:-1px; }
+      .tab { font-size:19px; padding:11px 26px; color:#8A9AB5; background:#0B1322;
+             border:1px solid #1B2740; border-bottom:none; border-radius:9px 9px 0 0; }
+      .tab.on { color:#E8EDF5; background:#0E1626; border-color:#38BDF8; }
+      .panel { background:#0E1626; border:1px solid #1B2740; border-radius:0 14px 14px 14px;
+               padding:38px 46px; width:1420px; }
+      .panel.wide { width:1620px; }
+      .ptitle { font-size:21px; letter-spacing:.26em; color:#38BDF8; margin-bottom:24px; }
+      .grid { width:100%; border-collapse:collapse; }
+      .grid td { padding:15px 12px; border-bottom:1px solid #16203a; font-size:29px; will-change:transform,opacity; }
+      .grid .lab { color:#8A9AB5; text-align:left; }
+      .grid .val { text-align:right; font-family:"JBMono","Inter",monospace; }
+      .grid .val.in { color:#38BDF8; }
+      .grid .val.calc { color:#E8EDF5; }
+      .grid tr.hl td { background:rgba(201,168,76,.11); }
+      .grid tr.hl .val { color:#C9A84C; font-weight:700; }
+      .grid tr.good .val { color:#4ADE80; font-weight:700; }
+      .grid tr.hl-red td { background:rgba(240,85,63,.13); }
+      .grid tr.hl-red .num { color:#F0553F; }
+      .grid .hdr td { font-size:21px; letter-spacing:.16em; color:#8A9AB5; border-bottom:1px solid #1B2740; }
+      .grid .num { text-align:right; font-family:"JBMono","Inter",monospace; font-size:27px; }
+      .grid .num.neg { color:#C98A80; }
+      .grid .num.strong { color:#C9A84C; font-weight:700; }
+      .grid .tick, .grid .stat { font-size:24px; color:#8A9AB5; }
+      .grid.dcf .lab, .grid.peers .lab { font-size:26px; }
+      .fbar { margin-top:24px; font-family:"JBMono","Inter",monospace; font-size:24px; color:#8A9AB5;
+              background:#0A1120; border:1px solid #16203a; border-radius:9px; padding:14px 18px; }
+      .fbar .fx { color:#38BDF8; margin-right:16px; font-style:italic; }
+      .pnote { margin-top:20px; font-size:24px; color:#8A9AB5; }
+      .pnote.red { color:#F0553F; font-weight:600; }
+
+      .cellbox, .trapcell { display:flex; flex-direction:column; gap:12px; padding:44px 76px;
+                background:#0E1626; border:2px solid #38BDF8; border-radius:14px; }
+      .cellref { font-family:"JBMono","Inter",monospace; font-size:24px; color:#38BDF8; letter-spacing:.08em; }
+      .cellval { font-family:"Archivo Black",sans-serif; font-size:92px; }
+      .bugline { font-size:42px; color:#8A9AB5; }
+      .bugline.red { color:#F0553F; font-weight:700; font-size:56px; }
+
+      .cascade { display:flex; flex-direction:column; gap:12px; width:1180px; }
+      .crow { display:grid; grid-template-columns:300px 1fr 190px; align-items:center; gap:20px;
+              padding:19px 26px; background:#0E1626; border:1px solid #1B2740; border-radius:11px; }
+      .cref { font-family:"JBMono","Inter",monospace; font-size:25px; color:#38BDF8; text-align:left; }
+      .cname { font-size:27px; color:#E8EDF5; text-align:left; }
+      .cerr { font-family:"JBMono","Inter",monospace; font-size:26px; color:#F0553F; font-weight:700; text-align:right; }
+
+      .fixrow { display:flex; align-items:center; gap:52px; }
+      .fixbox { display:flex; flex-direction:column; gap:10px; padding:38px 58px; border-radius:14px;
+                background:#0E1626; border:2px solid #1B2740; }
+      .fixbox.bad { border-color:#F0553F; } .fixbox.good { border-color:#4ADE80; }
+      .fixlab { font-size:19px; letter-spacing:.24em; color:#8A9AB5; }
+      .fixval { font-family:"Archivo Black",sans-serif; font-size:74px; }
+      .fixtype { font-family:"JBMono","Inter",monospace; font-size:22px; color:#8A9AB5; }
+      .fixarrow { font-size:56px; color:#8A9AB5; }
+
+      .buildcol { display:flex; flex-direction:column; gap:12px; width:1120px; }
+      .brow { display:flex; justify-content:space-between; align-items:center; padding:24px 34px;
+              background:#0E1626; border:1px solid #1B2740; border-radius:12px; }
+      .brow.last { border-color:#C9A84C; }
+      .blab { font-size:29px; color:#8A9AB5; }
+      .bval { font-family:"JBMono","Inter",monospace; font-size:38px; }
+      .brow.last .bval { color:#C9A84C; font-weight:700; }
+
+      .cmprow { display:flex; gap:56px; }
+      .cmpbox { display:flex; flex-direction:column; gap:14px; padding:46px 58px; width:640px;
+                background:#0E1626; border:1px solid #1B2740; border-radius:14px; }
+      .cmpname { font-size:21px; letter-spacing:.24em; color:#38BDF8; }
+      .cmpval { font-family:"Archivo Black",sans-serif; font-size:88px; }
+      .cmpsub { font-size:23px; color:#8A9AB5; }
+
+      .traparms { display:flex; gap:44px; }
+      .traparm { font-size:29px; color:#8A9AB5; padding:22px 34px; background:#0E1626;
+                 border:1px solid #1B2740; border-radius:12px; }
+      .traparm b { color:#C9A84C; }
+
+      .iflist { display:flex; flex-direction:column; gap:15px; width:1120px; }
+      .ifrow { display:flex; align-items:center; gap:26px; padding:23px 34px; font-size:33px;
+               background:#0E1626; border:1px solid #1B2740; border-radius:12px; text-align:left; }
+      .ifn { display:grid; place-items:center; width:48px; height:48px; flex:0 0 48px; border-radius:50%;
+             background:#0A1120; border:1px solid #38BDF8; color:#38BDF8; font-size:23px; font-weight:700; }
+      .ifn.gold { border-color:#C9A84C; color:#C9A84C; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="862" data-width="1920" data-height="1080">
+      <section id="bg" class="clip" data-start="0" data-duration="862" data-track-index="0">
+        <div id="ground"></div>
+      </section>
+
+      <section id="sc00" class="clip scene" data-start="0" data-duration="5" data-track-index="1">
+        <div class="fade" id="sc00-fade">
+  <div class="stack center">
+    <p class="kicker" id="sc00-a">AI FINANCE TOOLKIT</p>
+    <h1 class="h1" id="sc00-b">Build Your Own Price</h1>
+    <span class="rule" id="sc00-c"></span>
+    <p class="sub" id="sc00-d">The Own-Price Valuation Engine</p>
+  </div></div>
+      </section>
+      <section id="sc01" class="clip scene" data-start="5" data-duration="17.5" data-track-index="2">
+        <div class="fade" id="sc01-fade">
+  <div class="stack center">
+    <p class="kicker" id="sc01-a">OWN PRICE vs MARKET</p>
+    <div class="vrow">
+      <div class="vcell" id="sc01-own"><span class="vnum gold">$2.09</span><span class="vlab">OWN PRICE</span></div>
+      <div class="vsep" id="sc01-sep">vs</div>
+      <div class="vcell" id="sc01-mkt"><span class="vnum">$1.25</span><span class="vlab">MARKET</span></div>
+    </div>
+    <p class="updelta" id="sc01-up">+67%</p>
+  </div></div>
+      </section>
+      <section id="sc02" class="clip scene" data-start="22.5" data-duration="15.5" data-track-index="1">
+        <div class="fade" id="sc02-fade">
+  <div class="stack center">
+    <h1 class="h1 tight" id="sc02-b">Build it. Break it. Fix it.</h1>
+    <p class="sub wide" id="sc02-d">How much of that 67% survives?</p>
+  </div></div>
+      </section>
+      <section id="sc03" class="clip scene" data-start="38" data-duration="12" data-track-index="2">
+        <div class="fade" id="sc03-fade">
+  <div class="stack center">
+    <p class="kicker" id="sc03-a">CHAPTER 1</p>
+    <h1 class="h1" id="sc03-b">What the engine does</h1>
+    <span class="rule" id="sc03-c"></span>
+    <p class="sub" id="sc03-d">Three estimates, weighted, then haircut</p>
+  </div></div>
+      </section>
+      <section id="sc04" class="clip scene" data-start="50" data-duration="38.6" data-track-index="1">
+        <div class="fade" id="sc04-fade">
+  <div class="stack center">
+    <div class="flowrow">
+      <div class="fnode" id="sc04-n0"><span class="fname">DCF</span><span class="fval">$1.25</span><span class="fsub">NAV per share</span></div><div class="fnode" id="sc04-n1"><span class="fname">PEERS</span><span class="fval">$3.17</span><span class="fsub">EV per lb applied</span></div><div class="fnode" id="sc04-n2"><span class="fname">ANALYST</span><span class="fval">$3.75</span><span class="fsub">Sanity check</span></div>
+    </div>
+    <div class="farrow" id="sc04-ar">↓ &nbsp; weighted 50 / 30 / 20 &nbsp; ↓</div>
+    <div class="fblend" id="sc04-bl"><span class="fname">BLENDED</span><span class="fval">$2.33</span></div>
+    <div class="farrow" id="sc04-ar2">↓ &nbsp; less 10% liquidity haircut &nbsp; ↓</div>
+    <div class="fown" id="sc04-ow"><span class="fname">YOUR OWN PRICE</span><span class="fval gold">$2.09</span></div>
+  </div></div>
+      </section>
+      <section id="sc05" class="clip scene" data-start="88.6" data-duration="43.4" data-track-index="2">
+        <div class="fade" id="sc05-fade">
+  <div class="stack center">
+    <div class="flowrow">
+      <div class="fnode tall" id="sc05-n0"><span class="fname">DCF / NAV</span><span class="fval big">$1.25</span></div><div class="fnode tall" id="sc05-n1"><span class="fname">PEER-IMPLIED</span><span class="fval big">$3.17</span></div><div class="fnode tall" id="sc05-n2"><span class="fname">ANALYST TARGET</span><span class="fval big">$3.75</span></div>
+    </div>
+    <p class="sub wide" id="sc05-note">Three reasonable methods. Wildly different answers.</p>
+  </div></div>
+      </section>
+      <section id="sc06" class="clip scene" data-start="132" data-duration="28" data-track-index="1">
+        <div class="fade" id="sc06-fade">
+  <div class="stack">
+    <div class="tabbar" id="sc06-tab"><span class="tab on">Inputs</span><span class="tab">Sensitivity</span><span class="tab">DCF</span><span class="tab">Peers</span><span class="tab">OwnPrice</span></div>
+    <div class="panel">
+      <p class="ptitle" id="sc06-pt">A · COMPANY &amp; MARKET</p>
+      <table class="grid">
+        <tr class="grow in" id="sc06-r0"><td class="lab">Share price ($)</td><td class="val in">$1.25</td></tr><tr class="grow in" id="sc06-r1"><td class="lab">Shares — basic (M)</td><td class="val in">194.216</td></tr><tr class="grow in" id="sc06-r2"><td class="lab">Cash &amp; equivalents ($M)</td><td class="val in">41.6</td></tr><tr class="grow in" id="sc06-r3"><td class="lab">Marketable securities ($M)</td><td class="val in">70.1</td></tr><tr class="grow in" id="sc06-r4"><td class="lab">Debt — face value ($M)</td><td class="val in">115.0</td></tr><tr class="grow calc" id="sc06-r5"><td class="lab">Net cash / (debt) ($M)</td><td class="val calc">(3.3)</td></tr>
+      </table>
+      <p class="fbar" id="sc06-fx"><span class="fx">fx</span>B16  =B13+B14−B15</p>
+      
+    </div>
+  </div></div>
+      </section>
+      <section id="sc07" class="clip scene" data-start="160" data-duration="31.7" data-track-index="2">
+        <div class="fade" id="sc07-fade"><div class="stack center">
+      <div class="cellbox" id="sc07-cb"><span class="cellref">Inputs!B8</span><span class="cellval">$1.25</span></div>
+      <p class="bugline" id="sc07-l1">It looks like a number.</p>
+      <p class="bugline" id="sc07-l2">It's formatted like a number.</p>
+      <p class="bugline red" id="sc07-l3">It's text.</p>
+    </div></div>
+      </section>
+      <section id="sc08" class="clip scene" data-start="191.7" data-duration="40.3" data-track-index="1">
+        <div class="fade" id="sc08-fade"><div class="stack center">
+      <p class="kicker" id="sc08-k">WHAT ONE TEXT CELL BREAKS</p>
+      <div class="cascade">
+        <div class="crow" id="sc08-c0"><span class="cref">Inputs!B12</span><span class="cname">Market cap</span><span class="cerr">#VALUE!</span></div><div class="crow" id="sc08-c1"><span class="cref">Inputs!B20</span><span class="cname">Cap-size bucket</span><span class="cerr">#VALUE!</span></div><div class="crow" id="sc08-c2"><span class="cref">Peers!C12</span><span class="cname">Peer row</span><span class="cerr">#VALUE!</span></div><div class="crow" id="sc08-c3"><span class="cref">OwnPrice!B12</span><span class="cname">Upside / downside</span><span class="cerr">#VALUE!</span></div><div class="crow" id="sc08-c4"><span class="cref">OwnPrice!B13</span><span class="cname">Verdict</span><span class="cerr">#VALUE!</span></div>
+      </div>
+      <p class="sub wide" id="sc08-w">No warning. Every other number still calculates perfectly.</p>
+    </div></div>
+      </section>
+      <section id="sc09" class="clip scene" data-start="232" data-duration="14" data-track-index="2">
+        <div class="fade" id="sc09-fade"><div class="stack center">
+    <div class="fixrow">
+      <div class="fixbox bad" id="sc09-b1"><span class="fixlab">STORED</span><span class="fixval">"$1.25"</span><span class="fixtype">text</span></div>
+      <div class="fixarrow" id="sc09-ar">→</div>
+      <div class="fixbox good" id="sc09-b2"><span class="fixlab">SHOULD BE</span><span class="fixval">1.25</span><span class="fixtype">number</span></div>
+    </div>
+    <p class="sub wide" id="sc09-t">Type the number. Let the cell's format add the dollar sign.</p>
+  </div></div>
+      </section>
+      <section id="sc10" class="clip scene" data-start="246" data-duration="35.7" data-track-index="1">
+        <div class="fade" id="sc10-fade">
+  <div class="stack">
+    <div class="tabbar" id="sc10-tab"><span class="tab on">Inputs</span><span class="tab">Sensitivity</span><span class="tab">DCF</span><span class="tab">Peers</span><span class="tab">OwnPrice</span></div>
+    <div class="panel">
+      <p class="ptitle" id="sc10-pt">B · CAP-SIZE ENGINE</p>
+      <table class="grid">
+        <tr class="grow row" id="sc10-r0"><td class="lab">Micro</td><td class="val row">&lt; $300M</td></tr><tr class="grow row" id="sc10-r1"><td class="lab">Small</td><td class="val row">$300M – $2B</td></tr><tr class="grow row" id="sc10-r2"><td class="lab">Mid</td><td class="val row">$2B – $10B</td></tr><tr class="grow row" id="sc10-r3"><td class="lab">Large</td><td class="val row">> $10B</td></tr><tr class="grow hl" id="sc10-r4"><td class="lab">SELECTED bucket</td><td class="val hl">Micro</td></tr><tr class="grow calc" id="sc10-r5"><td class="lab">Size premium</td><td class="val calc">4.5%</td></tr>
+      </table>
+      <p class="fbar" id="sc10-fx"><span class="fx">fx</span>B22  =INDEX($F$28:$F$31, MATCH($B$21,$E$28:$E$31,0))</p>
+      
+    </div>
+  </div></div>
+      </section>
+      <section id="sc11" class="clip scene" data-start="281.7" data-duration="40.3" data-track-index="2">
+        <div class="fade" id="sc11-fade">
+  <div class="stack">
+    <div class="tabbar" id="sc11-tab"><span class="tab on">Inputs</span><span class="tab">Sensitivity</span><span class="tab">DCF</span><span class="tab">Peers</span><span class="tab">OwnPrice</span></div>
+    <div class="panel">
+      <p class="ptitle" id="sc11-pt">LIQUIDITY DISCOUNT</p>
+      <table class="grid">
+        <tr class="grow row" id="sc11-r0"><td class="lab">Micro-cap default</td><td class="val row">25.0%</td></tr><tr class="grow in" id="sc11-r1"><td class="lab">Override (optional)</td><td class="val in">10.0%</td></tr><tr class="grow hl" id="sc11-r2"><td class="lab">Discount USED</td><td class="val hl">10.0%</td></tr>
+      </table>
+      <p class="fbar" id="sc11-fx"><span class="fx">fx</span>B25  =IF(ISNUMBER(B24), B24, B23)</p>
+      <p class="pnote" id="sc11-nt">enCore trades on NASDAQ daily. A private-company haircut would be wrong.</p>
+    </div>
+  </div></div>
+      </section>
+      <section id="sc12" class="clip scene" data-start="322" data-duration="41.7" data-track-index="1">
+        <div class="fade" id="sc12-fade">
+  <div class="stack center">
+    <p class="kicker" id="sc12-k">C · DISCOUNT RATE BUILD</p>
+    <div class="buildcol">
+      <div class="brow " id="sc12-s0"><span class="blab">Risk-free rate (US 10Y)</span><span class="bval">4.55%</span></div><div class="brow " id="sc12-s1"><span class="blab">Equity risk premium</span><span class="bval">5.00%</span></div><div class="brow " id="sc12-s2"><span class="blab">Beta</span><span class="bval">1.30</span></div><div class="brow last" id="sc12-s3"><span class="blab">Base cost of equity</span><span class="bval">11.05%</span></div>
+    </div>
+  </div></div>
+      </section>
+      <section id="sc13" class="clip scene" data-start="363.7" data-duration="36.3" data-track-index="2">
+        <div class="fade" id="sc13-fade">
+  <div class="stack center">
+    <p class="kicker" id="sc13-k">DISCOUNT RATE USED</p>
+    <p class="huge gold" id="sc13-v">15.55%</p>
+    <p class="sub" id="sc13-s">11.05% base + 4.50% size premium</p>
+    <p class="cellref dim" id="sc13-c">Inputs!B40</p>
+  </div></div>
+      </section>
+      <section id="sc14" class="clip scene" data-start="400" data-duration="40" data-track-index="1">
+        <div class="fade" id="sc14-fade">
+  <div class="stack">
+    <div class="tabbar"><span class="tab">Inputs</span><span class="tab">Sensitivity</span><span class="tab on">DCF</span><span class="tab">Peers</span><span class="tab">OwnPrice</span></div>
+    <div class="panel wide">
+      <p class="ptitle">5-YEAR DCF — 2026 to 2030</p>
+      <table class="grid dcf">
+        <tr class="hdr"><td></td><td>2026</td><td>2027</td><td>2028</td><td>2029</td><td>2030</td></tr>
+        <tr class="grow " id="sc14-r0">
+          <td class="lab">Production (M lbs)</td><td class="num ">0.7</td><td class="num ">1.0</td><td class="num ">1.5</td><td class="num ">2.0</td><td class="num ">2.5</td></tr><tr class="grow " id="sc14-r1">
+          <td class="lab">Realized price ($/lb)</td><td class="num ">68</td><td class="num ">72</td><td class="num ">78</td><td class="num ">84</td><td class="num ">88</td></tr><tr class="grow " id="sc14-r2">
+          <td class="lab">Revenue ($M)</td><td class="num ">47.6</td><td class="num ">72.0</td><td class="num ">117.0</td><td class="num ">168.0</td><td class="num ">220.0</td></tr><tr class="grow " id="sc14-r3">
+          <td class="lab">Operating cost ($M)</td><td class="num neg">(32.2)</td><td class="num neg">(44.0)</td><td class="num neg">(63.0)</td><td class="num neg">(82.0)</td><td class="num neg">(100.0)</td></tr><tr class="grow " id="sc14-r4">
+          <td class="lab">Overhead ($M)</td><td class="num neg">(8.3)</td><td class="num neg">(12.6)</td><td class="num neg">(20.5)</td><td class="num neg">(29.4)</td><td class="num neg">(38.5)</td></tr><tr class="grow " id="sc14-r5">
+          <td class="lab">EBITDA ($M)</td><td class="num ">7.1</td><td class="num ">15.4</td><td class="num ">33.5</td><td class="num ">56.6</td><td class="num ">81.5</td></tr><tr class="grow " id="sc14-r6">
+          <td class="lab">Capex ($M)</td><td class="num neg">(25.0)</td><td class="num neg">(30.0)</td><td class="num neg">(40.0)</td><td class="num neg">(90.0)</td><td class="num neg">(90.0)</td></tr><tr class="grow " id="sc14-r7">
+          <td class="lab">Free cash flow ($M)</td><td class="num neg">(17.9)</td><td class="num neg">(14.6)</td><td class="num neg">(6.5)</td><td class="num neg">(33.4)</td><td class="num neg">(8.5)</td></tr>
+      </table>
+      
+    </div>
+  </div></div>
+      </section>
+      <section id="sc15" class="clip scene" data-start="440" data-duration="21.6" data-track-index="2">
+        <div class="fade" id="sc15-fade">
+  <div class="stack">
+    <div class="tabbar"><span class="tab">Inputs</span><span class="tab">Sensitivity</span><span class="tab on">DCF</span><span class="tab">Peers</span><span class="tab">OwnPrice</span></div>
+    <div class="panel wide">
+      <p class="ptitle">5-YEAR DCF — 2026 to 2030</p>
+      <table class="grid dcf">
+        <tr class="hdr"><td></td><td>2026</td><td>2027</td><td>2028</td><td>2029</td><td>2030</td></tr>
+        <tr class="grow " id="sc15-r0">
+          <td class="lab">Production (M lbs)</td><td class="num ">0.7</td><td class="num ">1.0</td><td class="num ">1.5</td><td class="num ">2.0</td><td class="num ">2.5</td></tr><tr class="grow " id="sc15-r1">
+          <td class="lab">Realized price ($/lb)</td><td class="num ">68</td><td class="num ">72</td><td class="num ">78</td><td class="num ">84</td><td class="num ">88</td></tr><tr class="grow " id="sc15-r2">
+          <td class="lab">Revenue ($M)</td><td class="num ">47.6</td><td class="num ">72.0</td><td class="num ">117.0</td><td class="num ">168.0</td><td class="num ">220.0</td></tr><tr class="grow " id="sc15-r3">
+          <td class="lab">Operating cost ($M)</td><td class="num neg">(32.2)</td><td class="num neg">(44.0)</td><td class="num neg">(63.0)</td><td class="num neg">(82.0)</td><td class="num neg">(100.0)</td></tr><tr class="grow " id="sc15-r4">
+          <td class="lab">Overhead ($M)</td><td class="num neg">(8.3)</td><td class="num neg">(12.6)</td><td class="num neg">(20.5)</td><td class="num neg">(29.4)</td><td class="num neg">(38.5)</td></tr><tr class="grow " id="sc15-r5">
+          <td class="lab">EBITDA ($M)</td><td class="num ">7.1</td><td class="num ">15.4</td><td class="num ">33.5</td><td class="num ">56.6</td><td class="num ">81.5</td></tr><tr class="grow " id="sc15-r6">
+          <td class="lab">Capex ($M)</td><td class="num neg">(25.0)</td><td class="num neg">(30.0)</td><td class="num neg">(40.0)</td><td class="num neg">(90.0)</td><td class="num neg">(90.0)</td></tr><tr class="grow hl-red" id="sc15-r7">
+          <td class="lab">Free cash flow ($M)</td><td class="num neg">(17.9)</td><td class="num neg">(14.6)</td><td class="num neg">(6.5)</td><td class="num neg">(33.4)</td><td class="num neg">(8.5)</td></tr>
+      </table>
+      <p class="pnote red" id="sc15-nt">Negative every single year.</p>
+    </div>
+  </div></div>
+      </section>
+      <section id="sc16" class="clip scene" data-start="461.6" data-duration="33.4" data-track-index="1">
+        <div class="fade" id="sc16-fade">
+  <div class="stack center">
+    <p class="kicker" id="sc16-k">SUM OF PV OF FREE CASH FLOW</p>
+    <p class="huge red" id="sc16-v">−$53.5M</p>
+    <p class="sub" id="sc16-s">Five years of operations, discounted</p>
+    <p class="cellref dim" id="sc16-c">DCF!B25</p>
+  </div></div>
+      </section>
+      <section id="sc17" class="clip scene" data-start="495" data-duration="25" data-track-index="2">
+        <div class="fade" id="sc17-fade">
+  <div class="stack center">
+    <h1 class="h1 tight" id="sc17-b">All of it is terminal value.</h1>
+    <p class="sub wide" id="sc17-d">You're not buying five years of cash flow.</p>
+  </div></div>
+      </section>
+      <section id="sc18" class="clip scene" data-start="520" data-duration="39.2" data-track-index="1">
+        <div class="fade" id="sc18-fade">
+  <div class="stack center">
+    <p class="kicker" id="sc18-k">TERMINAL VALUE — TWO METHODS</p>
+    <div class="cmprow">
+      <div class="cmpbox" id="sc18-b0">
+        <span class="cmpname">Gordon growth</span><span class="cmpval">$350.0M</span>
+        <span class="cmpsub">Normalised FCF, grown at 2% forever</span><span class="cellref dim">DCF!B21</span></div><div class="cmpbox" id="sc18-b1">
+        <span class="cmpname">Exit multiple</span><span class="cmpval">$618.0M</span>
+        <span class="cmpsub">$12/lb × 51.5M lbs of resource</span><span class="cellref dim">DCF!B22</span></div>
+    </div>
+    <p class="updelta" id="sc18-d">76% higher — one dropdown apart</p>
+  </div></div>
+      </section>
+      <section id="sc19" class="clip scene" data-start="559.2" data-duration="32.8" data-track-index="2">
+        <div class="fade" id="sc19-fade">
+  <div class="stack center">
+    <h1 class="h1 tight" id="sc19-b">One dropdown.</h1>
+    <p class="sub wide" id="sc19-d">That gap is a method choice, not a fact about the business.</p>
+  </div></div>
+      </section>
+      <section id="sc20" class="clip scene" data-start="592" data-duration="38" data-track-index="1">
+        <div class="fade" id="sc20-fade">
+  <div class="stack">
+    <div class="tabbar"><span class="tab">Inputs</span><span class="tab">Sensitivity</span><span class="tab">DCF</span><span class="tab on">Peers</span><span class="tab">OwnPrice</span></div>
+    <div class="panel wide">
+      <p class="ptitle">PEER CROSS-CHECK — URANIUM UNIVERSE</p>
+      <table class="grid peers">
+        <tr class="hdr"><td>Company</td><td>Ticker</td><td>Market cap</td><td>Status</td></tr>
+        <tr class="grow " id="sc20-r0">
+          <td class="lab">Cameco</td><td class="tick">CCJ</td><td class="num">$64,500M</td><td class="stat">Producer</td></tr><tr class="grow " id="sc20-r1">
+          <td class="lab">Kazatomprom</td><td class="tick">KAP</td><td class="num">$13,500M</td><td class="stat">Producer</td></tr><tr class="grow " id="sc20-r2">
+          <td class="lab">NexGen Energy</td><td class="tick">NXE</td><td class="num">$10,950M</td><td class="stat">Developer</td></tr><tr class="grow " id="sc20-r3">
+          <td class="lab">Uranium Energy</td><td class="tick">UEC</td><td class="num">$6,200M</td><td class="stat">Producer (ramp)</td></tr><tr class="grow " id="sc20-r4">
+          <td class="lab">Denison Mines</td><td class="tick">DNN</td><td class="num">$4,710M</td><td class="stat">Developer</td></tr><tr class="grow " id="sc20-r5">
+          <td class="lab">Energy Fuels</td><td class="tick">UUUU</td><td class="num">$4,510M</td><td class="stat">Producer</td></tr><tr class="grow " id="sc20-r6">
+          <td class="lab">Ur-Energy</td><td class="tick">URG</td><td class="num">$602M</td><td class="stat">Producer</td></tr><tr class="grow hl" id="sc20-r7">
+          <td class="lab">enCore Energy</td><td class="tick">EU</td><td class="num">$243M</td><td class="stat">Producer (ramp)</td></tr>
+      </table>
+      <p class="pnote" id="sc20-nt">NexGen is worth $10.9B with zero pounds coming out of the ground.</p>
+    </div>
+  </div></div>
+      </section>
+      <section id="sc21" class="clip scene" data-start="630" data-duration="24.6" data-track-index="2">
+        <div class="fade" id="sc21-fade"><div class="stack center">
+        <div class="trapcell" id="sc21-tc"><span class="cellref">Inputs!B45</span><span class="cellval gold">$12.00 / lb</span></div>
+        <div class="traparms">
+          <div class="traparm" id="sc21-a1">drives <b>DCF terminal value</b></div>
+          <div class="traparm" id="sc21-a2">drives <b>peer-implied price</b></div>
+        </div>
+      </div></div>
+      </section>
+      <section id="sc22" class="clip scene" data-start="654.6" data-duration="29.4" data-track-index="1">
+        <div class="fade" id="sc22-fade"><div class="stack center">
+        <h1 class="h1 tight" id="sc22-b">One opinion, two hats.</h1>
+        <p class="sub wide" id="sc22-d">When the legs agree they aren't confirming each other. They're repeating one assumption you made once.</p>
+      </div></div>
+      </section>
+      <section id="sc23" class="clip scene" data-start="684" data-duration="36" data-track-index="2">
+        <div class="fade" id="sc23-fade">
+  <div class="stack">
+    <div class="tabbar"><span class="tab">Inputs</span><span class="tab">Sensitivity</span><span class="tab">DCF</span><span class="tab">Peers</span><span class="tab on">OwnPrice</span></div>
+    <div class="panel">
+      <p class="ptitle">YOUR OWN PRICE — THE ANSWER SHEET</p>
+      <table class="grid">
+        <tr class="grow " id="sc23-r0"><td class="lab">NAV per share (DCF)</td><td class="val ">$1.25</td></tr><tr class="grow " id="sc23-r1"><td class="lab">Peer-implied price</td><td class="val ">$3.17</td></tr><tr class="grow " id="sc23-r2"><td class="lab">Analyst target</td><td class="val ">$3.75</td></tr><tr class="grow " id="sc23-r3"><td class="lab">Weights (NAV / Peer / Analyst)</td><td class="val ">50% / 30% / 20%</td></tr><tr class="grow calc" id="sc23-r4"><td class="lab">Blended, pre-discount</td><td class="val calc">$2.33</td></tr><tr class="grow " id="sc23-r5"><td class="lab">Liquidity discount</td><td class="val ">10.0%</td></tr><tr class="grow hl" id="sc23-r6"><td class="lab">OWN PRICE</td><td class="val hl">$2.09</td></tr><tr class="grow " id="sc23-r7"><td class="lab">Current market price</td><td class="val ">$1.25</td></tr><tr class="grow good" id="sc23-r8"><td class="lab">Upside</td><td class="val good">+67.4%</td></tr><tr class="grow good" id="sc23-r9"><td class="lab">Verdict</td><td class="val good">UNDERVALUED</td></tr>
+      </table>
+    </div>
+  </div></div>
+      </section>
+      <section id="sc24" class="clip scene" data-start="720" data-duration="15.9" data-track-index="1">
+        <div class="fade" id="sc24-fade">
+  <div class="stack center">
+    <h1 class="h1 tight" id="sc24-b">On your assumptions.</h1>
+    <p class="sub wide" id="sc24-d">The model never claims to know. It shows you what you assumed.</p>
+  </div></div>
+      </section>
+      <section id="sc25" class="clip scene" data-start="735.9" data-duration="32.1" data-track-index="2">
+        <div class="fade" id="sc25-fade">
+  <div class="stack center">
+    <p class="kicker" id="sc25-k">$2.09 HOLDS ONLY IF</p>
+    <div class="iflist">
+      <div class="ifrow" id="sc25-i0"><span class="ifn">1</span><span>uranium holds up</span></div><div class="ifrow" id="sc25-i1"><span class="ifn">2</span><span>production ramps as modelled</span></div><div class="ifrow" id="sc25-i2"><span class="ifn">3</span><span>$12 per pound is fair</span></div><div class="ifrow" id="sc25-i3"><span class="ifn">4</span><span>the terminal year arrives roughly as sketched</span></div>
+    </div>
+  </div></div>
+      </section>
+      <section id="sc26" class="clip scene" data-start="768" data-duration="32" data-track-index="1">
+        <div class="fade" id="sc26-fade">
+  <div class="stack">
+    <div class="tabbar"><span class="tab">Inputs</span><span class="tab on">Sensitivity</span><span class="tab">DCF</span><span class="tab">Peers</span><span class="tab">OwnPrice</span></div>
+    <div class="panel wide">
+      <p class="ptitle">URANIUM PRICE SENSITIVITY — YEAR-1 ECONOMICS</p>
+      <table class="grid peers">
+        <tr class="hdr"><td>Scenario</td><td>Spot ($/lb)</td><td>Realized</td><td>All-in margin</td><td>Gross profit ($M)</td></tr>
+        <tr class="grow " id="sc26-r0">
+            <td class="lab">Bear</td><td class="num">50</td><td class="num">55</td><td class="num">$9</td><td class="num strong">6.3</td></tr><tr class="grow " id="sc26-r1">
+            <td class="lab">Base</td><td class="num">70</td><td class="num">68</td><td class="num">$22</td><td class="num strong">15.4</td></tr><tr class="grow " id="sc26-r2">
+            <td class="lab">Term-price world</td><td class="num">90</td><td class="num">87</td><td class="num">$41</td><td class="num strong">28.7</td></tr><tr class="grow hl" id="sc26-r3">
+            <td class="lab">Bull</td><td class="num">110</td><td class="num">105</td><td class="num">$59</td><td class="num strong">41.3</td></tr>
+      </table>
+      <p class="pnote" id="sc26-nt">6.5× swing in gross profit — from a price range uranium has genuinely traded through.</p>
+    </div>
+  </div></div>
+      </section>
+      <section id="sc27" class="clip scene" data-start="800" data-duration="27.2" data-track-index="2">
+        <div class="fade" id="sc27-fade">
+  <div class="stack center">
+    <p class="kicker" id="sc27-k">VERSION LOG — STAMP EVERY RUN</p>
+    <div class="panel wide">
+      <table class="grid peers">
+        <tr class="hdr"><td>Date</td><td>Bucket</td><td>Disc. rate</td><td>Own price</td><td>Mkt price</td></tr>
+        <tr class="grow hl" id="sc27-r0"><td class="num">21-Jul-26</td><td class="num">Micro</td><td class="num">15.55%</td><td class="num">$2.09</td><td class="num">$1.25</td></tr>
+      </table>
+    </div>
+    <p class="sub wide" id="sc27-s">Do this for a year and you find out whether your prices were any good. Most people never do.</p>
+  </div></div>
+      </section>
+      <section id="sc28" class="clip scene" data-start="827.2" data-duration="22.8" data-track-index="1">
+        <div class="fade" id="sc28-fade">
+  <div class="stack center">
+    <p class="kicker" id="sc28-k">DO THIS NEXT</p>
+    <div class="iflist">
+      <div class="ifrow" id="sc28-i0"><span class="ifn gold">1</span><span>Fix the text cell</span></div><div class="ifrow" id="sc28-i1"><span class="ifn gold">2</span><span>Split the shared $/lb lever</span></div><div class="ifrow" id="sc28-i2"><span class="ifn gold">3</span><span>Flip the terminal value method</span></div><div class="ifrow" id="sc28-i3"><span class="ifn gold">4</span><span>Log every run</span></div>
+    </div>
+  </div></div>
+      </section>
+      <section id="sc29" class="clip scene" data-start="850" data-duration="12" data-track-index="2">
+        <div class="fade" id="sc29-fade">
+  <div class="stack center">
+    <h1 class="h1" id="sc29-b">Build your own price.</h1>
+    <span class="rule" id="sc29-c"></span>
+    <p class="sub" id="sc29-d">AI Finance Toolkit · Own-Price Valuation Engine</p>
+  </div></div>
+      </section>
+
+      <section id="vg" class="clip" data-start="0" data-duration="862" data-track-index="8">
+        <div id="vign"></div>
+      </section>
+
+      <audio id="mix" class="clip" src="assets/audio/final-mix.wav" data-start="0" data-duration="862" data-track-index="9"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+  tl.fromTo("#sc00-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 0);
+  tl.to("#sc00-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 4.45);
+  tl.set("#sc00-fade", { opacity: 0 }, 5);
+  tl.fromTo("#sc00 .stack > *", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.55, stagger: 0.16, ease: "power3.out" }, 0.3);
+  tl.fromTo("#sc01-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 5);
+  tl.to("#sc01-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 21.95);
+  tl.set("#sc01-fade", { opacity: 0 }, 22.5);
+  tl.fromTo(["#sc01-own", "#sc01-sep", "#sc01-mkt"], { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.4, ease: "power3.out" }, 5.5);
+  tl.fromTo("#sc01-up", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.8)" }, 7.2);
+  tl.fromTo("#sc02-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 22.5);
+  tl.to("#sc02-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 37.45);
+  tl.set("#sc02-fade", { opacity: 0 }, 38);
+  tl.fromTo("#sc02 .stack > *", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.55, stagger: 0.16, ease: "power3.out" }, 22.8);
+  tl.fromTo("#sc03-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 38);
+  tl.to("#sc03-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 49.45);
+  tl.set("#sc03-fade", { opacity: 0 }, 50);
+  tl.fromTo("#sc03 .stack > *", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.55, stagger: 0.16, ease: "power3.out" }, 38.3);
+  tl.fromTo("#sc04-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 50);
+  tl.to("#sc04-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 88.05);
+  tl.set("#sc04-fade", { opacity: 0 }, 88.6);
+  tl.fromTo("#sc04 .fnode", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.13, ease: "power3.out" }, 50.35);
+  tl.fromTo("#sc05-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 88.6);
+  tl.to("#sc05-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 131.45);
+  tl.set("#sc05-fade", { opacity: 0 }, 132);
+  tl.fromTo("#sc05 .fnode", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.13, ease: "power3.out" }, 88.94999999999999);
+  tl.fromTo("#sc06-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 132);
+  tl.to("#sc06-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 159.45);
+  tl.set("#sc06-fade", { opacity: 0 }, 160);
+  tl.fromTo("#sc06 .grow", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.13, ease: "power3.out" }, 132.35);
+  tl.fromTo("#sc07-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 160);
+  tl.to("#sc07-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 191.15);
+  tl.set("#sc07-fade", { opacity: 0 }, 191.7);
+  tl.fromTo(["#sc07-l1", "#sc07-l2", "#sc07-l3"], { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45, stagger: 1.5, ease: "power3.out" }, 161.6);
+  tl.fromTo("#sc08-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 191.7);
+  tl.to("#sc08-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 231.45);
+  tl.set("#sc08-fade", { opacity: 0 }, 232);
+  tl.fromTo("#sc08 .crow", { opacity: 0, x: -26 }, { opacity: 1, x: 0, duration: 0.45, stagger: 0.55, ease: "power3.out" }, 192.29999999999998);
+  tl.fromTo("#sc08 .cerr", { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 0.3, stagger: 0.55, ease: "back.out(2)" }, 192.64999999999998);
+  tl.fromTo("#sc09-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 232);
+  tl.to("#sc09-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 245.45);
+  tl.set("#sc09-fade", { opacity: 0 }, 246);
+  tl.fromTo("#sc10-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 246);
+  tl.to("#sc10-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 281.15);
+  tl.set("#sc10-fade", { opacity: 0 }, 281.7);
+  tl.fromTo("#sc10 .grow", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.13, ease: "power3.out" }, 246.35);
+  tl.fromTo("#sc11-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 281.7);
+  tl.to("#sc11-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 321.45);
+  tl.set("#sc11-fade", { opacity: 0 }, 322);
+  tl.fromTo("#sc11 .grow", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.13, ease: "power3.out" }, 282.05);
+  tl.fromTo("#sc12-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 322);
+  tl.to("#sc12-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 363.15);
+  tl.set("#sc12-fade", { opacity: 0 }, 363.7);
+  tl.fromTo("#sc12 .brow", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.13, ease: "power3.out" }, 322.35);
+  tl.fromTo("#sc13-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 363.7);
+  tl.to("#sc13-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 399.45);
+  tl.set("#sc13-fade", { opacity: 0 }, 400);
+  tl.fromTo("#sc13 .stack > *", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.55, stagger: 0.16, ease: "power3.out" }, 364);
+  tl.fromTo("#sc14-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 400);
+  tl.to("#sc14-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 439.45);
+  tl.set("#sc14-fade", { opacity: 0 }, 440);
+  tl.fromTo("#sc14 .grow", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.13, ease: "power3.out" }, 400.35);
+  tl.fromTo("#sc15-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 440);
+  tl.to("#sc15-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 461.05);
+  tl.set("#sc15-fade", { opacity: 0 }, 461.6);
+  tl.fromTo("#sc15 .grow", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.13, ease: "power3.out" }, 440.35);
+  tl.fromTo("#sc16-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 461.6);
+  tl.to("#sc16-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 494.45);
+  tl.set("#sc16-fade", { opacity: 0 }, 495);
+  tl.fromTo("#sc16 .stack > *", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.55, stagger: 0.16, ease: "power3.out" }, 461.90000000000003);
+  tl.fromTo("#sc17-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 495);
+  tl.to("#sc17-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 519.45);
+  tl.set("#sc17-fade", { opacity: 0 }, 520);
+  tl.fromTo("#sc17 .stack > *", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.55, stagger: 0.16, ease: "power3.out" }, 495.3);
+  tl.fromTo("#sc18-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 520);
+  tl.to("#sc18-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 558.65);
+  tl.set("#sc18-fade", { opacity: 0 }, 559.2);
+  tl.fromTo("#sc18 .cmpbox", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.6, ease: "power3.out" }, 520.5);
+  tl.fromTo("#sc18-d", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 522.4);
+  tl.fromTo("#sc19-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 559.2);
+  tl.to("#sc19-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 591.45);
+  tl.set("#sc19-fade", { opacity: 0 }, 592);
+  tl.fromTo("#sc19 .stack > *", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.55, stagger: 0.16, ease: "power3.out" }, 559.5);
+  tl.fromTo("#sc20-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 592);
+  tl.to("#sc20-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 629.45);
+  tl.set("#sc20-fade", { opacity: 0 }, 630);
+  tl.fromTo("#sc20 .grow", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.13, ease: "power3.out" }, 592.35);
+  tl.fromTo("#sc21-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 630);
+  tl.to("#sc21-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 654.05);
+  tl.set("#sc21-fade", { opacity: 0 }, 654.6);
+  tl.fromTo("#sc21 .traparm", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.7, ease: "power3.out" }, 631);
+  tl.fromTo("#sc22-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 654.6);
+  tl.to("#sc22-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 683.45);
+  tl.set("#sc22-fade", { opacity: 0 }, 684);
+  tl.fromTo("#sc23-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 684);
+  tl.to("#sc23-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 719.45);
+  tl.set("#sc23-fade", { opacity: 0 }, 720);
+  tl.fromTo("#sc23 .grow", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.13, ease: "power3.out" }, 684.35);
+  tl.fromTo("#sc24-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 720);
+  tl.to("#sc24-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 735.35);
+  tl.set("#sc24-fade", { opacity: 0 }, 735.9);
+  tl.fromTo("#sc24 .stack > *", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.55, stagger: 0.16, ease: "power3.out" }, 720.3);
+  tl.fromTo("#sc25-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 735.9);
+  tl.to("#sc25-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 767.45);
+  tl.set("#sc25-fade", { opacity: 0 }, 768);
+  tl.fromTo("#sc25 .ifrow", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.13, ease: "power3.out" }, 736.25);
+  tl.fromTo("#sc26-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 768);
+  tl.to("#sc26-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 799.45);
+  tl.set("#sc26-fade", { opacity: 0 }, 800);
+  tl.fromTo("#sc26 .grow", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.13, ease: "power3.out" }, 768.35);
+  tl.fromTo("#sc27-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 800);
+  tl.to("#sc27-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 826.65);
+  tl.set("#sc27-fade", { opacity: 0 }, 827.2);
+  tl.fromTo("#sc27 .grow", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.13, ease: "power3.out" }, 800.35);
+  tl.fromTo("#sc28-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 827.2);
+  tl.to("#sc28-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 849.45);
+  tl.set("#sc28-fade", { opacity: 0 }, 850);
+  tl.fromTo("#sc28 .ifrow", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.13, ease: "power3.out" }, 827.5500000000001);
+  tl.fromTo("#sc29-fade", { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 850);
+  tl.to("#sc29-fade", { opacity: 0, duration: 0.55, ease: "power2.in" }, 861.45);
+  tl.set("#sc29-fade", { opacity: 0 }, 862);
+  tl.fromTo("#sc29 .stack > *", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.55, stagger: 0.16, ease: "power3.out" }, 850.3);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

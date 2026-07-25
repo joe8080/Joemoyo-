@@ -1,0 +1,21 @@
+So when the peer leg and the DCF leg agree, they're not confirming each other. They're both repeating one assumption you made once.
+
+To this model's credit, it flags this itself. There's a note in the cell saying the lever is shared.
+
+But you should know what it means. If you want the peer check to be a real second opinion, give it its own dollars-per-pound. Otherwise you've got one opinion wearing two hats.
+
+Now the answer sheet, and it's the simplest page in the workbook.
+
+Three prices. One twenty-five from the DCF. Three seventeen from peers. Three seventy-five from analysts.
+
+Weights: fifty percent DCF, thirty percent peers, twenty percent analysts. They have to total a hundred, and there's a check cell that tells you off if they don't.
+
+Weighted, that's two dollars thirty-three.
+
+Then the liquidity haircut. Ten percent off.
+
+Two dollars nine. Against a market price of one twenty-five.
+
+Sixty-seven percent upside. Verdict: undervalued on your assumptions.
+
+Read those last three words again. On your assumptions.

@@ -1,0 +1,23 @@
+Someone typed a dollar sign into a cell that was already formatted as currency. Excel took it literally and stored the whole thing as a string.
+
+And here's the damage.
+
+Market cap multiplies price by shares. Broken. The cap-size classifier reads market cap. Broken. The peers table pulls that same market cap. Broken.
+
+Then, on the answer sheet — upside, broken. Verdict, broken.
+
+The two cells you actually look at. Gone. And the sheet gives you no warning, because every other number still calculates perfectly.
+
+The fix takes two seconds. Retype it as one point two five, no dollar sign, and let the cell's format add the symbol.
+
+I'm showing you this because it's the most common way a model lies quietly. Not wrong logic. A text cell wearing a number's clothes.
+
+Once market cap works, this section does something most retail models skip.
+
+It sizes the company, then charges it for being small.
+
+Under three hundred million is micro. Up to two billion is small. Up to ten billion is mid. Above that, large.
+
+Each bucket carries two penalties.
+
+A size premium, added to the discount rate. Small companies are riskier, so future cash is worth less today. Micro-cap gets four and a half percent.

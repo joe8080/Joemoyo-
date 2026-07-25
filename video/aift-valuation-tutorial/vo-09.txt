@@ -1,0 +1,15 @@
+The model isn't claiming enCore is worth two dollars nine. It's saying: if uranium holds up, if production ramps, if twelve dollars a pound is fair, and if the terminal year arrives roughly as sketched — then two dollars nine.
+
+Change any one of those and the number moves. That's the honest version of valuation, and it's why the sheet is built so every assumption has its own cell with your fingerprints on it.
+
+Two sheets left, and they're the ones that turn this from a calculator into a practice.
+
+The sensitivity table runs uranium from fifty dollars to a hundred and ten. Costs and production stay pinned to the DCF, so only price moves.
+
+Bear case, six point three million gross profit. Bull case, forty-one point three. Roughly six and a half times, from a price range that uranium has genuinely traded through.
+
+That's your real risk. Not the spreadsheet — the commodity.
+
+And then the version log. Every time you run this, it stamps the date, the bucket, the discount rate, and the price you got, and you paste it in as a frozen row.
+
+Do that for a year and you can see whether your own prices were any good. Most people never find out, because they never wrote the number down.

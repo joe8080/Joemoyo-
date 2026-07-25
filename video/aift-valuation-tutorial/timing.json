@@ -1,0 +1,87 @@
+{
+  "total": 861.769,
+  "leadIn": 5,
+  "tail": 13,
+  "parts": [
+    {
+      "id": "vo-01",
+      "file": "assets/audio/vo-01.mp3",
+      "dur": 79.647347,
+      "start": 5,
+      "end": 84.647,
+      "gapAfter": 4
+    },
+    {
+      "id": "vo-02",
+      "file": "assets/audio/vo-02.mp3",
+      "dur": 91.010612,
+      "start": 88.647,
+      "end": 179.658,
+      "gapAfter": 12
+    },
+    {
+      "id": "vo-03",
+      "file": "assets/audio/vo-03.mp3",
+      "dur": 84.035918,
+      "start": 191.658,
+      "end": 275.694,
+      "gapAfter": 6
+    },
+    {
+      "id": "vo-04",
+      "file": "assets/audio/vo-04.mp3",
+      "dur": 77.00898,
+      "start": 281.694,
+      "end": 358.703,
+      "gapAfter": 5
+    },
+    {
+      "id": "vo-05",
+      "file": "assets/audio/vo-05.mp3",
+      "dur": 91.872653,
+      "start": 363.703,
+      "end": 455.576,
+      "gapAfter": 6
+    },
+    {
+      "id": "vo-06",
+      "file": "assets/audio/vo-06.mp3",
+      "dur": 83.644082,
+      "start": 461.576,
+      "end": 545.22,
+      "gapAfter": 14
+    },
+    {
+      "id": "vo-07",
+      "file": "assets/audio/vo-07.mp3",
+      "dur": 82.364082,
+      "start": 559.22,
+      "end": 641.584,
+      "gapAfter": 13
+    },
+    {
+      "id": "vo-08",
+      "file": "assets/audio/vo-08.mp3",
+      "dur": 73.325714,
+      "start": 654.584,
+      "end": 727.91,
+      "gapAfter": 8
+    },
+    {
+      "id": "vo-09",
+      "file": "assets/audio/vo-09.mp3",
+      "dur": 79.307755,
+      "start": 735.91,
+      "end": 815.218,
+      "gapAfter": 12
+    },
+    {
+      "id": "vo-10",
+      "file": "assets/audio/vo-10.mp3",
+      "dur": 21.55102,
+      "start": 827.218,
+      "end": 848.769,
+      "gapAfter": 0
+    }
+  ]
+}

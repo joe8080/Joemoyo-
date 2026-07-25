@@ -1,0 +1,17 @@
+This model uses the exit multiple, which is the more generous of the two. And the toggle for that choice is one dropdown on the Inputs sheet.
+
+Flip it to Gordon growth and watch the own price fall. That's not the model being unreliable. That's the model showing you honestly how much of your answer was a method choice rather than a fact about the business.
+
+Any valuation that gives you one number without showing you that gap is hiding something.
+
+The peer sheet checks the DCF against what the market actually pays.
+
+Cameco, sixty-four and a half billion, producing. NexGen, eleven billion, not producing anything yet. Uranium Energy, Denison, Energy Fuels, Kazatomprom, Ur-Energy.
+
+The lesson in this table is that producers get a premium over developers, and the gap is enormous. NexGen is worth eleven billion with zero pounds coming out of the ground.
+
+Apply twelve dollars a pound to enCore's resource and you get six hundred and eighteen million enterprise value. Adjust for cash and debt, divide by shares, and the peer-implied price is three seventeen.
+
+Now — the trap.
+
+That twelve dollars per pound? It's the same cell that drove the terminal value in the DCF.
