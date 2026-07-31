@@ -1,0 +1,830 @@
+<title>Trick or Trade 2024 — Collection Board</title>
+<style>
+/* The board commits to a single dark visual world on purpose: the holographic
+   card treatment is a specular effect that only reads against a dark ground.
+   Declared rather than omitted. */
+:root { color-scheme: dark; }
+/* Trick or Trade 2024 — collection board
+   Self-contained. No external fonts, no CDN, no network at runtime. */
+
+:root {
+  --bg: #05070E;
+  --panel: #0C1220;
+  --panel-2: #111A2C;
+  --edge: #1B2740;
+  --text: #E9EEF7;
+  --dim: #8494B0;
+  --cyan: #38BDF8;
+  --violet: #A78BFA;
+  --amber: #F7B955;
+  --green: #4ADE80;
+  --red: #F0553F;
+  --pumpkin: #FF7A2F;
+  --r: 14px;
+  --ease: cubic-bezier(.22,.9,.28,1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.wrap { width: min(1340px, 92vw); margin-inline: auto; }
+
+/* ── ambient background ─────────────────────────────────────────────── */
+.grid-bg {
+  position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(56,189,248,.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56,189,248,.055) 1px, transparent 1px);
+  background-size: 62px 62px;
+  mask-image: radial-gradient(ellipse 90% 62% at 50% 0%, #000 10%, transparent 78%);
+}
+.glow {
+  position: fixed; z-index: -1; pointer-events: none;
+  width: 62vw; height: 62vw; max-width: 900px; max-height: 900px;
+  border-radius: 50%; filter: blur(110px); opacity: .5;
+}
+.glow-a { top: -22vw; left: -12vw; background: radial-gradient(circle, rgba(167,139,250,.5), transparent 66%); }
+.glow-b { top: -8vw; right: -16vw; background: radial-gradient(circle, rgba(255,122,47,.34), transparent 66%); }
+
+/* ── hero ───────────────────────────────────────────────────────────── */
+.hero { padding: clamp(64px, 11vw, 132px) 0 44px; }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 11px;
+  font-size: 13px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--cyan); font-weight: 600;
+  padding: 9px 17px; border: 1px solid var(--edge); border-radius: 999px;
+  background: rgba(12,18,32,.72);
+}
+.dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--green);
+  box-shadow: 0 0 0 0 rgba(74,222,128,.65); animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  70% { box-shadow: 0 0 0 9px rgba(74,222,128,0); }
+  100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+}
+
+h1 {
+  margin: 22px 0 16px;
+  font-size: clamp(46px, 8.4vw, 104px);
+  line-height: 1.02; letter-spacing: -.035em; font-weight: 800;
+  background: linear-gradient(96deg, #fff 12%, var(--pumpkin) 52%, var(--violet) 92%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+h1 .thin { font-weight: 300; }
+
+.lede { max-width: 58ch; color: var(--dim); font-size: clamp(16px, 1.9vw, 20px); }
+
+/* ── stats ──────────────────────────────────────────────────────────── */
+.stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
+  gap: 14px; margin-top: 40px;
+}
+.stat {
+  padding: 22px 24px; border: 1px solid var(--edge); border-radius: var(--r);
+  background: linear-gradient(168deg, var(--panel-2), var(--panel));
+  display: flex; flex-direction: column; gap: 4px;
+}
+.stat.value { border-color: rgba(247,185,85,.42); }
+.stat-num {
+  font-size: clamp(30px, 4.4vw, 42px); font-weight: 800; letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+}
+.stat.value .stat-num { color: var(--amber); }
+.stat-lab { font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); }
+
+/* ── no-price banner ────────────────────────────────────────────────── */
+.price-banner {
+  margin-top: 22px; padding: 17px 22px; border-radius: var(--r);
+  border: 1px solid rgba(247,185,85,.36); background: rgba(247,185,85,.075);
+  display: flex; gap: 14px; flex-wrap: wrap; align-items: baseline; font-size: 15px;
+}
+.price-banner strong { color: var(--amber); }
+.price-banner span { color: var(--dim); }
+.linkbtn {
+  background: none; border: none; padding: 0; font: inherit; cursor: pointer;
+  color: var(--cyan); text-decoration: underline; text-underline-offset: 3px;
+}
+
+/* ── toolbar ────────────────────────────────────────────────────────── */
+.toolbar {
+  position: sticky; top: 0; z-index: 30; padding: 13px 0;
+  background: rgba(5,7,14,.82); backdrop-filter: blur(15px);
+  border-bottom: 1px solid transparent; transition: border-color .3s;
+}
+.toolbar.stuck { border-bottom-color: var(--edge); }
+.tb { display: flex; gap: 11px; align-items: center; flex-wrap: wrap; }
+.spacer { flex: 1 1 auto; }
+
+.search { position: relative; flex: 1 1 210px; max-width: 320px; }
+.search svg {
+  position: absolute; left: 13px; top: 50%; translate: 0 -50%;
+  width: 17px; height: 17px; fill: none; stroke: var(--dim); stroke-width: 2;
+  stroke-linecap: round;
+}
+.search input {
+  width: 100%; padding: 11px 14px 11px 39px;
+  background: var(--panel); border: 1px solid var(--edge); border-radius: 10px;
+  color: var(--text); font: inherit; font-size: 15px;
+}
+.search input:focus { outline: 2px solid var(--cyan); outline-offset: -1px; }
+
+.chips { display: flex; gap: 7px; flex-wrap: wrap; }
+.chip {
+  padding: 9px 15px; border-radius: 999px; cursor: pointer; font-size: 14px;
+  background: var(--panel); border: 1px solid var(--edge); color: var(--dim);
+  transition: color .2s, border-color .2s, background .2s;
+}
+.chip:hover { color: var(--text); border-color: #2A3B5C; }
+.chip.on { color: #04121C; background: var(--cyan); border-color: var(--cyan); font-weight: 700; }
+
+.sortwrap { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--dim); }
+.sortwrap select {
+  padding: 10px 12px; background: var(--panel); color: var(--text);
+  border: 1px solid var(--edge); border-radius: 10px; font: inherit; font-size: 14px;
+}
+
+.btn {
+  padding: 11px 19px; border-radius: 10px; cursor: pointer; font: inherit;
+  font-size: 14px; font-weight: 700; border: 1px solid var(--cyan);
+  background: var(--cyan); color: #04121C;
+  transition: transform .18s var(--ease), filter .18s;
+}
+.btn:hover { transform: translateY(-1px); filter: brightness(1.09); }
+.btn:active { transform: translateY(0); }
+.btn.ghost { background: transparent; color: var(--text); border-color: var(--edge); }
+.btn.ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+.btn.big { padding: 15px 30px; font-size: 16px; }
+
+/* ── board ──────────────────────────────────────────────────────────── */
+.board {
+  display: grid; gap: 20px; padding: 34px 0 12px;
+  grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+}
+
+.card {
+  position: relative; border-radius: var(--r); padding: 17px;
+  background: linear-gradient(168deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--edge);
+  transform-style: preserve-3d;
+  transition: transform .32s var(--ease), border-color .28s, box-shadow .32s;
+  will-change: transform;
+}
+.card.tilt { transition: transform .09s linear, border-color .28s, box-shadow .32s; }
+.card:hover { border-color: #2E4062; box-shadow: 0 18px 44px -18px rgba(0,0,0,.85); }
+
+/* holographic sheen — follows the pointer, only while hovered */
+.card::after {
+  content: ""; position: absolute; inset: 0; border-radius: var(--r);
+  opacity: 0; transition: opacity .3s; pointer-events: none;
+  background:
+    radial-gradient(circle at var(--mx,50%) var(--my,50%),
+      rgba(255,255,255,.17) 0%, rgba(167,139,250,.13) 22%,
+      rgba(56,189,248,.11) 40%, transparent 62%);
+  mix-blend-mode: screen;
+}
+.card:hover::after { opacity: 1; }
+
+.card.holo { border-color: rgba(167,139,250,.44); }
+.card.holo::before {
+  content: ""; position: absolute; inset: -1px; border-radius: var(--r);
+  padding: 1px; pointer-events: none;
+  background: linear-gradient(115deg, var(--cyan), var(--violet), var(--pumpkin), var(--cyan));
+  background-size: 320% 320%;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: shift 7s linear infinite; opacity: .75;
+}
+@keyframes shift { to { background-position: 320% 50%; } }
+
+.c-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.c-num {
+  font-size: 12px; letter-spacing: .13em; color: var(--dim);
+  font-variant-numeric: tabular-nums; font-weight: 700;
+}
+.c-name { margin: 11px 0 5px; font-size: 19px; font-weight: 700; line-height: 1.25; }
+.c-meta { font-size: 13px; color: var(--dim); display: flex; gap: 8px; flex-wrap: wrap; }
+.c-meta span { white-space: nowrap; }
+
+.c-price {
+  margin-top: 15px; padding-top: 14px; border-top: 1px solid var(--edge);
+  display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+}
+.c-price .amt { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--amber); }
+.c-price .amt.none { color: var(--dim); font-size: 15px; font-weight: 600; }
+.c-price .src { font-size: 11px; color: var(--dim); text-align: right; line-height: 1.35; }
+.c-price .src.stale { color: var(--amber); }
+
+.c-actions { display: flex; gap: 6px; margin-top: 14px; }
+.tog {
+  flex: 1; padding: 9px 6px; font: inherit; font-size: 12.5px; font-weight: 700;
+  cursor: pointer; border-radius: 9px; letter-spacing: .04em;
+  background: var(--bg); border: 1px solid var(--edge); color: var(--dim);
+  transition: all .2s;
+}
+.tog:hover { color: var(--text); border-color: #2A3B5C; }
+.tog.on[data-s="keep"] { background: rgba(74,222,128,.15); border-color: var(--green); color: var(--green); }
+.tog.on[data-s="sell"] { background: rgba(240,85,63,.15); border-color: var(--red); color: var(--red); }
+
+.badge {
+  font-size: 10px; letter-spacing: .13em; text-transform: uppercase; font-weight: 800;
+  padding: 4px 9px; border-radius: 999px; white-space: nowrap;
+}
+.badge.keep { background: rgba(74,222,128,.16); color: var(--green); }
+.badge.sell { background: rgba(240,85,63,.16); color: var(--red); }
+.badge.undecided { background: rgba(132,148,176,.15); color: var(--dim); }
+
+.count { padding: 18px 0 40px; color: var(--dim); font-size: 14px; }
+
+/* ── empty state ────────────────────────────────────────────────────── */
+.empty { padding: 60px 0; }
+.empty-card {
+  border: 1px dashed var(--edge); border-radius: var(--r); padding: 54px 40px;
+  text-align: center; background: rgba(12,18,32,.5);
+}
+.empty-card h2 { font-size: 26px; margin-bottom: 12px; }
+.empty-card p { color: var(--dim); max-width: 54ch; margin: 0 auto 26px; }
+code {
+  background: var(--bg); padding: 2px 7px; border-radius: 5px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; color: var(--cyan);
+}
+
+/* ── valuation ──────────────────────────────────────────────────────── */
+.valuation { padding: 40px 0 70px; }
+.valuation h2 { font-size: clamp(26px, 3.4vw, 36px); letter-spacing: -.02em; }
+.valuation .sub { color: var(--dim); margin: 8px 0 26px; }
+.vgrid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(214px, 1fr)); }
+.vcell {
+  padding: 22px 24px; border: 1px solid var(--edge); border-radius: var(--r);
+  background: linear-gradient(168deg, var(--panel-2), var(--panel));
+}
+.vcell .k { font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--dim); }
+.vcell .v { font-size: 30px; font-weight: 800; margin-top: 6px; font-variant-numeric: tabular-nums; }
+.stale {
+  margin-top: 18px; padding: 14px 18px; border-radius: 10px; font-size: 14px;
+  border: 1px solid rgba(247,185,85,.36); background: rgba(247,185,85,.075); color: var(--amber);
+}
+
+/* ── footer ─────────────────────────────────────────────────────────── */
+.foot { border-top: 1px solid var(--edge); padding: 34px 0 56px; margin-top: 30px; }
+.foot p { font-size: 14px; }
+.foot .dim { color: var(--dim); font-size: 12.5px; margin-top: 9px; max-width: 76ch; }
+
+/* ── dialogs ────────────────────────────────────────────────────────── */
+.dlg {
+  border: 1px solid var(--edge); border-radius: var(--r); background: var(--panel);
+  color: var(--text); padding: 0; width: min(620px, 92vw);
+}
+.dlg::backdrop { background: rgba(2,4,10,.76); backdrop-filter: blur(4px); }
+.dlg form { padding: 30px; }
+.dlg h3 { font-size: 22px; margin-bottom: 9px; }
+.dlg-sub { color: var(--dim); font-size: 14.5px; margin-bottom: 18px; }
+.dlg textarea {
+  width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--edge);
+  border-radius: 10px; padding: 14px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13.5px; resize: vertical;
+}
+.dlg menu { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+.chk { display: flex; gap: 9px; align-items: center; margin-top: 14px; font-size: 14px; color: var(--dim); }
+.help { margin: 0 0 18px 20px; color: var(--dim); font-size: 14.5px; }
+.help li { margin-bottom: 10px; }
+.help strong { color: var(--text); }
+
+/* ── motion ─────────────────────────────────────────────────────────── */
+.reveal { opacity: 0; transform: translateY(20px); }
+.reveal.in { opacity: 1; transform: none; transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.card { opacity: 0; transform: translateY(16px); }
+.card.in { opacity: 1; transform: none; transition: opacity .5s var(--ease), transform .5s var(--ease); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+  .reveal, .card { opacity: 1; transform: none; }
+}
+
+@media (max-width: 640px) {
+  .board { grid-template-columns: repeat(auto-fill, minmax(158px, 1fr)); gap: 13px; }
+  .card { padding: 14px; }
+  .c-name { font-size: 16px; }
+  .tb { gap: 8px; }
+  .search { max-width: none; }
+}
+
+.vcell .vsub {
+  display: block; margin-top: 4px; font-size: 13px; font-weight: 500;
+  color: var(--dim); letter-spacing: 0;
+}
+
+</style>
+
+<div class="grid-bg" aria-hidden="true"></div>
+<div class="glow glow-a" aria-hidden="true"></div>
+<div class="glow glow-b" aria-hidden="true"></div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow reveal"><span class="dot"></span> <span id="set-code">TRT-2024</span> · COMPLETE SET</p>
+    <h1 class="reveal">Trick or Trade<span class="thin"> 2024</span></h1>
+    <p class="lede reveal">The full Halloween BOOster Bundle set, catalogued card by card. Sort it, filter it, decide what stays and what goes.</p>
+
+    <div class="stats reveal" id="stats">
+      <div class="stat"><span class="stat-num" data-count="0" id="s-total">0</span><span class="stat-lab">Cards</span></div>
+      <div class="stat"><span class="stat-num" data-count="0" id="s-keep">0</span><span class="stat-lab">Keeping</span></div>
+      <div class="stat"><span class="stat-num" data-count="0" id="s-sell">0</span><span class="stat-lab">Selling</span></div>
+      <div class="stat value"><span class="stat-num" id="s-value">—</span><span class="stat-lab" id="s-value-lab">Sell value</span></div>
+    </div>
+
+    <div class="price-banner reveal" id="price-banner" hidden>
+      <strong>No prices loaded.</strong>
+      <span>Nothing on this page is an estimate — every value is blank until you enter a real one. <button class="linkbtn" id="open-help">How to price these</button></span>
+    </div>
+  </div>
+</header>
+
+<nav class="toolbar" id="toolbar">
+  <div class="wrap tb">
+    <div class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input type="search" id="q" placeholder="Search name or number…" autocomplete="off" aria-label="Search cards">
+    </div>
+    <div class="chips" role="group" aria-label="Filter by status">
+      <button class="chip on" data-filter="all">All</button>
+      <button class="chip" data-filter="keep">Keep</button>
+      <button class="chip" data-filter="sell">Sell</button>
+      <button class="chip" data-filter="undecided">Undecided</button>
+      <button class="chip" data-filter="unpriced">Unpriced</button>
+    </div>
+    <div class="spacer"></div>
+    <label class="sortwrap">
+      <span>Sort</span>
+      <select id="sort" aria-label="Sort cards">
+        <option value="number">Number</option>
+        <option value="name">Name</option>
+        <option value="value-desc">Value — high to low</option>
+        <option value="value-asc">Value — low to high</option>
+        <option value="rarity">Rarity</option>
+      </select>
+    </label>
+    <button class="btn ghost" id="btn-import">Add cards</button>
+    <button class="btn" id="btn-export">Export</button>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section id="empty" class="empty" hidden>
+    <div class="empty-card">
+      <h2>No cards yet</h2>
+      <p>Paste your checklist and this fills itself in. One card per line — the parser handles <code>001 Pikachu</code>, <code>001, Pikachu, Common</code>, or just names.</p>
+      <button class="btn big" id="btn-import-2">Add your cards</button>
+    </div>
+  </section>
+
+  <section id="board" class="board" aria-live="polite"></section>
+
+  <p class="count" id="count"></p>
+</main>
+
+<section class="valuation wrap" id="valuation" hidden>
+  <h2>Valuation board</h2>
+  <p class="sub">Computed from the prices you entered. Nothing here is modelled or inferred.</p>
+  <div class="vgrid" id="vgrid"></div>
+  <p class="stale" id="stale" hidden></p>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <p><strong>Trick or Trade 2024</strong> — personal collection board.</p>
+    <p class="dim">Card names and images are property of The Pokémon Company. This is a personal, non-commercial catalogue. Prices are the owner's own research, not a market quote or an appraisal.</p>
+    <p class="dim" id="built"></p>
+  </div>
+</footer>
+
+<!-- import dialog -->
+<dialog id="dlg-import" class="dlg">
+  <form method="dialog">
+    <h3>Add cards</h3>
+    <p class="dlg-sub">Paste one card per line. Recognised: <code>012 Gengar Rare</code> · <code>012, Gengar, Rare</code> · <code>Gengar</code></p>
+    <textarea id="paste" rows="12" placeholder="001 Pikachu Common&#10;002 Gengar Rare&#10;…"></textarea>
+    <label class="chk"><input type="checkbox" id="replace"> Replace existing list (otherwise append)</label>
+    <menu>
+      <button value="cancel" class="btn ghost">Cancel</button>
+      <button value="ok" class="btn" id="do-import">Add cards</button>
+    </menu>
+  </form>
+</dialog>
+
+<!-- pricing help -->
+<dialog id="dlg-help" class="dlg">
+  <form method="dialog">
+    <h3>Pricing these properly</h3>
+    <p class="dlg-sub">I could not look up a single price — this machine's network blocks every card-price source, and a guessed price on a card you're about to sell is worse than no price.</p>
+    <ol class="help">
+      <li><strong>eBay sold listings</strong> — filter to <em>Sold items</em>, not active. Active asking prices are fiction; sold is what someone actually paid.</li>
+      <li><strong>Cardmarket</strong> (best for UK/EU) — use <em>Trend price</em>, not the lowest listing. The lowest is usually damaged or overseas.</li>
+      <li><strong>TCGplayer Market Price</strong> — US-centric, so convert and expect a gap.</li>
+      <li><strong>Price by exact variant.</strong> Trick or Trade cards carry a Halloween stamp; a stamped card and its base-set twin are different products and can differ a lot.</li>
+      <li><strong>Condition drives the number.</strong> NM to LP is often a 20–40% drop on modern cards.</li>
+    </ol>
+    <p class="dlg-sub">Enter what you find in each card's price field. The board records the source and date, and marks anything older than 30 days as stale.</p>
+    <menu><button value="ok" class="btn">Got it</button></menu>
+  </form>
+</dialog>
+
+<script>
+window.__CARDS__ = {"$comment":["Your collection lives here. The site reads this file on load.","","You do NOT have to hand-edit this. Open the site, click ADD CARDS, and","paste your list — it builds the rows for you and exports this file back.","","PRICES ARE DELIBERATELY null. No price in this file was guessed or","AI-generated. Fill priceGBP from a real source (TCGplayer, Cardmarket,","eBay sold listings), record WHERE in priceSource and WHEN in priceChecked.","The site refuses to show a portfolio total until prices are real, and","flags anything checked more than 30 days ago as stale."],"set":{"name":"Trick or Trade BOOster Bundle 2024","code":"TRT-2024","year":2024,"cardCount":null,"currency":"GBP","$note":"Confirm cardCount against the official checklist before claiming a complete set on the page."},"cards":[]};
+</script>
+<script>
+/* Trick or Trade 2024 — collection board
+ *
+ * Loads data/cards.json, merges any local edits from localStorage, and renders.
+ * Keep/sell decisions and prices you type live in localStorage until you Export,
+ * so the page works from a file:// open or GitHub Pages with no backend.
+ *
+ * PRICING RULE: this file never invents, infers, or estimates a price. A card
+ * with priceGBP === null renders as "No price" and is excluded from every total.
+ */
+(() => {
+  "use strict";
+
+  const LS = "trt2024.collection.v1";
+  const STALE_DAYS = 30;
+  const RARITY_ORDER = ["Common", "Uncommon", "Rare", "Double Rare", "Ultra Rare", "Illustration Rare", "Special Illustration Rare", "Hyper Rare"];
+
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  let SET = {};
+  let CARDS = [];
+  let filter = "all";
+  let query = "";
+  let sortBy = "number";
+
+  const gbp = (n) =>
+    new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", minimumFractionDigits: 2 }).format(n);
+
+  const daysSince = (iso) => {
+    if (!iso) return null;
+    const t = Date.parse(iso);
+    if (Number.isNaN(t)) return null;
+    return Math.floor((Date.now() - t) / 86400000);
+  };
+
+  /* ── data ───────────────────────────────────────────────────────────── */
+
+  async function load() {
+    let file = { set: {}, cards: [] };
+    try {
+      file = window.__CARDS__ || file;
+    } catch {
+      /* file:// with no fetch permission — fall through to localStorage */
+    }
+
+    SET = file.set || {};
+    const seeded = (file.cards || []).filter((c) => !/^EXAMPLE/i.test(c.name || ""));
+
+    let local = null;
+    try {
+      local = JSON.parse(localStorage.getItem(LS) || "null");
+    } catch { /* corrupt storage — ignore rather than crash the page */ }
+
+    CARDS = local && Array.isArray(local.cards) && local.cards.length ? local.cards : seeded;
+    CARDS = CARDS.map(normalise);
+    if (SET.code) $("#set-code").textContent = SET.code;
+  }
+
+  function normalise(c, i) {
+    return {
+      number: String(c.number ?? i + 1).padStart(3, "0"),
+      name: c.name || "Unknown",
+      rarity: c.rarity || "",
+      variant: c.variant || "",
+      condition: c.condition || "NM",
+      qty: Number(c.qty) || 1,
+      status: ["keep", "sell", "undecided"].includes(c.status) ? c.status : "undecided",
+      priceGBP: c.priceGBP === null || c.priceGBP === undefined || c.priceGBP === "" ? null : Number(c.priceGBP),
+      priceSource: c.priceSource || "",
+      priceChecked: c.priceChecked || "",
+      image: c.image || "",
+      notes: c.notes || "",
+    };
+  }
+
+  const save = () => localStorage.setItem(LS, JSON.stringify({ set: SET, cards: CARDS }));
+
+  /* ── render ─────────────────────────────────────────────────────────── */
+
+  function visible() {
+    const q = query.trim().toLowerCase();
+    return CARDS.filter((c) => {
+      if (filter === "unpriced" && c.priceGBP !== null) return false;
+      if (["keep", "sell", "undecided"].includes(filter) && c.status !== filter) return false;
+      if (q && !(`${c.number} ${c.name} ${c.rarity}`.toLowerCase().includes(q))) return false;
+      return true;
+    }).sort(cmp);
+  }
+
+  function cmp(a, b) {
+    switch (sortBy) {
+      case "name": return a.name.localeCompare(b.name);
+      case "rarity": return RARITY_ORDER.indexOf(a.rarity) - RARITY_ORDER.indexOf(b.rarity) || a.number.localeCompare(b.number);
+      case "value-desc": return (b.priceGBP ?? -1) - (a.priceGBP ?? -1);
+      case "value-asc": {
+        // unpriced sorts last in both directions — it is absence, not zero
+        if (a.priceGBP === null) return 1;
+        if (b.priceGBP === null) return -1;
+        return a.priceGBP - b.priceGBP;
+      }
+      default: return a.number.localeCompare(b.number, undefined, { numeric: true });
+    }
+  }
+
+  function cardEl(c) {
+    const el = document.createElement("article");
+    const holo = /rare|illustration|hyper/i.test(c.rarity);
+    el.className = "card" + (holo ? " holo" : "");
+    el.dataset.n = c.number;
+
+    const stale = daysSince(c.priceChecked);
+    const isStale = stale !== null && stale > STALE_DAYS;
+
+    const priceHtml =
+      c.priceGBP === null
+        ? `<span class="amt none">No price</span>
+           <span class="src">not yet<br>researched</span>`
+        : `<span class="amt">${gbp(c.priceGBP * c.qty)}</span>
+           <span class="src${isStale ? " stale" : ""}">${c.priceSource ? esc(c.priceSource) : "source?"}${
+             stale !== null ? `<br>${stale}d ago${isStale ? " · stale" : ""}` : ""
+           }</span>`;
+
+    el.innerHTML = `
+      <div class="c-top">
+        <span class="c-num">#${esc(c.number)}</span>
+        <span class="badge ${c.status}">${c.status}</span>
+      </div>
+      <h3 class="c-name">${esc(c.name)}</h3>
+      <p class="c-meta">
+        ${c.rarity ? `<span>${esc(c.rarity)}</span>` : ""}
+        <span>${esc(c.condition)}</span>
+        ${c.qty > 1 ? `<span>×${c.qty}</span>` : ""}
+        ${c.variant ? `<span>${esc(c.variant)}</span>` : ""}
+      </p>
+      <div class="c-price">${priceHtml}</div>
+      <div class="c-actions">
+        <button class="tog ${c.status === "keep" ? "on" : ""}" data-s="keep">KEEP</button>
+        <button class="tog ${c.status === "sell" ? "on" : ""}" data-s="sell">SELL</button>
+        <button class="tog" data-s="price">£</button>
+      </div>`;
+
+    el.addEventListener("click", (e) => {
+      const b = e.target.closest(".tog");
+      if (!b) return;
+      if (b.dataset.s === "price") return editPrice(c);
+      c.status = c.status === b.dataset.s ? "undecided" : b.dataset.s;
+      save();
+      render();
+    });
+
+    // pointer-tracked sheen + subtle 3D tilt
+    el.addEventListener("pointermove", (e) => {
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+      el.style.setProperty("--mx", `${px * 100}%`);
+      el.style.setProperty("--my", `${py * 100}%`);
+      el.classList.add("tilt");
+      el.style.transform = `perspective(880px) rotateY(${(px - .5) * 9}deg) rotateX(${(.5 - py) * 9}deg) translateY(-4px)`;
+    });
+    el.addEventListener("pointerleave", () => {
+      el.classList.remove("tilt");
+      el.style.transform = "";
+    });
+
+    return el;
+  }
+
+  function editPrice(c) {
+    const raw = prompt(
+      `Price for #${c.number} ${c.name} (GBP, per card).\n\n` +
+      `Use a real source — eBay SOLD listings or Cardmarket trend.\n` +
+      `Leave blank to clear.`,
+      c.priceGBP ?? "",
+    );
+    if (raw === null) return;
+    if (raw.trim() === "") {
+      c.priceGBP = null; c.priceSource = ""; c.priceChecked = "";
+    } else {
+      const n = Number(raw.replace(/[£,\s]/g, ""));
+      if (!Number.isFinite(n) || n < 0) return alert("That is not a number.");
+      c.priceGBP = n;
+      c.priceSource = (prompt("Where did that come from? (e.g. eBay sold, Cardmarket trend)", c.priceSource || "") || "").slice(0, 40);
+      c.priceChecked = new Date().toISOString().slice(0, 10);
+    }
+    save();
+    render();
+  }
+
+  function render() {
+    const list = visible();
+    const board = $("#board");
+    board.innerHTML = "";
+    list.forEach((c) => board.appendChild(cardEl(c)));
+
+    $("#empty").hidden = CARDS.length > 0;
+    $("#count").textContent = CARDS.length
+      ? `Showing ${list.length} of ${CARDS.length} cards`
+      : "";
+
+    stats();
+    valuation();
+    observeCards();
+  }
+
+  function stats() {
+    const keep = CARDS.filter((c) => c.status === "keep");
+    const sell = CARDS.filter((c) => c.status === "sell");
+    const priced = sell.filter((c) => c.priceGBP !== null);
+
+    countTo($("#s-total"), CARDS.reduce((s, c) => s + c.qty, 0));
+    countTo($("#s-keep"), keep.reduce((s, c) => s + c.qty, 0));
+    countTo($("#s-sell"), sell.reduce((s, c) => s + c.qty, 0));
+
+    const anyPriced = CARDS.some((c) => c.priceGBP !== null);
+    $("#price-banner").hidden = anyPriced || CARDS.length === 0;
+
+    const el = $("#s-value");
+    if (!sell.length || !priced.length) {
+      el.textContent = "—";
+      $("#s-value-lab").textContent = sell.length ? "Sell pile unpriced" : "Sell value";
+    } else {
+      const total = priced.reduce((s, c) => s + c.priceGBP * c.qty, 0);
+      el.textContent = gbp(total);
+      const missing = sell.length - priced.length;
+      $("#s-value-lab").textContent = missing ? `Sell value · ${missing} unpriced` : "Sell value";
+    }
+  }
+
+  function valuation() {
+    const priced = CARDS.filter((c) => c.priceGBP !== null);
+    const sec = $("#valuation");
+    if (!priced.length) { sec.hidden = true; return; }
+    sec.hidden = false;
+
+    const tot = (arr) => arr.reduce((s, c) => s + c.priceGBP * c.qty, 0);
+    const all = tot(priced);
+    const keep = tot(priced.filter((c) => c.status === "keep"));
+    const sell = tot(priced.filter((c) => c.status === "sell"));
+    const top = [...priced].sort((a, b) => b.priceGBP - a.priceGBP)[0];
+    const unpriced = CARDS.length - priced.length;
+
+    $("#vgrid").innerHTML = [
+      ["Priced cards", `${priced.length} / ${CARDS.length}`],
+      ["Collection total", gbp(all)],
+      ["Keep pile", gbp(keep)],
+      ["Sell pile", gbp(sell)],
+      ["Most valuable", top ? `${gbp(top.priceGBP)}<span class="vsub">${esc(top.name)}</span>` : "—"],
+      ["Median card", gbp(median(priced.map((c) => c.priceGBP)))],
+    ].map(([k, v]) => `<div class="vcell"><div class="k">${k}</div><div class="v">${v}</div></div>`).join("");
+
+    const staleCards = priced.filter((c) => (daysSince(c.priceChecked) ?? 0) > STALE_DAYS);
+    const notes = [];
+    if (unpriced) notes.push(`${unpriced} card${unpriced > 1 ? "s have" : " has"} no price, so these totals are a floor, not the full value.`);
+    if (staleCards.length) notes.push(`${staleCards.length} price${staleCards.length > 1 ? "s are" : " is"} over ${STALE_DAYS} days old — re-check before you list.`);
+    $("#stale").hidden = !notes.length;
+    $("#stale").textContent = notes.join(" ");
+  }
+
+  const median = (a) => {
+    if (!a.length) return 0;
+    const s = [...a].sort((x, y) => x - y);
+    const m = s.length >> 1;
+    return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+  };
+
+  /* ── import / export ────────────────────────────────────────────────── */
+
+  function parsePaste(text) {
+    const out = [];
+    text.split(/\r?\n/).forEach((line) => {
+      const t = line.trim();
+      if (!t) return;
+      let number = "", name = t, rarity = "";
+
+      if (t.includes(",")) {
+        const p = t.split(",").map((x) => x.trim());
+        if (/^\d+$/.test(p[0])) { number = p[0]; name = p[1] || ""; rarity = p[2] || ""; }
+        else { name = p[0]; rarity = p[1] || ""; }
+      } else {
+        const m = t.match(/^(\d{1,3})[\s.\-/]+(.+)$/);
+        if (m) { number = m[1]; name = m[2]; }
+        const r = name.match(/\s+(Common|Uncommon|Double Rare|Ultra Rare|Illustration Rare|Special Illustration Rare|Hyper Rare|Rare)$/i);
+        if (r) { rarity = r[1]; name = name.slice(0, r.index).trim(); }
+      }
+      if (!name) return;
+      out.push({ number: number || String(out.length + 1), name, rarity });
+    });
+    return out;
+  }
+
+  function doImport() {
+    const rows = parsePaste($("#paste").value);
+    if (!rows.length) return;
+    const replace = $("#replace").checked;
+    const base = replace ? [] : CARDS;
+    CARDS = [...base, ...rows.map(normalise)].map((c, i) => normalise(c, i));
+    save();
+    $("#paste").value = "";
+    render();
+  }
+
+  function doExport() {
+    const blob = new Blob(
+      [JSON.stringify({ set: SET, cards: CARDS }, null, 2)],
+      { type: "application/json" },
+    );
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "cards.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  /* ── motion ─────────────────────────────────────────────────────────── */
+
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function countTo(el, target) {
+    const from = Number(el.dataset.count || 0);
+    el.dataset.count = target;
+    if (reduce || from === target) { el.textContent = target; return; }
+    const t0 = performance.now(), dur = 620;
+    const step = (t) => {
+      const k = Math.min(1, (t - t0) / dur);
+      el.textContent = Math.round(from + (target - from) * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  let io;
+  function observeCards() {
+    io?.disconnect();
+    io = new IntersectionObserver(
+      (es) => es.forEach((e, i) => {
+        if (!e.isIntersecting) return;
+        setTimeout(() => e.target.classList.add("in"), Math.min(i * 26, 320));
+        io.unobserve(e.target);
+      }),
+      { rootMargin: "0px 0px -8% 0px" },
+    );
+    $$(".card").forEach((c) => io.observe(c));
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m]));
+  }
+
+  /* ── wire up ────────────────────────────────────────────────────────── */
+
+  async function init() {
+    await load();
+
+    $("#q").addEventListener("input", (e) => { query = e.target.value; render(); });
+    $("#sort").addEventListener("change", (e) => { sortBy = e.target.value; render(); });
+    $$(".chip").forEach((b) =>
+      b.addEventListener("click", () => {
+        $$(".chip").forEach((x) => x.classList.remove("on"));
+        b.classList.add("on");
+        filter = b.dataset.filter;
+        render();
+      }));
+
+    const dlg = $("#dlg-import");
+    $("#btn-import").addEventListener("click", () => dlg.showModal());
+    $("#btn-import-2").addEventListener("click", () => dlg.showModal());
+    dlg.addEventListener("close", () => { if (dlg.returnValue === "ok") doImport(); });
+    $("#btn-export").addEventListener("click", doExport);
+    $("#open-help").addEventListener("click", () => $("#dlg-help").showModal());
+
+    const tb = $("#toolbar");
+    addEventListener("scroll", () => tb.classList.toggle("stuck", scrollY > 10), { passive: true });
+
+    $$(".reveal").forEach((el, i) => setTimeout(() => el.classList.add("in"), 90 * i));
+    $("#built").textContent = `Board generated ${new Date().toISOString().slice(0, 10)} · prices are owner-entered, never estimated`;
+
+    render();
+  }
+
+  init();
+})();
+
+</script>
