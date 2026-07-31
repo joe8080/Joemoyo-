@@ -135,13 +135,61 @@ def main():
              *ENC_FLAGS, "-r", str(FPS),
              "-f", "mpegts", "-bsf:v", "h264_mp4toannexb", str(out_ts)])
 
-    # --- Concat (demuxer = path-safe for spaces + Windows drive letters) + mux audio ---
-    print("Concatenating + muxing audio...")
+    # --- Concat (demuxer = path-safe for spaces + Windows drive letters) ---
+    print("Concatenating...")
     list_file = work / "concat_list.txt"
     list_file.write_text(
         "".join(f"file '{c.resolve().as_posix()}'\n" for c in chunks),
         encoding="utf-8")
+    silent = work / "silent.mp4"
     run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(list_file),
+         "-c", "copy", str(silent)])
+
+    # --- Optional: overlay OGX 'DECLASSIFIED' evidence cards as pop-up beats ---
+    # Drop card PNGs in 02_images_inbox/<slug>/evidence-cards/ (any name); optional
+    # evidence-cards/cards.json = [{"file":"01.png","at":0.08,"dur":6}, ...] with
+    # `at` as a fraction (0-1) of total duration, or absolute seconds if >1.
+    cards_dir = img_dir / "evidence-cards"
+    cards = sorted(cards_dir.glob("*.png")) if cards_dir.is_dir() else []
+    base_for_mux = silent
+    if cards:
+        import json as _json
+        cfg_path = cards_dir / "cards.json"
+        cfg = _json.loads(cfg_path.read_text()) if cfg_path.exists() else []
+        cfgmap = {c.get("file"): c for c in cfg} if cfg else {}
+        CARD_DUR = 6.0
+        specs = []
+        for i, cp in enumerate(cards):
+            c = cfgmap.get(cp.name, {})
+            at = c.get("at", (i + 1) / (len(cards) + 1))
+            t = at * dur_total if at <= 1 else at
+            specs.append((cp, t, c.get("dur", CARD_DUR)))
+        inputs = ["-i", str(silent)]
+        for cp, _, d in specs:
+            inputs += ["-loop", "1", "-t", str(d), "-i", str(cp)]
+        fc = []
+        for i, (cp, t, d) in enumerate(specs):
+            df = int(d * FPS)
+            fc.append(
+                f"[{i+1}:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
+                f"zoompan=z='min(zoom+0.0008,1.05)':d={df}:s={W}x{H}:fps={FPS},"
+                f"format=rgba,fade=t=in:st=0:d=0.35:alpha=1,fade=t=out:st={d-0.35:.2f}:d=0.35:alpha=1,"
+                f"setpts=PTS-STARTPTS+{t}/TB[ov{i}]")
+        prev = "0:v"
+        for i, (cp, t, d) in enumerate(specs):
+            out = f"b{i}" if i < len(specs) - 1 else "vout"
+            fc.append(f"[{prev}][ov{i}]overlay=enable='between(t,{t:.2f},{t+d:.2f})':x=0:y=0[{out}]")
+            prev = out
+        carded = work / "carded.mp4"
+        run(["ffmpeg", "-y", *inputs, "-filter_complex", ";".join(fc),
+             "-map", "[vout]", "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
+             "-pix_fmt", "yuv420p", "-r", str(FPS), str(carded)])
+        base_for_mux = carded
+        print(f"Overlaid {len(specs)} evidence cards.")
+
+    # --- Mux audio ---
+    print("Muxing audio...")
+    run(["ffmpeg", "-y", "-i", str(base_for_mux),
          "-i", str(audio), "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
          "-shortest", "-movflags", "+faststart", str(final)])
 

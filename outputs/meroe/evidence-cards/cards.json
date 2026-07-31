@@ -1,0 +1,7 @@
+[
+  {"file": "01_the_meroe_head.png",   "at": 0.06, "dur": 6},
+  {"file": "02_the_kandakes.png",     "at": 0.28, "dur": 6},
+  {"file": "03_the_roman_record.png", "at": 0.50, "dur": 6},
+  {"file": "04_treaty_of_samos.png",  "at": 0.66, "dur": 6},
+  {"file": "05_the_ezana_stone.png",  "at": 0.90, "dur": 6}
+]
