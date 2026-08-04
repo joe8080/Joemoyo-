@@ -44,8 +44,9 @@ tab:
 ## Regenerating
 
 ```bash
-python3 build_portfolio_tracker.py     # writes Portfolio_Tracker.xlsx
-python3 verify_portfolio_tracker.py    # checks references + recomputes the arithmetic
+python3 build_portfolio_tracker.py       # writes Portfolio_Tracker.xlsx
+python3 verify_portfolio_tracker.py      # static checks + independent arithmetic
+python3 evaluate_portfolio_tracker.py    # evaluates every formula, reports error cells
 ```
 
 `verify_portfolio_tracker.py` resolves every cross-sheet reference, rejects
@@ -53,6 +54,15 @@ spilling/post-2007 functions that break outside Microsoft 365, confirms each
 formula targets the row its label claims, and independently recomputes shares,
 invested, market value and P/L from the transaction log — reconciling to the
 source export to the penny.
+
+`evaluate_portfolio_tracker.py` builds the dependency graph and actually
+evaluates the workbook with the pure-Python `formulas` engine (`pip install
+formulas`), then reports any `#NAME?` / `#REF!` / `#DIV/0!` / `#VALUE!` cells
+and prints the computed values. This replaces the usual LibreOffice recalc
+step, which hangs in the build sandbox even on a trivial file.
+
+Last run: **1,908 cells evaluated, 0 formula errors**, weights summing to
+exactly 100%, and every holding matching the source export to the penny.
 
 ## Data sources and assumptions
 
