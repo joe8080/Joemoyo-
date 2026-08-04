@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Evaluate every formula with a pure-Python engine and report error values.
+"""Evaluate every formula with a pure-Python engine and report error cells.
 
-Stands in for recalc.py, which cannot run here — LibreOffice hangs in this
-sandbox even on a trivial file.
+Stands in for recalc.py: LibreOffice hangs in this sandbox even on a trivial file.
+Rows are located by their label so the checks cannot drift as the layout changes.
 """
 import re
 import sys
@@ -12,10 +12,35 @@ warnings.filterwarnings("ignore")
 import formulas  # noqa: E402
 
 PATH = "/tmp/claude-0/-home-user/de029611-12c7-500a-9a8b-f4dd5e8389f7/scratchpad/build/Portfolio_Tracker.xlsx"
+ERRS = ("#NAME?", "#REF!", "#DIV/0!", "#VALUE!", "#NULL!", "#NUM!", "#N/A", "#ERROR!")
+TICKERS = ("AMZN", "MSFT", "UBER")
 
-ERRS = ("#NAME?", "#REF!", "#DIV/0!", "#VALUE!", "#NULL!", "#NUM!", "#N/A")
+import openpyxl  # noqa: E402
+book = openpyxl.load_workbook(PATH)
 
-print("loading and building the dependency graph ...")
+# ---------------------------------------------------- banned-function screen
+BANNED = re.compile(r"\b(XLOOKUP|XMATCH|SORT|FILTER|UNIQUE|SEQUENCE|TEXTJOIN|IFS"
+                    r"|SWITCH|MAXIFS|MINIFS|STOCKHISTORY|LET|LAMBDA)\s*\(")
+banned = []
+for ws in book.worksheets:
+    for row in ws.iter_rows():
+        for c in row:
+            if isinstance(c.value, str) and c.value.startswith("="):
+                for m in BANNED.finditer(c.value.upper()):
+                    banned.append(f"{ws.title}!{c.coordinate} uses {m.group(1)}()")
+print(f"[1] banned/spilling functions: {len(banned)}")
+for b in banned:
+    print("   ", b)
+
+# label -> row, per sheet
+def rowof(sheet, label):
+    ws = book[sheet]
+    for row in ws.iter_rows(min_col=1, max_col=1):
+        if row[0].value == label:
+            return row[0].row
+    raise KeyError(f"{sheet}: no row labelled {label!r}")
+
+print("\nloading and building the dependency graph ...")
 xl = formulas.ExcelModel().loads(PATH).finish()
 print("calculating ...")
 sol = xl.calculate()
@@ -35,67 +60,136 @@ def unwrap(v):
     return v
 
 
-bad = {}
-cells = 0
-values = {}
+vals, bad, n = {}, {}, 0
 for key, val in sol.items():
     m = re.match(r"^'\[.*?\]([^']+)'!([A-Z]{1,3}\d+)$", key)
     if not m:
         continue
-    sheet, coord = m.group(1), m.group(2)
     v = unwrap(val)
-    cells += 1
-    values[(sheet.upper(), coord)] = v
+    vals[(m.group(1).upper(), m.group(2))] = v
+    n += 1
     if isinstance(v, str) and v.strip() in ERRS:
-        bad.setdefault(v.strip(), []).append(f"{sheet}!{coord}")
+        bad.setdefault(v.strip(), []).append(f"{m.group(1)}!{m.group(2)}")
 
-print(f"cells evaluated: {cells}")
+print(f"[2] cells evaluated: {n}")
 if bad:
-    print("\nFORMULA ERRORS FOUND:")
-    for err, locs in bad.items():
-        print(f"  {err}  x{len(locs)}: {', '.join(locs[:15])}")
-    sys.exit(1)
-print("formula errors: 0\n")
+    print("    FORMULA ERRORS:")
+    for e, locs in bad.items():
+        print(f"      {e} x{len(locs)}: {', '.join(locs[:20])}")
+else:
+    print("    formula errors: 0")
 
 
-def get(sheet, coord):
-    return values.get((sheet.upper(), coord))
+def V(sheet, label):
+    return vals.get((sheet.upper(), f"B{rowof(sheet, label)}"))
 
 
-print("computed values pulled straight out of the evaluated workbook")
-print("-" * 74)
-rows = [("AMZN", 13618.02, 1413.63), ("MSFT", 7250.23, None), ("UBER", 5831.61, 223.35)]
-print(f"{'tab':6} {'shares':>11} {'invested':>11} {'avg cost':>10} {'mkt value':>11} "
-      f"{'P/L':>10} {'weight':>8}  signal")
-ok = True
-for tab, exp_mv, _ in rows:
-    shares = get(tab, "B8")
-    inv = get(tab, "B9")
-    avg = get(tab, "B10")
-    mv = get(tab, "B14")
-    pl = get(tab, "B15")
-    wt = get(tab, "B19")
-    sig = get(tab, "B55")
-    try:
-        print(f"{tab:6} {shares:11.4f} {inv:11.2f} {avg:10.4f} {mv:11.2f} "
-              f"{pl:10.2f} {wt:8.2%}  {sig}")
-    except Exception:
-        print(f"{tab:6} shares={shares} inv={inv} avg={avg} mv={mv} pl={pl} wt={wt} sig={sig}")
-    if not isinstance(mv, (int, float)) or abs(mv - exp_mv) > 0.01:
-        print(f"   !! {tab} market value {mv} != export {exp_mv}")
+ok = not bad and not banned
+
+# ------------------------------------------------------------- position block
+print("\n[3] position and valuation")
+print(f"    {'':6} {'shares':>10} {'invested':>10} {'avg':>8} {'price':>8} "
+      f"{'value':>10} {'P/L':>9} {'wt':>6} {'fwd P/E':>8} {'PEG':>6}")
+tot_mv = tot_inv = 0.0
+for t in TICKERS:
+    sh, inv = V(t, "Shares held"), V(t, "Total invested (GBP)")
+    avg, px = V(t, "Average cost per share (GBP)"), V(t, "Price per share (GBP)")
+    mv, pl = V(t, "Market value (GBP)"), V(t, "Unrealised P/L (GBP)")
+    wt, pe = V(t, "% of portfolio"), V(t, "Forward P/E on Year 1 EPS")
+    peg = V(t, "PEG (fwd P/E / EPS growth)")
+    tot_mv += mv; tot_inv += inv
+    print(f"    {t:6} {sh:10.4f} {inv:10.2f} {avg:8.2f} {px:8.2f} {mv:10.2f} "
+          f"{pl:9.2f} {wt:6.1%} {pe:8.1f} {peg:6.2f}")
+print(f"    {'TOTAL':6} {'':10} {tot_inv:10.2f} {'':8} {'':8} {tot_mv:10.2f} "
+      f"{tot_mv-tot_inv:9.2f}")
+
+# cost basis must still tie to the pie export exactly
+EXPECT_INV = {"AMZN": 12204.39, "MSFT": 5800.47, "UBER": 5608.26}
+for t, exp in EXPECT_INV.items():
+    got = V(t, "Total invested (GBP)")
+    if abs(got - exp) > 0.01:
+        print(f"    !! {t} invested {got:.2f} != export {exp}")
+        ok = False
+print("    cost basis ties to the pie export")
+
+wsum = sum(V(t, "% of portfolio") for t in TICKERS)
+if abs(wsum - 1.0) > 1e-6:
+    print(f"    !! weights sum to {wsum}")
+    ok = False
+print(f"    weights sum to {wsum:.6f}")
+
+# ------------------------------------------------------------ 3-year targets
+print("\n[4] your 3-year price targets")
+print(f"    {'':6} {'tgt P/E':>8} {'now $':>9} {'Y1 $':>9} {'Y2 $':>9} {'Y3 $':>9} "
+      f"{'up Y3':>8} {'req p.a.':>9}  status")
+for t in TICKERS:
+    pe = V(t, "Your target P/E")
+    now = V(t, "Live price (USD)")
+    a = V(t, "Target price FY2027 (USD)")
+    b = V(t, "Target price FY2028 (USD)")
+    c = V(t, "Target price FY2029 (USD)")
+    up, cg = V(t, "Upside to Year 3 target"), V(t, "Required annual return to Year 3")
+    st = V(t, "TARGET STATUS")
+    print(f"    {t:6} {pe:8.2f} {now:9.2f} {a:9.2f} {b:9.2f} {c:9.2f} "
+          f"{up:8.1%} {cg:9.1%}  {st}")
+    if not (a < b < c):
+        print(f"    !! {t} targets not increasing across the three years")
         ok = False
 
-print("-" * 74)
-print(f"{'Dashboard':22} invested {get('Dashboard','B5')}")
-print(f"{'':22} value    {get('Dashboard','B6')}")
-print(f"{'':22} P/L      {get('Dashboard','B7')}   ({get('Dashboard','B8')})")
-print(f"{'':22} total rt {get('Dashboard','B11')}")
-print(f"{'':22} holdings {get('Dashboard','B15')}  largest {get('Dashboard','B16')}")
+# Year 1 target should land on the analyst consensus, by construction
+print("\n[5] Year 1 target vs analyst consensus (should match by construction)")
+est = book["Estimates"]
+for i, t in enumerate(TICKERS):
+    cons = est[f"L{5+i}"].value
+    y1 = V(t, "Target price FY2027 (USD)")
+    flag = "ok" if abs(y1 - cons) < 0.01 else "MISMATCH"
+    if flag != "ok":
+        ok = False
+    print(f"    {t:6} target {y1:8.2f}   consensus {cons:8.2f}   {flag}")
 
-wsum = sum(get(t, "B19") for t, _, _ in rows if isinstance(get(t, "B19"), (int, float)))
-print(f"\nweights sum to {wsum:.6f} (must be 1.0)")
-if abs(wsum - 1.0) > 1e-6:
-    print("   !! weights do not sum to 100%")
-    ok = False
+# ------------------------------------------------------------------- signals
+print("\n[6] sell signals")
+for t in TICKERS:
+    print(f"    {t:6} price {V(t,'Price per share (GBP)'):8.2f}  "
+          f"stop {V(t,'Stop-loss price (GBP)'):7.2f}  "
+          f"trim1 {V(t,'Trim 1 price (GBP)'):7.2f}  "
+          f"trail {V(t,'Trailing stop price (GBP)'):7.2f}  -> {V(t,'SIGNAL')}")
 
+# ------------------------------------------------------------------ dashboard
+print("\n[7] dashboard and targets")
+for lbl in ["Total invested (GBP)", "Current market value (GBP)", "Unrealised P/L (GBP)",
+            "Unrealised P/L %", "Day change (GBP)", "Number of holdings",
+            "Largest position", "Projected value at FY2029 (GBP)", "% of £1m goal today"]:
+    v = vals.get(("DASHBOARD", f"B{rowof('Dashboard', lbl)}"))
+    print(f"    {lbl:42} {v}")
+
+print()
+for lbl in ["Value today (GBP)", "Projected value FY2027 (GBP)", "Projected value FY2028 (GBP)",
+            "Projected value FY2029 (GBP)", "Total gain to FY2029 (GBP)",
+            "Portfolio return needed p.a."]:
+    v = vals.get(("TARGETS", f"B{rowof('Targets', lbl)}"))
+    print(f"    {lbl:42} {v}")
+
+print()
+for lbl in ["Target portfolio value (GBP)", "% of goal reached today", "Gap to goal (GBP)",
+            "% of goal at FY2029", "Years to goal at that return, no new money",
+            "Monthly contribution to hit goal by FY2029"]:
+    v = vals.get(("TARGETS", f"B{rowof('Targets', lbl)}"))
+    print(f"    {lbl:42} {v}")
+
+# reconciliation
+print("\n[8] reconciliation vs the pie export")
+prc = book["Prices"]
+rr = None
+for row in prc.iter_rows(min_col=1, max_col=1):
+    if row[0].value == "Ticker" and row[0].row > 10:
+        rr = row[0].row + 1
+for i, t in enumerate(TICKERS):
+    exp = vals.get(("PRICES", f"B{rr+i}"))
+    live = vals.get(("PRICES", f"C{rr+i}"))
+    d = vals.get(("PRICES", f"D{rr+i}"))
+    p = vals.get(("PRICES", f"E{rr+i}"))
+    print(f"    {t:6} export {exp:10.2f}   workbook {live:10.2f}   diff {d:8.2f} ({p:6.2%})")
+
+print("\n" + ("ALL CHECKS PASSED" if ok else "CHECKS FAILED"))
 sys.exit(0 if ok else 1)
