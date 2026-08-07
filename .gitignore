@@ -8,7 +8,9 @@ __pycache__/
 *.pyo
 *.egg-info/
 dist/
-build/
+# Root-scoped: the only Python build artefact lives at the repo root. An
+# unanchored `build/` also swallowed assets/ogx/*/build, the video build sheets.
+/build/
 .venv/
 venv/
 env/

@@ -1,0 +1,7 @@
+node_modules/
+snapshots/
+renders/
+*.log
+
+# index.html is generated — edit build-composition.mjs and re-run instead.
+# It is committed anyway so the project previews without a build step.

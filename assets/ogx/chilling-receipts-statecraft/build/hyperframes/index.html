@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>OGX — Chilling Receipts of Declassified Global Statecraft</title>
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #000;
+        /* Inter is what the renderer substitutes for system sans anyway —
+           naming it directly keeps preview and render identical. */
+        font-family: Inter, sans-serif;
+      }
+      /* Opaque stage ground — guards against the white flash at crossfade seams
+         (seam-craft). Full-bleed child, never the composition root itself. */
+      #stage {
+        position: absolute;
+        inset: 0;
+        background: #0a0a0a;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+      }
+      /* Every scene frame starts hidden. A full-frame overlay that starts
+         visible covers all earlier frames in the render, even though preview
+         looks correct — each scene's entry tween is what reveals it. */
+      .frame {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        opacity: 0;
+        background: #0a0a0a;
+      }
+      /* The slow push rides this wrapper, so anything composited on the card
+         (e.g. the corrected statistic) scales and travels with it. */
+      .push {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        transform-origin: 50% 50%;
+      }
+      .plate {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        object-fit: cover;
+      }
+      /* Correction plate over the Stasi card's bottom-left statistic label.
+         The original read "CITIZENS WAS A FULL-TIME STASI OFFICER", which is
+         wrong: ~91,000 full-time officers against ~16.4M population is roughly
+         1 in 180. The 1-in-63 figure is Koehler's ratio for informants and
+         collaborators, which is what this label now says. */
+      .stat-fix {
+        position: absolute;
+        left: 11%;
+        top: 81%;
+        width: 40%;
+        height: 15%;
+        /* Feathered rather than a flat rectangle — a hard-edged fill reads as a
+           patch against the archival folder art at the card's left edge. The
+           opaque core still fully covers the original label. */
+        background: radial-gradient(
+          ellipse at center,
+          #060707 0%,
+          #060707 82%,
+          rgba(6, 7, 7, 0) 100%
+        );
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+      }
+      .stat-fix-line {
+        color: #f2ede4;
+        font-size: 23px;
+        font-weight: 700;
+        letter-spacing: 1.1px;
+        text-align: center;
+        line-height: 1.15;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="174"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="stage"></div>
+
+      <section
+        id="s01"
+        class="clip scene"
+        data-start="0"
+        data-duration="7.6"
+        data-track-index="1"
+        data-label="Title — Chilling Receipts"
+      >
+        <div id="s01-frame" class="frame">
+          <div id="s01-kb" class="push" data-layout-allow-overflow>
+            <img id="s01-media" class="plate" src="assets/cards/s01_generated.webp" alt="" />
+          </div>
+        </div>
+      </section>
+      <section
+        id="s02"
+        class="clip scene"
+        data-start="7"
+        data-duration="6.6"
+        data-track-index="2"
+        data-label="The Unbreakable Rule — 39 citations"
+      >
+        <div id="s02-frame" class="frame">
+          <div id="s02-kb" class="push" data-layout-allow-overflow>
+            <img id="s02-media" class="plate" src="assets/cards/s02_generated.webp" alt="" />
+          </div>
+        </div>
+      </section>
+      <section
+        id="s03"
+        class="clip scene"
+        data-start="13"
+        data-duration="13.6"
+        data-track-index="1"
+        data-label="The Stasi — Europe"
+      >
+        <div id="s03-frame" class="frame">
+          <div id="s03-kb" class="push" data-layout-allow-overflow>
+            <img id="s03-media" class="plate" src="assets/cards/s03_generated.webp" alt="" />
+            <div id="s03-fix" class="stat-fix">
+              <div class="stat-fix-line">CITIZENS WAS AN INFORMANT</div>
+              <div class="stat-fix-line">OR COLLABORATOR</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section
+        id="s04"
+        class="clip scene"
+        data-start="26"
+        data-duration="10.6"
+        data-track-index="2"
+        data-label="The 1991 Reckoning"
+      >
+        <div id="s04-frame" class="frame">
+          <div id="s04-kb" class="push" data-layout-allow-overflow>
+            <img id="s04-media" class="plate" src="assets/cards/s04_generated.webp" alt="" />
+          </div>
+        </div>
+      </section>
+      <section
+        id="s05"
+        class="clip scene"
+        data-start="36"
+        data-duration="14.6"
+        data-track-index="1"
+        data-label="Katyn — the 50-year lie"
+      >
+        <div id="s05-frame" class="frame">
+          <div id="s05-kb" class="push" data-layout-allow-overflow>
+            <img id="s05-media" class="plate" src="assets/cards/s05_generated.webp" alt="" />
+          </div>
+        </div>
+      </section>
+      <section
+        id="s06"
+        class="clip scene"
+        data-start="50"
+        data-duration="12.6"
+        data-track-index="2"
+        data-label="Nazi criminals, Western payroll"
+      >
+        <div id="s06-frame" class="frame">
+          <div id="s06-kb" class="push" data-layout-allow-overflow>
+            <img id="s06-media" class="plate" src="assets/cards/s06_generated.webp" alt="" />
+          </div>
+        </div>
+      </section>
+      <section
+        id="s07"
+        class="clip scene"
+        data-start="62"
+        data-duration="12.6"
+        data-track-index="1"
+        data-label="Operation Gladio"
+      >
+        <div id="s07-frame" class="frame">
+          <div id="s07-kb" class="push" data-layout-allow-overflow>
+            <img id="s07-media" class="plate" src="assets/cards/s07_generated.webp" alt="" />
+          </div>
+        </div>
+      </section>
+      <section
+        id="s08"
+        class="clip scene"
+        data-start="74"
+        data-duration="12.6"
+        data-track-index="2"
+        data-label="Gulf of Tonkin — Asia"
+      >
+        <div id="s08-frame" class="frame">
+          <div id="s08-kb" class="push" data-layout-allow-overflow>
+            <img id="s08-media" class="plate" src="assets/cards/s08_generated.webp" alt="" />
+          </div>
+        </div>
+      </section>
+      <section
+        id="s09"
+        class="clip scene"
+        data-start="86"
+        data-duration="12.6"
+        data-track-index="1"
+        data-label="Iran 1953 — Operation TPAJAX"
+      >
+        <div id="s09-frame" class="frame">
+          <div id="s09-kb" class="push" data-layout-allow-overflow>
+            <img id="s09-media" class="plate" src="assets/cards/s09_generated.webp" alt="" />
+          </div>
+        </div>
+      </section>
+      <section
+        id="s10"
+        class="clip scene"
+        data-start="98"
+        data-duration="13.6"
+        data-track-index="2"
+        data-label="The Americas — regime change blueprint"
+      >
+        <div id="s10-frame" class="frame">
+          <div id="s10-kb" class="push" data-layout-allow-overflow>
+            <img id="s10-media" class="plate" src="assets/cards/s10_generated.webp" alt="" />
+          </div>
+        </div>
+      </section>
+      <section
+        id="s11"
+        class="clip scene"
+        data-start="111"
+        data-duration="12.6"
+        data-track-index="1"
+        data-label="The Barr Doctrine"
+      >
+        <div id="s11-frame" class="frame">
+          <div id="s11-kb" class="push" data-layout-allow-overflow>
+            <img id="s11-media" class="plate" src="assets/cards/s11_generated.webp" alt="" />
+          </div>
+        </div>
+      </section>
+      <section
+        id="s12"
+        class="clip scene"
+        data-start="123"
+        data-duration="11.6"
+        data-track-index="2"
+        data-label="CIA Family Jewels"
+      >
+        <div id="s12-frame" class="frame">
+          <div id="s12-kb" class="push" data-layout-allow-overflow>
+            <img id="s12-media" class="plate" src="assets/cards/s12_generated.webp" alt="" />
+          </div>
+        </div>
+      </section>
+      <section
+        id="s13"
+        class="clip scene"
+        data-start="134"
+        data-duration="13.6"
+        data-track-index="1"
+        data-label="MLK & COINTELPRO"
+      >
+        <div id="s13-frame" class="frame">
+          <div id="s13-kb" class="push" data-layout-allow-overflow>
+            <img id="s13-media" class="plate" src="assets/cards/s13_generated.webp" alt="" />
+          </div>
+        </div>
+      </section>
+      <section
+        id="s14"
+        class="clip scene"
+        data-start="147"
+        data-duration="16.6"
+        data-track-index="2"
+        data-label="The Synthesis"
+      >
+        <div id="s14-frame" class="frame">
+          <div id="s14-kb" class="push" data-layout-allow-overflow>
+            <img id="s14-media" class="plate" src="assets/cards/s14_generated.webp" alt="" />
+          </div>
+        </div>
+      </section>
+      <section
+        id="s15"
+        class="clip scene"
+        data-start="163"
+        data-duration="11"
+        data-track-index="1"
+        data-label="The Digital Vault — closing"
+      >
+        <div id="s15-frame" class="frame">
+          <div id="s15-kb" class="push" data-layout-allow-overflow>
+            <img id="s15-media" class="plate" src="assets/cards/s15_generated.webp" alt="" />
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+  // Title — Chilling Receipts
+  tl.fromTo("#s01-frame", { opacity: 0 }, { opacity: 1, duration: 0.9, ease: "power2.out" }, 0);
+  tl.fromTo("#s01-kb", { scale: 1 }, { scale: 1.06, duration: 7, ease: "none" }, 0);
+  tl.to("#s01-frame", { x: -230, opacity: 0, duration: 0.6, ease: "power4.in" }, 7);
+
+  // The Unbreakable Rule — 39 citations
+  tl.fromTo("#s02-frame", { x: 230, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 7);
+  tl.fromTo("#s02-kb", { scale: 1 }, { scale: 1.05, duration: 6, ease: "none" }, 7);
+  tl.to("#s02-frame", { x: -230, opacity: 0, duration: 0.6, ease: "power4.in" }, 13);
+
+  // The Stasi — Europe
+  tl.fromTo("#s03-frame", { x: 230, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 13);
+  tl.fromTo("#s03-kb", { scale: 1 }, { scale: 1.07, duration: 13, ease: "none" }, 13);
+  tl.to("#s03-frame", { x: -230, opacity: 0, duration: 0.6, ease: "power4.in" }, 26);
+
+  // The 1991 Reckoning
+  tl.fromTo("#s04-frame", { x: 230, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 26);
+  tl.fromTo("#s04-kb", { scale: 1 }, { scale: 1.05, duration: 10, ease: "none" }, 26);
+  tl.to("#s04-frame", { x: -230, opacity: 0, duration: 0.6, ease: "power4.in" }, 36);
+
+  // Katyn — the 50-year lie
+  tl.fromTo("#s05-frame", { x: 230, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 36);
+  tl.fromTo("#s05-kb", { scale: 1 }, { scale: 1.06, duration: 14, ease: "none" }, 36);
+  tl.to("#s05-frame", { x: -230, opacity: 0, duration: 0.6, ease: "power4.in" }, 50);
+
+  // Nazi criminals, Western payroll
+  tl.fromTo("#s06-frame", { x: 230, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 50);
+  tl.fromTo("#s06-kb", { scale: 1 }, { scale: 1.05, duration: 12, ease: "none" }, 50);
+  tl.to("#s06-frame", { x: -230, opacity: 0, duration: 0.6, ease: "power4.in" }, 62);
+
+  // Operation Gladio
+  tl.fromTo("#s07-frame", { x: 230, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 62);
+  tl.fromTo("#s07-kb", { scale: 1 }, { scale: 1.06, duration: 12, ease: "none" }, 62);
+  tl.to("#s07-frame", { x: -230, opacity: 0, duration: 0.6, ease: "power4.in" }, 74);
+
+  // Gulf of Tonkin — Asia
+  tl.fromTo("#s08-frame", { x: 230, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 74);
+  tl.fromTo("#s08-kb", { scale: 1 }, { scale: 1.05, duration: 12, ease: "none" }, 74);
+  tl.to("#s08-frame", { x: -230, opacity: 0, duration: 0.6, ease: "power4.in" }, 86);
+
+  // Iran 1953 — Operation TPAJAX
+  tl.fromTo("#s09-frame", { x: 230, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 86);
+  tl.fromTo("#s09-kb", { scale: 1 }, { scale: 1.06, duration: 12, ease: "none" }, 86);
+  tl.to("#s09-frame", { x: -230, opacity: 0, duration: 0.6, ease: "power4.in" }, 98);
+
+  // The Americas — regime change blueprint
+  tl.fromTo("#s10-frame", { x: 230, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 98);
+  tl.fromTo("#s10-kb", { scale: 1 }, { scale: 1.05, duration: 13, ease: "none" }, 98);
+  tl.to("#s10-frame", { x: -230, opacity: 0, duration: 0.6, ease: "power4.in" }, 111);
+
+  // The Barr Doctrine
+  tl.fromTo("#s11-frame", { x: 230, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 111);
+  tl.fromTo("#s11-kb", { scale: 1 }, { scale: 1.06, duration: 12, ease: "none" }, 111);
+  tl.to("#s11-frame", { x: -230, opacity: 0, duration: 0.6, ease: "power4.in" }, 123);
+
+  // CIA Family Jewels
+  tl.fromTo("#s12-frame", { x: 230, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 123);
+  tl.fromTo("#s12-kb", { scale: 1 }, { scale: 1.05, duration: 11, ease: "none" }, 123);
+  tl.to("#s12-frame", { x: -230, opacity: 0, duration: 0.6, ease: "power4.in" }, 134);
+
+  // MLK & COINTELPRO
+  tl.fromTo("#s13-frame", { x: 230, opacity: 0 }, { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" }, 134);
+  tl.fromTo("#s13-kb", { scale: 1 }, { scale: 1.06, duration: 13, ease: "none" }, 134);
+  tl.to("#s13-frame", { scale: 1.14, opacity: 0, duration: 0.6, ease: "power4.in" }, 147);
+
+  // The Synthesis
+  tl.fromTo("#s14-frame", { scale: 1.14, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "power4.out" }, 147);
+  tl.fromTo("#s14-kb", { scale: 1 }, { scale: 1.08, duration: 16, ease: "none" }, 147);
+  tl.to("#s14-frame", { scale: 0.9, opacity: 0, duration: 0.6, ease: "power4.in" }, 163);
+
+  // The Digital Vault — closing
+  tl.fromTo("#s15-frame", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "power4.out" }, 163);
+  tl.fromTo("#s15-kb", { scale: 1 }, { scale: 1.04, duration: 11, ease: "none" }, 163);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
