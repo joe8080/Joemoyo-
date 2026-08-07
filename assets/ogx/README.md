@@ -65,6 +65,26 @@ images/archival/03_cable_scan.png
 - Nothing ships unverified: every date, figure, document ID, and quote goes
   through the OGX Supabase DB (`qvlllknedilztozxwscj`) first.
 
+## Motion: what animates where
+
+The single most important rule for this house style — **never run a finished
+fact card through AI image-to-video.** Dense gold typography warps into garbled
+letterforms. Motion comes from two separate places:
+
+| Layer | How it moves | Tool |
+| --- | --- | --- |
+| Fact cards, title card | Slow push / parallax, text stays razor-sharp | HyperFrames (GSAP) |
+| Atmospheric plates, B-roll | Real generated motion — dolly, crane, orbit | Highfield image/text-to-video |
+
+Cut the generated plates *between* cards rather than under them. Prompt every
+plate with an explicit "no text, no lettering, no captions" — the models will
+otherwise hallucinate signage that reads as gibberish on a documentary frame.
+
+Seams follow the motion doctrine, not crossfades: pick one dominant direction
+for the film (house default LEFT), exit on `power4.in` and enter on
+`power4.out` over matched distance and duration so the cut lands mid-motion.
+Reserve Z-forward for "deeper into the same thought" and Z-back for arrival.
+
 ## HyperFrames note
 
 HyperFrames compositions fetch media over HTTPS, so assets referenced by a
