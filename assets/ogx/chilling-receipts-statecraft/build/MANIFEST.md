@@ -4,7 +4,17 @@
 - **Style:** OGX declassified-receipts (locked house style)
 - **DB record:** `content_ideas` → *THE VAULT FILES: What 39 Declassified Records Prove About Hidden History* (status `scripting`)
 - **Runtime:** 2:54 (174s) with cards only; ~3:18 once the six motion plates are folded in
-- **Status:** assets in / built — **awaiting narration VO**
+- **Status:** built and rendered (v1, cards only) — **awaiting narration VO**
+
+## Rendered output
+
+`npm run render` in `build/hyperframes/` produces the master. Verified v1:
+1920×1080, h264, 30 fps, 5220 frames, 174.0s, ~17.4 Mbps, decodes clean.
+
+MP4s are gitignored (the master is 362 MB) — re-render rather than fetching a
+binary. The seams were spot-checked in the rendered file, not just in preview:
+at 13.3s the outgoing card is still travelling under the incoming one, and the
+closing card lands on its Z-back arrival.
 
 ## Verification
 
