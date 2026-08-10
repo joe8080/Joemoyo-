@@ -19,8 +19,10 @@ env/
 # Auto-trader runtime logs (regenerated on every run)
 outputs/reports/autotrade_log_*.md
 
-# OGX pipeline artefacts (regenerated on every run)
-outputs/ogx/*.md
+# OGX pipeline artefacts are TRACKED, unlike the auto-trader logs above.
+# They are not cheaply regenerated: a full run is four agent passes and, once
+# narration is rendered, real credit spend. They are also the only record of
+# what the evidence gate accepted for a given episode. Do not add them here.
 
 # IDE
 .vscode/
