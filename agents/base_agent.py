@@ -61,6 +61,18 @@ class BaseAgent(ABC):
         """Guidance appended to the task prompt explaining the CLI's tools."""
         return ""
 
+    # Claude Code is a coding agent by default: left alone it will write the
+    # deliverable to a file of its choosing and then describe having done so.
+    # The pipeline already owns saving (BaseAgent.save_output), so that both
+    # strands a copy somewhere nobody looks and leaves a stray "Saved to …"
+    # paragraph inside the deliverable itself.
+    _CLI_OUTPUT_CONTRACT = (
+        "\n\nOUTPUT CONTRACT: return the deliverable itself as your final "
+        "message, in full. Do not write it to a file — the pipeline saves it. "
+        "Do not add a preamble, a summary of what you did, a note about which "
+        "tools you used, or a sign-off. The final message IS the artefact."
+    )
+
     def _run_via_cli(self, user_message: str) -> str:
         """Run one task through the Claude Code CLI instead of the API."""
         from tools import claude_backend
@@ -73,7 +85,9 @@ class BaseAgent(ABC):
         )
         output = claude_backend.run_prompt(
             system_prompt=self.system_prompt,
-            user_prompt=user_message + (f"\n\n{appendix}" if appendix else ""),
+            user_prompt=(user_message
+                         + (f"\n\n{appendix}" if appendix else "")
+                         + self._CLI_OUTPUT_CONTRACT),
             model=self.model,
             allowed_tools=self._cli_allowed_tools(),
         )

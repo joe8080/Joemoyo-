@@ -19,6 +19,9 @@ env/
 # Auto-trader runtime logs (regenerated on every run)
 outputs/reports/autotrade_log_*.md
 
+# OGX pipeline artefacts (regenerated on every run)
+outputs/ogx/*.md
+
 # IDE
 .vscode/
 .idea/
