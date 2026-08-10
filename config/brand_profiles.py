@@ -14,6 +14,50 @@ BRAND_PROFILES = {
         "keywords": ["historical facts", "primary sources", "timeline", "impact", "legacy"],
         "niches": ["ancient civilizations", "wars", "empires", "biographies", "revolutions"],
     },
+    # OrigineX Human Archives — the OGX channel. Unlike the profiles above, this
+    # one is evidence-gated: every claim is checked against the OGX research
+    # database before it reaches a script, card, thumbnail, or description.
+    "origine_x": {
+        "name": "OrigineX Human Archives",
+        "handle": "@originexhumanarchives",
+        "channel_id": "UC_VwS819y4GZgNmYajBvm3Q",
+        "tone": "authoritative, cinematic, evidence-first, unflinching, UK English",
+        "audience": "UK/US viewers 25-45, African and world history, diaspora audiences",
+        "style": "faceless prestige documentary — gold-on-near-black, receipts over rhetoric",
+        "cta": (
+            "Subscribe. Share with someone who was never taught this. "
+            "Next episode — {next_video}."
+        ),
+        "keywords": ["declassified", "primary sources", "suppressed history",
+                     "African civilisation", "statecraft", "archives"],
+        "niches": ["African empires", "statecraft and covert policy", "biographies",
+                   "ancient civilisations", "colonial and post-colonial history"],
+        # Two locked looks. "archives" is the default house style; "declassified"
+        # is the receipts-documentary variant (the West Sabotage formula).
+        "palette": {
+            "gold": "#C9A84C",
+            "dark": "#1A1A2E",
+            "crimson": "#8B1A1A",
+            "amber": "#FFF3CD",
+            "teal": "#0F4C75",
+            "white": "#FFFFFF",
+        },
+        "declassified_palette": {
+            "gold": "#C9A24B",
+            "dark": "#0A0A0A",
+            "red": "#B0231F",
+            "body": "#F2EDE4",
+            "box_fill": "#0E0E10",
+            "box_border": "#C9A24B",
+        },
+        # Brand-anchor thumbnails passed as reference images at generation time.
+        "thumbnail_references": [
+            "https://i.ytimg.com/vi/t0B1-f8JH-s/maxresdefault.jpg",
+            "https://i.ytimg.com/vi/YVW5lv94K9Q/maxresdefault.jpg",
+        ],
+        "cadence": "Tue = person/biographical, Thu = civilisation/topic, ~19:00 Europe/London",
+        "language": "UK English (honour, civilisation, recognised, manoeuvre)",
+    },
     "finance_channel": {
         "name": "Capital Edge",
         "tone": "analytical, confident, balanced, plain-English, actionable",

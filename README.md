@@ -6,6 +6,7 @@ AI-powered agents for your multi-brand business — built with Python and Claude
 
 | Business | Agent |
 |---|---|
+| OrigineX Human Archives (OGX) | OGXResearchAgent + OGXScriptWriterAgent + OGXVideoBuildAgent + OGXPackagingAgent |
 | YouTube Historical Channel | ContentResearchAgent + ScriptWriterAgent |
 | YouTube Finance Channel | FinancialContentAgent + ScriptWriterAgent |
 | Music Studio | LeadGeneratorAgent |
@@ -57,6 +58,30 @@ python main.py history --topic "The Fall of Constantinople"
 
 # Write script only (no web research)
 python main.py history --topic "Ancient Egypt" --script-only
+```
+
+### OrigineX (OGX) — evidence-gated history pipeline
+
+The OGX channel runs on a stricter pipeline than the others: every factual claim
+is checked against the OrigineX research database before it reaches a script,
+a card, a title, or a description. The pipeline **refuses to start** without
+that database. See [docs/OGX_PIPELINE.md](docs/OGX_PIPELINE.md) for the full
+workflow, the house styles, and the schema contract.
+
+```bash
+# Full pipeline: research → script → video build sheet → posting pack
+python main.py ogx --topic "Queen Nzinga"
+
+# The declassified-receipts format (long-form statecraft documentaries)
+python main.py ogx --topic "Operation Condor" --style declassified
+
+# One stage at a time — iterate the script without paying for the rest
+python main.py ogx --topic "Mansa Musa" --stage research
+python main.py ogx --topic "Mansa Musa" --stage build \
+    --from-file outputs/ogx/OGX_Mansa_Musa_script_archives_20260810_120000.md
+
+# Run without the research database (everything is marked unverified)
+python main.py ogx --topic "Sundiata Keita" --allow-unverified
 ```
 
 ### Finance YouTube Channel
@@ -326,6 +351,7 @@ All generated content is saved to `outputs/`:
 ```
 outputs/
 ├── scripts/      # YouTube research outlines and scripts
+├── ogx/          # OGX dossiers, scripts, build sheets, posting packs
 ├── marketing/    # Social posts, emails, ad copy
 ├── leads/        # Outreach sequences and sponsorship pitches
 └── reports/      # Shopify performance reports
@@ -344,6 +370,10 @@ Edit `config/brand_profiles.py` to update your channel names, tone, audience, an
 ```
 main.py (CLI)
     └── orchestrator/orchestrator.py (workflow routing)
+            ├── agents/ogx_research.py      → tools/ogx_db.py + tools/web_search.py
+            ├── agents/ogx_script.py        → tools/ogx_db.py
+            ├── agents/ogx_video_build.py   → tools/ogx_db.py
+            ├── agents/ogx_packaging.py     → tools/ogx_db.py
             ├── agents/content_research.py  → tools/web_search.py
             ├── agents/script_writer.py
             ├── agents/financial_content.py → tools/web_search.py
@@ -355,3 +385,11 @@ main.py (CLI)
 ```
 
 All agents inherit from `agents/base_agent.py` which handles the Claude tool-use loop automatically.
+The four OGX agents inherit from `agents/ogx_base.py` instead, which adds the shared
+research-database toolkit so no stage of that pipeline can skip the evidence gate.
+
+Run the OGX schema-contract tests (stdlib only, no network, no API calls):
+
+```bash
+python tests/test_ogx.py
+```

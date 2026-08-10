@@ -6,6 +6,8 @@ AI agents for your YouTube channels, music studio, and Shopify store.
 
 Usage:
   python main.py history  --topic "The Fall of Constantinople"
+  python main.py ogx      --topic "Queen Nzinga"
+  python main.py ogx      --topic "Operation Condor" --style declassified
   python main.py finance  --topic "Bitcoin ETF Analysis"
   python main.py shopify  --report weekly
   python main.py leads    --type studio --name "Artist Name" --genre "R&B"
@@ -81,6 +83,131 @@ def history(topic: str, script_only: bool):
     else:
         result = orch.produce_history_video(topic)
         console.print(f"\n[bold green]Done![/bold green] Script: {len(result['script'].split())} words")
+
+
+# ------------------------------------------------------------------ #
+#  ORIGINEX (OGX) — EVIDENCE-GATED HISTORY PIPELINE                    #
+# ------------------------------------------------------------------ #
+
+@cli.command()
+@click.option(
+    "--topic", "-t",
+    required=True,
+    help='OGX subject (e.g. "Queen Nzinga" or "Operation Condor")',
+)
+@click.option(
+    "--style",
+    type=click.Choice(["archives", "declassified"]),
+    default="archives",
+    show_default=True,
+    help="archives = house style; declassified = receipts case-file format",
+)
+@click.option(
+    "--minutes", "-m",
+    default=0,
+    help="Runtime target in minutes (default: 18 archives / 42 declassified)",
+)
+@click.option(
+    "--stage",
+    type=click.Choice(["all", "research", "script", "build", "package"]),
+    default="all",
+    show_default=True,
+    help="Run the whole pipeline or a single stage",
+)
+@click.option(
+    "--from-file", "-f",
+    default="",
+    help="Feed an existing script/dossier into a single stage (with --stage)",
+)
+@click.option(
+    "--skip-research",
+    is_flag=True,
+    help="Write the script straight from the topic, no research pass",
+)
+@click.option(
+    "--allow-unverified",
+    is_flag=True,
+    help="Run without the research database (output is marked unverified)",
+)
+@click.option(
+    "--no-persist",
+    is_flag=True,
+    help="Do not log the episode and agent outputs to the database",
+)
+def ogx(topic: str, style: str, minutes: int, stage: str, from_file: str,
+        skip_research: bool, allow_unverified: bool, no_persist: bool):
+    """
+    Produce a complete OrigineX Human Archives video package.
+
+    Runs: Research → Script → Video Build Sheet → Posting Pack
+
+    Every factual claim is verified against the OGX research database before it
+    reaches a script, card, or title. The pipeline refuses to run without that
+    database unless you pass --allow-unverified.
+
+    Outputs saved to outputs/ogx/. Thumbnail generation and title scoring still
+    run through vidIQ — the packaging stage produces the brief for them.
+    """
+    from tools import ogx_db
+
+    # Check the evidence gate before spending anything — a missing database is
+    # a setup problem, not a stack trace.
+    if not allow_unverified:
+        try:
+            ogx_db.require_enabled()
+        except EnvironmentError as e:
+            console.print(f"[bold red]Setup Error:[/bold red] {e}")
+            sys.exit(1)
+
+    orch = get_orchestrator()
+
+    source = ""
+    if from_file:
+        try:
+            with open(from_file, encoding="utf-8") as f:
+                source = f.read()
+        except OSError as e:
+            console.print(f"[bold red]Could not read {from_file}:[/bold red] {e}")
+            sys.exit(1)
+
+    if stage == "all":
+        result = orch.produce_ogx_video(
+            topic,
+            style=style,
+            target_minutes=minutes,
+            skip_research=skip_research,
+            allow_unverified=allow_unverified,
+            persist=not no_persist,
+        )
+        console.print(
+            f"\n[bold green]Done![/bold green] "
+            f"Script: {len(result['script'].split())} words"
+            + (f" · Episode {result['episode_id']}" if result["episode_id"] else "")
+        )
+        return
+
+    # Single-stage runs — useful for iterating one part without paying for the rest.
+    from agents.ogx_packaging import OGXPackagingAgent
+    from agents.ogx_research import OGXResearchAgent
+    from agents.ogx_script import OGXScriptWriterAgent
+    from agents.ogx_video_build import OGXVideoBuildAgent
+
+    if stage == "research":
+        output = OGXResearchAgent(allow_unverified=allow_unverified).research_topic(topic)["research"]
+    elif stage == "script":
+        output = OGXScriptWriterAgent(
+            style=style, allow_unverified=allow_unverified,
+        ).write_script(source or topic, target_minutes=minutes)
+    elif stage == "build":
+        output = OGXVideoBuildAgent(allow_unverified=allow_unverified).build_sheet(
+            source or topic, target_minutes=minutes or 18, subject=topic,
+        )
+    else:  # package
+        output = OGXPackagingAgent(allow_unverified=allow_unverified).package(
+            topic, script_or_research=source, style=style,
+        )
+
+    console.print(output)
 
 
 # ------------------------------------------------------------------ #

@@ -71,6 +71,132 @@ class BusinessOrchestrator:
         }
 
     # ------------------------------------------------------------------ #
+    #  WORKFLOW 1b: OrigineX (OGX) Evidence-Gated Video Pipeline           #
+    # ------------------------------------------------------------------ #
+
+    def produce_ogx_video(
+        self,
+        topic: str,
+        style: str = "archives",
+        target_minutes: int = 0,
+        skip_research: bool = False,
+        allow_unverified: bool = False,
+        persist: bool = True,
+    ) -> dict:
+        """
+        Full OrigineX pipeline: Research → Script → Video Build → Packaging.
+
+        Unlike the other content workflows, this one is evidence-gated: it
+        refuses to start unless the OGX research database is reachable, because
+        every OGX claim is verified against it before shipping. Pass
+        allow_unverified=True to run on Claude's trained knowledge instead —
+        output is then marked unverified throughout.
+
+        Args:
+            topic:            Subject (e.g. "Queen Nzinga" or "Operation Condor")
+            style:            "archives" (default house style) or "declassified"
+            target_minutes:   Runtime target; defaults to 18 / 42 by style
+            skip_research:    Go straight to script from the topic alone
+            allow_unverified: Run without the research database
+            persist:          Log the episode and every agent output to the database
+
+        Returns: dict with research, script, build_sheet, packaging, episode_id
+        """
+        from agents.ogx_packaging import OGXPackagingAgent
+        from agents.ogx_research import OGXResearchAgent
+        from agents.ogx_script import OGXScriptWriterAgent
+        from agents.ogx_video_build import OGXVideoBuildAgent
+        from tools import ogx_db
+
+        if not allow_unverified:
+            ogx_db.require_enabled()
+
+        if not target_minutes:
+            target_minutes = 42 if style == "declassified" else 18
+
+        total_steps = 3 if skip_research else 4
+        console.print(Panel(
+            f"[bold]OGX Video Pipeline[/bold]\n"
+            f"Topic: {topic}\n"
+            f"Style: {style} · Target: {target_minutes} min"
+            + ("\n[yellow]UNVERIFIED MODE — no database gate[/yellow]"
+               if allow_unverified else ""),
+            style="yellow",
+        ))
+
+        episode_id = ""
+        if persist and not allow_unverified:
+            episode_id = ogx_db.create_episode(
+                title=topic, topic=topic, target_minutes=target_minutes,
+            )
+            if episode_id:
+                console.print(f"[dim]Episode {episode_id} opened in video_episodes[/dim]")
+
+        def record(role: str, content: str) -> None:
+            if episode_id:
+                ogx_db.save_agent_output(episode_id, role, content, model=self._ogx_model())
+
+        step = 0
+        research = ""
+        if not skip_research:
+            step += 1
+            console.print(f"\n[bold][Step {step}/{total_steps}][/bold] Researching (database first)...")
+            researcher = OGXResearchAgent(allow_unverified=allow_unverified)
+            research = researcher.research_topic(topic)["research"]
+            record("research", research)
+
+        step += 1
+        console.print(f"\n[bold][Step {step}/{total_steps}][/bold] Writing {style} script...")
+        writer = OGXScriptWriterAgent(style=style, allow_unverified=allow_unverified)
+        script = writer.write_script(
+            topic_or_research=research or topic,
+            target_minutes=target_minutes,
+        )
+        record("script", script)
+
+        step += 1
+        console.print(f"\n[bold][Step {step}/{total_steps}][/bold] Building the shot sheet...")
+        builder = OGXVideoBuildAgent(allow_unverified=allow_unverified)
+        build_sheet = builder.build_sheet(script, target_minutes=target_minutes, subject=topic)
+        record("visual", build_sheet)  # the schema's role vocabulary for build work
+
+        step += 1
+        console.print(f"\n[bold][Step {step}/{total_steps}][/bold] Packaging for publication...")
+        packager = OGXPackagingAgent(allow_unverified=allow_unverified)
+        packaging = packager.package(topic, script_or_research=script, style=style)
+        record("packaging", packaging)
+
+        if episode_id:
+            # save_agent_output advances the episode status per stage, so by
+            # here it already reads "assembling" — ready for an editor.
+            ogx_db.log_decision(episode_id, "orchestrator", "pipeline_complete", {
+                "style": style,
+                "target_minutes": target_minutes,
+                "researched": not skip_research,
+            })
+
+        console.print(Panel(
+            "[bold green]OGX pipeline complete![/bold green]\n"
+            "[dim]Outputs in outputs/ogx/ — thumbnail generation and title "
+            "scoring still run through vidIQ.[/dim]",
+            style="green",
+        ))
+        return {
+            "topic": topic,
+            "style": style,
+            "episode_id": episode_id,
+            "research": research,
+            "script": script,
+            "build_sheet": build_sheet,
+            "packaging": packaging,
+        }
+
+    @staticmethod
+    def _ogx_model() -> str:
+        from config.settings import settings
+        return settings.model
+
+    # ------------------------------------------------------------------ #
     #  WORKFLOW 2: Financial Content Production Pipeline                   #
     # ------------------------------------------------------------------ #
 
