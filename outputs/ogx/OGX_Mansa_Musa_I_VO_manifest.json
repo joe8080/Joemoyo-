@@ -1,0 +1,195 @@
+{
+ "episode": "Mansa Musa I — The Map That Proved They Knew",
+ "channel": "OrigineX Human Archives",
+ "voice": {
+  "name": "Arthur",
+  "provider": "highfield",
+  "model": "seed_audio",
+  "voice_id": "30fc8796-ceb6-4a66-b3a7-4a145ef7f346",
+  "voice_type": "preset"
+ },
+ "format": {
+  "container": "wav",
+  "sample_rate": 24000
+ },
+ "totals": {
+  "takes": 17,
+  "words": 2577,
+  "runtime_sec": 1097.21,
+  "runtime": "18:17",
+  "measured_wpm": 141,
+  "script_target": "14:00"
+ },
+ "takes": [
+  {
+   "take": 1,
+   "section": "COLD OPEN — THE ROAD FROM THE SOUTH",
+   "start": "00:00",
+   "end": "01:10",
+   "duration_sec": 70.91,
+   "words": 160,
+   "wpm": 135,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065700_395a211e-dc32-47a9-86f2-277c9b36be8d.wav"
+  },
+  {
+   "take": 2,
+   "section": "CHAPTER ONE — WHAT THE INTERNET TOOK",
+   "start": "01:10",
+   "end": "02:26",
+   "duration_sec": 75.15,
+   "words": 177,
+   "wpm": 141,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065700_557f3a9f-4714-474a-b091-b2b027e347e3.wav"
+  },
+  {
+   "take": 3,
+   "section": "CHAPTER ONE — WHAT THE INTERNET TOOK (rhetorical turn)",
+   "start": "02:26",
+   "end": "02:37",
+   "duration_sec": 11.81,
+   "words": 31,
+   "wpm": 158,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065700_b9eba6a9-f02d-4907-bf8a-04b4bc962ab1.wav"
+  },
+  {
+   "take": 4,
+   "section": "CHAPTER TWO — THE WORLD BEFORE",
+   "start": "02:37",
+   "end": "03:38",
+   "duration_sec": 61.07,
+   "words": 180,
+   "wpm": 177,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065700_6cbe9118-a37f-4eb6-be42-389cf107c08b.wav"
+  },
+  {
+   "take": 5,
+   "section": "CHAPTER TWO — THE WORLD BEFORE (cont)",
+   "start": "03:38",
+   "end": "04:47",
+   "duration_sec": 68.58,
+   "words": 149,
+   "wpm": 130,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065700_fc091607-be75-4b4d-ab9b-c0094330d4c9.wav"
+  },
+  {
+   "take": 6,
+   "section": "CHAPTER THREE — THE KING THE LISTS DISAGREE ABOUT",
+   "start": "04:47",
+   "end": "05:46",
+   "duration_sec": 58.58,
+   "words": 153,
+   "wpm": 157,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065700_a1b47414-f98c-49cb-9a2b-6bda81f722fe.wav"
+  },
+  {
+   "take": 7,
+   "section": "CHAPTER THREE — THE KING THE LISTS DISAGREE ABOUT (cont)",
+   "start": "05:46",
+   "end": "06:56",
+   "duration_sec": 70.4,
+   "words": 158,
+   "wpm": 135,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065700_0409f7e8-375d-4fa5-b0f2-4fc67099840a.wav"
+  },
+  {
+   "take": 8,
+   "section": "CHAPTER FOUR — WHAT CAIRO WROTE DOWN",
+   "start": "06:56",
+   "end": "07:53",
+   "duration_sec": 56.52,
+   "words": 129,
+   "wpm": 137,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065700_2ad3b52f-37bf-4a55-be96-d5fe0d298dc1.wav"
+  },
+  {
+   "take": 9,
+   "section": "CHAPTER FOUR — WHAT CAIRO WROTE DOWN (cont)",
+   "start": "07:53",
+   "end": "08:56",
+   "duration_sec": 63.66,
+   "words": 148,
+   "wpm": 139,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065700_6dd28270-e855-4c16-878e-1402d53500fa.wav"
+  },
+  {
+   "take": 10,
+   "section": "CHAPTER FOUR — WHAT CAIRO WROTE DOWN (cont)",
+   "start": "08:56",
+   "end": "09:54",
+   "duration_sec": 57.87,
+   "words": 134,
+   "wpm": 139,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065700_0c761b60-667f-4f66-9cc0-831e2b51517d.wav"
+  },
+  {
+   "take": 11,
+   "section": "CHAPTER FIVE — THE MAP THAT PROVED THEY KNEW",
+   "start": "09:54",
+   "end": "11:11",
+   "duration_sec": 76.58,
+   "words": 167,
+   "wpm": 131,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065700_0e390581-fca4-466b-a9f7-2877079d5a96.wav"
+  },
+  {
+   "take": 12,
+   "section": "CHAPTER FIVE — THE MAP THAT PROVED THEY KNEW (cont)",
+   "start": "11:11",
+   "end": "12:22",
+   "duration_sec": 71.83,
+   "words": 175,
+   "wpm": 146,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065700_c2f1d5b0-d0b4-4ea7-b441-1e7ac8540efa.wav"
+  },
+  {
+   "take": 13,
+   "section": "CHAPTER SIX — HOW THE RECORD WAS BROKEN",
+   "start": "12:22",
+   "end": "13:44",
+   "duration_sec": 81.86,
+   "words": 168,
+   "wpm": 123,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065905_2dab3f96-47b4-47fd-a462-6ed6c5f9570d.wav"
+  },
+  {
+   "take": 14,
+   "section": "CHAPTER SIX — HOW THE RECORD WAS BROKEN (cont)",
+   "start": "13:44",
+   "end": "14:48",
+   "duration_sec": 63.26,
+   "words": 155,
+   "wpm": 147,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065905_8f63c0fb-240c-46f3-b858-8cfadc4e926b.wav"
+  },
+  {
+   "take": 15,
+   "section": "CHAPTER SEVEN — WHAT SURVIVED, AND WHO CARRIED IT",
+   "start": "14:48",
+   "end": "16:01",
+   "duration_sec": 73.58,
+   "words": 180,
+   "wpm": 147,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065905_75993c3d-3bd0-42a5-a48e-efcb4ecce0d7.wav"
+  },
+  {
+   "take": 16,
+   "section": "CHAPTER EIGHT — THE GOLD IS STILL THE ARGUMENT",
+   "start": "16:01",
+   "end": "17:08",
+   "duration_sec": 66.45,
+   "words": 156,
+   "wpm": 141,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065905_5851ddbd-990b-49a9-a19c-9d4e150b7aa8.wav"
+  },
+  {
+   "take": 17,
+   "section": "CTA — THE NEXT FILE",
+   "start": "17:08",
+   "end": "18:17",
+   "duration_sec": 69.09,
+   "words": 157,
+   "wpm": 136,
+   "url": "https://d8j0ntlcm91z4.cloudfront.net/user_39AwNqqHnEuHKHkz07Lufl4IL4u/hf_20260810_065905_fc88f5f1-c398-44a3-b8af-c59f82b9ff2d.wav"
+  }
+ ]
+}

@@ -55,6 +55,22 @@ BRAND_PROFILES = {
             "https://i.ytimg.com/vi/t0B1-f8JH-s/maxresdefault.jpg",
             "https://i.ytimg.com/vi/YVW5lv94K9Q/maxresdefault.jpg",
         ],
+        # Locked narration voice. Chosen by A/B on the Mansa Musa cold open
+        # against Cillian and Fraser; Fraser read the same text 10 seconds
+        # faster, which is wrong for a prestige documentary.
+        "voice": {
+            "name": "Arthur",
+            "provider": "highfield",
+            "model": "seed_audio",
+            "voice_id": "30fc8796-ceb6-4a66-b3a7-4a145ef7f346",
+            "voice_type": "preset",
+            "register": "male, older — elder-statesman documentary read",
+            # Measured over the full 2,577-word Mansa Musa narration, not
+            # estimated: Arthur reads at 141 wpm at default speech_rate. The
+            # script prompts assume 130, so scripts run ~8% long — a 14:00
+            # target came out at 18:17. Budget words against 141.
+            "pace_wpm": 141,
+        },
         "cadence": "Tue = person/biographical, Thu = civilisation/topic, ~19:00 Europe/London",
         "language": "UK English (honour, civilisation, recognised, manoeuvre)",
     },
