@@ -48,12 +48,18 @@ class OGXScriptWriterAgent(OGXAgent):
         # exact quote or page reference mid-sentence rather than paraphrasing.
         return [self._verify_tool(), self._citations_tool()]
 
-    def write_script(self, topic_or_research: str, target_minutes: int = 0) -> str:
+    def write_script(self, topic_or_research: str, target_minutes: int = 0,
+                     subject: str = "") -> str:
         """
         Write the full script from a topic or (preferably) a research dossier.
 
         target_minutes defaults to the style's natural length: 18 for archives,
         42 for a declassified receipts documentary.
+
+        `subject` names the output file. Pass it whenever the first argument is
+        a dossier rather than a topic — otherwise the filename is derived from
+        the dossier's own heading and comes out as
+        OGX_OGX_RESEARCH_DOSSIER__MANSA_MUSA_I_script_archives.md
         """
         if not target_minutes:
             target_minutes = 42 if self.style == "declassified" else 18
@@ -93,6 +99,6 @@ End with the verification table: every factual claim in the script, its
 database status, and its on-screen source.
 """
         script = self.run(prompt)
-        subject = topic_or_research.split("\n")[0][:60]
-        self._save(script, subject, f"script_{self.style}")
+        self._save(script, subject or topic_or_research.split("\n")[0][:60],
+                   f"script_{self.style}")
         return script

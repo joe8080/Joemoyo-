@@ -197,7 +197,7 @@ def ogx(topic: str, style: str, minutes: int, stage: str, from_file: str,
     elif stage == "script":
         output = OGXScriptWriterAgent(
             style=style, allow_unverified=allow_unverified,
-        ).write_script(source or topic, target_minutes=minutes)
+        ).write_script(source or topic, target_minutes=minutes, subject=topic)
     elif stage == "build":
         output = OGXVideoBuildAgent(allow_unverified=allow_unverified).build_sheet(
             source or topic, target_minutes=minutes or 18, subject=topic,

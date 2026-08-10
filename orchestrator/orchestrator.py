@@ -151,6 +151,7 @@ class BusinessOrchestrator:
         script = writer.write_script(
             topic_or_research=research or topic,
             target_minutes=target_minutes,
+            subject=topic,
         )
         record("script", script)
 
