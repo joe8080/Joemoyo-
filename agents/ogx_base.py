@@ -16,6 +16,7 @@ the script to "unsupported" and the agent would cheerfully cut real history.
 
 from agents.base_agent import BaseAgent
 from config.brand_profiles import BRAND_PROFILES
+from prompts.ogx_prompts import OGX_MCP_VERIFICATION_APPENDIX
 from tools import ogx_db
 from tools.ogx_db import OGXDatabaseError
 
@@ -186,6 +187,20 @@ class OGXAgent(BaseAgent):
         if result is not None:
             return result
         return f"Unknown tool: {tool_name}"
+
+    # ---- Claude Code CLI backend --------------------------------------- #
+
+    def _cli_allowed_tools(self) -> tuple[str, ...]:
+        """
+        In CLI mode the evidence layer is the Supabase MCP, not ogx_db.py.
+        Same database, same rules — a different way in.
+        """
+        return ("mcp__Supabase__execute_sql", "mcp__Supabase__list_tables")
+
+    def _cli_tool_appendix(self) -> str:
+        if self.allow_unverified:
+            return ""
+        return OGX_MCP_VERIFICATION_APPENDIX
 
     # ---- shared helpers ------------------------------------------------ #
 

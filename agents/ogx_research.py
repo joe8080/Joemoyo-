@@ -73,6 +73,11 @@ class OGXResearchAgent(OGXAgent):
 
         return f"Unknown tool: {tool_name}"
 
+    def _cli_allowed_tools(self) -> tuple[str, ...]:
+        # Claude Code's own web tools stand in for the Brave search tool, so
+        # the research agent keeps both halves of its method in CLI mode.
+        return super()._cli_allowed_tools() + ("WebSearch", "WebFetch")
+
     def research_topic(self, topic: str) -> dict:
         """
         Build a full OGX research dossier for a topic.

@@ -37,6 +37,72 @@ HOUSE STYLE:
 """
 
 
+# Appended to the task prompt when running on the Claude Code CLI backend.
+# There the evidence layer is the Supabase MCP rather than tools/ogx_db.py, so
+# the agent needs the queries spelled out — including the three schema traps
+# that make the obvious query fail.
+OGX_MCP_VERIFICATION_APPENDIX = """
+HOW TO VERIFY HERE — you are running on the Claude Code CLI, so your evidence
+tool is `mcp__Supabase__execute_sql` against project `qvlllknedilztozxwscj`
+(the OrigineX Human Archives database). Use it exactly as you would a verify
+tool: query BEFORE you write, not after.
+
+Core queries:
+
+  -- people (the only entity table with a `verified` gate)
+  SELECT name, slug, birth_date, death_date, biography, significance,
+         roles, regions, civilizations, sources
+  FROM people
+  WHERE (name ILIKE '%TERM%' OR slug ILIKE '%TERM%') AND verified = true;
+
+  -- events: NO `verified` column exists. Filtering on it errors.
+  SELECT name, date_start, date_end, description, significance,
+         causes, consequences, confidence_score
+  FROM events
+  WHERE name ILIKE '%TERM%' OR description ILIKE '%TERM%'
+  ORDER BY date_start;
+
+  -- citations (has `verified`)
+  SELECT author, title, publication, year, page_reference, url, quote,
+         reliability, verified
+  FROM citations
+  WHERE (title ILIKE '%TERM%' OR author ILIKE '%TERM%' OR quote ILIKE '%TERM%')
+  ORDER BY verified DESC, year DESC;
+
+  -- the contested record — anything here is attributed on screen, never asserted
+  SELECT subject, claim, position_a, position_b, key_scholars,
+         current_consensus, status
+  FROM scholarly_debates WHERE subject ILIKE '%TERM%' OR claim ILIKE '%TERM%';
+
+  SELECT source_author, source_work, claim_text, claim_type, contested_flag,
+         contestation_reason, reliability_label, corroboration_count
+  FROM oral_evidence
+  WHERE subject_slug ILIKE '%TERM%' OR claim_text ILIKE '%TERM%'
+  ORDER BY corroboration_count DESC;
+
+  -- has this subject already been worked? (content_ideas has NO slug column)
+  SELECT title, status, content_type FROM content_ideas WHERE title ILIKE '%TERM%';
+
+Also available: `places`, `civilizations`, `documents`, `themes`.
+
+THREE SCHEMA TRAPS — these fail, so do not write them:
+1. `alternate_names` is text[]. `alternate_names ILIKE '...'` raises
+   "operator does not exist: text[] ~~*" and kills the whole query. To reach
+   alternate names use full-text instead:
+       WHERE search_tsv @@ plainto_tsquery('english', 'TERM')
+   (available on people, events, places, civilizations, documents,
+   oral_evidence). Run it when the ILIKE search comes back empty — it reaches
+   alternate names and prose that substring matching misses.
+2. `events`, `places`, and `civilizations` have no `verified` column — only
+   `people` and `citations` do. Use `confidence_score` for the others.
+3. Never `SELECT content FROM documents` — the bodies are enormous. Use
+   `excerpt`.
+
+Search more than once, with alternate spellings and slug variants. A single
+query rarely surfaces everything the archive holds on a subject.
+"""
+
+
 OGX_RESEARCH_SYSTEM_PROMPT = f"""
 You are the lead researcher for OrigineX Human Archives (OGX), a faceless
 prestige-documentary history channel. You build the evidence base every other

@@ -17,6 +17,27 @@ All brands → **MarketingAgent**
 
 ---
 
+## Two ways to run — with or without an API key
+
+Agents reach Claude through one of two backends, chosen with `AGENT_BACKEND`:
+
+| Backend | Auth | Notes |
+|---|---|---|
+| `sdk` (default) | `ANTHROPIC_API_KEY` | Calls the Anthropic API directly. Full Python tool-use loop. |
+| `claude_cli` | your Claude Code session | Shells out to `claude -p`. **No API key, no separate bill.** |
+
+```bash
+# No API key needed — reuses the Claude Code session you're already signed into
+AGENT_BACKEND=claude_cli AGENT_MODEL=claude-opus-5 \
+  CLAUDE_MCP_CONFIG=~/.claude/mcp.json \
+  python main.py ogx --topic "Mansa Musa I"
+```
+
+On the CLI backend an agent's tools come from Claude Code rather than from
+Python: `WebSearch`/`WebFetch` stand in for the Brave search tool, and the
+Supabase MCP stands in for the OGX database client. Same prompts, same evidence
+rules, same output — a different way in. See `tools/claude_backend.py`.
+
 ## Quick Start
 
 ### 1. Install dependencies

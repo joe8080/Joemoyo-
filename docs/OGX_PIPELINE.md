@@ -84,14 +84,37 @@ Outputs land in `outputs/ogx/` as `OGX_{Subject}_{stage}_{timestamp}.md`.
 
 ## Setup
 
+Two routes reach the same database, and the gate accepts either.
+
+**Route A — API key + REST credentials**
+
 ```bash
 # .env
+ANTHROPIC_API_KEY=sk-ant-...
 OGX_SUPABASE_URL=https://qvlllknedilztozxwscj.supabase.co
 OGX_SUPABASE_SERVICE_KEY=your_service_role_key
 ```
 
-Service-role key, server-side only. Without it the pipeline stops at the gate
-with a setup message rather than a stack trace.
+Service-role key, server-side only.
+
+**Route B — no API key at all**
+
+```bash
+AGENT_BACKEND=claude_cli \
+CLAUDE_MCP_CONFIG=~/.claude/mcp.json \
+AGENT_MODEL=claude-opus-5 \
+  python main.py ogx --topic "Mansa Musa I" --no-persist
+```
+
+Agents run through `claude -p`, authenticating with your Claude Code session,
+and verify claims through the Supabase MCP instead of the REST client. No
+Anthropic API key and no Supabase key of your own.
+
+The trade-off: MCP access is read-oriented, so episode logging needs the REST
+credentials from Route A. Use `--no-persist` on Route B, or set both.
+
+Without either route the pipeline stops at the gate with a setup message rather
+than a stack trace.
 
 ---
 

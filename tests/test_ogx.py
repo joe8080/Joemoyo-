@@ -341,6 +341,163 @@ for status, marker in (("supported", "may state this directly"),
         assert m in ogx_db.format_verdict(verdict), f"{s} verdict lost its rule"
     check(f"verdict '{status}' carries its rule", _verdict)
 
+print("\n== Claude Code CLI backend ==")
+from tools import claude_backend  # noqa: E402
+from prompts.ogx_prompts import OGX_MCP_VERIFICATION_APPENDIX  # noqa: E402
+
+
+def _cli_tools_carry_the_evidence_layer():
+    for name, agent in AGENTS.items():
+        tools = agent._cli_allowed_tools()
+        assert "mcp__Supabase__execute_sql" in tools, \
+            f"{name} has no way to verify on the CLI backend"
+    research_cli = AGENTS["research"]._cli_allowed_tools()
+    assert "WebSearch" in research_cli, "research agent lost web search on the CLI"
+
+
+check("every OGX agent keeps a verification tool on the CLI backend",
+      _cli_tools_carry_the_evidence_layer)
+
+
+def _appendix_matches_the_schema_contract():
+    text = OGX_MCP_VERIFICATION_APPENDIX
+    # The appendix is the CLI backend's only schema guidance — if it teaches a
+    # query that errors, every CLI run silently loses that evidence source.
+    assert "text[]" in text, "appendix omits the alternate_names array trap"
+    assert "plainto_tsquery" in text, "appendix omits the full-text fallback"
+    assert "no `verified` column" in text or "NO `verified` column" in text, \
+        "appendix omits the events verified-column trap"
+    assert "content_ideas has NO slug" in text or "NO slug column" in text, \
+        "appendix omits the content_ideas slug trap"
+    assert "SELECT content FROM documents" in text, \
+        "appendix omits the document-body warning"
+    assert "qvlllknedilztozxwscj" in text, "appendix omits the project id"
+    # It must not teach the query that raises 42883.
+    assert "alternate_names ILIKE" not in text.replace(
+        "`alternate_names ILIKE '...'` raises", ""), \
+        "appendix teaches an ilike against an array column"
+
+
+check("MCP appendix encodes every schema trap", _appendix_matches_the_schema_contract)
+
+
+def _appendix_dropped_when_unverified():
+    agent = OGXVideoBuildAgent(allow_unverified=True)
+    assert agent._cli_tool_appendix() == "", \
+        "unverified mode still injects verification guidance"
+    assert AGENTS["video_build"]._cli_tool_appendix() == OGX_MCP_VERIFICATION_APPENDIX
+
+
+check("appendix present when gated, absent when unverified",
+      _appendix_dropped_when_unverified)
+
+
+def _cli_argv_shape():
+    """The CLI invocation must append (not replace) the system prompt."""
+    captured = {}
+
+    class Result:
+        returncode = 0
+        stdout = "output text"
+        stderr = ""
+
+    def fake_run(cmd, input=None, capture_output=None, text=None, timeout=None):
+        captured["cmd"] = cmd
+        captured["input"] = input
+        return Result()
+
+    real_run = claude_backend.subprocess.run
+    claude_backend.subprocess.run = fake_run
+    try:
+        out = claude_backend.run_prompt(
+            "SYS", "USER", model="claude-opus-5",
+            allowed_tools=("WebSearch", "mcp__Supabase__execute_sql"),
+        )
+    finally:
+        claude_backend.subprocess.run = real_run
+
+    cmd = captured["cmd"]
+    assert out == "output text"
+    assert cmd[0] == "claude" and "-p" in cmd
+    assert "--append-system-prompt" in cmd, "replaced the system prompt instead"
+    assert "--system-prompt" not in cmd
+    assert cmd[cmd.index("--append-system-prompt") + 1] == "SYS"
+    assert cmd[cmd.index("--model") + 1] == "claude-opus-5"
+    assert "WebSearch" in cmd and "mcp__Supabase__execute_sql" in cmd
+    # Prompt on stdin, never as an argv entry — dossiers would blow ARG_MAX.
+    assert captured["input"] == "USER"
+    assert "USER" not in cmd
+
+
+check("CLI invocation shape", _cli_argv_shape)
+
+
+def _cli_failures_raise():
+    class Result:
+        returncode = 1
+        stdout = ""
+        stderr = "boom"
+
+    real_run = claude_backend.subprocess.run
+    claude_backend.subprocess.run = lambda *a, **k: Result()
+    try:
+        expect_error(claude_backend.ClaudeBackendError,
+                     claude_backend.run_prompt, "S", "U")
+    finally:
+        claude_backend.subprocess.run = real_run
+
+
+check("a non-zero CLI exit raises rather than returning empty", _cli_failures_raise)
+
+
+def _backend_dispatch():
+    agent = OGXPackagingAgent()
+    agent.backend = "claude_cli"
+    calls = {}
+
+    def fake_run_prompt(system_prompt, user_prompt, model="",
+                        allowed_tools=(), **kw):
+        calls["system"] = system_prompt
+        calls["user"] = user_prompt
+        calls["tools"] = allowed_tools
+        return "cli output"
+
+    real = claude_backend.run_prompt
+    claude_backend.run_prompt = fake_run_prompt
+    try:
+        assert agent.run("do the thing") == "cli output"
+    finally:
+        claude_backend.run_prompt = real
+
+    assert "EVIDENCE RULES" in calls["system"], "system prompt lost on dispatch"
+    assert calls["user"].startswith("do the thing")
+    assert "mcp__Supabase__execute_sql" in calls["tools"]
+    assert "qvlllknedilztozxwscj" in calls["user"], "appendix not appended"
+
+
+check("run() dispatches to the CLI backend and carries prompt + tools",
+      _backend_dispatch)
+
+
+def _gate_accepts_either_route():
+    without_credentials()
+    os.environ["AGENT_BACKEND"] = "sdk"
+    assert ogx_db.verification_available() is False
+    os.environ["AGENT_BACKEND"] = "claude_cli"
+    real_avail, real_mcp = claude_backend.available, claude_backend.mcp_configured
+    claude_backend.available = lambda: True
+    claude_backend.mcp_configured = lambda: True
+    try:
+        assert ogx_db.verification_available() is True, \
+            "gate rejects the CLI+MCP verification route"
+    finally:
+        claude_backend.available, claude_backend.mcp_configured = real_avail, real_mcp
+        os.environ["AGENT_BACKEND"] = "sdk"
+
+
+check("evidence gate accepts REST credentials or the CLI+MCP route",
+      _gate_accepts_either_route)
+
 print("\n== orchestrator and CLI ==")
 signature = inspect.signature(BusinessOrchestrator.produce_ogx_video)
 check("pipeline signature",

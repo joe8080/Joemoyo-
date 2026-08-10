@@ -61,17 +61,37 @@ def enabled() -> bool:
     return bool(_URL and _KEY)
 
 
+def verification_available() -> bool:
+    """
+    True when the pipeline can verify claims at all — by either route.
+
+    Two routes reach the same database: this module's PostgREST client (needs
+    OGX_SUPABASE_* credentials) and the Supabase MCP driven by the Claude Code
+    CLI backend (needs no credentials of ours). The gate cares that verification
+    is possible, not which road it takes.
+    """
+    if enabled():
+        return True
+    if os.environ.get("AGENT_BACKEND", "").strip().lower() == "claude_cli":
+        from tools import claude_backend
+        return claude_backend.available() and claude_backend.mcp_configured()
+    return False
+
+
 def require_enabled() -> None:
     """Fail fast before any OGX pipeline work starts."""
-    if not enabled():
-        raise EnvironmentError(
-            "OGX research database is not configured. Add to .env:\n"
-            f"  OGX_SUPABASE_URL=https://{PROJECT_ID}.supabase.co\n"
-            "  OGX_SUPABASE_SERVICE_KEY=your_service_role_key\n"
-            "Every OGX claim is verified against this database — the pipeline "
-            "will not run without it. Pass --allow-unverified to override "
-            "(research quality drops to Claude's trained knowledge only)."
-        )
+    if verification_available():
+        return
+    raise EnvironmentError(
+        "OGX research database is not reachable. Either add to .env:\n"
+        f"  OGX_SUPABASE_URL=https://{PROJECT_ID}.supabase.co\n"
+        "  OGX_SUPABASE_SERVICE_KEY=your_service_role_key\n"
+        "or run through the Claude Code CLI with the Supabase MCP:\n"
+        "  AGENT_BACKEND=claude_cli CLAUDE_MCP_CONFIG=/path/to/mcp.json\n"
+        "Every OGX claim is verified against this database — the pipeline "
+        "will not run without it. Pass --allow-unverified to override "
+        "(research quality drops to Claude's trained knowledge only)."
+    )
 
 
 def _headers() -> dict:

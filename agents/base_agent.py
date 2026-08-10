@@ -24,10 +24,16 @@ class BaseAgent(ABC):
     """Abstract base class all agents inherit from."""
 
     def __init__(self):
-        self.client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
         self.model = settings.model
         self.max_tokens = settings.max_tokens
+        self.backend = settings.agent_backend
         self.tool_definitions = self._define_tools()
+        # The CLI backend never touches the SDK, so don't build a client that
+        # would need an API key we deliberately don't have.
+        self.client = (
+            None if self.backend == "claude_cli"
+            else anthropic.Anthropic(api_key=settings.anthropic_api_key)
+        )
 
     @property
     @abstractmethod
@@ -45,11 +51,43 @@ class BaseAgent(ABC):
         """Execute a tool call requested by Claude. Return the result as a string."""
         pass
 
+    # ---- CLI backend hooks (overridden by agents that need tools) ------ #
+
+    def _cli_allowed_tools(self) -> tuple[str, ...]:
+        """Claude Code tools this agent may use when AGENT_BACKEND=claude_cli."""
+        return ()
+
+    def _cli_tool_appendix(self) -> str:
+        """Guidance appended to the task prompt explaining the CLI's tools."""
+        return ""
+
+    def _run_via_cli(self, user_message: str) -> str:
+        """Run one task through the Claude Code CLI instead of the API."""
+        from tools import claude_backend
+
+        agent_name = self.__class__.__name__
+        appendix = self._cli_tool_appendix()
+        console.print(
+            f"\n[bold blue][{agent_name}][/bold blue] Starting task "
+            "[dim](Claude Code CLI backend)[/dim]..."
+        )
+        output = claude_backend.run_prompt(
+            system_prompt=self.system_prompt,
+            user_prompt=user_message + (f"\n\n{appendix}" if appendix else ""),
+            model=self.model,
+            allowed_tools=self._cli_allowed_tools(),
+        )
+        console.print(f"[bold green][{agent_name}][/bold green] Done.")
+        return output
+
     def run(self, user_message: str) -> str:
         """
         Run the agent with a user message.
         Automatically handles the full tool-use agentic loop.
         """
+        if self.backend == "claude_cli":
+            return self._run_via_cli(user_message)
+
         messages = [{"role": "user", "content": user_message}]
         agent_name = self.__class__.__name__
 

@@ -42,15 +42,27 @@ class Settings:
     model: str = "claude-sonnet-4-6"
     max_tokens: int = 8096
 
+    # "sdk" calls the Anthropic API and needs ANTHROPIC_API_KEY.
+    # "claude_cli" shells out to the Claude Code CLI and needs no key —
+    # it reuses whatever session you are already signed into.
+    agent_backend: str = "sdk"
+
 
 def get_settings() -> Settings:
     anthropic_key = os.environ.get("ANTHROPIC_API_KEY", "")
-    if not anthropic_key:
+    backend = os.environ.get("AGENT_BACKEND", "sdk").strip().lower()
+    # The CLI backend authenticates through the Claude Code session, so a
+    # missing API key is expected there rather than a setup error.
+    if not anthropic_key and backend != "claude_cli":
         raise EnvironmentError(
             "ANTHROPIC_API_KEY is not set. "
-            "Copy .env.example to .env and add your key."
+            "Copy .env.example to .env and add your key — or set "
+            "AGENT_BACKEND=claude_cli to run through the Claude Code CLI "
+            "with no API key at all."
         )
     return Settings(
+        agent_backend=backend,
+        model=os.environ.get("AGENT_MODEL", "claude-sonnet-4-6"),
         anthropic_api_key=anthropic_key,
         brave_api_key=os.environ.get("BRAVE_SEARCH_API_KEY", ""),
         shopify_shop_name=os.environ.get("SHOPIFY_SHOP_NAME", ""),
