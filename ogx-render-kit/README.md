@@ -57,6 +57,27 @@ _OGX_BATCH\
 - Per-scene `.ts` chunks, then **concat demuxer** (`-f concat -safe 0`) + mux — keeps it
   resumable and is path-safe for spaces and Windows drive letters.
 
+## PRO / broadcast render (`render_ogx_pro.py`)
+
+Broadcast-standard version (ogx-motion-sections spec). Same folders + audio, but:
+- **Fast pacing** — each still becomes several **7–14s shots** with **A-to-B multi-move**
+  framings (wide / detail / opposite-corner), not one slow 33s hold.
+- **Unified cinematic grade** on every shot (contrast + colour-balance + vignette + film
+  grain) so the AI stills read as one graded film.
+- **Broadcast lower-third chyrons** — drop transparent 1920×1080 chyron PNGs in
+  `02_images_inbox/<slug>/lowerthirds/` with a `cards.json`
+  (`[{"file":"lt1.png","at":0.06,"dur":7}, ...]`, `at` = fraction of audio or seconds).
+- **Sound-design sting** (58Hz sub + pink noise) under each chyron entry.
+
+```
+python render_ogx_pro.py 23_Kingdom_of_Meroe
+```
+Output → `03_finished_packs\<slug>\FINAL_PRO.mp4` (1080p, no music). Resumable per-shot `.ts`.
+The 5 Meroë chyrons + `cards.json` are ready in the repo at `outputs/meroe/lowerthirds/` —
+copy that folder to `02_images_inbox\23_Kingdom_of_Meroe\lowerthirds\`. Make chyrons for
+other videos with `broadcast/make_lowerthirds.py` (needs Python `playwright` + a Chromium;
+edit the `CARDS` list). No `lowerthirds/` folder → a clean graded film with no chyrons.
+
 ## Cadence
 
 - **Tuesday = a PERSON, Thursday = a CIVILISATION**, both **15:00 UK**.
