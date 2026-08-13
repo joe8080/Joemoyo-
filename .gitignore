@@ -20,8 +20,12 @@ env/
 outputs/reports/autotrade_log_*.md
 
 # Voice generator
-voice/vendor/            # VibeVoice checkout, recreated by voice/setup.sh
-voice/voices/*.wav       # voice biometrics - never commit these
+# NB: gitignore has no inline comments - a trailing "# ..." becomes part of
+# the pattern and silently stops it matching. Keep comments on their own line.
+# VibeVoice checkout, recreated by voice/setup.sh
+voice/vendor/
+# Voice samples are biometric data - never commit these
+voice/voices/*.wav
 voice/outputs/*.wav
 voice/scripts/episode.txt
 
