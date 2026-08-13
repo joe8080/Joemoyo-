@@ -19,6 +19,12 @@ env/
 # Auto-trader runtime logs (regenerated on every run)
 outputs/reports/autotrade_log_*.md
 
+# Voice generator
+voice/vendor/            # VibeVoice checkout, recreated by voice/setup.sh
+voice/voices/*.wav       # voice biometrics - never commit these
+voice/outputs/*.wav
+voice/scripts/episode.txt
+
 # IDE
 .vscode/
 .idea/
