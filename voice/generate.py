@@ -214,7 +214,21 @@ def load_model(model_path, device):
             pass
 
     print(f"loading {model_path}  (device={device}, dtype={dtype}, attn={attn})")
-    processor = VibeVoiceProcessor.from_pretrained(model_path)
+    try:
+        # Note: this also reaches out for the Qwen/Qwen2.5-1.5B tokenizer, which
+        # is a separate download from the VibeVoice weights themselves.
+        processor = VibeVoiceProcessor.from_pretrained(model_path)
+    except OSError as exc:
+        die(
+            f"could not load the model/tokenizer.\n\n  {exc}\n\n"
+            "Most often this is network: the processor fetches BOTH the VibeVoice\n"
+            "weights and the Qwen/Qwen2.5-1.5B tokenizer from huggingface.co, so a\n"
+            "proxy or firewall that blocks it will fail here rather than at install.\n"
+            "  - check access:  curl -sI https://huggingface.co\n"
+            "  - behind a proxy: export HTTPS_PROXY=... before running\n"
+            "  - air-gapped: pre-download both repos on a connected machine, copy\n"
+            "    the HF cache over, then run with HF_HUB_OFFLINE=1"
+        )
     try:
         model = VibeVoiceForConditionalGenerationInference.from_pretrained(
             model_path,

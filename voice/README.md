@@ -91,7 +91,30 @@ pacing, so write full stops where you want breaths.
 | `1.5b` | 4 | ~90 min | ~7 GB |
 | `7b` | 4 | ~45 min | more than a free T4 has |
 
-Weights download from Hugging Face on first run and cache locally.
+Weights download from Hugging Face on first run and cache locally. Note that
+loading pulls **two** repos: the VibeVoice weights and the `Qwen/Qwen2.5-1.5B`
+tokenizer they depend on. Both need to be reachable.
+
+## Troubleshooting
+
+**`Can't load tokenizer for 'Qwen/Qwen2.5-1.5B'`** — huggingface.co is
+unreachable. This surfaces at generation time rather than at install, because
+nothing touches the network until the model loads. Check with
+`curl -sI https://huggingface.co`; set `HTTPS_PROXY` if you are behind one. To
+run air-gapped, pre-download both repos on a connected machine, copy the
+`~/.cache/huggingface` directory across, and set `HF_HUB_OFFLINE=1`.
+
+**`Cannot uninstall cryptography ... RECORD file not found`** during setup — a
+Debian/Ubuntu system-managed Python package is blocking pip. Use a virtualenv:
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+bash voice/setup.sh
+```
+
+**`ModuleNotFoundError: No module named 'torch'` after setup ran cleanly** — the
+`pip` on your PATH belongs to a different interpreter than `python3`. Run
+`python3 -m pip` instead, or use the virtualenv above.
 
 ## Limitations
 
