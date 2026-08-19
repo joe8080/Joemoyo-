@@ -197,23 +197,58 @@ def pick_device(requested):
     return "cpu"
 
 
-def load_model(model_path, device):
+def report_vram(device):
+    """Print the card and its VRAM, and warn if it looks too small."""
+    import torch
+
+    if device != "cuda" or not torch.cuda.is_available():
+        return None
+    props = torch.cuda.get_device_properties(0)
+    total_gb = props.total_memory / 1024**3
+    print(f"gpu:     {props.name}  ({total_gb:.1f} GB VRAM)")
+    if total_gb < 6:
+        print(
+            "\nwarning: under 6 GB is below what the 1.5B model normally needs (~7 GB).\n"
+            "         Try --low-vram (offloads layers to system RAM, slower) and a\n"
+            "         smaller --chunk-chars, e.g. 1500. If it still fails, use the\n"
+            "         Colab notebook in voice/notebooks/.\n"
+        )
+    elif total_gb < 8:
+        print(
+            "\nnote: ~7 GB is typical for the 1.5B model, so this is tight. If you hit\n"
+            "      out-of-memory, add --low-vram and lower --chunk-chars to ~2000.\n"
+        )
+    return total_gb
+
+
+def load_model(model_path, device, dtype_name="auto", low_vram=False):
     import torch
     from vibevoice.modular.modeling_vibevoice_inference import (
         VibeVoiceForConditionalGenerationInference,
     )
     from vibevoice.processor.vibevoice_processor import VibeVoiceProcessor
 
-    dtype = {"cuda": torch.bfloat16, "mps": torch.float16}.get(device, torch.float32)
+    if dtype_name != "auto":
+        dtype = getattr(torch, dtype_name)
+    else:
+        dtype = {"cuda": torch.bfloat16, "mps": torch.float16}.get(device, torch.float32)
+
     attn = "sdpa"
     if device == "cuda":
         try:
             import flash_attn  # noqa: F401
             attn = "flash_attention_2"
         except ImportError:
+            # flash-attn rarely builds on Windows; sdpa is the supported path there.
             pass
 
-    print(f"loading {model_path}  (device={device}, dtype={dtype}, attn={attn})")
+    # "auto" lets accelerate spill layers into system RAM when VRAM runs out.
+    device_map = "auto" if low_vram and device == "cuda" else (
+        device if device in ("cuda", "cpu") else None
+    )
+
+    print(f"loading {model_path}  (device={device}, dtype={dtype}, attn={attn}"
+          f"{', low-vram offload' if low_vram and device == 'cuda' else ''})")
     try:
         # Note: this also reaches out for the Qwen/Qwen2.5-1.5B tokenizer, which
         # is a separate download from the VibeVoice weights themselves.
@@ -233,7 +268,7 @@ def load_model(model_path, device):
         model = VibeVoiceForConditionalGenerationInference.from_pretrained(
             model_path,
             torch_dtype=dtype,
-            device_map=device if device in ("cuda", "cpu") else None,
+            device_map=device_map,
             attn_implementation=attn,
         )
     except Exception as exc:
@@ -242,7 +277,7 @@ def load_model(model_path, device):
             model = VibeVoiceForConditionalGenerationInference.from_pretrained(
                 model_path,
                 torch_dtype=dtype,
-                device_map=device if device in ("cuda", "cpu") else None,
+                device_map=device_map,
                 attn_implementation="sdpa",
             )
         else:
@@ -328,6 +363,17 @@ def main():
     )
     parser.add_argument("--seed", type=int, help="fix the random seed for reproducible takes")
     parser.add_argument(
+        "--low-vram",
+        action="store_true",
+        help="offload layers to system RAM when the card is short on VRAM (slower)",
+    )
+    parser.add_argument(
+        "--dtype",
+        default="auto",
+        choices=["auto", "float32", "float16", "bfloat16"],
+        help="force a precision; auto picks bfloat16 on CUDA, float16 on Metal",
+    )
+    parser.add_argument(
         "--raw", action="store_true", help="skip markdown/stage-direction cleaning"
     )
     parser.add_argument(
@@ -388,8 +434,10 @@ def main():
         if device == "cuda":
             torch.cuda.manual_seed_all(args.seed)
 
+    report_vram(device)
+
     model_path = MODELS.get(args.model.lower(), args.model)
-    processor, model = load_model(model_path, device)
+    processor, model = load_model(model_path, device, args.dtype, args.low_vram)
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     final_path = Path(args.out) if args.out else OUTPUT_DIR / f"{script_path.stem}.wav"
@@ -400,9 +448,22 @@ def main():
     for index, chunk in enumerate(chunks, start=1):
         print(f"\n[{index}/{len(chunks)}] generating...")
         chunk_started = time.time()
-        audio = synthesize(
-            processor, model, render(chunk), voice_paths, device, args.cfg_scale
-        )
+        try:
+            audio = synthesize(
+                processor, model, render(chunk), voice_paths, device, args.cfg_scale
+            )
+        except Exception as exc:
+            if "out of memory" not in str(exc).lower():
+                raise
+            hint = "" if args.low_vram else "  - add --low-vram to offload layers to system RAM\n"
+            die(
+                f"ran out of GPU memory on chunk {index}.\n\n"
+                f"{hint}"
+                f"  - lower --chunk-chars (currently {args.chunk_chars}); try 2000, then 1000\n"
+                "  - close other GPU applications (browsers and games hold VRAM)\n"
+                "  - stay on --model 1.5b; the 7B needs far more\n"
+                "  - or use the Colab notebook in voice/notebooks/ for a bigger card"
+            )
         part_path = (
             final_path
             if len(chunks) == 1

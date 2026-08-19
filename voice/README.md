@@ -29,15 +29,37 @@ VibeVoice is a diffusion model and needs a GPU in practice.
 
 ## Quick start
 
+### Windows
+
+```powershell
+# 1. Install (creates .venv, clones VibeVoice, installs CUDA PyTorch)
+powershell -ExecutionPolicy Bypass -File voice\setup.ps1
+
+# 2. Activate the environment - needed in every new terminal
+.venv\Scripts\Activate.ps1
+
+# 3. Make a voice sample for each speaker
+python voice\prepare_voice.py --input me_talking.mp4 --name Joe  --gender man
+python voice\prepare_voice.py --input cohost.wav     --name Maya --gender woman
+
+# 4. Generate
+python voice\generate.py --script voice\scripts\example_2p.txt --voices Joe Maya
+```
+
+Needs [Git for Windows](https://git-scm.com/download/win), Python 3.10-3.12, and
+`winget install Gyan.FFmpeg`. `flash-attn` is skipped on Windows — it needs a
+full CUDA toolchain and MSVC to build, and almost never succeeds; the code falls
+back to sdpa attention automatically.
+
+If `setup.ps1` installs a CUDA build that reports `CUDA available: False`, your
+driver is likely older than the wheel: re-run with `-CudaVersion cu121`.
+
+### macOS / Linux
+
 ```bash
-# 1. Install (clones VibeVoice into voice/vendor/, installs deps)
 bash voice/setup.sh
-
-# 2. Make a voice sample for each speaker
 python voice/prepare_voice.py --input me_talking.mp4 --name Joe  --gender man
-python voice/prepare_voice.py --input cohost.wav    --name Maya --gender woman
-
-# 3. Generate
+python voice/prepare_voice.py --input cohost.wav     --name Maya --gender woman
 python voice/generate.py --script voice/scripts/example_2p.txt --voices Joe Maya
 ```
 
@@ -71,8 +93,29 @@ python voice/generate.py --script draft.txt --voices Joe Maya --dry-run
 | `--chunk-chars` | `6000` | Splits long scripts, then joins the audio. `0` disables |
 | `--device` | `auto` | `cuda`, `mps`, or `cpu` |
 | `--seed` | none | Fix for a reproducible take |
+| `--low-vram` | off | Offload layers to system RAM when the card is short on VRAM |
+| `--dtype` | `auto` | Force `float16` / `bfloat16` / `float32` |
 | `--raw` | off | Keep markdown and bracketed notes instead of stripping them |
 | `--dry-run` | off | Show the parsed script and exit |
+
+## Running on a small card
+
+The 1.5B model typically wants around 7 GB of VRAM, so 8 GB and up is
+comfortable. Below that it gets tight, and `generate.py` will say so before it
+loads anything. In rough order of what to try:
+
+```bash
+python voice/generate.py --script ep.txt --voices Joe Maya --low-vram --chunk-chars 2000
+```
+
+- `--low-vram` spills layers into system RAM. It works on less VRAM at the cost
+  of speed.
+- Lower `--chunk-chars` (2000, then 1000). Shorter generations hold fewer
+  activations, and each chunk is saved as it completes.
+- Close browsers and games first — they hold VRAM you'll want.
+- Stay on `--model 1.5b`. The 7B needs considerably more.
+
+Under ~6 GB, expect to fall back to the Colab notebook.
 
 ## Getting a good result
 
