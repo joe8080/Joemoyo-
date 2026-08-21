@@ -16,6 +16,24 @@ All brands → **MarketingAgent**
 
 ---
 
+## Also in this repository
+
+**[`aift-studio/`](aift-studio/README.md) — AI Finance Toolkit Studio**
+
+A separate TypeScript application: a private research-to-YouTube-production studio for the
+**AI Finance Toolkit** channel. It researches, cites, writes, storyboards, renders a real MP4,
+grades the result against nine quality gates — and then stops and waits for you to approve it.
+
+It has no upload credential, no YouTube OAuth scope, no brokerage API and no publish step, and a
+build guard fails CI if any of those ever appear. It shares nothing with the Python agents above
+and does not touch them.
+
+```bash
+cd aift-studio && npm install && npm run verify && npm run pack:demo
+```
+
+---
+
 ## Quick Start
 
 ### 1. Install dependencies

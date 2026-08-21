@@ -19,7 +19,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "verify": "npm run typecheck && npm run guard:no-publish && npm run guard:no-secrets && npm run test"
+    "verify": "npm run typecheck && npm run guard:no-publish && npm run guard:no-secrets && npm run test",
+    "verify:pack": "tsx scripts/verify-pack.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",

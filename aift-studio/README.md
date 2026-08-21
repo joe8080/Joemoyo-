@@ -120,6 +120,9 @@ frame, with each frame piped as JPEG straight into ffmpeg. Two consequences wort
 - **A frame is a pure function of time.** No CSS keyframes, no `requestAnimationFrame`, no
   wall-clock. Frame 4,197 is identical on every machine and every run, so what a chart shows is
   auditable rather than merely plausible.
+- **The render parallelises.** Contiguous frame ranges are captured by independent browsers and
+  concatenated by copy. A test proves one worker and three produce identical pixels either side of
+  every segment boundary.
 - **Charts are rendered in Node, by the same code the visual gate checks.** `ChartRenderer` exposes
   `visibleValues()` — the exact strings a viewer will read — and the gate compares them against the
   claim ledger. A number cannot reach the screen without a claim behind it.

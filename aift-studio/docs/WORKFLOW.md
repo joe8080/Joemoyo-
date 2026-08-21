@@ -152,6 +152,13 @@ construction rather than by adjustment afterwards.
 keyframes, no `requestAnimationFrame` and no wall-clock reads. The consequence is that a re-render is
 identical, which is what makes what a chart shows auditable rather than merely plausible.
 
+**Rendering scales across cores.** Because a frame is a pure function of time, the timeline can be
+cut into contiguous ranges, captured by independent browsers, and concatenated. Each segment is
+encoded with identical parameters and forced to open on a keyframe, so the concat demuxer joins them
+by copy — no re-encode and no generation loss. A test renders the same clip on one worker and on
+three and compares frame hashes either side of every segment boundary. The default is one worker per
+two cores, capped at four; the encoder needs a core too.
+
 **Charts are pre-rendered in Node** by `SvgChartRenderer`, at one SVG per animation step, embedded
 in the document. That is the same class whose `visibleValues()` the visual-accuracy gate compares
 against the claim ledger — so the code that draws the pixels is the code the gate checks.
