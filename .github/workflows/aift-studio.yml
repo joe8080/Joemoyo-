@@ -1,0 +1,49 @@
+name: AIFT Studio
+
+# The two guards run before the tests, so a build that acquires a publishing
+# path, or leaks a secret into a client bundle, fails fast and obviously.
+#
+# There is deliberately no step here that applies a database migration.
+# Migrations are reviewed and applied by a person, against a branch database.
+
+on:
+  push:
+    paths: ['aift-studio/**', '.github/workflows/aift-studio.yml']
+  pull_request:
+    paths: ['aift-studio/**', '.github/workflows/aift-studio.yml']
+
+defaults:
+  run:
+    working-directory: aift-studio
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: aift-studio/package-lock.json
+
+      - run: npm ci
+
+      - name: No publishing path exists
+        run: npm run guard:no-publish
+
+      - name: No secret reachable from a client bundle
+        run: npm run guard:no-secrets
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Produce a complete content pack from the fixture topic
+        run: npm run pack:demo -- --no-video

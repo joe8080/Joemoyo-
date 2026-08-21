@@ -8,19 +8,18 @@
     "node": ">=20.11"
   },
   "scripts": {
-    "dev": "next dev -p 3000",
     "build": "next build",
-    "start": "next start -p 3000",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest",
+    "capture:ui": "tsx scripts/capture-ui.ts",
+    "dev": "next dev -p 3000",
     "guard:no-publish": "tsx scripts/guard-no-publish.ts",
     "guard:no-secrets": "tsx scripts/guard-no-client-secrets.ts",
-    "verify": "npm run typecheck && npm run guard:no-publish && npm run test",
     "pack:demo": "tsx scripts/run-demo-pack.ts",
-    "render:pack": "tsx scripts/render-pack.ts",
-    "seed": "tsx scripts/seed-local.ts",
-    "preview": "tsx scripts/preview-frames.ts"
+    "preview": "tsx scripts/preview-frames.ts",
+    "start": "next start -p 3000",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run typecheck && npm run guard:no-publish && npm run guard:no-secrets && npm run test"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",

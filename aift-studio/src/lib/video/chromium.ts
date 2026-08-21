@@ -33,7 +33,9 @@ export function resolveChromiumPath(): string | undefined {
     '/usr/bin/chromium', '/usr/bin/chromium-browser', '/usr/bin/google-chrome',
     '/usr/bin/google-chrome-stable', '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   ]) {
-    if (existsSync(p)) return p;
+    // Probing known install locations for a binary; the tracer's warning about
+    // whole-project tracing does not apply to an absolute path list.
+    if (existsSync(/* turbopackIgnore: true */ p)) return p;
   }
   return undefined;
 }

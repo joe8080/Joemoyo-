@@ -16,7 +16,7 @@ export function resolveFfmpegPath(): string {
     // fall through
   }
   for (const p of ['/usr/bin/ffmpeg', '/usr/local/bin/ffmpeg', '/opt/homebrew/bin/ffmpeg']) {
-    if (existsSync(p)) return p;
+    if (existsSync(/* turbopackIgnore: true */ p)) return p;
   }
   return 'ffmpeg';
 }
