@@ -139,7 +139,8 @@ Every variable is optional. See `.env.example` for the full list and the ones de
 
 | Variable | Effect when absent |
 |---|---|
-| `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | In-memory persistence; state lives for the life of the process |
+| `SUPABASE_URL`, `SUPABASE_ANON_KEY` | No sign-in: the studio runs as a single local owner and says so. Set both to enforce Supabase Auth on every page |
+| `SUPABASE_SERVICE_ROLE_KEY` | In-memory persistence; state lives for the life of the process |
 | `AIFT_LLM_API_KEY` | Deterministic composer instead of a model. The pipeline still runs and the pack is still complete |
 | `AIFT_TTS_PROVIDER` | Silent narration at exactly the right length. Set `espeak` for an offline preview voice, `http` for a licensed one |
 | `AIFT_MEDIA_API_KEY` | Procedural abstract B-roll |

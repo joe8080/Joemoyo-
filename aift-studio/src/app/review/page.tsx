@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function ReviewIndex() {
   const { repo } = await getRuntime();
-  const jobs = await repo.listContentJobs(ownerId());
+  const jobs = await repo.listContentJobs(await ownerId());
   const queue = jobs.filter((j) => j.status !== 'archived');
   const done = jobs.filter((j) => j.status === 'archived');
 

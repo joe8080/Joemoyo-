@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import './globals.css';
 import { getRuntime } from '@/lib/server/runtime';
+import { getSessionUser, supabaseAuthConfigured } from '@/lib/server/auth';
+import { signOutAction } from './actions';
 
 export const metadata: Metadata = {
   title: 'AI Finance Toolkit Studio',
@@ -22,6 +24,8 @@ const NAV = [
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { mode } = await getRuntime();
   const live = Object.values(mode).filter((m) => m === 'live' || m === 'supabase').length;
+  const authOn = supabaseAuthConfigured();
+  const user = authOn ? await getSessionUser() : null;
 
   return (
     <html lang="en-GB">
@@ -46,7 +50,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </nav>
 
             <div className="railfoot">
-              <b>Providers</b>
+              <b>Owner</b>
+              {authOn ? (
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'center' }}>
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{user?.email ?? 'signed out'}</span>
+                  <form action={signOutAction}>
+                    <button type="submit" style={{ padding: '2px 8px', fontSize: 11 }}>out</button>
+                  </form>
+                </div>
+              ) : (
+                <div style={{ color: 'var(--warn)' }}>local owner — authentication is not enforced</div>
+              )}
+              <b style={{ marginTop: 12 }}>Providers</b>
               {Object.entries(mode).map(([k, v]) => (
                 <div key={k} style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
                   <span>{k}</span>

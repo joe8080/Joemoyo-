@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 export default async function SystemLog() {
   const { repo, providers, mode } = await getRuntime();
   const runs = await repo.listRuns(60);
-  const jobs = await repo.listContentJobs(ownerId());
+  const jobs = await repo.listContentJobs(await ownerId());
   const events = (await Promise.all(jobs.map((j) => repo.listReviewEvents(j.id)))).flat()
     .sort((a, b) => b.created_at.localeCompare(a.created_at));
 

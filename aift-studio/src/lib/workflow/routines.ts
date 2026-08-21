@@ -38,7 +38,7 @@ export const researchRadar: JobDefinition<RadarInput> = {
 
     for (const topic of context.research_topics.slice(0, 3)) {
       const job = await engine.intake({
-        userId: ownerId(), topic: topic.topic, ticker: topic.ticker,
+        userId: await ownerId(), topic: topic.topic, ticker: topic.ticker,
         jobType: 'radar', referenceDate: input.day,
       });
       const { claims } = await engine.runResearch(job.id, brand);
@@ -64,14 +64,14 @@ export const editorialProduction: JobDefinition<ProductionInput> = {
     const { engine, repo } = await getRuntime();
     const brand = await getBrand();
 
-    const candidates = (await repo.listResearchJobs(ownerId()))
+    const candidates = (await repo.listResearchJobs(await ownerId()))
       .filter((j) => j.status === 'evidence_ready' && !j.failure_reason);
     const chosen = candidates[0];
     if (!chosen) throw new PermanentJobError('no research job with sufficient evidence is available');
 
     ctx.log('info', 'production', `producing "${chosen.topic}" as ${input.format}`);
     const job = await engine.createContentJob({
-      userId: ownerId(), researchJobId: chosen.id, format: input.format, workingTitle: chosen.topic,
+      userId: await ownerId(), researchJobId: chosen.id, format: input.format, workingTitle: chosen.topic,
     });
 
     const { blocked } = await engine.produce(job.id, brand, { renderVideo: true });

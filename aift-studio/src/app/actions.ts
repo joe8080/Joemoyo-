@@ -1,7 +1,9 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { getBrand, getRuntime, ownerId, requireReviewer } from '@/lib/server/runtime';
+import { signOutSession } from '@/lib/server/auth';
 import { FIXTURE_TOPIC } from '@/lib/fixtures/northwind';
 import { stableId } from '@/lib/util/hash';
 import type { BrandSettings } from '@/lib/domain';
@@ -23,7 +25,7 @@ export async function createResearchJob(form: FormData): Promise<void> {
 
   if (!topic) throw new Error('A topic is required.');
   const job = await engine.intake({
-    userId: ownerId(), topic, ticker, jobType: 'deep_dive',
+    userId: await ownerId(), topic, ticker, jobType: 'deep_dive',
     referenceDate: referenceDate || new Date().toISOString().slice(0, 10),
   });
   await engine.runResearch(job.id, brand);
@@ -35,7 +37,7 @@ export async function seedFixtureTopic(): Promise<void> {
   const { engine } = await getRuntime();
   const brand = await getBrand();
   const job = await engine.intake({
-    userId: ownerId(), topic: FIXTURE_TOPIC.topic, ticker: FIXTURE_TOPIC.ticker,
+    userId: await ownerId(), topic: FIXTURE_TOPIC.topic, ticker: FIXTURE_TOPIC.ticker,
     jobType: 'deep_dive', referenceDate: FIXTURE_TOPIC.referenceDate,
   });
   await engine.runResearch(job.id, brand);
@@ -51,7 +53,7 @@ export async function produceContent(form: FormData): Promise<void> {
   const withVideo = form.get('with_video') === 'on';
 
   const job = await engine.createContentJob({
-    userId: ownerId(), researchJobId, format,
+    userId: await ownerId(), researchJobId, format,
     workingTitle: (await (await getRuntime()).repo.getResearchJob(researchJobId))?.topic ?? 'Untitled',
   });
   await engine.produce(job.id, brand, { renderVideo: withVideo });
@@ -151,8 +153,13 @@ export async function saveBrand(form: FormData): Promise<void> {
     throw new Error('The disclosure text is required and must be a complete sentence.');
   }
 
-  await repo.updateBrandSettings(ownerId(), patch);
+  await repo.updateBrandSettings(await ownerId(), patch);
   revalidatePath('/brand');
+}
+
+export async function signOutAction(): Promise<void> {
+  await signOutSession();
+  redirect('/login');
 }
 
 function splitLines(v: string): string[] {

@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function StudioIndex() {
   const { repo } = await getRuntime();
-  const jobs = await repo.listContentJobs(ownerId());
+  const jobs = await repo.listContentJobs(await ownerId());
 
   return (
     <>

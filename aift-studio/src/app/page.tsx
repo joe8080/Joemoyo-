@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function Dashboard() {
   const { repo, mode } = await getRuntime();
-  const user = ownerId();
+  const user = await ownerId();
   const research = await repo.listResearchJobs(user);
   const jobs = await repo.listContentJobs(user);
 

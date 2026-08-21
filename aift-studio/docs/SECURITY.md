@@ -106,7 +106,30 @@ screen, marked unresolved, and this application will not mark it resolved.
 
 ---
 
-## 3. Key placement
+## 3. Authentication and the reviewer boundary
+
+The studio runs in one of two modes, and it says which:
+
+| Mode | When | What it means |
+|---|---|---|
+| **Authenticated** | `SUPABASE_URL` and `SUPABASE_ANON_KEY` are set | Every page requires a Supabase session. Middleware redirects to `/login`, `requireReviewer()` throws without one, and every approval is attributed to the signed-in user id. RLS scopes every row to it. |
+| **Local owner** | Those are absent | The studio runs as a single local owner with no sign-in. Fine on localhost, not fine on a shared host. |
+
+The Security Checklist reports which mode is in force. It does not describe the local mode as
+secure, because it is not.
+
+`/api/jobs/run` is exempt from the cookie check and authenticates by HMAC over the request body
+instead — the right shape for a platform cron and the wrong shape for a session cookie. Without
+`AIFT_JOB_SIGNING_SECRET` it returns 503 and refuses everything.
+
+**The transition to `approved_for_archive` and to `archived` is reachable from exactly three server
+actions, all of which call `requireReviewer()` first, transition with actor `reviewer`, and record a
+review event.** A test asserts the workflow engine contains no transition call naming either state,
+so the property is checked rather than merely intended.
+
+---
+
+## 4. Key placement
 
 | Key | Where it may live | Enforcement |
 |---|---|---|
@@ -129,7 +152,7 @@ Assets in the private bucket are reachable only through short-lived signed URLs 
 
 ---
 
-## 4. Migration review process
+## 5. Migration review process
 
 1. **Read the migration.** Every file in `supabase/migrations/` is meant to be read start to finish.
 2. **Apply to a branch database**, never to production.
@@ -144,7 +167,7 @@ database. That is not an oversight.
 
 ---
 
-## 5. What this system cannot do
+## 6. What this system cannot do
 
 Not "will not" — cannot, and the build proves it on every run.
 

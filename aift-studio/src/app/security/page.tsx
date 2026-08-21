@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { secretHealth } from '@/lib/env';
 import { getBrand, getRuntime } from '@/lib/server/runtime';
+import { getSessionUser, supabaseAuthConfigured } from '@/lib/server/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,6 +27,8 @@ export default async function SecurityChecklist() {
   const { mode } = await getRuntime();
   const brand = await getBrand();
   const health = secretHealth();
+  const authOn = supabaseAuthConfigured();
+  const user = authOn ? await getSessionUser() : null;
 
   const proposal = await readFile('supabase/migrations-pending-review/0001_REVIEW_REQUIRED_broker_rls.sql', 'utf8').catch(() => '');
   const tests = await readFile('supabase/tests/broker_rls_policy_test.sql', 'utf8').catch(() => '');
@@ -194,6 +197,19 @@ export default async function SecurityChecklist() {
                   {mode.database === 'supabase'
                     ? 'Connected. Apply the aift_* migrations on a branch first.'
                     : 'Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY on the server to persist beyond this process.'}
+                </td>
+              </tr>
+              <tr>
+                <td>Authentication</td>
+                <td>
+                  <span className={`pill ${authOn ? 'pass' : 'fail'}`}>
+                    {authOn ? (user ? `signed in as ${user.email ?? 'owner'}` : 'configured, signed out') : 'not enforced'}
+                  </span>
+                </td>
+                <td style={{ color: 'var(--dim)' }}>
+                  {authOn
+                    ? 'Supabase Auth is in force. Every page requires a session and every approval is attributed to it.'
+                    : 'Running as a single local owner. Fine on localhost; set SUPABASE_URL and SUPABASE_ANON_KEY and create the owner account before this reaches any shared host.'}
                 </td>
               </tr>
               <tr>

@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function ResearchDesk() {
   const { repo } = await getRuntime();
-  const jobs = await repo.listResearchJobs(ownerId());
+  const jobs = await repo.listResearchJobs(await ownerId());
 
   const detail = await Promise.all(jobs.map(async (j) => ({
     job: j,
