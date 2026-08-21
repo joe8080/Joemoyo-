@@ -58,15 +58,22 @@ async function main(): Promise<void> {
       assets: Array<{ type: string; key: string; sha256: string; bytes: number }>;
       aspect_ratio: string; duration_seconds: number;
     };
+    // A storage key is `<user>/<job>/<format>/<relative path>`, and `dir` is the
+    // pack directory — the first three segments. Everything after them is the
+    // path inside the pack, subdirectories included.
     let mismatched = 0;
+    let checked = 0;
+    let missing = 0;
     for (const a of manifest.assets) {
-      const name = a.key.split('/').slice(-1)[0]!;
-      const path = join(dir, ...a.key.split('/').slice(-2, -1).filter((p) => p !== name), name);
-      const bytes = await readFile(path).catch(() => null);
-      if (!bytes) continue;
+      const relative = a.key.split('/').slice(3);
+      if (relative.length === 0) continue;
+      const bytes = await readFile(join(dir, ...relative)).catch(() => null);
+      if (!bytes) { missing += 1; continue; }
+      checked += 1;
       if (sha256(new Uint8Array(bytes)) !== a.sha256) mismatched += 1;
     }
-    add('asset hashes match the manifest', mismatched === 0, `${mismatched} mismatch(es)`);
+    add('asset hashes match the manifest', mismatched === 0 && missing === 0 && checked > 0,
+      `${checked} verified, ${mismatched} mismatch(es), ${missing} missing`);
 
     // --- the video itself ---------------------------------------------------
     const video = files.find((f) => f.endsWith('.mp4'));

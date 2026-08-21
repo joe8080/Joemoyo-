@@ -220,7 +220,7 @@ export const sceneSchema = z.object({
   scene_id: z.string().min(1).max(24),
   beat_ids: z.array(z.string()).min(1),
   start_ms: z.number().int().min(0),
-  duration_ms: z.number().int().min(1200).max(30_000),
+  duration_ms: z.number().int().min(1200).max(90_000),
   composition: z.enum([
     'title_card',
     'statement',

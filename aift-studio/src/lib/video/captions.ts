@@ -44,7 +44,15 @@ export function buildCaptionTimeline(
       return word;
     });
 
-    lines.push({ beatId, start, end: Math.round(cursor), words });
+    // The planner guarantees the scene is long enough, but a caption that runs
+    // past its cut produces an SRT whose cues go backwards — worth making
+    // impossible here too rather than only upstream.
+    const limit = scene.start_ms + scene.duration_ms;
+    for (const w of words) {
+      w.start = Math.min(w.start, limit);
+      w.end = Math.min(w.end, limit);
+    }
+    lines.push({ beatId, start, end: Math.min(Math.round(cursor), limit), words });
   }
 
   return lines;

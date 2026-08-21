@@ -395,6 +395,8 @@ async function gateContext(out: Produced, over: { script?: ContentJob['script'];
     critique: null,
     renderedChartValues: rendered,
     audioPeakDbfs: -3,
+    narrationByBeat: new Map(plan.scenes.map((s) => [s.beat_ids[0]!, (s.duration_ms - 700) / 1000])),
+    captionCueStartsMs: plan.scenes.map((s) => s.start_ms),
     videoBytes: 5_000_000,
     videoAspect: '16:9',
     narrationSeconds: plan.total_ms / 1000,

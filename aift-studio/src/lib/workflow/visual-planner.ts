@@ -53,7 +53,13 @@ const DIMENSIONS = {
 const LEAD_IN_MS = 260;
 const TAIL_MS = 420;
 const MIN_SCENE_MS = 1600;
-const MAX_SCENE_MS = 30_000;
+/**
+ * A cap on how long a *silent* scene may hold. It is deliberately not applied to
+ * a scene carrying narration: clamping there made the audio and the captions run
+ * past the cut and overlap the next scene — two voices at once, and an SRT whose
+ * cues went backwards.
+ */
+const MAX_SILENT_SCENE_MS = 30_000;
 
 export function planScenes(input: PlanInput): ScenePlan {
   const dims = DIMENSIONS[input.format];
@@ -64,7 +70,9 @@ export function planScenes(input: PlanInput): ScenePlan {
   for (const [i, beat] of input.script.beats.entries()) {
     const spoken = (input.narrationSeconds.get(beat.beat_id) ?? 0) * 1000;
     const raw = Math.round(spoken + LEAD_IN_MS + TAIL_MS);
-    const duration = Math.min(MAX_SCENE_MS, Math.max(MIN_SCENE_MS, raw));
+    const duration = spoken > 0
+      ? Math.max(MIN_SCENE_MS, raw)
+      : Math.min(MAX_SILENT_SCENE_MS, Math.max(MIN_SCENE_MS, raw));
 
     const beatClaims = beat.claim_ids.map((id) => claimById.get(id)).filter((c): c is Claim => Boolean(c));
     const scene = buildScene({

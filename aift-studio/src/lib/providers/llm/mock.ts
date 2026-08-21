@@ -299,18 +299,18 @@ const PIVOTS = [
  */
 const MECHANISM: Record<string, string[]> = {
   financial_statement: [
-    'A reported figure is the most solid thing in a filing. It has been through the company’s own controls and, at the year end, an auditor’s. What it does not carry is context. It tells you what happened in the period. It does not tell you whether the period was representative, and it does not tell you what the next one looks like.',
-    'Reported figures are backward-looking by construction. That is a feature: it is the one part of the document that is not an opinion. The work is in deciding what the figure is evidence of — a durable change in the business, or a quarter that happened to fall a certain way.',
+    'A reported figure is the most solid thing in a filing. It has been through the company’s own controls and, at the year end, an auditor’s. What it does not carry is context: it tells you what happened, not whether the period was representative.',
+    'Reported figures are backward-looking by construction, and that is a feature: this is the one part of the document that is not an opinion. The work is deciding what the figure is evidence of.',
     'Notice what a line like this settles and what it leaves open. It settles what the period contained. It leaves open whether the same conditions hold next quarter, and the filing is careful not to claim otherwise.',
     'The temptation with a figure this clean is to extend the line. Resist it for one more minute, because the interesting question is not how large the number is but what had to be true for it to be that large.',
   ],
   forecast_or_guidance: [
-    'Guidance sits in a different category entirely. It is the company’s own estimate of its own future, issued under a safe harbour and revised whenever conditions change. Treat it as information about management’s confidence rather than as a result that has already happened.',
+    'Guidance sits in a different category. It is the company’s own estimate of its own future, issued under a safe harbour and revised whenever conditions change. Treat it as information about management’s confidence, not as a result.',
     'A guided number is not a small version of a reported number. It is a statement of intent with a range attached. The useful question is not whether the midpoint is right; it is what the company would have to see to move it.',
     'The range around a guided figure is doing more work than the figure itself. A narrow range says the quarter is largely booked. A wide one says the company is telling you honestly that it does not know.',
   ],
   insider_or_ownership: [
-    'Concentration disclosure exists because dependency is material. The threshold is not a judgement about whether the relationship is good or bad — a concentrated customer base can be extremely profitable for as long as it lasts. It is a statement that if the relationship ends, it matters.',
+    'Concentration disclosure exists because dependency is material. It is not a judgement about whether the relationship is good — a concentrated customer base can be very profitable while it lasts. It says that if it ends, it matters.',
     'When a filing names a dependency, it is telling you where the business is fragile, not predicting that the fragility will be tested. Those are different claims, and conflating them is the most common mistake made with this line.',
   ],
   causal: [

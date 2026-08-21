@@ -435,6 +435,8 @@ export class WorkflowEngine {
       contentJobId, format: job0.format, brand, script, plan, claims, sources,
       assets, critique, renderedChartValues,
       audioPeakDbfs: audioPeak, videoBytes,
+      narrationByBeat: narrationSeconds,
+      captionCueStartsMs: srtCueStarts(srt),
       videoAspect: aspect,
       narrationSeconds: [...narrationSeconds.values()].reduce((a, b) => a + b, 0),
       runAt: this.iso(),
@@ -542,6 +544,13 @@ function tierFor(url: string): string {
   if (/sec\.gov|investor\./iu.test(url)) return 'primary_filing';
   if (/\.gov|europa\.eu|bankofengland/iu.test(url)) return 'primary_regulator';
   return 'journalism';
+}
+
+/** Cue start times, in the order they appear in the file. */
+function srtCueStarts(srt: string): number[] {
+  return [...srt.matchAll(/(\d{2}):(\d{2}):(\d{2}),(\d{3}) --> /gu)].map(
+    (m) => Number(m[1]) * 3_600_000 + Number(m[2]) * 60_000 + Number(m[3]) * 1000 + Number(m[4]),
+  );
 }
 
 function countWords(script: Script): number {

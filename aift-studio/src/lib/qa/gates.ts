@@ -26,6 +26,10 @@ export type GateContext = {
   /** Exact strings the chart renderer will draw, keyed by scene id. */
   renderedChartValues: Map<string, string[]>;
   audioPeakDbfs: number;
+  /** beat_id → measured narration seconds, for the scene-coverage check. */
+  narrationByBeat: Map<string, number>;
+  /** Cue start times from the produced SRT, in order of appearance. */
+  captionCueStartsMs: number[];
   videoBytes: number;
   videoAspect: string;
   narrationSeconds: number;
@@ -350,6 +354,28 @@ function technicalGate(ctx: GateContext): Draft[] {
     ? ok('technical', 'pack_complete', 'Every required asset is present in the content pack.')
     : fail('technical', 'pack_complete', 'The content pack is missing required assets.', missing,
         'Re-run the render stage; each missing asset names the producing step.'));
+
+  // Overlapping narration is the failure this catches: a scene shorter than the
+  // speech it carries bleeds into the next one, and the captions go with it.
+  const overrun = ctx.plan.scenes.filter((s) => {
+    const spoken = (ctx.narrationByBeat.get(s.beat_ids[0] ?? '') ?? 0) * 1000;
+    return spoken > 0 && spoken + 200 > s.duration_ms;
+  });
+  out.push(overrun.length === 0
+    ? ok('technical', 'scenes_cover_narration', 'Every scene is long enough for the narration it carries.')
+    : fail('technical', 'scenes_cover_narration',
+        'A scene is shorter than its narration, so speech and captions overlap the next scene.',
+        overrun.map((s) => `${s.scene_id}: ${(s.duration_ms / 1000).toFixed(1)}s scene, ${((ctx.narrationByBeat.get(s.beat_ids[0] ?? '') ?? 0)).toFixed(1)}s spoken`),
+        'Lengthen the scene to at least the narration duration, or split the beat.'));
+
+  // Cues must advance. A backwards SRT is rejected by most players outright.
+  const srtAsset = ctx.assets.find((a) => a.asset_type === 'captions_srt');
+  const cueOrder = ctx.captionCueStartsMs;
+  const ordered = cueOrder.every((v, i) => i === 0 || v >= cueOrder[i - 1]!);
+  out.push(ordered
+    ? ok('technical', 'caption_cues_ordered', `${cueOrder.length} caption cues, all in ascending order.`)
+    : fail('technical', 'caption_cues_ordered', 'Caption cues are not in ascending order.',
+        [srtAsset?.storage_key ?? 'captions.srt'], 'Fix the scene timings; a cue cannot start before the previous one.'));
 
   const badHash = ctx.assets.filter((a) => a.bytes > 0 && !/^[0-9a-f]{64}$/u.test(a.sha256));
   out.push(badHash.length === 0
