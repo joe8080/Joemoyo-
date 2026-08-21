@@ -46,7 +46,10 @@ phrase list.`,
 Write the script. You may use only the approved claims supplied; any other figure is forbidden.
 Every beat that states a figure carries the claim id for it. Values are spoken with their as-of date.
 Include the disclosure verbatim as its own beat before the outro. Write for the ear: short sentences for
-numbers, longer ones for reasoning.`,
+numbers, longer ones for reasoning.
+In description_markdown, put the exact string <!--AIFT:CHAPTERS--> where the chapter list belongs. Scene
+timings do not exist yet, so you cannot know the timecodes; the render stage substitutes the real list.
+Do not repeat the disclosure in a footer — it already has its own section.`,
 
   reviewer_critique: `
 You are an independent reviewer. You did not write this script and you have no stake in it passing.

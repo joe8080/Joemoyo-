@@ -181,6 +181,16 @@ export const scriptBeatSchema = z.object({
 });
 export type ScriptBeat = z.infer<typeof scriptBeatSchema>;
 
+/**
+ * Placeholder for the chapter list in a description.
+ *
+ * The description is written before scene timings exist, so timecodes cannot be
+ * known at that point. The writer emits this marker and the render stage
+ * substitutes the real chapter list. A placeholder that gets replaced beats a
+ * list of guessed timestamps that then has to be stripped out again.
+ */
+export const CHAPTERS_MARKER = '<!--AIFT:CHAPTERS-->';
+
 export const scriptSchema = z.object({
   working_title: z.string().min(10).max(100),
   reference_date: isoDate,

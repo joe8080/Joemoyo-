@@ -5,7 +5,7 @@ import type {
   BrandSettings, ClaimRecord, ContentAsset, ContentJob, ResearchJob, SourceDocument, Uuid,
 } from '@/lib/domain';
 import {
-  analystBriefSchema, editorialPlanSchema, reviewerCritiqueSchema, scriptSchema,
+  analystBriefSchema, CHAPTERS_MARKER, editorialPlanSchema, reviewerCritiqueSchema, scriptSchema,
   searchPlanSchema, sourceAssessmentSchema, thumbnailBriefSchema,
   type AnalystBrief, type EditorialPlan, type ReviewerCritique, type ScenePlan, type Script, type ThumbnailBrief,
 } from '@/lib/schemas/content';
@@ -605,11 +605,13 @@ function descriptionWithChapters(script: Script, plan: ScenePlan, brand: BrandSe
     return `${youtubeStamp(plan.scenes[Math.max(0, i)]?.start_ms ?? 0)} ${c.title}`;
   }).join('\n');
 
+  // The disclosure is already the last section of the body; repeating it in the
+  // footer would put it on screen twice for no reader's benefit.
   return [
-    script.description_markdown.replace(/^- —.*$/gmu, '').replace(/### Chapters\n\n?/u, `### Chapters\n${chapterLines}\n`),
+    script.description_markdown.replace(CHAPTERS_MARKER, chapterLines),
     '', '---', '',
     `${brand.channel_name} · ${script.reference_date}`,
-    '', script.disclosure_text, '',
+    '',
     `Tags: ${script.tags.join(', ')}`,
   ].join('\n');
 }

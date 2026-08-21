@@ -7,7 +7,7 @@ import type {
 import type {
   AnalystBrief, Claim, EditorialPlan, ReviewerCritique, Script, ScriptBeat, SearchPlan, SourceAssessment,
 } from '@/lib/schemas/content';
-import { isMaterial } from '@/lib/schemas/content';
+import { CHAPTERS_MARKER, isMaterial } from '@/lib/schemas/content';
 import { stableHash } from '@/lib/util/hash';
 
 /**
@@ -61,7 +61,7 @@ export class MockLLMProvider implements LLMProvider {
 // ---------------------------------------------------------------------------
 
 function searchPlan(p: SearchPlanPayload): SearchPlan {
-  const subject = p.ticker ? `${p.ticker}` : p.topic.split(/[:—-]/u)[0]!.trim();
+  const subject = p.ticker ? `${p.ticker}` : p.topic.split(/[:—]/u)[0]!.trim();
   return {
     reference_date: p.reference_date,
     rationale:
@@ -137,7 +137,7 @@ function analystBrief(p: AnalystBriefPayload): AnalystBrief {
 
   const bull = byDirection('bull');
   const bear = byDirection('bear');
-  const subject = p.ticker ?? p.topic.split(/[:—-]/u)[0]!.trim();
+  const subject = p.ticker ?? p.topic.split(/[:—]/u)[0]!.trim();
 
   return {
     reference_date: p.reference_date,
@@ -179,7 +179,7 @@ function analystBrief(p: AnalystBriefPayload): AnalystBrief {
 // ---------------------------------------------------------------------------
 
 function editorialPlan(p: EditorialPayload): EditorialPlan {
-  const subject = p.ticker ?? p.brief.headline.split(/[:—-]/u)[0]!.trim();
+  const subject = p.ticker ?? p.brief.headline.split(/[:—]/u)[0]!.trim();
   const short = p.format === 'short';
 
   // Group claims by what they are, then build chapters around the groups that
@@ -525,7 +525,7 @@ function script(p: ScriptPayload): Script {
     reference_date: p.reference_date,
     beats,
     chapters,
-    description_markdown: buildDescription(p, chapters),
+    description_markdown: buildDescription(p),
     tags: buildTags(p),
     disclosure_text: p.disclosure_text,
   };
@@ -542,7 +542,7 @@ function dedupeChapters(beats: ScriptBeat[]): Script['chapters'] {
   return out;
 }
 
-function buildDescription(p: ScriptPayload, chapters: Script['chapters']): string {
+function buildDescription(p: ScriptPayload): string {
   const claimLines = p.approved_claims
     .map((c) => `- \`${c.claim_id}\` — ${c.claim_text} _(as of ${c.as_of_date ?? 'n/a'}, confidence ${c.confidence.toFixed(2)})_`)
     .join('\n');
@@ -554,7 +554,7 @@ function buildDescription(p: ScriptPayload, chapters: Script['chapters']): strin
     `**Reference date:** ${p.reference_date}`,
     '',
     '### Chapters',
-    chapters.map((c, i) => `- ${i === 0 ? '00:00' : '—'} ${c.title}`).join('\n'),
+    CHAPTERS_MARKER,
     '',
     '### Every claim in this video',
     claimLines,
@@ -567,11 +567,25 @@ function buildDescription(p: ScriptPayload, chapters: Script['chapters']): strin
   ].join('\n');
 }
 
+const TAG_STOPWORDS = new Set([
+  'about', 'actually', 'after', 'again', 'against', 'because', 'behind', 'between', 'could',
+  'filing', 'first', 'their', 'there', 'these', 'those', 'three', 'through', 'which', 'while',
+  'would', 'quarter', 'matter', 'number', 'says', 'study',
+]);
+
 function buildTags(p: ScriptPayload): string[] {
-  const base = ['investing education', 'how to read a 10-Q', 'financial statements', 'equity research', 'fundamental analysis',
-    'earnings explained', 'risk factors', 'customer concentration', 'gross margin', 'guidance vs results'];
-  const fromTitle = p.editorial.title_options[0]!.title.toLowerCase().split(/\W+/u).filter((t) => t.length > 4).slice(0, 5);
-  return Array.from(new Set([...base, ...fromTitle])).slice(0, 20);
+  const base = ['investing education', 'how to read a 10-Q', 'financial statements', 'equity research',
+    'fundamental analysis', 'earnings explained', 'risk factors', 'customer concentration',
+    'gross margin', 'guidance vs results'];
+  // Ticker and subject only. Splitting the title into words produced tags like
+  // "actually" and "filing", which are noise dressed as keywords.
+  // Split on a colon or em dash only: a plain hyphen cuts compound words like
+  // "data-centre" and leaves a tag that reads as a truncation.
+  const subject = p.brief.headline.split(/[:—]/u)[0]!.trim().toLowerCase()
+    .replace(/[’']s\b/u, '').replace(/\s+/gu, ' ').trim();
+  const extras = [subject, ...(subject.includes('semiconductor') ? ['semiconductors', 'supply chain'] : [])]
+    .filter((t) => t.length > 3 && t.length < 40 && !TAG_STOPWORDS.has(t));
+  return Array.from(new Set([...base, ...extras])).slice(0, 20);
 }
 
 // ---------------------------------------------------------------------------
