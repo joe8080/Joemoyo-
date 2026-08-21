@@ -23,6 +23,8 @@ import { assembleNarration, peakDbfs, type Placement } from '@/lib/video/audio';
 import { renderStill, renderVideo } from '@/lib/video/render';
 import { runAllGates, isBlocked, type GateContext } from '@/lib/qa/gates';
 import { SvgChartRenderer } from '@/lib/providers/chart/svg';
+import { PermanentJobError } from '@/lib/providers/jobs/inline';
+import type { ContentState } from '@/lib/workflow/states';
 
 /**
  * The workflow engine.
@@ -231,9 +233,7 @@ export class WorkflowEngine {
 
     // queued → researching → evidence_ready is owned by the research job; the
     // content job walks its own path from queued.
-    await this.step(contentJobId, 'researching', 'research linked');
-    await this.step(contentJobId, 'evidence_ready', `${approved.length}/${claims.length} claims cleared`);
-    await this.step(contentJobId, 'drafting', 'editorial planning');
+    await this.advance(contentJobId, 'drafting', `${approved.length}/${claims.length} claims cleared`);
 
     const editorial = await this.call('editorial_plan', 'fast', editorialPlanSchema, {
       kind: 'editorial_plan', topic: research.topic, ticker: research.ticker,
@@ -257,7 +257,7 @@ export class WorkflowEngine {
     this.log('info', 'script', `${script.beats.length} beats, ${countWords(script)} words`);
 
     // --- narration ----------------------------------------------------------
-    await this.step(contentJobId, 'visual_planning', 'narration + scene plan');
+    await this.advance(contentJobId, 'visual_planning', 'narration + scene plan');
     const narrationSeconds = new Map<string, number>();
     const clips: Array<{ beatId: string; wav: Uint8Array }> = [];
     for (const beat of script.beats) {
@@ -283,7 +283,7 @@ export class WorkflowEngine {
     this.log('info', 'visual_plan', `${plan.scenes.length} scenes, ${(plan.total_ms / 1000).toFixed(1)}s`);
 
     // --- render -------------------------------------------------------------
-    await this.step(contentJobId, 'rendering', 'assembling pack');
+    await this.advance(contentJobId, 'rendering', 'assembling pack');
     const prefix = `${job0.user_id}/${contentJobId}/${job0.format}`;
     const assets: ContentAsset[] = [];
     const store = async (
@@ -420,7 +420,7 @@ export class WorkflowEngine {
     }
 
     // --- QA -----------------------------------------------------------------
-    await this.step(contentJobId, 'qa_running', 'quality gates');
+    await this.advance(contentJobId, 'qa_running', 'quality gates');
 
     const critique = await this.call('reviewer_critique', 'review', reviewerCritiqueSchema, {
       kind: 'reviewer_critique', script,
@@ -458,10 +458,11 @@ export class WorkflowEngine {
 
     const blocked = isBlocked(checks);
     if (blocked) {
-      await this.step(contentJobId, 'blocked', `${checks.filter((c) => c.result === 'fail' && c.severity === 'blocking').length} blocking check(s)`);
+      await this.repo.transition(contentJobId, 'blocked', 'workflow',
+        `${checks.filter((c) => c.result === 'fail' && c.severity === 'blocking').length} blocking check(s)`);
       this.log('warn', 'qa', 'job blocked by quality gates');
     } else {
-      await this.step(contentJobId, 'needs_review', 'awaiting owner review');
+      await this.advance(contentJobId, 'needs_review', 'awaiting owner review');
       this.log('info', 'qa', 'all blocking checks passed; job is in needs_review');
     }
 
@@ -471,10 +472,42 @@ export class WorkflowEngine {
 
   // -------------------------------------------------------------------------
 
-  private async step(id: Uuid, to: Parameters<Repository['transition']>[1], note: string): Promise<void> {
-    const job = await this.repo.getContentJob(id);
-    if (!job || job.status === to) return;
-    await this.repo.transition(id, to, 'workflow', note);
+  /**
+   * The canonical forward path. `advance` walks it rather than jumping, so a job
+   * that resumes mid-way — after a rework, or after a blocked run was cleared —
+   * still passes through every state and every state change is still a legal,
+   * recorded FSM edge.
+   */
+  private static readonly ORDER: ContentState[] = [
+    'queued', 'researching', 'evidence_ready', 'drafting',
+    'visual_planning', 'rendering', 'qa_running', 'needs_review',
+  ];
+
+  private async advance(id: Uuid, to: ContentState, note: string): Promise<void> {
+    let job = await this.repo.getContentJob(id);
+    if (!job) throw new Error(`content job ${id} not found`);
+
+    if (job.status === 'rework_required') {
+      job = await this.repo.transition(id, 'drafting', 'workflow', 'rework accepted');
+    }
+    if (job.status === 'blocked') {
+      throw new PermanentJobError(
+        'job is blocked; a reviewer must clear the blocking failures before production can resume',
+      );
+    }
+    if (['needs_review', 'approved_for_archive', 'archived'].includes(job.status) && to !== 'needs_review') {
+      throw new PermanentJobError(
+        `job is in "${job.status}"; send it back for rework before producing again`,
+      );
+    }
+
+    const target = WorkflowEngine.ORDER.indexOf(to);
+    let i = WorkflowEngine.ORDER.indexOf(job.status);
+    if (i < 0 || target < 0) return;
+    while (i < target) {
+      job = await this.repo.transition(id, WorkflowEngine.ORDER[i + 1]!, 'workflow', note);
+      i += 1;
+    }
   }
 
   private async call<T>(
