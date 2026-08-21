@@ -8,7 +8,7 @@ import type {
   AnalystBrief, Claim, EditorialPlan, ReviewerCritique, Script, ScriptBeat, SearchPlan, SourceAssessment,
 } from '@/lib/schemas/content';
 import { isMaterial } from '@/lib/schemas/content';
-import { seededRandom, stableHash } from '@/lib/util/hash';
+import { stableHash } from '@/lib/util/hash';
 
 /**
  * Deterministic composer standing in for a language model.
@@ -198,15 +198,17 @@ function editorialPlan(p: EditorialPayload): EditorialPlan {
     add('What to watch', 'The one checkable thing that would change the reading', [], 16);
     add('Disclosure', 'Educational disclosure and close', [], 14);
   } else {
+    // Chapters get disjoint slices. Overlapping them meant the same figure was
+    // spoken twice under two headings.
     add('The number everyone quotes', 'Open on the headline reported figure, dated and sourced', g.reported.slice(0, 1), 70);
     if (g.reported.length > 1) {
       add('Where the growth actually came from', 'Decompose the headline into its mix', g.reported.slice(1, 3), 105);
     }
-    if (g.guided.length > 0) {
-      add('Reported versus guided', 'Separate what happened from what the company expects', [...g.reported.slice(3, 4), ...g.guided.slice(0, 2)], 115);
-    }
     if (g.reported.length > 3) {
       add('The commitment on the balance sheet', 'Read commitments as signal and as obligation', g.reported.slice(3), 95);
+    }
+    if (g.guided.length > 0) {
+      add('Reported versus guided', 'Separate what happened from what the company expects', g.guided, 115);
     }
     if (g.dependency.length > 0) {
       add('The dependency in the risk factors', 'Concentration and supply, in the company\u2019s own words', [...g.dependency, ...g.definitional.slice(0, 1)], 120);
@@ -299,10 +301,13 @@ const MECHANISM: Record<string, string[]> = {
   financial_statement: [
     'A reported figure is the most solid thing in a filing. It has been through the company’s own controls and, at the year end, an auditor’s. What it does not carry is context. It tells you what happened in the period. It does not tell you whether the period was representative, and it does not tell you what the next one looks like.',
     'Reported figures are backward-looking by construction. That is a feature: it is the one part of the document that is not an opinion. The work is in deciding what the figure is evidence of — a durable change in the business, or a quarter that happened to fall a certain way.',
+    'Notice what a line like this settles and what it leaves open. It settles what the period contained. It leaves open whether the same conditions hold next quarter, and the filing is careful not to claim otherwise.',
+    'The temptation with a figure this clean is to extend the line. Resist it for one more minute, because the interesting question is not how large the number is but what had to be true for it to be that large.',
   ],
   forecast_or_guidance: [
     'Guidance sits in a different category entirely. It is the company’s own estimate of its own future, issued under a safe harbour and revised whenever conditions change. Treat it as information about management’s confidence rather than as a result that has already happened.',
     'A guided number is not a small version of a reported number. It is a statement of intent with a range attached. The useful question is not whether the midpoint is right; it is what the company would have to see to move it.',
+    'The range around a guided figure is doing more work than the figure itself. A narrow range says the quarter is largely booked. A wide one says the company is telling you honestly that it does not know.',
   ],
   insider_or_ownership: [
     'Concentration disclosure exists because dependency is material. The threshold is not a judgement about whether the relationship is good or bad — a concentrated customer base can be extremely profitable for as long as it lasts. It is a statement that if the relationship ends, it matters.',
@@ -315,6 +320,7 @@ const MECHANISM: Record<string, string[]> = {
   contextual: [
     'This one comes from outside the company, which is exactly why it is worth having. A filing can only tell you about itself. An independent estimate can tell you whether what you are looking at is unusual — at the cost of being an estimate.',
     'Outside context earns its place by being independent, and pays for it by being less precise. Use it to size the question, not to settle it.',
+    'Treat this as a second opinion rather than a second source. It was produced by people with no stake in how the filing reads, which is worth something, and by people with less access, which costs something.',
   ],
   definitional: [
     'That is the mechanism, and it is worth holding on to, because it applies to every filing you will read after this one.',
@@ -353,10 +359,22 @@ const VISUAL_FOR_TYPE: Record<string, ScriptBeat['visual_intent']> = {
 };
 
 function script(p: ScriptPayload): Script {
-  const rnd = seededRandom(stableHash(p.editorial.angle + p.brief.reference_date + p.format));
-  const pick = <T,>(arr: readonly T[]): T => arr[Math.floor(rnd() * arr.length) % arr.length]!;
+  // Round-robin, not random. A seeded pick still lands on the same paragraph
+  // twice in a row often enough to be noticeable, and in a ten-minute video the
+  // repeat is the thing a viewer remembers.
+  const seed = stableHash(p.editorial.angle + p.brief.reference_date + p.format);
+  const cursors = new Map<string, number>();
+  const rotate = <T,>(bank: string, arr: readonly T[]): T => {
+    const i = cursors.get(bank) ?? seed % arr.length;
+    cursors.set(bank, i + 1);
+    return arr[i % arr.length]!;
+  };
+  const pick = <T,>(arr: readonly T[]): T => rotate('default', arr);
   const claimById = new Map(p.approved_claims.map((c) => [c.claim_id, c]));
   const short = p.format === 'short';
+  // A claim earns one spoken appearance. The same figure under two headings
+  // reads as padding, whatever the surrounding words do.
+  const spoken = new Set<string>();
 
   const beats: ScriptBeat[] = [];
   let n = 0;
@@ -426,8 +444,12 @@ function script(p: ScriptPayload): Script {
       continue;
     }
 
+    const beatsBefore = beats.length;
     for (const [i, claim] of claims.entries()) {
-      const lead = i === 0 ? pick(OPENERS) : pick(PIVOTS);
+      if (spoken.has(claim.claim_id)) continue;
+      spoken.add(claim.claim_id);
+
+      const lead = i === 0 ? rotate('openers', OPENERS) : rotate('pivots', PIVOTS);
       const asOf = claim.as_of_date ? ` As of ${formatDate(claim.as_of_date)}.` : '';
       push({
         chapter: chapter.chapter,
@@ -443,7 +465,7 @@ function script(p: ScriptPayload): Script {
       const bank = MECHANISM[claim.claim_type] ?? MECHANISM.contextual!;
       push({
         chapter: chapter.chapter,
-        narration: `${pick(bank)}${claim.uncertainty_note ? ` ${capitalise(claim.uncertainty_note)}` : ''}`,
+        narration: `${rotate(`mech:${claim.claim_type}`, bank)}${claim.uncertainty_note ? ` ${capitalise(claim.uncertainty_note)}` : ''}`,
         on_screen_text: '',
         claim_ids: [claim.claim_id],
         visual_intent: claim.claim_type === 'definitional' ? 'quote_card' : 'statement',
@@ -452,10 +474,11 @@ function script(p: ScriptPayload): Script {
 
     // A closing beat earns its place only where a chapter carried more than one
     // claim. Adding one everywhere is how an explainer starts to feel padded.
-    if (!short && claims.length >= 2) {
+    // Only where this chapter actually carried two or more new claims.
+    if (!short && beats.length - beatsBefore >= 4) {
       push({
         chapter: chapter.chapter,
-        narration: `${pick(CLOSERS)} ${CHAPTER_INTROS.default}`,
+        narration: rotate('closers', CLOSERS),
         on_screen_text: '', claim_ids: [], visual_intent: 'statement',
       });
     }
