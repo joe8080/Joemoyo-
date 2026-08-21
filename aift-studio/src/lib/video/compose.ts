@@ -117,6 +117,12 @@ function __seek(t){
     cite.textContent=S.cite||'';
     cite.style.opacity=S.cite?'1':'0';
     caption.classList.toggle('small', S.c==='line_chart'||S.c==='bar_chart'||S.c==='comparison_table');
+    // A chapter card's narration is the chapter name, which is already the
+    // largest thing on screen. Captioning it too would print the same words
+    // three times in one frame.
+    const isChapter = S.c==='chapter_card';
+    caption.classList.toggle('off', isChapter);
+    chapterTag.style.opacity = isChapter ? '0' : '1';
     lastActive=active;
   }
 

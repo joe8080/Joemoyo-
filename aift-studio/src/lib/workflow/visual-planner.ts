@@ -205,16 +205,31 @@ function buildScene(args: {
     };
   }
 
-  // Cards that sit alongside a spoken claim show the *figures*, not the sentence:
-  // the caption is already the sentence, and repeating it word for word costs
-  // the frame its hierarchy. A quote card is the exception — its whole job is to
-  // carry the sentence, and a definition reduced to "10%" says nothing.
+  // What the card shows depends on what the beat is doing.
+  //
+  //  - A beat that *states* a claim shows the figures. The caption already has
+  //    the sentence; repeating it word for word costs the frame its hierarchy.
+  //  - A beat that *explains* one — the mechanism beats, which carry no on-screen
+  //    text of their own — shows its own opening line, so the card supports the
+  //    point being made rather than re-displaying a number just shown.
+  //  - A quote card carries the sentence, because a definition reduced to "10%"
+  //    says nothing.
   const composition = beat.visual_intent;
-  const carriesFigures = composition === 'risk_card' || composition === 'statement';
-  const figures = carriesFigures && claims.length > 0 ? claimFigures(claims[0]!) : [];
-  const headline = figures.length > 0
-    ? figures.slice(0, 3).join('   ·   ')
-    : trim(claims[0]?.claim_text || beat.on_screen_text || beat.chapter, composition === 'quote_card' ? 200 : 110);
+  const statesAClaim = beat.on_screen_text.length > 0;
+  const figures = statesAClaim && (composition === 'risk_card' || composition === 'statement') && claims.length > 0
+    ? claimFigures(claims[0]!)
+    : [];
+
+  let headline: string;
+  if (figures.length > 0) {
+    headline = figures.slice(0, 3).join('   ·   ');
+  } else if (composition === 'quote_card') {
+    headline = trim(claims[0]?.claim_text || beat.on_screen_text || beat.chapter, 200);
+  } else if (!statesAClaim && beat.narration) {
+    headline = trim(firstSentence(beat.narration), 120);
+  } else {
+    headline = trim(beat.on_screen_text || beat.chapter, 110);
+  }
   return { ...base, composition, headline };
 }
 
@@ -240,6 +255,12 @@ function citationFor(claim: Claim): string {
 function firstFigure(text: string): string {
   const m = text.match(/(?:[$£€]\s?\d[\d,]*(?:\.\d+)?(?:\s?(?:bn|billion|m|million|trillion))?)|(?:\d[\d,]*(?:\.\d+)?\s?%)/iu);
   return m ? m[0].replace(/\s+/gu, ' ').trim() : '';
+}
+
+/** The opening sentence, which is where an explanatory beat states its point. */
+function firstSentence(s: string): string {
+  const m = s.match(/^[^.!?]+[.!?]/u);
+  return (m?.[0] ?? s).trim();
 }
 
 function stripParenthetical(s: string): string {
