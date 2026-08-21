@@ -29,6 +29,16 @@ export type BrandSettings = {
   disclosure_text: string;
   default_video_length_minutes: number;
   shorts_enabled: boolean;
+  audio: {
+    music_enabled: boolean;
+    music_mood: 'analytical' | 'tense' | 'open';
+    /** How far the bed drops under speech, in dB. */
+    duck_db: number;
+    /** Where the bed sits when nothing is speaking, in dB relative to unity. */
+    bed_db: number;
+    /** Delivery target. YouTube normalises playback to about -14 LUFS. */
+    target_lufs: number;
+  };
   /**
    * Private-context allow-list. Every flag defaults to false. A flag that could
    * reveal personal finances stays false until the owner turns it on and the
@@ -109,7 +119,7 @@ export type ContentAsset = {
     | 'script_markdown' | 'script_json' | 'scene_plan' | 'narration_text'
     | 'captions_srt' | 'chapters_json' | 'description_markdown' | 'title_options'
     | 'thumbnail_brief' | 'thumbnail_png' | 'chart_svg' | 'broll_prompt'
-    | 'audio_wav' | 'video_mp4' | 'source_manifest' | 'quality_report' | 'package_manifest'
+    | 'audio_wav' | 'audio_opus' | 'music_wav' | 'video_mp4' | 'source_manifest' | 'quality_report' | 'package_manifest'
     | 'composition_html';
   storage_key: string;
   sha256: string;
@@ -121,6 +131,8 @@ export type ContentAsset = {
   aspect_ratio: string | null;
   bytes: number;
   created_at: string;
+  /** Rights and origin. An asset whose licence nobody can state cannot ship. */
+  licence_notes: string;
 };
 
 export type QualityCheck = {

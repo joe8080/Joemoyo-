@@ -55,6 +55,13 @@ export const DEFAULT_BRAND_SETTINGS: BrandSettings = {
   disclosure_text: DISCLOSURE_TEXT,
   default_video_length_minutes: 10,
   shorts_enabled: true,
+  audio: {
+    music_enabled: true,
+    music_mood: 'analytical',
+    duck_db: -11,
+    bed_db: -19,
+    target_lufs: -14,
+  },
   private_context_allowlist: {
     research_topics: true,
     agent_rules: true,

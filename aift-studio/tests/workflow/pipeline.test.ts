@@ -8,6 +8,7 @@ import { MockResearchProvider } from '@/lib/providers/research/mock';
 import { SvgChartRenderer } from '@/lib/providers/chart/svg';
 import { MockMediaProvider } from '@/lib/providers/media/mock';
 import { MockVoiceProvider } from '@/lib/providers/voice/mock';
+import { ProceduralMusicProvider } from '@/lib/providers/music/procedural';
 import { LocalStorageProvider } from '@/lib/providers/storage/local';
 import { InlineJobRunner } from '@/lib/providers/jobs/inline';
 import { MockContextProvider } from '@/lib/providers/context';
@@ -34,6 +35,7 @@ async function makeEngine(brand: BrandSettings) {
       chart: new SvgChartRenderer(),
       media: new MockMediaProvider(),
       voice: new MockVoiceProvider(),
+      music: new ProceduralMusicProvider(),
       storage: new LocalStorageProvider(root),
       jobs: new InlineJobRunner(repo),
       context: new MockContextProvider(brand.private_context_allowlist),
@@ -395,6 +397,10 @@ async function gateContext(out: Produced, over: { script?: ContentJob['script'];
     critique: null,
     renderedChartValues: rendered,
     audioPeakDbfs: -3,
+    loudness: { integratedLufs: -14.1, truePeakDbtp: -1.4, loudnessRange: 6.2 },
+    targetLufs: -14,
+    musicEnabled: false,
+    duckDb: -11,
     narrationByBeat: new Map(plan.scenes.map((s) => [s.beat_ids[0]!, (s.duration_ms - 700) / 1000])),
     captionCueStartsMs: plan.scenes.map((s) => s.start_ms),
     videoBytes: 5_000_000,

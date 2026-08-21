@@ -26,7 +26,9 @@ Running one topic produces a **content pack**:
 |---|---|
 | `script.md` / `script.json` | Beat-by-beat script, each figure bound to a claim id |
 | `scene_plan.json` | Every scene: composition, timing, data rows, source, as-of date |
-| `narration.txt`, `narration.wav` | Narration text and the assembled, timed audio track |
+| `narration.txt` | The spoken text, verbatim |
+| `mix.wav`, `mix.opus` | The delivered mix — narration, ducked music bed, normalised to −14 LUFS — as WAV and as an Ogg/Opus review copy |
+| `music_bed.wav` | The bed, with its licence and provenance recorded on the asset |
 | `captions.srt` | Word-timed captions, generated from the same timeline as the burnt-in ones |
 | `chapters.json` | YouTube chapter marks |
 | `description.md`, `title_options.json` | Description with chapters and the full claim list; scored titles |
@@ -123,6 +125,7 @@ frame, with each frame piped as JPEG straight into ffmpeg. Two consequences wort
 - **The render parallelises.** Contiguous frame ranges are captured by independent browsers and
   concatenated by copy. A test proves one worker and three produce identical pixels either side of
   every segment boundary.
+- **Audio is mixed, not just attached.** Narration is assembled at measured scene offsets, a music bed is ducked under it by an envelope follower, and the whole mix is normalised to −14 LUFS with a −1 dBTP ceiling — the numbers YouTube actually plays back to. Gates check loudness, true peak, duck depth and the bed's licence.
 - **Charts are rendered in Node, by the same code the visual gate checks.** `ChartRenderer` exposes
   `visibleValues()` — the exact strings a viewer will read — and the gate compares them against the
   claim ledger. A number cannot reach the screen without a claim behind it.
@@ -142,7 +145,7 @@ Every variable is optional. See `.env.example` for the full list and the ones de
 | `SUPABASE_URL`, `SUPABASE_ANON_KEY` | No sign-in: the studio runs as a single local owner and says so. Set both to enforce Supabase Auth on every page |
 | `SUPABASE_SERVICE_ROLE_KEY` | In-memory persistence; state lives for the life of the process |
 | `AIFT_LLM_API_KEY` | Deterministic composer instead of a model. The pipeline still runs and the pack is still complete |
-| `AIFT_TTS_PROVIDER` | Silent narration at exactly the right length. Set `espeak` for an offline preview voice, `http` for a licensed one |
+| `AIFT_TTS_PROVIDER` | Silent narration at exactly the right length, and the music bed carried as the programme. Set `espeak` for an offline preview voice, `http` for a licensed one |
 | `AIFT_MEDIA_API_KEY` | Procedural abstract B-roll |
 | `AIFT_STORAGE_DRIVER` | Writes to `.artifacts/` (git-ignored) |
 | `AIFT_JOB_SIGNING_SECRET` | The scheduler endpoint refuses every request rather than falling back to open access |

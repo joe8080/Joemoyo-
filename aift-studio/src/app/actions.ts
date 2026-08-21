@@ -136,6 +136,14 @@ export async function saveBrand(form: FormData): Promise<void> {
       accent_2: String(form.get('c_accent_2') ?? current.visual_style.accent_2),
       ink: String(form.get('c_ink') ?? current.visual_style.ink),
     },
+    audio: {
+      ...current.audio,
+      music_enabled: form.get('music_enabled') === 'on',
+      music_mood: (String(form.get('music_mood') ?? current.audio.music_mood)) as BrandSettings['audio']['music_mood'],
+      target_lufs: Number(form.get('target_lufs') ?? current.audio.target_lufs),
+      bed_db: Number(form.get('bed_db') ?? current.audio.bed_db),
+      duck_db: Number(form.get('duck_db') ?? current.audio.duck_db),
+    },
     private_context_allowlist: {
       ...current.private_context_allowlist,
       research_topics: form.get('allow_research_topics') === 'on',

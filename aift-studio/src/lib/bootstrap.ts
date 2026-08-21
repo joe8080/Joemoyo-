@@ -11,6 +11,7 @@ import { createVoiceProvider } from '@/lib/providers/voice';
 import { LocalStorageProvider } from '@/lib/providers/storage/local';
 import { InlineJobRunner } from '@/lib/providers/jobs/inline';
 import { MockContextProvider } from '@/lib/providers/context';
+import { ProceduralMusicProvider } from '@/lib/providers/music/procedural';
 import { FixtureDataRegistry } from '@/lib/workflow/data-registry';
 
 /**
@@ -48,6 +49,7 @@ export async function bootstrap(opts?: { repo?: Repository; brand?: BrandSetting
     chart: new SvgChartRenderer(),
     media: new MockMediaProvider(),
     voice: await createVoiceProvider(),
+    music: new ProceduralMusicProvider(),
     storage,
     jobs: new InlineJobRunner(repo),
     context,

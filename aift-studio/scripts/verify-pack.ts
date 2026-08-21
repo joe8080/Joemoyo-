@@ -45,7 +45,8 @@ async function main(): Promise<void> {
   add('manifest present', Boolean(manifestName), manifestName ?? 'manifest.json is missing');
 
   const required = ['script.md', 'scene_plan.json', 'captions.srt', 'description.md',
-    'source_manifest.json', 'thumbnail_brief.json', 'quality_report.md', 'composition.html'];
+    'source_manifest.json', 'thumbnail_brief.json', 'quality_report.md', 'composition.html',
+    'mix.wav'];
   for (const f of required) {
     const present = files.includes(f);
     const size = present ? (await stat(join(dir, f))).size : 0;
@@ -112,6 +113,21 @@ async function main(): Promise<void> {
       add('rendered video present', false, 'no .mp4 in the pack');
     }
   }
+
+  // --- the delivered audio -------------------------------------------------
+  const mix = files.find((f) => f === 'mix.wav');
+  if (mix) {
+    const { measureLoudness, TARGET_LUFS, SILENCE_FLOOR_LUFS } = await import('@/lib/video/loudness');
+    const l = await measureLoudness(new Uint8Array(await readFile(join(dir, mix))));
+    if (l.integratedLufs <= SILENCE_FLOOR_LUFS) {
+      add('programme loudness', true, 'silent programme (no TTS credential and no music bed)');
+    } else {
+      add('programme loudness', Math.abs(l.integratedLufs - TARGET_LUFS) <= 2,
+        `${l.integratedLufs.toFixed(1)} LUFS (target ${TARGET_LUFS}), range ${l.loudnessRange.toFixed(1)} LU`);
+      add('true peak', l.truePeakDbtp <= -1, `${l.truePeakDbtp.toFixed(1)} dBTP`);
+    }
+  }
+  add('opus review copy', files.includes('mix.opus'), files.includes('mix.opus') ? 'mix.opus' : 'missing');
 
   // --- the report says what the gates found --------------------------------
   const report = await readFile(join(dir, 'quality_report.md'), 'utf8').catch(() => '');

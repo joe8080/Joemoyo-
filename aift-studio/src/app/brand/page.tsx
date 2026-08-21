@@ -124,13 +124,55 @@ export default async function BrandStudio() {
           </div>
         </div>
 
-        <div className="card" style={{ marginTop: 14 }}>
-          <h2>Private research context — allow-list</h2>
+        <div className="grid g2" style={{ marginTop: 14 }}>
+          <div className="card">
+            <h2>Audio</h2>
+            <p className="hint" style={{ marginBottom: 14 }}>
+              Delivery loudness, not peak level. YouTube normalises playback to about −14 LUFS, so a
+              pack far from target gets re-levelled and the balance you approved is not the balance
+              anyone hears.
+            </p>
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, textTransform: 'none', letterSpacing: 0 }}>
+              <input type="checkbox" name="music_enabled" defaultChecked={brand.audio.music_enabled} style={{ width: 'auto' }} />
+              Music bed under narration
+            </label>
+            <div className="row" style={{ marginTop: 14 }}>
+              <div className="field" style={{ flex: 1, marginTop: 0 }}>
+                <label htmlFor="music_mood">Mood</label>
+                <select id="music_mood" name="music_mood" defaultValue={brand.audio.music_mood}>
+                  <option value="analytical">Analytical</option>
+                  <option value="tense">Tense</option>
+                  <option value="open">Open</option>
+                </select>
+              </div>
+              <div className="field" style={{ flex: 1, marginTop: 0 }}>
+                <label htmlFor="target_lufs">Target loudness (LUFS)</label>
+                <input id="target_lufs" name="target_lufs" type="number" step="0.5" min={-24} max={-8}
+                  defaultValue={brand.audio.target_lufs} />
+              </div>
+            </div>
+            <div className="row">
+              <div className="field" style={{ flex: 1 }}>
+                <label htmlFor="bed_db">Bed level (dB)</label>
+                <input id="bed_db" name="bed_db" type="number" step="1" min={-40} max={0}
+                  defaultValue={brand.audio.bed_db} />
+              </div>
+              <div className="field" style={{ flex: 1 }}>
+                <label htmlFor="duck_db">Duck under speech (dB)</label>
+                <input id="duck_db" name="duck_db" type="number" step="1" min={-30} max={-6}
+                  defaultValue={brand.audio.duck_db} />
+                <p className="hint">A gate fails below 6 dB: the narration would fight the bed.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="card">
+            <h2>Private research context — allow-list</h2>
           <p className="hint" style={{ marginBottom: 14 }}>
             What the server may read from the finance database and pass, redacted, to a model. Every
             flag starts off. Turning one on widens what a model can see, so turn on the least you need.
           </p>
-          {ALLOWLIST.map((a) => (
+            {ALLOWLIST.map((a) => (
             <div key={a.key} style={{ padding: '11px 0', borderBottom: '1px solid var(--line)' }}>
               <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', textTransform: 'none', letterSpacing: 0, marginBottom: 0 }}>
                 <input
@@ -147,7 +189,8 @@ export default async function BrandStudio() {
                 </span>
               </label>
             </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         <div className="row" style={{ marginTop: 18 }}>

@@ -1,6 +1,7 @@
 import type { VoiceClip, VoiceProvider, VoiceRequest } from '@/lib/providers/types';
 import { env } from '@/lib/env';
 import { wavDurationSeconds } from './wav';
+import { ensurePcm16Wav } from '@/lib/video/transcode';
 
 /**
  * Licensed cloud text-to-speech adapter.
@@ -35,14 +36,18 @@ export class HttpVoiceProvider implements VoiceProvider {
       body: JSON.stringify({ input: req.text, voice, response_format: 'wav' }),
     });
     if (!res.ok) throw new Error(`TTS request failed with HTTP ${res.status}`);
-    const wav = new Uint8Array(await res.arrayBuffer());
+
+    // WAV is requested, but providers disagree about defaults — ElevenLabs and
+    // OpenAI both return MP3 unless told otherwise, and some return 24-bit or
+    // Opus regardless. Normalising here keeps that argument out of the mixer.
+    const wav = await ensurePcm16Wav(new Uint8Array(await res.arrayBuffer()));
     return {
       wav,
       durationSeconds: wavDurationSeconds(wav),
       generator: this.name,
       voice,
       transcript: req.text,
-      settings: { format: 'wav' },
+      settings: { format: 'wav', normalised: 'pcm_s16le' },
     };
   }
 }

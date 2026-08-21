@@ -15,11 +15,13 @@ import { evaluateClaim } from '@/lib/qa/claim-safety';
 import { planScenes } from './visual-planner';
 import type { DataRegistry } from './data-registry';
 import { FIXTURE_SOURCES } from '@/lib/fixtures/northwind';
-import { sha256, stableId } from '@/lib/util/hash';
+import { sha256, stableHash as stableHashNumber, stableId } from '@/lib/util/hash';
 import { estimateNarrationSeconds } from '@/lib/providers/voice/wav';
 import { buildCaptionTimeline, toChaptersJson, toSrt, youtubeStamp } from '@/lib/video/captions';
 import { buildDocument, type PreparedScene } from '@/lib/video/compose';
-import { assembleNarration, peakDbfs, type Placement } from '@/lib/video/audio';
+import { assembleNarration, mixWithBed, peakDbfs, DEFAULT_DUCK, type Placement } from '@/lib/video/audio';
+import { normaliseLoudness } from '@/lib/video/loudness';
+import { toOpus } from '@/lib/video/transcode';
 import { renderStill, renderVideo } from '@/lib/video/render';
 import { runAllGates, isBlocked, type GateContext } from '@/lib/qa/gates';
 import { SvgChartRenderer } from '@/lib/providers/chart/svg';
@@ -297,7 +299,7 @@ export class WorkflowEngine {
         sha256: stored.sha256, generator: `${this.p.llm.name}+${this.charts.name}`,
         prompt_version: PROMPT_VERSION, source_claim_ids: [], status: 'draft',
         duration_seconds: null, aspect_ratio: null, bytes: stored.bytes,
-        created_at: this.iso(), ...extra,
+        created_at: this.iso(), licence_notes: '', ...extra,
       });
       assets.push(asset);
       return asset;
@@ -364,14 +366,52 @@ export class WorkflowEngine {
       formatLabel: job0.format === 'short' ? 'Short' : 'Deep dive',
     });
 
-    const audioWav = assembleNarration(
+    // --- the mix ------------------------------------------------------------
+    // Narration first, then the bed ducked under it, then one measured gain to
+    // the delivery target. Normalising last means the number the gate checks is
+    // the number in the file.
+    const narrationOnly = assembleNarration(
       clips.map((c): Placement => {
         const scene = plan.scenes.find((s) => s.beat_ids.includes(c.beatId));
         return { wav: c.wav, startMs: (scene?.start_ms ?? 0) + 260 };
       }),
       plan.total_ms,
     );
+
+    let bed: Awaited<ReturnType<typeof this.p.music.generate>> | null = null;
+    let mixed = narrationOnly;
+    if (brand.audio.music_enabled) {
+      bed = await this.p.music.generate({
+        durationSeconds: plan.total_ms / 1000,
+        mood: brand.audio.music_mood,
+        seed: stableHashNumber(contentJobId),
+      });
+
+      // `bed_db` sits the bed *under the narration*. With no narration — mock
+      // mode, or a pack awaiting a voice — there is nothing to sit under, and
+      // attenuating anyway leaves a programme so quiet that normalisation
+      // cannot lift it to target without hitting the gain cap.
+      const hasNarration = Number.isFinite(peakDbfs(narrationOnly));
+      const bedDb = hasNarration ? brand.audio.bed_db : 0;
+
+      mixed = mixWithBed(narrationOnly, bed.wav, {
+        duckDb: brand.audio.duck_db,
+        bedDb,
+        attackMs: DEFAULT_DUCK.attackMs,
+        releaseMs: DEFAULT_DUCK.releaseMs,
+      });
+      this.log('info', 'audio', hasNarration
+        ? `bed mixed at ${bedDb} dB, ducking ${brand.audio.duck_db} dB under speech (${bed.generator})`
+        : `no narration present; bed carried at unity as the programme (${bed.generator})`);
+    }
+
+    const normalised = await normaliseLoudness(mixed, brand.audio.target_lufs);
+    const audioWav = normalised.wav;
     const audioPeak = peakDbfs(audioWav);
+    this.log('info', 'audio',
+      Number.isFinite(normalised.after.integratedLufs)
+        ? `programme loudness ${normalised.after.integratedLufs.toFixed(1)} LUFS, true peak ${normalised.after.truePeakDbtp.toFixed(1)} dBTP (gain ${normalised.gainDb >= 0 ? '+' : ''}${normalised.gainDb.toFixed(1)} dB)`
+        : 'programme is silent; no narration or bed to measure');
 
     // Text assets
     await store('script_markdown', 'script.md', scriptMarkdown(script, plan, brand), 'text/markdown');
@@ -384,7 +424,20 @@ export class WorkflowEngine {
     await store('title_options', 'title_options.json', JSON.stringify(editorial.title_options, null, 2), 'application/json');
     await store('thumbnail_brief', 'thumbnail_brief.json', JSON.stringify(thumbnail, null, 2), 'application/json');
     await store('source_manifest', 'source_manifest.json', sourceManifest(sources, claims, research.reference_date), 'application/json');
-    await store('audio_wav', 'narration.wav', audioWav, 'audio/wav', { duration_seconds: plan.total_ms / 1000 });
+    await store('audio_wav', 'mix.wav', audioWav, 'audio/wav', {
+      duration_seconds: plan.total_ms / 1000,
+      generator: `assembled+${brand.audio.music_enabled ? 'ducked-bed+' : ''}ebur128@${brand.audio.target_lufs}LUFS`,
+    });
+    await store('audio_opus', 'mix.opus', await toOpus(audioWav), 'audio/ogg', {
+      duration_seconds: plan.total_ms / 1000, generator: 'libopus@96k',
+    });
+    if (bed) {
+      await store('music_wav', 'music_bed.wav', bed.wav, 'audio/wav', {
+        duration_seconds: bed.durationSeconds,
+        generator: bed.generator,
+        licence_notes: `${bed.title} — ${bed.licence} (${bed.provenance})`,
+      });
+    }
     // The editable motion-graphics source, stored alongside the render so a
     // human can open it, change a card and re-render without the pipeline.
     await store('composition_html', 'composition.html', html, 'text/html');
@@ -434,7 +487,12 @@ export class WorkflowEngine {
     const gateCtx: GateContext = {
       contentJobId, format: job0.format, brand, script, plan, claims, sources,
       assets, critique, renderedChartValues,
-      audioPeakDbfs: audioPeak, videoBytes,
+      audioPeakDbfs: audioPeak,
+      loudness: normalised.after,
+      targetLufs: brand.audio.target_lufs,
+      musicEnabled: brand.audio.music_enabled,
+      duckDb: brand.audio.duck_db,
+      videoBytes,
       narrationByBeat: narrationSeconds,
       captionCueStartsMs: srtCueStarts(srt),
       videoAspect: aspect,

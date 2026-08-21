@@ -38,6 +38,11 @@ export function decodeWav(bytes: Uint8Array): WavInfo {
   if (dataOff < 0) throw new Error('WAV has no data chunk');
   if (bitsPerSample !== 16) throw new Error(`unsupported bit depth ${bitsPerSample}; expected 16`);
 
+  // A WAV written to a pipe cannot know its own length, so ffmpeg emits a
+  // placeholder size — often 0xFFFFFFFF. Trusting it walks off the end of the
+  // buffer. The bytes actually present are the authority.
+  dataLen = Math.min(dataLen, bytes.byteLength - dataOff);
+
   const frames = Math.floor(dataLen / (2 * channels));
   const out = new Float32Array(frames);
   for (let i = 0; i < frames; i += 1) {
@@ -100,6 +105,67 @@ export function assembleNarration(placements: Placement[], totalMs: number): Uin
     pcm[i] = Math.round(v * 32_767);
   }
   return writeWav(pcm, MASTER_SAMPLE_RATE);
+}
+
+/**
+ * Mix a music bed under narration with speech-priority ducking.
+ *
+ * The bed is pulled down wherever the narration is speaking and released back
+ * afterwards, so the "maintain speech intelligibility" rule is a property of the
+ * mix rather than a note in a brief. The envelope follower is deliberately slow
+ * to release (600 ms) and quick to attack (120 ms): ducking that pumps is worse
+ * than no bed at all.
+ *
+ * A silent narration track ducks nothing, which is the correct behaviour — in
+ * mock mode the bed simply plays.
+ */
+export type DuckSettings = {
+  /** How far the bed drops under speech, in dB. */
+  duckDb: number;
+  attackMs: number;
+  releaseMs: number;
+  /** Level the bed sits at when nothing is speaking, in dB relative to unity. */
+  bedDb: number;
+};
+
+export const DEFAULT_DUCK: DuckSettings = { duckDb: -11, attackMs: 120, releaseMs: 600, bedDb: -19 };
+
+export function mixWithBed(
+  narrationWav: Uint8Array, bedWav: Uint8Array, settings: DuckSettings = DEFAULT_DUCK,
+): Uint8Array {
+  const speech = decodeWav(narrationWav);
+  const bedInfo = decodeWav(bedWav);
+  const rate = MASTER_SAMPLE_RATE;
+  const voice = resample(speech.samples, speech.sampleRate, rate);
+  const bed = resample(bedInfo.samples, bedInfo.sampleRate, rate);
+
+  // Envelope follower over the speech, in dB-domain gain for the bed.
+  const attack = Math.max(1, Math.round((settings.attackMs / 1000) * rate));
+  const release = Math.max(1, Math.round((settings.releaseMs / 1000) * rate));
+  const bedGain = 10 ** (settings.bedDb / 20);
+  const duckGain = 10 ** ((settings.bedDb + settings.duckDb) / 20);
+  // Anything above about -45 dBFS counts as speech; below it is room noise.
+  const threshold = 10 ** (-45 / 20);
+
+  const out = new Float32Array(voice.length);
+  let env = 0;
+  for (let i = 0; i < voice.length; i += 1) {
+    const level = Math.abs(voice[i] ?? 0);
+    const target = level > threshold ? 1 : 0;
+    const coeff = target > env ? 1 / attack : 1 / release;
+    env += (target - env) * coeff;
+
+    const g = bedGain + (duckGain - bedGain) * env;
+    // The bed loops if it is shorter than the programme.
+    const b = bed.length > 0 ? (bed[i % bed.length] ?? 0) : 0;
+    out[i] = (voice[i] ?? 0) + b * g;
+  }
+
+  const pcm = new Int16Array(out.length);
+  for (let i = 0; i < out.length; i += 1) {
+    pcm[i] = Math.round(Math.max(-1, Math.min(1, out[i] ?? 0)) * 32_767);
+  }
+  return writeWav(pcm, rate);
 }
 
 /** True peak in dBFS, used by the technical QA gate. */

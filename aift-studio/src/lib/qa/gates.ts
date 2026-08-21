@@ -26,6 +26,11 @@ export type GateContext = {
   /** Exact strings the chart renderer will draw, keyed by scene id. */
   renderedChartValues: Map<string, string[]>;
   audioPeakDbfs: number;
+  /** Measured programme loudness of the delivered mix. */
+  loudness: { integratedLufs: number; truePeakDbtp: number; loudnessRange: number };
+  targetLufs: number;
+  musicEnabled: boolean;
+  duckDb: number;
   /** beat_id → measured narration seconds, for the scene-coverage check. */
   narrationByBeat: Map<string, number>;
   /** Cue start times from the produced SRT, in order of appearance. */
@@ -330,16 +335,45 @@ function technicalGate(ctx: GateContext): Draft[] {
     ? ok('technical', 'captions_present', 'An SRT caption file was produced.')
     : fail('technical', 'captions_present', 'No caption file was produced.', [], 'Re-run caption generation.'));
 
-  // -1.0 dBFS is the ceiling; the assembler targets -1.5.
-  const peak = ctx.audioPeakDbfs;
-  if (!Number.isFinite(peak)) {
-    out.push(warn('technical', 'narration_level', 'The narration track is silent.', [],
-      'Expected in mock mode. Configure AIFT_TTS_PROVIDER before publishing anything from this pack.'));
+  // Loudness, not peak. YouTube normalises playback to about -14 LUFS, so a
+  // track that peaks politely can still arrive quiet or crushed — and a peak
+  // check would pass both.
+  const { integratedLufs, truePeakDbtp, loudnessRange } = ctx.loudness;
+  if (!Number.isFinite(integratedLufs)) {
+    out.push(warn('technical', 'programme_loudness', 'The programme is silent: no narration and no music bed.', [],
+      'Expected with no TTS credential and music disabled. Configure AIFT_TTS_PROVIDER before publishing from this pack.'));
   } else {
-    out.push(peak <= -1.0
-      ? ok('technical', 'narration_level', `Narration peaks at ${peak.toFixed(2)} dBFS, below the -1.0 dBFS ceiling.`)
-      : fail('technical', 'narration_level', `Narration peaks at ${peak.toFixed(2)} dBFS, above the -1.0 dBFS ceiling.`,
-          [peak.toFixed(2)], 'Lower the voice gain or re-normalise the assembled track.'));
+    const drift = Math.abs(integratedLufs - ctx.targetLufs);
+    out.push(drift <= 2
+      ? ok('technical', 'programme_loudness',
+          `Programme is ${integratedLufs.toFixed(1)} LUFS against a ${ctx.targetLufs} LUFS target, range ${loudnessRange.toFixed(1)} LU.`)
+      : fail('technical', 'programme_loudness',
+          `Programme is ${integratedLufs.toFixed(1)} LUFS, ${drift.toFixed(1)} LU from the ${ctx.targetLufs} LUFS target.`,
+          [`${integratedLufs.toFixed(1)} LUFS`],
+          'Re-normalise the mix. A pack this far off target will be re-levelled on playback, undoing the balance you approved.'));
+
+    out.push(truePeakDbtp <= -1.0
+      ? ok('technical', 'true_peak', `True peak is ${truePeakDbtp.toFixed(1)} dBTP, below the -1.0 dBTP ceiling.`)
+      : fail('technical', 'true_peak', `True peak is ${truePeakDbtp.toFixed(1)} dBTP, above the -1.0 dBTP ceiling.`,
+          [`${truePeakDbtp.toFixed(1)} dBTP`],
+          'Lower the mix gain. Above the ceiling, lossy encoding for playback will clip.'));
+  }
+
+  // Speech has to survive the bed. This is the "maintain speech intelligibility"
+  // rule from the brief, expressed as a number rather than a note.
+  if (ctx.musicEnabled) {
+    const music = ctx.assets.find((a) => a.asset_type === 'music_wav');
+    out.push(music && music.licence_notes.length > 10
+      ? ok('technical', 'music_licensed', `Music bed carries its licence and provenance: ${music.generator}.`)
+      : fail('technical', 'music_licensed', 'A music bed is present with no licence or provenance recorded.',
+          [music?.storage_key ?? 'music_wav missing'],
+          'Record the licence on the asset. A track whose rights nobody can state cannot ship.'));
+
+    const duckDb = Math.abs(ctx.duckDb);
+    out.push(duckDb >= 6
+      ? ok('technical', 'speech_priority', `The bed ducks ${duckDb.toFixed(0)} dB under narration.`)
+      : fail('technical', 'speech_priority', `The bed only ducks ${duckDb.toFixed(0)} dB under narration.`,
+          [`${duckDb.toFixed(0)} dB`], 'Increase the duck depth to at least 6 dB or the narration will fight the bed.'));
   }
 
   // The quality report and package manifest are this gate's own downstream

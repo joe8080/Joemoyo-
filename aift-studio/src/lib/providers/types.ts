@@ -146,6 +146,27 @@ export type VoiceClip = {
   settings: Record<string, string | number>;
 };
 
+/**
+ * A music bed. Contract: mono 16-bit PCM WAV, and provenance for every second
+ * of it — a track whose licence nobody can state is a track that cannot ship.
+ */
+export type MusicRequest = { durationSeconds: number; mood: 'analytical' | 'tense' | 'open'; seed: number };
+
+export type MusicBed = {
+  wav: Uint8Array;
+  durationSeconds: number;
+  generator: string;
+  title: string;
+  licence: string;
+  provenance: string;
+};
+
+export interface MusicProvider {
+  readonly name: string;
+  readonly isLive: boolean;
+  generate(req: MusicRequest): Promise<MusicBed>;
+}
+
 export interface VoiceProvider {
   readonly name: string;
   readonly isLive: boolean;
@@ -205,6 +226,7 @@ export type Providers = {
   chart: ChartRenderer;
   media: MediaProvider;
   voice: VoiceProvider;
+  music: MusicProvider;
   storage: StorageProvider;
   jobs: JobRunner;
   context: PrivateContextProvider;

@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { VoiceClip, VoiceProvider, VoiceRequest } from '@/lib/providers/types';
 import { wavDurationSeconds } from './wav';
+import { ensurePcm16Wav } from '@/lib/video/transcode';
 
 const run = promisify(execFile);
 
@@ -36,7 +37,7 @@ export class EspeakVoiceProvider implements VoiceProvider {
       await run('espeak-ng', ['-v', req.voice || 'en-gb', '-s', '163', '-p', '38', '-g', '4', '-w', out, req.text], {
         maxBuffer: 32 * 1024 * 1024,
       });
-      const wav = new Uint8Array(await readFile(out));
+      const wav = await ensurePcm16Wav(new Uint8Array(await readFile(out)));
       return {
         wav,
         durationSeconds: wavDurationSeconds(wav),
