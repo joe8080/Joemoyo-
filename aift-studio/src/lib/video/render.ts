@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { spawn, type ChildProcess } from 'node:child_process';
 import { mkdtemp, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -88,7 +88,10 @@ async function renderSingle(opts: RenderOptions, executablePath: string, frames:
 
   const args = [
     '-hide_banner', '-loglevel', 'error', '-y',
-    '-f', 'image2pipe', '-framerate', String(opts.fps), '-i', 'pipe:0',
+    // Declare the input codec rather than letting ffmpeg probe the pipe.
+    // Probing succeeds on large frames and fails on small ones, which turns a
+    // working renderer into one that breaks on short or low-resolution clips.
+    '-f', 'image2pipe', '-c:v', 'mjpeg', '-framerate', String(opts.fps), '-i', 'pipe:0',
     ...(opts.audioWav ? ['-i', audioPath] : []),
     '-map', '0:v:0',
     ...(opts.audioWav ? ['-map', '1:a:0'] : []),
@@ -106,6 +109,7 @@ async function renderSingle(opts: RenderOptions, executablePath: string, frames:
   ];
 
   const ff = spawn(ffmpegPath, args, { stdio: ['pipe', 'inherit', 'pipe'] });
+  ff.stdin.on('error', () => { /* EPIPE when ffmpeg exits early; ffDone carries the real error */ });
   let ffErr = '';
   ff.stderr.on('data', (c: Buffer) => { ffErr += c.toString(); });
 
@@ -135,9 +139,7 @@ async function renderSingle(opts: RenderOptions, executablePath: string, frames:
         (window as unknown as { __seek: (n: number) => void }).__seek(ms);
       }, t);
       const buf = await page.screenshot({ type: 'jpeg', quality: opts.jpegQuality ?? 92 });
-      if (!ff.stdin.write(buf)) {
-        await new Promise<void>((resolve) => ff.stdin.once('drain', resolve));
-      }
+      await writeFrame(ff, ffDone, buf);
       if (opts.onProgress && (f % 30 === 0 || f === frames - 1)) opts.onProgress(f + 1, frames);
     }
 
@@ -223,7 +225,7 @@ async function captureRange(o: RenderOptions & {
 }): Promise<void> {
   const ff = spawn(o.ffmpegPath, [
     '-hide_banner', '-loglevel', 'error', '-y',
-    '-f', 'image2pipe', '-framerate', String(o.fps), '-i', 'pipe:0',
+    '-f', 'image2pipe', '-c:v', 'mjpeg', '-framerate', String(o.fps), '-i', 'pipe:0',
     '-an',
     '-c:v', 'libx264', '-preset', o.preset ?? 'medium', '-crf', String(o.crf ?? 19),
     '-pix_fmt', 'yuv420p', '-profile:v', 'high', '-level', '4.2',
@@ -231,6 +233,7 @@ async function captureRange(o: RenderOptions & {
     '-g', String(o.fps * 2), '-force_key_frames', 'expr:eq(n,0)',
     o.outPath,
   ], { stdio: ['pipe', 'ignore', 'pipe'] });
+  ff.stdin.on('error', () => { /* EPIPE when ffmpeg exits early; ffDone carries the real error */ });
 
   let ffErr = '';
   ff.stderr.on('data', (c: Buffer) => { ffErr += c.toString(); });
@@ -254,9 +257,7 @@ async function captureRange(o: RenderOptions & {
         (window as unknown as { __seek: (n: number) => void }).__seek(ms);
       }, Math.round(f * step));
       const buf = await page.screenshot({ type: 'jpeg', quality: o.jpegQuality ?? 92 });
-      if (!ff.stdin.write(buf)) {
-        await new Promise<void>((resolve) => ff.stdin.once('drain', resolve));
-      }
+      await writeFrame(ff, ffDone, buf);
       o.onFrame();
     }
     ff.stdin.end();
@@ -264,6 +265,30 @@ async function captureRange(o: RenderOptions & {
   } finally {
     await browser.close().catch(() => undefined);
   }
+}
+
+/**
+ * Write one frame, failing fast if the encoder has gone.
+ *
+ * Awaiting `drain` unconditionally is a hang waiting to happen: a dead ffmpeg
+ * never drains, so the capture loop blocks until something kills it and the real
+ * error — whatever ffmpeg said on the way out — never surfaces. Racing the
+ * encoder's exit turns a hang into a message.
+ */
+async function writeFrame(ff: ChildProcess, ffDone: Promise<void>, buf: Buffer): Promise<void> {
+  const stdin = ff.stdin;
+  if (!stdin || stdin.destroyed) {
+    await ffDone;
+    throw new Error('ffmpeg stdin closed before all frames were written');
+  }
+  if (stdin.write(buf)) return;
+  await Promise.race([
+    new Promise<void>((resolve) => stdin.once('drain', resolve)),
+    ffDone.then(
+      () => { throw new Error('ffmpeg exited before all frames were written'); },
+      (e: unknown) => { throw e; },
+    ),
+  ]);
 }
 
 function runFfmpeg(bin: string, args: string[]): Promise<void> {

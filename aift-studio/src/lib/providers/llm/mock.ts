@@ -147,19 +147,19 @@ function analystBrief(p: AnalystBriefPayload): AnalystBrief {
       `documents yielding ${claims.length} discrete claims. The strongest material claims come from primary ` +
       `disclosure rather than commentary. ` +
       (bull.length > 0
-        ? `The supportive side of the evidence rests on: ${bull.slice(0, 3).map((x) => lower(x.f.text)).join(' ')} `
+        ? `The supportive side of the evidence rests on the following. ${bull.slice(0, 3).map((x) => sentence(x.f.text)).join(' ')} `
         : '') +
       (bear.length > 0
-        ? `The cautionary side rests on: ${bear.slice(0, 3).map((x) => lower(x.f.text)).join(' ')} `
+        ? `The cautionary side rests on the following. ${bear.slice(0, 3).map((x) => sentence(x.f.text)).join(' ')} `
         : '') +
       `Every figure below carries an as-of date because a number without one is not evidence. Where the source is ` +
       `an estimate or a company characterisation rather than a reported result, the claim is labelled accordingly.`,
     bull_case: (bull.length > 0 ? bull : facts.slice(0, 2).map((f, i) => ({ f, id: `C-${i}` })))
       .slice(0, 5)
-      .map((x) => `${x.f.text}${x.f.uncertainty ? ` (${lower(x.f.uncertainty)})` : ''}`),
+      .map((x) => `${x.f.text}${x.f.uncertainty ? ` (${x.f.uncertainty})` : ''}`),
     bear_case: (bear.length > 0 ? bear : facts.slice(-2).map((f, i) => ({ f, id: `C-${i}` })))
       .slice(0, 5)
-      .map((x) => `${x.f.text}${x.f.uncertainty ? ` (${lower(x.f.uncertainty)})` : ''}`),
+      .map((x) => `${x.f.text}${x.f.uncertainty ? ` (${x.f.uncertainty})` : ''}`),
     key_risks: [
       ...bear.slice(0, 3).map((x) => `${x.f.text} The filing discloses the dependency; it does not quantify the probability.`),
       'Guidance is an estimate produced by the company and is revised as conditions change.',
@@ -338,6 +338,26 @@ const CHAPTER_INTROS: Record<string, string> = {
   default: 'The evidence for this section comes from the stored source register, and every figure carries the date it refers to.',
 };
 
+// Each lead is a complete sentence, so the evidence line that follows keeps its
+// own capitalisation — including proper nouns.
+const BULL_LEADS = [
+  'The supportive reading leads with this.',
+  'Take the supportive side first.',
+  'The case in favour rests on this line.',
+];
+
+const BEAR_LEADS = [
+  'The cautionary reading answers with this.',
+  'And here is the case against.',
+  'The case for caution rests here.',
+];
+
+const PAIR_CLOSERS = [
+  'Both sentences are true. Which one you weight more heavily is a judgement, and it should be held as one.',
+  'Neither line contradicts the other. They are answers to different questions about the same quarter.',
+  'The disagreement is not about the facts. It is about which fact is load-bearing.',
+];
+
 const CLOSERS = [
   'That is what the evidence supports on this point, and no more than that.',
   'Note what has not been claimed here: nothing about what happens next.',
@@ -416,12 +436,14 @@ function script(p: ScriptPayload): Script {
       for (let i = 0; i < pairs; i += 1) {
         const bullLine = p.brief.bull_case[i];
         const bearLine = p.brief.bear_case[i];
+        // Each half is a full sentence in its own right. Splicing it in
+        // mid-clause forced a lower-casing that mangled proper nouns.
         push({
           chapter: chapter.chapter,
           narration:
-            (bullLine ? `The supportive reading takes this: ${lower(stripParens(bullLine))} ` : '') +
-            (bearLine ? `The cautionary reading answers with this: ${lower(stripParens(bearLine))} ` : '') +
-            'Both sentences are true. Which one you weight more heavily is a judgement, and it should be held as one.',
+            (bullLine ? `${rotate('bullLead', BULL_LEADS)} ${sentence(stripParens(bullLine))} ` : '') +
+            (bearLine ? `${rotate('bearLead', BEAR_LEADS)} ${sentence(stripParens(bearLine))} ` : '') +
+            rotate('pairClose', PAIR_CLOSERS),
           on_screen_text: '', claim_ids: claims.map((c) => c.claim_id), visual_intent: 'statement',
         });
       }
@@ -629,8 +651,11 @@ function critique(p: CritiquePayload): ReviewerCritique {
 function truncate(s: string, n: number): string {
   return s.length <= n ? s : `${s.slice(0, n - 1).trimEnd()}…`;
 }
-function lower(s: string): string {
-  return s.length > 0 ? s[0]!.toLowerCase() + s.slice(1) : s;
+/** Ensures a fragment reads as a sentence without touching its first word. */
+function sentence(s: string): string {
+  const t = s.trim();
+  if (!t) return '';
+  return /[.!?]$/u.test(t) ? t : `${t}.`;
 }
 function capitalise(s: string): string {
   return s.length > 0 ? s[0]!.toUpperCase() + s.slice(1) : s;

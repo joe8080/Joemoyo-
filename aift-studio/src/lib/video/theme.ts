@@ -52,6 +52,8 @@ body{font-family:var(--body);color:var(--ink);-webkit-font-smoothing:antialiased
 .scene[data-comp="stat_reveal"] .pad{inset:${vertical ? '18% 8% 30% 8%' : '15% 9% 26% 9%'};}
 .scene[data-comp="risk_card"] .pad,.scene[data-comp="statement"] .pad{
   inset:${vertical ? '16% 8% 28% 8%' : '14% 9% 24% 9%'};}
+.scene[data-comp="quote_card"] .pad,.scene[data-comp="disclosure"] .pad,
+.scene[data-comp="chapter_card"] .pad{inset:${vertical ? '17% 8% 28% 8%' : '15% 10% 25% 10%'};}
 /* Captions step down a size on data scenes: there, the number is the subject. */
 #caption.small{font-size:calc(var(--u)*${vertical ? 2.9 : 1.5});}
 

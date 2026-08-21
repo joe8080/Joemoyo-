@@ -205,14 +205,16 @@ function buildScene(args: {
     };
   }
 
-  // Cards that sit alongside a spoken claim show the *figures*, not the sentence.
-  // The caption is already the sentence; a card that repeats it word for word
-  // adds nothing and costs the frame its hierarchy.
+  // Cards that sit alongside a spoken claim show the *figures*, not the sentence:
+  // the caption is already the sentence, and repeating it word for word costs
+  // the frame its hierarchy. A quote card is the exception — its whole job is to
+  // carry the sentence, and a definition reduced to "10%" says nothing.
   const composition = beat.visual_intent;
-  const figures = claims.length > 0 ? claimFigures(claims[0]!) : [];
+  const carriesFigures = composition === 'risk_card' || composition === 'statement';
+  const figures = carriesFigures && claims.length > 0 ? claimFigures(claims[0]!) : [];
   const headline = figures.length > 0
     ? figures.slice(0, 3).join('   ·   ')
-    : trim(beat.on_screen_text || beat.chapter, 110);
+    : trim(claims[0]?.claim_text || beat.on_screen_text || beat.chapter, composition === 'quote_card' ? 200 : 110);
   return { ...base, composition, headline };
 }
 

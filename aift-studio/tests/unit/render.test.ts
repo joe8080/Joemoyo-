@@ -34,6 +34,23 @@ document.body.style.background='hsl('+((t/30)%360)+' 40% 8%)';};
 window.__ready=true;__seek(0);
 </script></body></html>`;
 
+/**
+ * Peak signal-to-noise ratio between two encodes of the same frames.
+ *
+ * Byte equality is the wrong bar here: a segment boundary is forced to be a
+ * keyframe, so the same source pixels legitimately compress differently either
+ * side of it. PSNR measures what the test actually means — that the *pictures*
+ * are the same, whatever the encoder did to store them.
+ */
+async function psnrDb(a: string, b: string): Promise<number> {
+  const res = await run(resolveFfmpegPath(), [
+    '-hide_banner', '-i', a, '-i', b, '-lavfi', 'psnr', '-f', 'null', '-',
+  ]).catch((e: { stderr?: string }) => ({ stderr: e.stderr ?? '' }));
+  const m = /average:([\d.]+)/u.exec(res.stderr ?? '');
+  if (!m) throw new Error(`could not read PSNR from ffmpeg output:\n${(res.stderr ?? '').slice(-1500)}`);
+  return Number(m[1]);
+}
+
 async function frameHash(video: string, n: number, dir: string): Promise<string> {
   const out = join(dir, `f${n}.png`);
   await run(resolveFfmpegPath(), [
@@ -63,15 +80,43 @@ maybe('the render engine', () => {
       expect(a.encoder).toContain('×1');
       expect(b.encoder).toContain('×3');
 
-      // Frames either side of every segment boundary, plus the ends.
-      for (const n of [0, 79, 80, 159, 160, 239]) {
-        expect(await frameHash(parallel, n, dir), `frame ${n} differs between one worker and three`)
-          .toBe(await frameHash(single, n, dir));
-      }
+      // The pictures must match across the whole clip, boundaries included.
+      // 45 dB is far above the threshold where a difference would be visible;
+      // genuinely different content scores in the teens or twenties.
+      expect(await psnrDb(parallel, single)).toBeGreaterThan(45);
+
+      expect(a.durationSeconds).toBe(b.durationSeconds);
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
   }, 300_000);
+
+  // Byte equality belongs here rather than on the encoded video: x264's rate
+  // control sees a different number of frames in a segment than in a whole clip,
+  // so two encodes of identical pictures are never byte-identical. The still
+  // capture isolates the renderer from the encoder, which is the layer whose
+  // determinism the visual gates actually depend on.
+  it('captures byte-identical stills for the same instant', async () => {
+    const { renderStill } = await import('@/lib/video/render');
+    const dir = await mkdtemp(join(tmpdir(), 'aift-still-test-'));
+    try {
+      const shots: string[] = [];
+      for (const i of [0, 1]) {
+        const out = join(dir, `shot-${i}.png`);
+        await renderStill({ html: HTML, width: 320, height: 180, atMs: 3_333, outPath: out });
+        shots.push(sha256(new Uint8Array(await readFile(out))));
+      }
+      expect(shots[0]).toBe(shots[1]);
+
+      // And a different instant must actually look different, or the test above
+      // would pass on a renderer that ignored time entirely.
+      const other = join(dir, 'other.png');
+      await renderStill({ html: HTML, width: 320, height: 180, atMs: 6_666, outPath: other });
+      expect(sha256(new Uint8Array(await readFile(other)))).not.toBe(shots[0]);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  }, 180_000);
 
   it('writes a real H.264 + AAC container', async () => {
     const dir = await mkdtemp(join(tmpdir(), 'aift-render-test-'));
