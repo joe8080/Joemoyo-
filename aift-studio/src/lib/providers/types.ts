@@ -16,7 +16,8 @@ export type LlmCall<T> = {
   promptVersion: string;
   system: string;
   user: string;
-  schema: z.ZodType<T>;
+  /** Output-typed: inference must follow the parsed shape, not the input shape. */
+  schema: z.ZodType<T, z.ZodTypeDef, unknown>;
   schemaName: string;
   maxAttempts?: number;
   /**

@@ -109,7 +109,8 @@ export type ContentAsset = {
     | 'script_markdown' | 'script_json' | 'scene_plan' | 'narration_text'
     | 'captions_srt' | 'chapters_json' | 'description_markdown' | 'title_options'
     | 'thumbnail_brief' | 'thumbnail_png' | 'chart_svg' | 'broll_prompt'
-    | 'audio_wav' | 'video_mp4' | 'source_manifest' | 'quality_report' | 'package_manifest';
+    | 'audio_wav' | 'video_mp4' | 'source_manifest' | 'quality_report' | 'package_manifest'
+    | 'composition_html';
   storage_key: string;
   sha256: string;
   generator: string;

@@ -144,7 +144,7 @@ export const editorialPlanSchema = z.object({
         chapter: z.string().min(3).max(80),
         purpose: z.string().min(10).max(300),
         claim_ids: z.array(z.string()).default([]),
-        target_seconds: z.number().int().min(20).max(240),
+        target_seconds: z.number().int().min(8).max(240),
       }),
     )
     .min(4)
@@ -251,10 +251,10 @@ export const sceneSchema = z.object({
     .nullable()
     .default(null),
   rows: z
-    .array(z.object({ label: z.string().max(60), values: z.array(z.string().max(40)).max(4) }))
+    .array(z.object({ label: z.string().max(60), values: z.array(z.string().max(220)).max(4) }))
     .max(8)
     .default([]),
-  columns: z.array(z.string().max(40)).max(4).default([]),
+  columns: z.array(z.string().max(60)).max(4).default([]),
   bullets: z.array(z.string().max(160)).max(5).default([]),
   /** Atmospheric only. The visual gate rejects any prompt implying numbers. */
   broll_prompt: z.string().max(600).default(''),

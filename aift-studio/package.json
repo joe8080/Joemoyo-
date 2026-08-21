@@ -19,7 +19,8 @@
     "verify": "npm run typecheck && npm run guard:no-publish && npm run test",
     "pack:demo": "tsx scripts/run-demo-pack.ts",
     "render:pack": "tsx scripts/render-pack.ts",
-    "seed": "tsx scripts/seed-local.ts"
+    "seed": "tsx scripts/seed-local.ts",
+    "preview": "tsx scripts/preview-frames.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",

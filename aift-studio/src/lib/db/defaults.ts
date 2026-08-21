@@ -14,8 +14,13 @@ export const DEFAULT_BANNED_PHRASES: string[] = [
   'buy now', 'sell now', 'load up on', 'back up the truck', 'add to your position',
   'trim your position', 'cut your losses', 'get in before', 'guaranteed return',
   'guaranteed profit', 'risk free', 'risk-free', 'will definitely', 'can\'t lose',
-  'to the moon', 'my price target', 'financial advice',
+  'to the moon', 'my price target', 'this is financial advice', 'take my word for it',
+  'you can\'t go wrong', 'easy money', 'sure thing',
 ];
+
+// Note: "financial advice" on its own is deliberately absent. The required
+// disclosure contains the phrase ("not personalised financial advice"), so
+// banning the bare string would block every compliant script.
 
 export const DEFAULT_BRAND_SETTINGS: BrandSettings = {
   user_id: '',

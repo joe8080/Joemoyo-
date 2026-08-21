@@ -181,26 +181,43 @@ function analystBrief(p: AnalystBriefPayload): AnalystBrief {
 function editorialPlan(p: EditorialPayload): EditorialPlan {
   const subject = p.ticker ?? p.brief.headline.split(/[:—-]/u)[0]!.trim();
   const short = p.format === 'short';
-  const material = p.brief.claims.filter((c) => isMaterial(c.claim_type));
-  const bearIds = p.brief.claims.filter((c) => /concentration|single supplier|below|cancellable/iu.test(c.claim_text)).map((c) => c.claim_id);
 
-  const outline = short
-    ? [
-        { chapter: 'Hook', purpose: 'One number, stated with its date', claim_ids: material.slice(0, 1).map((c) => c.claim_id), target_seconds: 20 },
-        { chapter: 'The catch', purpose: 'The disclosed dependency behind the number', claim_ids: bearIds.slice(0, 1), target_seconds: 22 },
-        { chapter: 'What to watch', purpose: 'The one thing that would change the reading', claim_ids: [], target_seconds: 20 },
-        { chapter: 'Disclosure', purpose: 'Educational disclosure', claim_ids: [], target_seconds: 20 },
-      ]
-    : [
-        { chapter: 'The number everyone quotes', purpose: 'Open on the headline figure, dated and sourced', claim_ids: material.slice(0, 1).map((c) => c.claim_id), target_seconds: 65 },
-        { chapter: 'Where the growth actually came from', purpose: 'Decompose the headline into its mix', claim_ids: material.slice(1, 3).map((c) => c.claim_id), target_seconds: 95 },
-        { chapter: 'What the margin line is telling you', purpose: 'Separate reported margin from guided margin', claim_ids: material.slice(2, 5).map((c) => c.claim_id), target_seconds: 100 },
-        { chapter: 'The commitment the company has made', purpose: 'Read commitments as both signal and obligation', claim_ids: material.slice(3, 5).map((c) => c.claim_id), target_seconds: 90 },
-        { chapter: 'The dependency in the risk factors', purpose: 'Concentration and supply, in the company’s own words', claim_ids: bearIds.slice(0, 3), target_seconds: 105 },
-        { chapter: 'The bull case and the bear case', purpose: 'Both sides, evidence-linked, no verdict', claim_ids: material.slice(0, 4).map((c) => c.claim_id), target_seconds: 95 },
-        { chapter: 'What would change the picture', purpose: 'Falsifiable things to watch next', claim_ids: [], target_seconds: 70 },
-        { chapter: 'Disclosure and close', purpose: 'Educational disclosure and call to action', claim_ids: [], target_seconds: 45 },
-      ];
+  // Group claims by what they are, then build chapters around the groups that
+  // actually have evidence. A chapter with nothing behind it is padding, and
+  // padding is what makes a ten-minute video feel like a four-minute one.
+  const g = groupClaims(p.brief.claims);
+
+  const outline: EditorialPlan['outline'] = [];
+  const add = (chapter: string, purpose: string, claim_ids: string[], target_seconds: number) => {
+    outline.push({ chapter, purpose, claim_ids, target_seconds });
+  };
+
+  if (short) {
+    add('Hook', 'One reported figure, stated with its date', g.reported.slice(0, 1), 18);
+    add('The catch', 'The disclosed dependency sitting behind it', g.dependency.slice(0, 1), 20);
+    add('What to watch', 'The one checkable thing that would change the reading', [], 16);
+    add('Disclosure', 'Educational disclosure and close', [], 14);
+  } else {
+    add('The number everyone quotes', 'Open on the headline reported figure, dated and sourced', g.reported.slice(0, 1), 70);
+    if (g.reported.length > 1) {
+      add('Where the growth actually came from', 'Decompose the headline into its mix', g.reported.slice(1, 3), 105);
+    }
+    if (g.guided.length > 0) {
+      add('Reported versus guided', 'Separate what happened from what the company expects', [...g.reported.slice(3, 4), ...g.guided.slice(0, 2)], 115);
+    }
+    if (g.reported.length > 3) {
+      add('The commitment on the balance sheet', 'Read commitments as signal and as obligation', g.reported.slice(3), 95);
+    }
+    if (g.dependency.length > 0) {
+      add('The dependency in the risk factors', 'Concentration and supply, in the company\u2019s own words', [...g.dependency, ...g.definitional.slice(0, 1)], 120);
+    }
+    if (g.context.length > 0) {
+      add('What the outside evidence adds', 'Independent context the filing cannot supply', g.context.slice(0, 3), 100);
+    }
+    add('The bull case and the bear case', 'Both readings of the same document, no verdict', g.reported.slice(0, 3), 95);
+    add('What would change the picture', 'Falsifiable things to watch next', [], 75);
+    add('Disclosure', 'Educational disclosure and call to action', [], 45);
+  }
 
   return {
     angle:
@@ -211,18 +228,42 @@ function editorialPlan(p: EditorialPayload): EditorialPlan {
       `By the end you will be able to read this kind of filing yourself and know which three lines actually matter.`,
     title_options: [
       { title: truncate(`${subject}: What The Filing Actually Says`, 90), why_it_works: 'Concrete, promises the primary source rather than an opinion', overpromise_risk: 'low' },
-      { title: truncate(`The Three Lines That Matter In ${subject}'s Quarter`, 90), why_it_works: 'Numbered promise with a bounded scope the video delivers', overpromise_risk: 'low' },
+      { title: truncate(`The Three Lines That Matter In ${subject}\u2019s Quarter`, 90), why_it_works: 'Numbered promise with a bounded scope the video delivers', overpromise_risk: 'low' },
       { title: truncate(`${subject}: The Growth Number And The Dependency Behind It`, 90), why_it_works: 'Signals balance up front; both halves appear in the video', overpromise_risk: 'low' },
-      { title: truncate(`How To Read A Quarter Like This One (${subject} Case Study)`, 90), why_it_works: 'Educational framing that matches the channel’s remit', overpromise_risk: 'low' },
+      { title: truncate(`How To Read A Quarter Like This One (${subject} Case Study)`, 90), why_it_works: 'Educational framing that matches the channel\u2019s remit', overpromise_risk: 'low' },
     ],
-    hook:
-      `One line in this quarter did most of the work — and one line in the risk factors explains why that first ` +
-      `line is worth reading twice.`,
+    hook: short
+      ? `One line in this quarter did most of the work. One line in the risk factors explains why it is worth reading twice.`
+      : `One line in this quarter did most of the work \u2014 and one line in the risk factors explains why that first ` +
+        `line is worth reading twice.`,
     outline,
-    call_to_action:
-      `If you want the next one of these, the filing links and the full claim list are in the description. ` +
-      `Tell me which line you would have led with.`,
+    call_to_action: short
+      ? `Full source list in the description.`
+      : `The filing links and the full claim list are in the description. Tell me which line you would have led with.`,
   };
+}
+
+type ClaimGroups = {
+  reported: string[]; guided: string[]; dependency: string[]; context: string[]; definitional: string[];
+};
+
+function groupClaims(claims: Claim[]): ClaimGroups {
+  const g: ClaimGroups = { reported: [], guided: [], dependency: [], context: [], definitional: [] };
+  for (const c of claims) {
+    switch (c.claim_type) {
+      case 'financial_statement': case 'market_cap': case 'valuation': case 'price_or_performance':
+        g.reported.push(c.claim_id); break;
+      case 'forecast_or_guidance': case 'rating_or_recommendation':
+        g.guided.push(c.claim_id); break;
+      case 'insider_or_ownership': case 'causal':
+        g.dependency.push(c.claim_id); break;
+      case 'definitional':
+        g.definitional.push(c.claim_id); break;
+      default:
+        g.context.push(c.claim_id);
+    }
+  }
+  return g;
 }
 
 // ---------------------------------------------------------------------------
@@ -233,8 +274,9 @@ const OPENERS = [
   'Start with what the filing states.',
   'Here is what the document actually says.',
   'The disclosure is specific on this point.',
-  'Read the line itself rather than the summary of it.',
+  'Read the line itself rather than a summary of it.',
   'The primary source puts it plainly.',
+  'Take the sentence as it is written.',
 ];
 
 const PIVOTS = [
@@ -242,13 +284,59 @@ const PIVOTS = [
   'So far, so straightforward. The interesting part is what sits behind it.',
   'That is one line. It is worth asking what has to be true for it to hold.',
   'Take that as given and the next question follows immediately.',
+  'Hold that number for a moment, because the next one changes how you read it.',
 ];
 
-const CAUTIONS = [
-  'The evidence supports the statement. It does not support extending the statement into next year.',
-  'One quarter is a data point. A direction needs several.',
-  'This is what was disclosed, not what will happen.',
-  'The number is precise. The conclusion drawn from it should not be.',
+/**
+ * Mechanism paragraphs, keyed by what kind of claim they follow.
+ *
+ * This is the part that turns a list of figures into something worth watching:
+ * after every number, explain what that *kind* of number can and cannot tell
+ * you. Two variants per type, chosen by a seeded index, so a long video does
+ * not repeat the same framing four times.
+ */
+const MECHANISM: Record<string, string[]> = {
+  financial_statement: [
+    'A reported figure is the most solid thing in a filing. It has been through the company’s own controls and, at the year end, an auditor’s. What it does not carry is context. It tells you what happened in the period. It does not tell you whether the period was representative, and it does not tell you what the next one looks like.',
+    'Reported figures are backward-looking by construction. That is a feature: it is the one part of the document that is not an opinion. The work is in deciding what the figure is evidence of — a durable change in the business, or a quarter that happened to fall a certain way.',
+  ],
+  forecast_or_guidance: [
+    'Guidance sits in a different category entirely. It is the company’s own estimate of its own future, issued under a safe harbour and revised whenever conditions change. Treat it as information about management’s confidence rather than as a result that has already happened.',
+    'A guided number is not a small version of a reported number. It is a statement of intent with a range attached. The useful question is not whether the midpoint is right; it is what the company would have to see to move it.',
+  ],
+  insider_or_ownership: [
+    'Concentration disclosure exists because dependency is material. The threshold is not a judgement about whether the relationship is good or bad — a concentrated customer base can be extremely profitable for as long as it lasts. It is a statement that if the relationship ends, it matters.',
+    'When a filing names a dependency, it is telling you where the business is fragile, not predicting that the fragility will be tested. Those are different claims, and conflating them is the most common mistake made with this line.',
+  ],
+  causal: [
+    'This is the company’s own account of its own business, which makes it authoritative about the arrangement and not necessarily about the risk. A firm knows who its suppliers are. It does not know, and does not claim to know, the probability that one of them fails.',
+    'A causal sentence in a filing is written by people with an interest in how it reads. That does not make it false. It does mean the sentence is evidence about the structure of the business rather than a forecast of what that structure will do.',
+  ],
+  contextual: [
+    'This one comes from outside the company, which is exactly why it is worth having. A filing can only tell you about itself. An independent estimate can tell you whether what you are looking at is unusual — at the cost of being an estimate.',
+    'Outside context earns its place by being independent, and pays for it by being less precise. Use it to size the question, not to settle it.',
+  ],
+  definitional: [
+    'That is the mechanism, and it is worth holding on to, because it applies to every filing you will read after this one.',
+    'This is the sort of thing worth learning once. The specific company changes; the way the disclosure works does not.',
+  ],
+  valuation: [
+    'Valuation is a ratio, and a ratio has two ends. A change in it can come from the numerator, the denominator, or a change in what the market is willing to assume. The figure alone does not say which.',
+  ],
+  price_or_performance: [
+    'Performance figures are the easiest to quote and the easiest to mislead with, because the answer depends almost entirely on the window you choose. The date attached to this one is not decoration.',
+  ],
+};
+
+const CHAPTER_INTROS: Record<string, string> = {
+  default: 'The evidence for this section comes from the stored source register, and every figure carries the date it refers to.',
+};
+
+const CLOSERS = [
+  'That is what the evidence supports on this point, and no more than that.',
+  'Note what has not been claimed here: nothing about what happens next.',
+  'The figure is precise. The conclusion you draw from it should be held more loosely.',
+  'One line, one source, one date. That is the standard the rest of this holds to as well.',
 ];
 
 const VISUAL_FOR_TYPE: Record<string, ScriptBeat['visual_intent']> = {
@@ -265,30 +353,30 @@ const VISUAL_FOR_TYPE: Record<string, ScriptBeat['visual_intent']> = {
 };
 
 function script(p: ScriptPayload): Script {
-  const rnd = seededRandom(stableHash(p.editorial.angle + p.brief.reference_date));
+  const rnd = seededRandom(stableHash(p.editorial.angle + p.brief.reference_date + p.format));
   const pick = <T,>(arr: readonly T[]): T => arr[Math.floor(rnd() * arr.length) % arr.length]!;
   const claimById = new Map(p.approved_claims.map((c) => [c.claim_id, c]));
+  const short = p.format === 'short';
 
   const beats: ScriptBeat[] = [];
   let n = 0;
   const nextId = () => `B-${String(++n).padStart(3, '0')}`;
+  const push = (b: Omit<ScriptBeat, 'beat_id'>) => { beats.push({ beat_id: nextId(), ...b }); };
 
   const title = p.editorial.title_options[0]!.title;
 
-  // --- Cold open -----------------------------------------------------------
-  beats.push({
-    beat_id: nextId(), chapter: p.editorial.outline[0]!.chapter,
-    narration: `${p.editorial.hook}`,
+  push({
+    chapter: p.editorial.outline[0]!.chapter,
+    narration: p.editorial.hook,
     on_screen_text: title, claim_ids: [], visual_intent: 'title_card',
   });
 
   for (const [ci, chapter] of p.editorial.outline.entries()) {
-    const isDisclosureChapter = /disclosure/iu.test(chapter.chapter);
-    if (isDisclosureChapter) continue;
+    if (/disclosure/iu.test(chapter.chapter)) continue;
 
-    if (ci > 0) {
-      beats.push({
-        beat_id: nextId(), chapter: chapter.chapter,
+    if (ci > 0 && !short) {
+      push({
+        chapter: chapter.chapter,
         narration: `${chapter.chapter}.`,
         on_screen_text: chapter.chapter, claim_ids: [], visual_intent: 'chapter_card',
       });
@@ -296,45 +384,44 @@ function script(p: ScriptPayload): Script {
 
     const claims = chapter.claim_ids.map((id) => claimById.get(id)).filter((c): c is Claim => Boolean(c));
 
-    if (claims.length === 0) {
-      // Analytical chapter with no direct claim — e.g. "what would change the picture".
-      const qs = p.brief.open_questions.slice(0, 3);
-      beats.push({
-        beat_id: nextId(), chapter: chapter.chapter,
+    if (/bull case and the bear case/iu.test(chapter.chapter)) {
+      push({
+        chapter: chapter.chapter,
         narration:
-          `${pick(PIVOTS)} There are three things that would genuinely change the reading here, and all three are ` +
-          `checkable rather than a matter of opinion.`,
-        on_screen_text: 'What would change the picture', claim_ids: [], visual_intent: 'statement',
+          'Set the two readings side by side. This matters more than it sounds, because the supportive case and ' +
+          'the cautionary case here are drawing on the same document. They do not disagree about the facts. They ' +
+          'disagree about which lines carry the most weight.',
+        on_screen_text: 'Same filing, two readings',
+        claim_ids: claims.map((c) => c.claim_id), visual_intent: 'comparison_table',
       });
-      for (const q of qs) {
-        beats.push({
-          beat_id: nextId(), chapter: chapter.chapter,
-          narration: q, on_screen_text: truncate(q, 120), claim_ids: [], visual_intent: 'risk_card',
+      const pairs = Math.min(3, Math.max(p.brief.bull_case.length, p.brief.bear_case.length));
+      for (let i = 0; i < pairs; i += 1) {
+        const bullLine = p.brief.bull_case[i];
+        const bearLine = p.brief.bear_case[i];
+        push({
+          chapter: chapter.chapter,
+          narration:
+            (bullLine ? `The supportive reading takes this: ${lower(stripParens(bullLine))} ` : '') +
+            (bearLine ? `The cautionary reading answers with this: ${lower(stripParens(bearLine))} ` : '') +
+            'Both sentences are true. Which one you weight more heavily is a judgement, and it should be held as one.',
+          on_screen_text: '', claim_ids: claims.map((c) => c.claim_id), visual_intent: 'statement',
         });
       }
       continue;
     }
 
-    if (/bull case and the bear case/iu.test(chapter.chapter)) {
-      beats.push({
-        beat_id: nextId(), chapter: chapter.chapter,
-        narration:
-          `Set the two readings side by side. The supportive case and the cautionary case draw on the same ` +
-          `document; they differ in which lines they weight.`,
-        on_screen_text: 'Same filing, two readings',
-        claim_ids: claims.map((c) => c.claim_id), visual_intent: 'comparison_table',
+    if (claims.length === 0) {
+      push({
+        chapter: chapter.chapter,
+        narration: short
+          ? 'So here is the thing worth checking in the next filing.'
+          : `${pick(PIVOTS)} There are three things that would genuinely change the reading here. All three are ` +
+            `checkable against a future document rather than a matter of opinion, which is what makes them worth ` +
+            `writing down now.`,
+        on_screen_text: 'What would change the picture', claim_ids: [], visual_intent: 'statement',
       });
-      const pairs = Math.max(p.brief.bull_case.length, p.brief.bear_case.length);
-      for (let i = 0; i < Math.min(pairs, 3); i += 1) {
-        const bullLine = p.brief.bull_case[i];
-        const bearLine = p.brief.bear_case[i];
-        beats.push({
-          beat_id: nextId(), chapter: chapter.chapter,
-          narration:
-            (bullLine ? `The supportive reading: ${lower(stripParens(bullLine))} ` : '') +
-            (bearLine ? `The cautionary reading: ${lower(stripParens(bearLine))}` : ''),
-          on_screen_text: '', claim_ids: claims.map((c) => c.claim_id), visual_intent: 'statement',
-        });
+      for (const q of p.brief.open_questions.slice(0, short ? 1 : 3)) {
+        push({ chapter: chapter.chapter, narration: q, on_screen_text: truncate(q, 120), claim_ids: [], visual_intent: 'risk_card' });
       }
       continue;
     }
@@ -342,26 +429,46 @@ function script(p: ScriptPayload): Script {
     for (const [i, claim] of claims.entries()) {
       const lead = i === 0 ? pick(OPENERS) : pick(PIVOTS);
       const asOf = claim.as_of_date ? ` As of ${formatDate(claim.as_of_date)}.` : '';
-      const hedge = claim.uncertainty_note ? ` ${capitalise(claim.uncertainty_note)}` : ` ${pick(CAUTIONS)}`;
-      beats.push({
-        beat_id: nextId(), chapter: chapter.chapter,
-        narration: `${lead} ${claim.claim_text}${asOf}${hedge}`,
+      push({
+        chapter: chapter.chapter,
+        narration: `${lead} ${claim.claim_text}${asOf}`,
         on_screen_text: truncate(claim.claim_text, 150),
         claim_ids: [claim.claim_id],
         visual_intent: VISUAL_FOR_TYPE[claim.claim_type] ?? 'statement',
       });
+
+      if (short) continue;
+
+      // The mechanism beat: why this kind of figure behaves the way it does.
+      const bank = MECHANISM[claim.claim_type] ?? MECHANISM.contextual!;
+      push({
+        chapter: chapter.chapter,
+        narration: `${pick(bank)}${claim.uncertainty_note ? ` ${capitalise(claim.uncertainty_note)}` : ''}`,
+        on_screen_text: '',
+        claim_ids: [claim.claim_id],
+        visual_intent: claim.claim_type === 'definitional' ? 'quote_card' : 'statement',
+      });
+    }
+
+    // A closing beat earns its place only where a chapter carried more than one
+    // claim. Adding one everywhere is how an explainer starts to feel padded.
+    if (!short && claims.length >= 2) {
+      push({
+        chapter: chapter.chapter,
+        narration: `${pick(CLOSERS)} ${CHAPTER_INTROS.default}`,
+        on_screen_text: '', claim_ids: [], visual_intent: 'statement',
+      });
     }
   }
 
-  // --- Disclosure and outro ------------------------------------------------
-  beats.push({
-    beat_id: nextId(), chapter: 'Disclosure',
+  push({
+    chapter: 'Disclosure',
     narration: p.disclosure_text,
     on_screen_text: 'Research and education only — not financial advice',
     claim_ids: [], visual_intent: 'disclosure',
   });
-  beats.push({
-    beat_id: nextId(), chapter: 'Disclosure',
+  push({
+    chapter: 'Disclosure',
     narration: p.editorial.call_to_action,
     on_screen_text: p.channel_name, claim_ids: [], visual_intent: 'outro',
   });
