@@ -355,3 +355,14 @@ main.py (CLI)
 ```
 
 All agents inherit from `agents/base_agent.py` which handles the Claude tool-use loop automatically.
+
+---
+
+## Further Reading
+
+| Document | What's in it |
+|---|---|
+| `docs/PROJECT_DOSSIER.md` | End-to-end account of how the AutoTrader was designed, built and tested |
+| `docs/STRATEGY.md` | The strategy spec and the PASS/WATCH/FAIL scorecard criteria |
+| `docs/TRADING_PLAN.md` | The 90-day battle-test schedule and risk controls |
+| `docs/HERMES_AGENT_SETUP.md` | Installing and configuring Hermes Agent (Nous Research) on your own machine |
