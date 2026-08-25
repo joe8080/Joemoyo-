@@ -44,15 +44,21 @@ VPS if you want it reachable from your phone via one of the messaging gateways.
 
 ## Before you start
 
-On macOS and Linux the only hard prerequisite is **Git**. On Linux, also make
-sure `curl` and `xz-utils` are present. You do not need to install Python,
-Node.js, ripgrep or ffmpeg by hand — the installer pulls down everything it
-needs, clones the repo, builds a virtual environment, puts a global `hermes`
-command on your PATH, and walks you through picking an LLM provider.
+The project's installation guide states that on non-Windows platforms the only
+prerequisite is **Git**, and that on Linux you should also have `curl` and
+`xz-utils` available. You do not need to install Python, Node.js, ripgrep or
+ffmpeg by hand — the installer pulls down everything it needs, clones the repo,
+builds a virtual environment, puts a global `hermes` command on your PATH, and
+walks you through picking an LLM provider.
 
-On Windows the installer is even more self-contained: it bundles Python 3.11,
-Node.js, ripgrep, ffmpeg and a portable Git Bash (a roughly 45 MB MinGit), and
-it does not require administrator access.
+On Windows the installer is even more self-contained: it handles `uv`, Python
+3.11, Node.js, ripgrep and ffmpeg, and bundles a portable Git Bash (a roughly
+45 MB MinGit). It does not require administrator access.
+
+On Termux/Android the installer uses a curated `.[termux]` extra rather than the
+full `.[all]` extra, because the complete dependency set currently pulls in voice
+libraries that are not Android-compatible. The project documents a tested manual
+path for Termux separately — follow that guide rather than the one-liner below.
 
 ---
 
@@ -109,12 +115,17 @@ switching providers does not require touching any code.
 
 | What you want | Command |
 |---|---|
-| Start chatting | `hermes` |
+| Start chatting (interactive CLI) | `hermes` |
 | Full setup wizard | `hermes setup` |
-| Configure or switch model provider | `hermes model` |
-| Set up messaging gateways | `hermes gateway` |
-| Diagnose a broken install | `hermes doctor` |
+| Choose LLM provider and model | `hermes model` |
+| Configure which tools are enabled | `hermes tools` |
+| Set an individual config value | `hermes config set` |
+| Print an individual config value | `hermes config get` |
+| Start the messaging gateway | `hermes gateway` |
+| Check Tool Gateway setup | `hermes portal info` |
+| Update to the latest version | `hermes update` |
 | Migrate from OpenClaw | `hermes claw migrate` |
+| Diagnose issues | `hermes doctor` |
 
 If anything behaves oddly after an install or an upgrade, `hermes doctor` is the
 first thing to reach for — it checks the environment and reports what is missing
@@ -169,7 +180,9 @@ Note that the `hermes-agent.nousresearch.com` links above resolve normally from
 your own machine. They are only unreachable from inside a Claude Code web
 session, for the egress reason described at the top of this document.
 
-Install commands, the command reference, the feature list and the licence were
-taken from the project's official GitHub README. The prerequisite list and the
-`hermes setup --portal` flow come from the project's published installation and
-quickstart documentation.
+Install commands, the full command reference, the `hermes setup --portal` flow,
+the Termux caveat, the feature list and the licence were all verified directly
+against the project's official GitHub README. The macOS/Linux prerequisite list
+is the one exception — the README does not state prerequisites separately, so
+that line comes from the project's published installation guide and has not been
+verified against the repository itself.
