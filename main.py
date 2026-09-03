@@ -643,5 +643,20 @@ def ideas(weeks: int):
     console.print(result["finance_channel_ideas"])
 
 
+
+# ------------------------------------------------------------------ #
+#  JARVIS (Telegram voice assistant)                                   #
+# ------------------------------------------------------------------ #
+
+@cli.command()
+def jarvis():
+    """
+    Run Jarvis: the always-on Telegram assistant wired to the Vault and the
+    OrigineX database. Talk to it by voice note or text. See docs/JARVIS.md.
+    """
+    from jarvis.runner import main as jarvis_main
+    jarvis_main()
+
+
 if __name__ == "__main__":
     cli()

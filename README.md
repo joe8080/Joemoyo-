@@ -16,6 +16,22 @@ All brands → **MarketingAgent**
 
 ---
 
+## Jarvis (Telegram voice assistant)
+
+One always-on assistant that knows the whole operation. Talk to it on Telegram
+by voice note or text; it answers as Mary Jane, reads the Vault (finance-chief
+Supabase project) and the OrigineX database, logs decisions, ideas and
+memories, and replies by voice when ElevenLabs is configured.
+
+```bash
+python main.py jarvis        # local
+# Railway: second service on this repo, config path jarvis/railway.toml
+```
+
+Full setup, commands and variables: [docs/JARVIS.md](docs/JARVIS.md).
+
+---
+
 ## Quick Start
 
 ### 1. Install dependencies

@@ -1,0 +1,10 @@
+# Railway config for the Jarvis service. In the Railway service settings set
+# "Config file path" to jarvis/railway.toml so this file (not the root one for
+# the intraday trading engine) drives the build.
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "jarvis/Dockerfile"
+
+[deploy]
+restartPolicyType = "ALWAYS"
+restartPolicyMaxRetries = 10
