@@ -16,6 +16,7 @@ import anthropic
 from rich.console import Console
 
 from config.settings import settings
+from agent_os import client as agent_os
 
 console = Console()
 
@@ -28,6 +29,9 @@ class BaseAgent(ABC):
         self.model = settings.model
         self.max_tokens = settings.max_tokens
         self.tool_definitions = self._define_tools()
+        # Board identity — shows up on Agent OS under this id (see agent_os/roster.py).
+        if not getattr(self, "agent_id", None):
+            self.agent_id = agent_os.slug_for(self.__class__.__name__)
 
     @property
     @abstractmethod
@@ -48,10 +52,21 @@ class BaseAgent(ABC):
     def run(self, user_message: str) -> str:
         """
         Run the agent with a user message.
-        Automatically handles the full tool-use agentic loop.
+        Automatically handles the full tool-use agentic loop and reports
+        running / done / error to the Agent OS board.
         """
-        messages = [{"role": "user", "content": user_message}]
         agent_name = self.__class__.__name__
+        agent_os.report(self.agent_id, "running", task=user_message)
+        try:
+            final_text = self._run_loop(user_message, agent_name)
+        except Exception as e:
+            agent_os.report(self.agent_id, "error", note=f"{type(e).__name__}: {e}", run_type=self.agent_id)
+            raise
+        agent_os.report(self.agent_id, "done", result=final_text, run_type=self.agent_id)
+        return final_text
+
+    def _run_loop(self, user_message: str, agent_name: str) -> str:
+        messages = [{"role": "user", "content": user_message}]
 
         console.print(f"\n[bold blue][{agent_name}][/bold blue] Starting task...")
 
@@ -85,6 +100,7 @@ class BaseAgent(ABC):
             tool_results = []
             for tool_block in tool_use_blocks:
                 console.print(f"  [yellow]-> Tool: {tool_block.name}[/yellow]")
+                agent_os.report(self.agent_id, "running", task=f"{user_message[:80]} · using {tool_block.name}", log_run=False)
                 result = self._execute_tool(tool_block.name, tool_block.input)
                 tool_results.append({
                     "type": "tool_result",

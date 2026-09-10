@@ -39,6 +39,10 @@ jobs:
           ALPACA_PAPER: "true"
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          # Agent OS board (optional): check in so the card updates live and
+          # the board's Pause button is honoured. Keys from `os connect`.
+          AGENT_OS_URL: ${{ secrets.AGENT_OS_URL }}
+          AGENT_OS_KEYS: ${{ secrets.AGENT_OS_KEYS }}
           # The deterministic strategy never calls Anthropic; this only
           # satisfies the settings module's startup check.
           ANTHROPIC_API_KEY: "unused-by-autotrader"

@@ -16,6 +16,7 @@ class ScriptWriterAgent(BaseAgent):
     def __init__(self, channel: str = "history_channel"):
         self.channel = channel
         self.brand = BRAND_PROFILES[channel]
+        self.agent_id = "finance_script_writer" if channel == "finance_channel" else "history_script_writer"
         super().__init__()
 
     @property

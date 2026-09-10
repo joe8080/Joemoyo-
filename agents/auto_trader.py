@@ -33,6 +33,7 @@ from tools.strategies import (
     session_bars, opening_range, orb_signal,
 )
 from tools import supabase_store
+from agent_os import client as agent_os
 
 console = Console()
 
@@ -130,6 +131,8 @@ class AutoTrader:
         self.daily_loss_limit = daily_loss_limit
         self.mode = mode
         self.strategy = strategy
+        # Agent OS card this bot reports to (see agent_os/roster.py).
+        self.board_id = "intraday_trader" if mode == "intraday" else "swing_trader"
         self.or_bars = or_bars
         self.dry_run = dry_run
         self.llm_review = llm_review
@@ -240,22 +243,34 @@ class AutoTrader:
         review = " +LLM-review" if self.llm_review else ""
         self._log(f"**Cycle start** ({mode}{review}) watching {', '.join(self.symbols)}")
 
+        # Agent OS: check in as running; the reply says whether Joe pressed
+        # Pause on the board (fail-open — unreachable board = trade as before).
+        hb = agent_os.report(self.board_id, "running",
+                             task=f"{mode} cycle over {len(self.symbols)} symbols")
+        if not self.dry_run and hb and hb.get("paused"):
+            self._log("Paused on the Agent OS board. Skipping cycle.")
+            agent_os.report(self.board_id, "idle", task="Paused from the board — no trades")
+            return {"skipped": True, "reason": "paused"}
+
         # 1. Market hours gate.
         try:
             clock = self.alpaca.get_clock()
         except RuntimeError as e:
             self._log(f"Could not fetch market clock: {e}. Skipping cycle.")
+            agent_os.report(self.board_id, "error", note=f"Could not fetch market clock: {e}", run_type=f"{self.mode}_cycle")
             return {"skipped": True, "reason": "clock_error"}
 
         if not clock.get("is_open", False):
             nxt = clock.get("next_open", "?")
             self._log(f"Market is CLOSED. Next open: {nxt}. No trades.")
+            agent_os.report(self.board_id, "idle", task=f"Market closed · next open {nxt}")
             return {"skipped": True, "reason": "market_closed"}
 
         # 2. Account + positions + open orders.
         account = self.alpaca.account_summary()
         if account.get("trading_blocked") or account.get("account_blocked"):
             self._log("Account is blocked from trading. Aborting cycle.")
+            agent_os.report(self.board_id, "error", note="Alpaca account is blocked from trading", run_type=f"{self.mode}_cycle")
             return {"skipped": True, "reason": "account_blocked"}
 
         all_positions = {p["symbol"]: p for p in self.alpaca.simplify_positions(self.alpaca.get_positions())}
@@ -345,6 +360,18 @@ class AutoTrader:
         executed = self._execute_proposals(proposals)
 
         self._log(f"**Cycle end** — {len(executed)} action(s) of {len(proposals)} proposed.")
+        agent_os.report(
+            self.board_id, "done",
+            result=(f"{len(executed)} action(s) of {len(proposals)} proposed"
+                    + (": " + ", ".join(f"{p.get('action', '?')} {p.get('symbol')}" for p in executed)
+                       if executed else " — no trades")),
+            metrics={"equity": account.get("equity"), "todays_pl": todays_pl,
+                     "positions": open_position_count, "budget": self.budget},
+            run_type=f"{self.mode}_cycle",
+            # A quiet cycle is a heartbeat, not a work item — only log a run
+            # row (the OS work log) when something was actually traded.
+            log_run=bool(executed),
+        )
         return {"skipped": False, "proposals": proposals, "executed": executed, "account": account}
 
     # ------------------------------------------------------------------ #
@@ -774,6 +801,8 @@ class AutoTrader:
         supabase_store.heartbeat(
             f"runner up: {self.strategy}/{self.mode} {','.join(self.symbols)}",
             mode=self.mode)
+        agent_os.report(self.board_id, "online",
+                        task=f"Runner up: {self.strategy}/{self.mode} {','.join(self.symbols)}")
         try:
             while True:
                 result = {}
@@ -781,11 +810,15 @@ class AutoTrader:
                     result = self.run_once() or {}
                 except Exception as e:  # keep the loop alive across transient errors
                     self._log(f"Cycle error (continuing): {e}")
+                    agent_os.report(self.board_id, "error", note=f"Cycle error (continuing): {e}")
                 # When the market is closed, idle in longer naps so an always-on
                 # host isn't doing 5-minute no-ops (and spamming logs) overnight.
                 closed = result.get("skipped") and result.get("reason") == "market_closed"
                 nap = 15 if closed else self.interval_minutes
                 console.print(f"[dim]Sleeping {nap} min...[/dim]")
+                if closed:
+                    # Keep the board's "online" light on while we nap overnight.
+                    agent_os.report(self.board_id, "online", task="Market closed — napping, will trade at the open")
                 time.sleep(nap * 60)
         except KeyboardInterrupt:
             self._log("AutoTrader stopped by user (KeyboardInterrupt).")

@@ -14,6 +14,7 @@ from datetime import datetime
 
 from config.settings import settings
 from tools.journal import build_ledger, ledger_stats, exit_reasons_from_csv
+from agent_os import client as agent_os
 
 
 def _read_trades_csv(path: str) -> list[dict]:
@@ -31,6 +32,11 @@ def generate_coach_report(orders: list[dict], reports_dir: str) -> dict:
     with stats, the note text, and the tendencies list. Falls back to stats-only
     (no narrative) if the Anthropic call fails — the numbers always render.
     """
+    with agent_os.task("trading_coach", "Daily close: ledger, coach note, tendencies", run_type="daily_close"):
+        return _generate(orders, reports_dir)
+
+
+def _generate(orders: list[dict], reports_dir: str) -> dict:
     os.makedirs(reports_dir, exist_ok=True)
     csv_rows = _read_trades_csv(os.path.join(reports_dir, "trades.csv"))
     trips = build_ledger(orders, exit_reasons_from_csv(csv_rows))

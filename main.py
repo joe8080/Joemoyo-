@@ -12,6 +12,7 @@ Usage:
   python main.py leads    --type sponsor --name "Brand Name" --channel history
   python main.py market   --brand history_channel --topic "New video out now"
   python main.py ideas    --weeks 4
+  python main.py os worker                 # run the agents as Agent OS workers
 """
 
 import sys
@@ -641,6 +642,135 @@ def ideas(weeks: int):
     console.print(result["history_channel_ideas"])
     console.print("\n[bold]FINANCE CHANNEL IDEAS[/bold]")
     console.print(result["finance_channel_ideas"])
+
+
+# ------------------------------------------------------------------ #
+#  AGENT OS — one board for every agent                               #
+# ------------------------------------------------------------------ #
+
+@cli.group("os")
+def agent_os_group():
+    """
+    Agent OS: the board where every agent is visible, and the socket new
+    agents plug into. Try: os connect · os worker · os status · os say
+    """
+
+
+def _admin_key() -> str:
+    import os as _os
+    key = _os.environ.get("AGENT_OS_ADMIN_KEY") or click.prompt("Agent OS admin key", hide_input=True)
+    return key.strip()
+
+
+def _admin_call(action: str, **fields) -> dict:
+    import os as _os
+    import requests
+    url = (_os.environ.get("AGENT_OS_URL") or "").rstrip("/")
+    if not url:
+        console.print("[bold red]AGENT_OS_URL is not set[/bold red] — the gateway URL (…/functions/v1/agent-os).")
+        sys.exit(1)
+    r = requests.post(url, json={"action": action, **fields},
+                      headers={"content-type": "application/json", "x-agent-os-key": _admin_key()}, timeout=20)
+    try:
+        data = r.json()
+    except ValueError:
+        data = {"error": r.text[:200]}
+    if r.status_code >= 300:
+        console.print(f"[bold red]{action} failed:[/bold red] {data.get('error', r.status_code)}")
+        sys.exit(1)
+    return data
+
+
+@agent_os_group.command("connect")
+@click.option("--only", default="", help="Comma-separated agent keys (default: all built-ins)")
+def os_connect(only: str):
+    """
+    Register the repo's agents in the OS and print their keys (shown once).
+
+    Run this ONCE per set-up (running it again issues fresh keys and the old
+    ones stop working). Paste the printed AGENT_OS_KEYS into each host that
+    runs those agents: GitHub Actions secrets, the Railway service, .env.
+    """
+    import json as _json
+    from agent_os.roster import ROSTER
+    wanted = {k.strip() for k in only.split(",") if k.strip()}
+    issued = {}
+    for a in ROSTER:
+        if wanted and a["agent_key"] not in wanted:
+            continue
+        data = _admin_call("register_agent", agent_key=a["agent_key"], display_name=a["display_name"],
+                           role=a["role"], domain=a["domain"], reports_to=a["reports_to"],
+                           provider=a["provider"], capabilities=a["capabilities"], notes=a["notes"],
+                           metadata={"board": a.get("board", {})})
+        issued[a["agent_key"]] = data["agent_key_secret"]
+        console.print(f"  [green]✓[/green] {a['display_name']} → {a['agent_key']}")
+    console.print(Panel(
+        "[bold]Keys (shown once — store them now)[/bold]\n\n"
+        f"AGENT_OS_KEYS='{_json.dumps(issued)}'\n\n"
+        "[dim]GitHub Actions: repo Settings → Secrets → AGENT_OS_KEYS (+ AGENT_OS_URL)\n"
+        "Railway intraday service: Variables → AGENT_OS_KEYS, AGENT_OS_URL\n"
+        "Laptop / runner: put both lines in .env, then: python main.py os worker[/dim]",
+        style="green",
+    ))
+
+
+@agent_os_group.command("publish-board")
+def os_publish_board():
+    """Upload agent_os/board.html to the gateway (needs SUPABASE_URL + SUPABASE_SERVICE_KEY)."""
+    import os as _os
+    from agent_os.edge.publish_board import publish
+    url = _os.environ.get("SUPABASE_URL", "")
+    key = _os.environ.get("SUPABASE_SERVICE_KEY") or _os.environ.get("SUPABASE_KEY", "")
+    if not (url and key):
+        console.print("[bold red]Set SUPABASE_URL and SUPABASE_SERVICE_KEY first[/bold red] (your machine only — never a worker).")
+        sys.exit(1)
+    publish(url, key)
+
+
+@agent_os_group.command("worker")
+@click.option("--poll", default=20, show_default=True, help="Seconds between task pulls")
+def os_worker(poll: int):
+    """Run the built-in agents as OS workers (pull tasks, execute, report)."""
+    from agent_os.worker import Worker
+    console.print(Panel("[bold]Agent OS Runner[/bold]\nPulling tasks for the JoeMoyo agents. Ctrl-C to stop.",
+                        style="cyan"))
+    Worker(poll_seconds=poll).run_forever()
+
+
+@agent_os_group.command("status")
+def os_status():
+    """Print the fleet from the OS: who's live, who needs attention."""
+    from rich.table import Table
+    d = _admin_call("dashboard")
+    s = d.get("summary", {})
+    console.print(f"[bold]{s.get('active_agents')}/{s.get('agents')} active · "
+                  f"{s.get('os_linked')} OS-linked · {s.get('open_tasks')} open tasks · "
+                  f"{s.get('pending_approvals')} approvals waiting · {s.get('failures_24h')} failures (24h)[/bold]")
+    table = Table()
+    for col in ("Agent", "Reports to", "Live", "Status", "Now / last"):
+        table.add_column(col)
+    for a in d.get("agents", []):
+        board = a.get("board") or {}
+        now = board.get("note") if board.get("status") == "error" else (board.get("task") or board.get("result") or a.get("last_summary") or "")
+        table.add_row(a["display_name"], a.get("reports_to") or "", a.get("live_status") or "",
+                      a.get("status") or "", (now or "")[:70])
+    console.print(table)
+
+
+@agent_os_group.command("say")
+@click.argument("agent_key")
+@click.argument("status", type=click.Choice(["running", "done", "idle", "error", "online"]))
+@click.option("--task", default=None, help="What it's doing")
+@click.option("--result", default=None, help="What it produced")
+@click.option("--note", default=None, help="Error text or remark")
+def os_say(agent_key, status, task, result, note):
+    """Report a status by hand, e.g.: os say shopify_reporter done --result "Sent"."""
+    from agent_os import client as _client
+    reply = _client.report(agent_key, status, task=task, result=result, note=note)
+    if reply:
+        console.print(f"[green]Reported[/green] {agent_key} → {status}" + (" [yellow](paused on the board)[/yellow]" if reply.get("paused") else ""))
+    else:
+        console.print("[red]Not reported[/red] — check AGENT_OS_URL and AGENT_OS_KEYS.")
 
 
 if __name__ == "__main__":

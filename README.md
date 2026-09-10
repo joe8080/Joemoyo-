@@ -16,6 +16,24 @@ All brands → **MarketingAgent**
 
 ---
 
+## Agent OS — every agent on one board
+
+The Chief's Agent OS (Supabase) already holds the roster, task queue, approvals
+and per-agent keys. This repo adds the board page and plugs its agents in:
+
+```bash
+python main.py os worker          # run the Python agents as OS workers
+python main.py os status          # the fleet in the terminal
+python main.py os connect         # (re)issue the agents' keys — once
+python main.py os publish-board   # push agent_os/board.html to the gateway
+```
+
+Open the gateway URL (`…/functions/v1/agent-os`), press Connect, paste the
+admin key. See [docs/AGENT_OS.md](docs/AGENT_OS.md) for plugging in n8n /
+Zapier / other Claude or Grok agents and for what the pills mean.
+
+---
+
 ## Quick Start
 
 ### 1. Install dependencies

@@ -29,6 +29,7 @@ python main.py autotrade --symbols NFLX,AVGO,COIN,IWM,SMH --interval 5 \
 | `ALPACA_API_SECRET_KEY` | yes | paper secret |
 | `ALPACA_PAPER` | yes | `true` |
 | `SUPABASE_URL` / `SUPABASE_SERVICE_KEY` | optional | durable logging |
+| `AGENT_OS_URL` / `AGENT_OS_KEYS` | optional | live card on the Agent OS board; Pause is honoured (see docs/AGENT_OS.md) |
 
 ## Deploy options (pick one)
 

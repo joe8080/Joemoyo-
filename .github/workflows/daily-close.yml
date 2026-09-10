@@ -32,6 +32,10 @@ jobs:
           ALPACA_PAPER: "true"
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          # Agent OS board (optional): check in so the card updates live and
+          # the board's Pause button is honoured. Keys from `os connect`.
+          AGENT_OS_URL: ${{ secrets.AGENT_OS_URL }}
+          AGENT_OS_KEYS: ${{ secrets.AGENT_OS_KEYS }}
           # Real key -> Claude writes the narrative; placeholder -> deterministic
           # stats-only note (the report still generates either way).
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY || 'unused-deterministic-note' }}
