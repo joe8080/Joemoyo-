@@ -14,6 +14,8 @@ class Settings:
     alpaca_api_key_id: str
     alpaca_api_secret_key: str
     alpaca_paper: bool
+    telegram_bot_token: str
+    telegram_chat_id: str
     output_dir: str
 
     # Brand names
@@ -43,6 +45,8 @@ def get_settings() -> Settings:
         alpaca_api_secret_key=os.environ.get("ALPACA_API_SECRET_KEY", ""),
         # Paper trading is the safe default. Set ALPACA_PAPER=false to go live.
         alpaca_paper=os.environ.get("ALPACA_PAPER", "true").lower() != "false",
+        telegram_bot_token=os.environ.get("TELEGRAM_BOT_TOKEN", ""),
+        telegram_chat_id=os.environ.get("TELEGRAM_CHAT_ID", ""),
         output_dir=os.environ.get("OUTPUT_DIR", "./outputs"),
         history_channel=os.environ.get("YOUTUBE_HISTORY_CHANNEL_NAME", "Chronicles of Time"),
         finance_channel=os.environ.get("YOUTUBE_FINANCE_CHANNEL_NAME", "Capital Edge"),

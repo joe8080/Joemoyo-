@@ -142,7 +142,27 @@ class AutoTrader:
         executed = self._execute_proposals(proposals)
 
         self._log(f"**Cycle end** — {len(executed)} action(s) of {len(proposals)} proposed.")
+
+        # 6. Telegram alert — only when something actually traded (no spam).
+        if executed:
+            self._notify_trades(executed, account)
+
         return {"skipped": False, "proposals": proposals, "executed": executed, "account": account}
+
+    def _notify_trades(self, executed: list[dict], account: dict) -> None:
+        """Send a Telegram summary of the trades placed this cycle (best-effort)."""
+        from tools.telegram_client import send_telegram, telegram_configured
+        if not telegram_configured():
+            return
+        tag = "DRY-RUN (no real order)" if self.dry_run else "PAPER"
+        lines = [f"*Auto-trader* ({tag})"]
+        for p in executed:
+            if p["action"] == "buy":
+                lines.append(f"🟢 BUY {p['qty']} {p['symbol']} @ ~${p['last_price']} (~${p.get('est_cost', 0)})")
+            else:
+                lines.append(f"🔴 CLOSE {p['symbol']} ({p['qty']} sh)")
+        lines.append(f"Equity ${account.get('equity')} · buying power ${account.get('buying_power')}")
+        send_telegram("\n".join(lines))
 
     # ------------------------------------------------------------------ #
     #  Proposal gathering (deterministic)                                 #
