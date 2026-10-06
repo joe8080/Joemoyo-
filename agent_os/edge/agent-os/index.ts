@@ -4,7 +4,9 @@
 // JoeMoyo board (every original action keeps its behaviour):
 //   GET                      serves the Agent OS board (board.html, read from
 //                            agent_os_config.board_html — see publish_board.py)
-//   dashboard (admin)        + per-agent board state, recent runs, latest metrics
+//   dashboard (admin)        + per-agent board state, recent runs, latest metrics,
+//                              and `extras` (FO-01: projects, work cycles, paper desk,
+//                              automations, router routes — agent_os_board_extras())
 //   register_agent (admin)   + notes, board metadata
 //   issue_agent_key (admin)  + board metadata
 //   heartbeat (agent)        + status / task / result / note / metrics → the card's
@@ -99,7 +101,11 @@ async function dashboard(db){
     x.heartbeat_status=r.heartbeat_status??"unknown"; x.notes=r.notes??null; x.updated_at=r.updated_at??null;
     x.board=isObj(c.metadata)&&isObj(c.metadata.board)?c.metadata.board:null; x.last_error=c.last_error??null;
   }
-  return {generated_at:new Date().toISOString(),agents:a,tasks:t,approvals:ap,events:events.data??[],handoffs:handoffs.data??[],runs:runs.data??[],metrics:metrics.data??[],queue:(queue.data??[])[0]??null,
+  // FO-01 layer (projects, work cycles, paper desk, automations, router). Optional:
+  // a failure here must never take the board down.
+  let extras=null;
+  try{const x=await db.rpc("agent_os_board_extras");if(!x.error)extras=x.data;}catch(_e){extras=null;}
+  return {generated_at:new Date().toISOString(),agents:a,tasks:t,approvals:ap,events:events.data??[],handoffs:handoffs.data??[],runs:runs.data??[],metrics:metrics.data??[],queue:(queue.data??[])[0]??null,extras,
     summary:{agents:a.length,active_agents:a.filter(x=>x.status==="active").length,os_linked:a.filter(x=>x.agent_os_api_connected===true).length,legacy_live:a.filter(x=>String(x.live_status).startsWith("legacy_")).length,open_tasks:t.filter(x=>!["completed","failed","cancelled"].includes(x.status)).length,pending_approvals:ap.filter(x=>x.status==="pending").length,failures_24h:a.filter(x=>x.last_result==="FAIL"&&x.last_run_at&&Date.now()-new Date(x.last_run_at).getTime()<86400000).length}};
 }
 

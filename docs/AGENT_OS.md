@@ -23,6 +23,14 @@ that executes tasks for them.
 - **Commander strip** — Mary Jane (the Chief), the headline, and four tiles you
   can press to filter: Working now · Need attention · Waiting on you · Resting.
 - **Numbers** — the latest `agent_ops_metrics` (book value, risk regime, …).
+- **Projects** — the FO-01 project state (Joe OS, Investment System, AIFT,
+  OGX, Smoking Lane): stage, objective, the open work cycle and what to test
+  next, and the next action.
+- **Paper trading desk** — live health from `v_paper_system_health`: equity,
+  positions, whether orders are on, and every reason they are blocked. The
+  "Decision needed" items also appear under **Waiting on you**.
+- **Automations** — every scheduled database job (T212 sync, price fetch,
+  tripwires, Telegram, paper health) with its last run; failures float to the top.
 - **Teams** — every supervisor with their agents. A card shows the state pill,
   what it is doing now or did last, its numbers, when it was last seen, and
   buttons: **Run** (built-ins) / **Task** (any agent), **Pause**/**Resume**,
@@ -33,7 +41,8 @@ that executes tasks for them.
 
 State pills: Running · Online · Working (telemetry in the last 20 min) ·
 Seen recently · Done · Resting · Paused · Not plugged in (no key yet) ·
-Logical role · and the red ones: Error · Failed · Stalled · Offline.
+Logical role · Via router (no key of its own; Zapier's FO-01 router runs its
+tasks on its provider — Gemini, Perplexity, OpenAI, Grok or Claude) · and the red ones: Error · Failed · Stalled · Offline.
 
 ## Plug in an agent (n8n, Zapier, a script, another Claude or Grok)
 
@@ -118,3 +127,18 @@ stop working. `--only swing_trader,trading_coach` limits it.
 - Real-money trading is denied at the OS level; the trading bots are paper only
   and the board's "Dry-run cycle" places nothing.
 - External actions default to approval — that is the "Waiting on you" panel.
+
+## FO-01 (Zapier router) and the board
+
+FO-01 is the Zapier orchestration layer: Zapier pulls ready tasks from
+`v_zapier_agent_dispatch` through the `agent-os-router` function, runs them on
+the assigned agent's provider, and writes results, handoffs and approvals back
+into the same tables. The board reads all of it:
+
+- tasks, approvals and handoffs FO-01 creates show in **Open tasks**,
+  **Waiting on you** and **Activity**;
+- routed results show on the owning agent's card (run type `fo01_routed`);
+- `agent_os_board_extras()` (service-role only, read-only) adds projects,
+  work cycles, paper desk health, scheduled jobs and the router's routes.
+
+Nothing on the board changes FO-01's routing or config.

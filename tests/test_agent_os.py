@@ -168,5 +168,8 @@ def test_board_page_builds_and_parses():
     except FileNotFoundError:
         pytest.skip("node not installed")
     gateway = open(os.path.join(ROOT, "agent_os", "edge", "agent-os", "index.ts"), encoding="utf-8").read()
+    assert "agent_os_board_extras" in gateway and "extras" in gateway
+    for marker in ('id="projects"', 'id="panel-desk"', 'id="panel-auto"', "routed: 'Via router'"):
+        assert marker in src, marker
     for action in ("dashboard", "register_agent", "issue_agent_key", "heartbeat", "whoami", "pull_tasks", "complete_task", "set_agent_status", "decide_approval"):
         assert f'action==="{action}"' in gateway

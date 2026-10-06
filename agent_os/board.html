@@ -82,8 +82,9 @@
   .btn.sm { min-height: 40px; padding: 0 14px; font-size: 14px; }
 
   /* ---- commander strip -------------------------------------------------- */
-  .strip { display: grid; grid-template-columns: minmax(0, 1.7fr) repeat(4, minmax(130px, 1fr)); gap: 12px; margin-top: 20px; }
-  @media (max-width: 1000px) { .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); } .strip .commander { grid-column: 1 / -1; } }
+  .strip { display: grid; grid-template-columns: minmax(0, 2.8fr) repeat(4, minmax(120px, 1fr)); gap: 12px; margin-top: 20px; align-items: start; }
+  @media (max-width: 1100px) { .strip { grid-template-columns: repeat(4, minmax(0, 1fr)); } .strip .commander { grid-column: 1 / -1; } }
+  @media (max-width: 560px) { .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .commander { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px; align-items: center; box-shadow: var(--shadow); }
   .commander .sigil { width: 52px; height: 52px; border-radius: 14px; background: var(--gold); color: var(--gold-ink); display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 20px; letter-spacing: -.04em; }
   .commander .who { min-width: 0; }
@@ -93,7 +94,7 @@
   .commander p strong { color: var(--ink); font-weight: 600; }
   .commander .say { display: flex; flex-direction: column; gap: 8px; }
   @media (max-width: 600px) { .commander { grid-template-columns: auto minmax(0,1fr); } .commander .say { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; } }
-  .tile { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; min-height: 96px; border-top: 3px solid var(--tile, var(--rest)); text-align: left; cursor: pointer; color: inherit; }
+  .tile { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; min-height: 104px; border-top: 3px solid var(--tile, var(--rest)); text-align: left; cursor: pointer; color: inherit; }
   .tile:hover { background: var(--raised); }
   .tile[aria-pressed="true"] { outline: 2px solid var(--gold); }
   .tile .n { font-family: var(--display); font-size: 36px; font-weight: 800; line-height: 1; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
@@ -158,6 +159,41 @@
   .socket { border: 2px dashed var(--line-2); border-radius: 14px; padding: 22px 18px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; justify-content: center; color: var(--ink-2); background: transparent; min-height: 150px; }
   .socket h3 { margin: 0; font-family: var(--display); font-size: 18px; font-weight: 700; color: var(--ink); }
   .socket p { margin: 0; font-size: 14px; text-wrap: pretty; }
+
+  /* ---- projects (FO-01) -------------------------------------------------- */
+  .projects { margin-top: 22px; }
+  .pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .project { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .project h3 { margin: 0; font-family: var(--display); font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+  .project .obj { margin: 0; font-size: 14px; color: var(--ink-2); text-wrap: pretty; }
+  .project .cycle { font-size: 13px; background: var(--raised); border-radius: 8px; padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; }
+  .project .cycle b { font-weight: 600; font-size: 14px; }
+  .project .cycle span { color: var(--ink-3); }
+  .project .next { margin: 0; font-size: 13px; color: var(--ink-2); }
+  .project .next::before { content: "Next "; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-right: 4px; }
+  .project .meta { font-size: 12px; }
+  .via { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--teal); }
+
+  /* ---- desk + automations -------------------------------------------------- */
+  .desk-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .kv { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 8px 0; }
+  .kv div { background: var(--raised); border-radius: 8px; padding: 6px 10px; display: flex; flex-direction: column; min-width: 0; }
+  .kv b { font-family: var(--display); font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .kv small { font-size: 11px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .04em; }
+  .blocked { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+  .blocked li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px; align-items: start; color: var(--ink-2); }
+  .blocked li.decide { color: var(--ink); font-weight: 600; }
+  .blocked li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; background: var(--rest); }
+  .blocked li.decide::before { background: var(--gold); }
+  .autolist { list-style: none; margin: 0; padding: 0; }
+  .autolist li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 13px; align-items: start; }
+  .autolist li:first-child { border-top: none; }
+  .autolist .nm { font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere; }
+  .autolist .err { color: var(--bad); font-size: 12px; overflow-wrap: anywhere; }
+  .autolist time { font-family: var(--mono); font-size: 12px; color: var(--ink-3); white-space: nowrap; }
+  details.more summary { cursor: pointer; font-size: 13px; color: var(--ink-2); padding: 6px 0; min-height: 32px; }
+  .sdot { width: 10px; height: 10px; border-radius: 50%; background: var(--ok); margin-top: 3px; }
+  .sdot.bad { background: var(--bad); } .sdot.idle { background: var(--rest); }
 
   /* ---- rail ------------------------------------------------------------- */
   .rail { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 16px; }
@@ -239,6 +275,11 @@
 
   <div class="numbers" id="numbers" aria-label="Today's numbers"></div>
 
+  <section class="projects" id="projects-wrap" aria-label="Projects" hidden>
+    <div class="dept-head"><h2>Projects</h2><span class="count" id="projects-count"></span><span class="rule"></span></div>
+    <div class="pgrid" id="projects"></div>
+  </section>
+
   <div class="deck">
     <main id="fleet" aria-label="Agents"></main>
     <aside class="rail" aria-label="Side panels">
@@ -246,9 +287,17 @@
         <h2>Waiting on you <span class="count" id="you-count"></span></h2>
         <div id="approvals"></div>
       </section>
+      <section class="panel" id="panel-desk" hidden>
+        <h2>Paper trading desk <span class="count" id="desk-time"></span></h2>
+        <div id="desk"></div>
+      </section>
       <section class="panel" id="panel-tasks">
         <h2>Open tasks <span class="count" id="tasks-count"></span></h2>
         <ol class="tasklist" id="tasks"></ol>
+      </section>
+      <section class="panel" id="panel-auto" hidden>
+        <h2>Automations <span class="count" id="auto-count"></span></h2>
+        <div id="auto"></div>
       </section>
       <section class="panel">
         <h2>Activity <span class="count" id="feed-count"></span></h2>
@@ -301,13 +350,14 @@
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
   const LABEL = { running: 'Running', online: 'Online', active: 'Working', recent: 'Seen recently', done: 'Done', idle: 'Resting',
-                  standby: 'Standing by', logical: 'Logical role', unlinked: 'Not plugged in', paused: 'Paused',
+                  standby: 'Standing by', logical: 'Logical role', unlinked: 'Not plugged in', routed: 'Via router', paused: 'Paused',
                   error: 'Error', stalled: 'Stalled', failed: 'Failed', offline: 'Offline', retired: 'Retired' };
-  const TONE = { running: 'ok', online: 'ok', active: 'teal', recent: 'teal', done: 'teal', paused: 'warn',
+  const TONE = { running: 'ok', online: 'ok', active: 'teal', recent: 'teal', done: 'teal', routed: 'teal', paused: 'warn',
                  error: 'bad', stalled: 'bad', failed: 'bad', offline: 'bad' };
   const ATTENTION = new Set(['error', 'stalled', 'failed', 'offline']);
   const WORKING = new Set(['running', 'online', 'active']);
-  const PROVIDER = { grok: 'Grok', claude: 'Claude', python: 'Python bot', mary_jane: 'Mary Jane', unassigned: 'unassigned', openai: 'OpenAI' };
+  const PROVIDER = { grok: 'Grok', claude: 'Claude', python: 'Python bot', mary_jane: 'Mary Jane', unassigned: 'unassigned', openai: 'OpenAI', gemini: 'Gemini', perplexity: 'Perplexity', zapier: 'Zapier' };
+  const ROUTE_NAME = { grok: 'Grok', claude: 'Claude', openai: 'OpenAI', gemini: 'Gemini', perplexity: 'Perplexity', specialist: 'OS Runner' };
 
   const state = { data: null, token: '', server: '', connected: false, preview: false, filter: null, timer: null, retired: false };
   try { state.token = localStorage.getItem('mjos_admin') || ''; state.server = localStorage.getItem('mjos_url') || ''; } catch (e) {}
@@ -335,7 +385,6 @@
       A({ agent_key: 'ogx_content_ops', display_name: 'OGX Content Ops', role: 'worker', domain: 'originex', reports_to: 'originex_supervisor', notes: 'Faceless Shorts assembly under OrigineX. Publish gated.', live_status: 'legacy_recent', last_seen_at: t(2 * 60), last_result: 'PASS', last_summary: 'Uploaded Meroë Short to the default alias.', last_run_at: t(2 * 60) }),
       A({ agent_key: 'history_researcher', display_name: 'History Researcher', role: 'worker', domain: 'originex', reports_to: 'originex_supervisor', provider: 'claude', connection_mode: 'api', notes: 'Deep-researches a historical topic for the OrigineX channel with cited sources.', agent_os_api_connected: true, live_status: 'online', last_seen_at: t(0.5), heartbeat_status: 'running', open_tasks: 1, board: { status: 'running', task: 'The Kingdom of Kush · using web_search', started_at: t(6), updated_at: t(0.5), schedule: 'On demand', runner: true, run_label: 'Research topic', input_hint: 'Topic, e.g. The Kingdom of Kush' } }),
       A({ agent_key: 'history_script_writer', display_name: 'History Script Writer', role: 'worker', domain: 'originex', reports_to: 'originex_supervisor', provider: 'claude', connection_mode: 'api', notes: 'Turns research (or a topic) into a 12-minute narration script.', agent_os_api_connected: true, live_status: 'connected', heartbeat_status: 'idle', last_seen_at: t(1), board: { status: 'idle', task: 'Mansa Musa', result: 'Script saved → outputs/scripts/mansa_musa.md (2,140 words)', updated_at: t(1), schedule: 'On demand', runner: true, run_label: 'Write script', input_hint: 'Topic or pasted research' } }),
-      A({ agent_key: 'youtube_growth', display_name: 'YouTube Growth', role: 'worker', domain: 'content', reports_to: 'content_supervisor', status: 'paused', provider: 'unassigned', connection_mode: 'manual', notes: 'Ready to connect a YouTube growth/analytics agent.' }),
       A({ agent_key: 'venture_supervisor', display_name: 'Venture Supervisor', role: 'supervisor', domain: 'ventures', reports_to: 'chief', provider: 'mary_jane', connection_mode: 'logical', notes: 'Logical supervisor for Studio, SCIP, BBQ and future ventures.', live_status: 'logical' }),
       A({ agent_key: 'studio_venture', display_name: 'Studio Venture', role: 'venture', domain: 'studio', reports_to: 'venture_supervisor', status: 'stalled', notes: 'Music studio stalled', last_result: 'STALLED', last_summary: 'Stalled venture audit: 28 asset rows missing purchase prices.', last_run_at: t(9 * 60), live_status: 'legacy_recent' }),
       A({ agent_key: 'shopify_reporter', display_name: 'Shopify Reporter', role: 'worker', domain: 'shopify', reports_to: 'venture_supervisor', provider: 'claude', connection_mode: 'api', notes: 'Weekly and monthly Shopify store performance reports.', agent_os_api_connected: true, live_status: 'connected', heartbeat_status: 'idle', last_seen_at: t(1), board: { status: 'idle', updated_at: t(1), schedule: 'On demand (weekly by default)', runner: true, run_label: 'Weekly report', input_hint: 'Leave blank for weekly, or type: monthly' } }),
@@ -372,7 +421,31 @@
       { as_of_date: 'today', domain: 'originex', metric_key: 'youtube_uploads', metric_value: 639, unit: 'videos' },
       { as_of_date: 'today', domain: 'studio', metric_key: 'missing_purchase_prices', metric_value: 28, unit: 'count' },
     ];
-    return { generated_at: new Date().toISOString(), agents, approvals, tasks, runs, events, metrics, summary: {} };
+    agents.push(
+      A({ agent_key: 'zapier_router', display_name: 'Zapier Orchestrator', role: 'worker', domain: 'systems', reports_to: 'systems_supervisor', provider: 'zapier', connection_mode: 'api', notes: 'Primary automation/orchestration layer: routes OS tasks to Claude, Grok, Gemini, OpenAI or Perplexity.', agent_os_api_connected: true, live_status: 'online', heartbeat_status: 'running', last_seen_at: t(2) }),
+      A({ agent_key: 'research_scout', display_name: 'Perplexity Research', role: 'worker', domain: 'research', reports_to: 'content_supervisor', provider: 'perplexity', connection_mode: 'api', notes: 'External research with current, cited evidence. Connected via FO-01 + Zapier.', last_result: 'PASS', last_run_type: 'fo01_routed', last_summary: 'UK investors in US-listed ETFs: no PFIC issue for non-US taxpayers, but no UK reporting-fund status — gains taxed as income.', last_run_at: t(40), live_status: 'legacy_recent' }),
+      A({ agent_key: 'youtube_growth', display_name: 'YouTube Growth', role: 'worker', domain: 'content', reports_to: 'content_supervisor', provider: 'gemini', connection_mode: 'api', notes: 'YouTube growth and analytics.', last_result: 'PASS', last_summary: '3 title ideas for UCITS vs US-listed ETFs, handed to Perplexity Research for fact-check.', last_run_at: t(90), live_status: 'offline' })
+    );
+    const extras = {
+      router: { routes: { grok: 'grok', claude: 'claude', gemini: 'gemini', openai: 'openai', perplexity: 'perplexity', python: 'specialist', mary_jane: 'openai' }, skip_agents: ['zapier_router', 'agent_os_runner'] },
+      projects: [
+        { project_key: 'joe_os', display_name: 'Joe OS', domain: 'systems', stage: 'integration', objective: 'Make every agent start from shared current context and keep learning between runs.', next_actions: ['observe next FO-01 routed task end-to-end'], open_tasks: 1, updated_at: t(200), open_cycle: { title: 'Unify Agent OS around FO-01 and closed-loop learning', status: 'measuring', target_review_at: new Date(Date.now() + 7 * 864e5).toISOString(), test_next: 'Confirm context and work-cycle ids persist through the next routed task.' } },
+        { project_key: 'investment_system', display_name: 'Investment System', domain: 'portfolio', stage: 'operating', objective: 'Keep research, risk, decisions and reviews on the same evidence trail.', next_actions: ['link new research tasks to FO-01 context'], open_tasks: 0, updated_at: t(200) },
+        { project_key: 'aift', display_name: 'AI Finance Toolkit', domain: 'content', stage: 'operating', objective: 'A repeatable evidence-led finance education content system.', next_actions: ['record performance experiments'], open_tasks: 0, updated_at: t(200) },
+        { project_key: 'ogx', display_name: 'OrigineX Human Archives', domain: 'content', stage: 'operating', objective: 'Documentary content as a measured production and learning system.', next_actions: ['capture experiment outcomes'], open_tasks: 0, updated_at: t(200) },
+        { project_key: 'smoking_lane', display_name: 'Smoking Lane / BBQ', domain: 'ventures', stage: 'prototype', objective: 'Iterate recipes and operating economics from real cook results.', next_actions: ['attach future cooks to work cycles'], open_tasks: 0, updated_at: t(200) },
+      ],
+      paper_desk: { overall_health: 'HEALTHY', execution_state: 'ORDERS_BLOCKED', new_orders_enabled: false, desk_status: 'PAPER_VALIDATION', equity_usd: 104727.44, positions: 8, open_orders: 0, checked_at_utc: t(3), health_problems: [],
+        blocked_reasons: ['Kill switch engaged: diagnostic window closed', 'Strategy execution disabled: no strategy is approved', 'Decision needed: permitted strategy tags', 'Decision needed: equity-only vs options scope', 'Decision needed: stale-quote limit (seconds)', 'US regular session closed'] },
+      automations: [
+        { name: 'daily_postmortem_flagger', active: true, last_status: 'failed', last_start: t(300), last_message: 'ERROR: column "alert_date" of relation "alerts_log" does not exist', failed_7d: 7 },
+        { name: 'alpaca_paper_health_check', active: true, last_status: 'succeeded', last_start: t(3) },
+        { name: 'telegram-digest', active: true, last_status: 'succeeded', last_start: t(180) },
+        { name: 't212-reconcile', active: true, last_status: 'succeeded', last_start: t(13 * 60) },
+        { name: 'tripwire_evaluation', active: true, last_status: 'succeeded', last_start: t(13 * 60) },
+      ],
+    };
+    return { generated_at: new Date().toISOString(), agents, approvals, tasks, runs, events, metrics, extras, summary: {} };
   })();
 
   // ---- helpers ------------------------------------------------------------
@@ -458,11 +531,17 @@
       case 'legacy_live': return 'active';
       case 'legacy_recent': return 'recent';
       case 'logical': return 'logical';
-      default: return a.agent_os_api_connected ? 'offline' : 'unlinked';
+      default: return a.agent_os_api_connected ? 'offline' : (a.route ? 'routed' : 'unlinked');
     }
+  }
+  function routeOf(a, d) {
+    const r = d.extras && d.extras.router; if (!r || !r.routes) return null;
+    if ((r.skip_agents || []).includes(a.agent_key) || a.connection_mode === 'logical' || a.status !== 'active') return null;
+    return r.routes[String(a.provider || '').toLowerCase()] || null;
   }
   function decorate(d) {
     const byKey = {};
+    d.agents.forEach(a => { a.route = routeOf(a, d); });
     d.agents.forEach(a => { a.state = stateOf(a); a.attention = ATTENTION.has(a.state); byKey[a.agent_key] = a; });
     d.byKey = byKey;
     const runs = d.runs || [];
@@ -470,16 +549,21 @@
     d.pending = (d.approvals || []).filter(x => x.status === 'pending');
     d.openTasks = (d.tasks || []).filter(x => !['completed', 'failed', 'cancelled'].includes(x.status));
     const visible = d.agents.filter(a => a.state !== 'retired' && a.role !== 'chief');
+    const desk = d.extras && d.extras.paper_desk;
+    d.deskDecisions = desk ? (desk.blocked_reasons || []).filter(r => /^Decision needed/i.test(r)) : [];
     d.counts = {
       running: visible.filter(a => WORKING.has(a.state)).length,
       attention: visible.filter(a => a.attention).length,
-      you: d.pending.length + d.openTasks.filter(t => t.status === 'waiting_approval' || t.status === 'blocked').length,
+      you: d.pending.length + d.deskDecisions.length + d.openTasks.filter(t => t.status === 'waiting_approval' || t.status === 'blocked').length,
       idle: visible.filter(a => !WORKING.has(a.state) && !a.attention && a.state !== 'paused').length,
     };
     const att = visible.filter(a => a.attention);
     const parts = [];
     if (att.length) parts.push(`${att.length} need${att.length === 1 ? 's' : ''} attention: ` + att.map(a => `${a.display_name} ${LABEL[a.state].toLowerCase()}`).join(', ') + '.');
     if (d.pending.length) parts.push(`${d.pending.length} approval${d.pending.length === 1 ? '' : 's'} waiting on you.`);
+    if (d.deskDecisions.length) parts.push(`Paper desk needs ${d.deskDecisions.length} decision${d.deskDecisions.length === 1 ? '' : 's'} before it can trade.`);
+    const autoFail = ((d.extras && d.extras.automations) || []).filter(j => j.active && j.last_status === 'failed');
+    if (autoFail.length) parts.push(`${autoFail.length} automation${autoFail.length === 1 ? '' : 's'} failed last run.`);
     if (!parts.length) parts.push(`All clear. ${d.counts.running} working, ${d.counts.idle} resting.`);
     d.headline = parts.join(' ');
     return d;
@@ -534,6 +618,8 @@
         `<span class="num" title="${esc(m.domain)}${m.notes ? ' · ' + esc(m.notes) : ''}"><b>${m.metric_text != null ? esc(m.metric_text) : fmtNum(m.metric_key, Number(m.metric_value), m.unit)}</b><small>${esc(human(m.metric_key))}</small></span>`).join('');
     }
 
+    renderExtras(d);
+
     // fleet
     const fleet = $('#fleet'); fleet.innerHTML = '';
     let shown = 0;
@@ -554,8 +640,13 @@
 
     // approvals
     const you = $('#panel-you'); const ap = $('#approvals'); ap.innerHTML = '';
-    you.hidden = d.pending.length === 0;
-    $('#you-count').textContent = d.pending.length ? `${d.pending.length}` : '';
+    you.hidden = d.pending.length === 0 && d.deskDecisions.length === 0;
+    $('#you-count').textContent = (d.pending.length + d.deskDecisions.length) ? `${d.pending.length + d.deskDecisions.length}` : '';
+    d.deskDecisions.forEach(r => {
+      const div = document.createElement('div'); div.className = 'approval';
+      div.innerHTML = `<b>${esc(r.replace(/^Decision needed:\s*/i, 'Paper desk: '))}</b><p class="meta"><span>Paper Trading Agent</span><span>desk rule</span><span>blocks new paper orders</span></p><div class="actions"><a class="btn sm" href="https://claude.ai/code" target="_blank" rel="noopener">Decide with Mary Jane</a></div>`;
+      ap.appendChild(div);
+    });
     d.pending.forEach(a => {
       const who = d.byKey[a.requested_by_agent]; const div = document.createElement('div'); div.className = 'approval'; div.dataset.id = a.id;
       div.innerHTML = `<b>${esc(a.action_summary)}</b><p class="meta"><span>${esc(who ? who.display_name : a.requested_by_agent || 'system')}</span><span>${esc(a.approval_type)}</span><span>${esc(a.risk_level)} risk</span><span>${esc(ago(ageS(a.requested_at)))}</span></p>
@@ -591,6 +682,47 @@
     });
   }
 
+
+  // ---- FO-01 layer: projects, paper desk, automations -------------------------
+  function renderExtras(d) {
+    const x = d.extras || {};
+    const projects = x.projects || [];
+    $('#projects-wrap').hidden = !projects.length;
+    $('#projects-count').textContent = projects.length ? `${projects.length}` : '';
+    $('#projects').innerHTML = projects.map(p => {
+      const c = p.open_cycle; const next = (p.next_actions || [])[0];
+      const tone = p.stage === 'operating' ? 'teal' : p.stage === 'prototype' ? 'gold' : p.stage === 'integration' ? 'warn' : '';
+      return `<article class="project"><header class="card-head"><div><h3>${esc(p.display_name)}</h3><span class="kind">${esc(p.domain || '')}</span></div><span class="pill ${tone}">${esc(p.stage || p.status)}</span></header>
+        <p class="obj">${esc(p.objective || '')}</p>
+        ${c ? `<div class="cycle"><b>${esc(c.title)}</b><span>Work cycle · ${esc(c.status)}${c.target_review_at ? ' · review ' + esc(fmtDate.format(new Date(c.target_review_at))) : ''}</span>${c.test_next ? `<span>Test next: ${esc(String(c.test_next).slice(0, 140))}</span>` : ''}</div>` : ''}
+        ${next ? `<p class="next">${esc(next)}</p>` : ''}
+        <p class="meta"><span>${p.open_tasks ? p.open_tasks + ' open task' + (p.open_tasks === 1 ? '' : 's') : 'no open tasks'}</span><span>updated ${esc(ago(ageS(p.updated_at)))}</span></p></article>`;
+    }).join('');
+
+    const desk = x.paper_desk;
+    $('#panel-desk').hidden = !desk;
+    if (desk) {
+      const ok = desk.overall_health === 'HEALTHY'; const trading = desk.new_orders_enabled === true;
+      $('#desk-time').textContent = desk.checked_at_utc ? `checked ${ago(ageS(desk.checked_at_utc))}` : '';
+      const reasons = (desk.blocked_reasons || []);
+      $('#desk').innerHTML = `<div class="desk-head"><span class="pill ${ok ? 'ok' : 'bad'}"><i class="dot"></i>${esc(desk.overall_health || 'unknown')}</span><span class="pill ${trading ? 'ok' : 'warn'}"><i class="dot"></i>${trading ? 'Orders on' : 'Orders blocked'}</span><span class="hint">${esc(String(desk.desk_status || '').replace(/_/g, ' ').toLowerCase())}</span></div>
+        <div class="kv"><div><b>${fmtNum('equity', Number(desk.equity_usd))}</b><small>Equity</small></div><div><b>${esc(desk.positions ?? '–')}</b><small>Positions</small></div><div><b>${esc(desk.open_orders ?? '–')}</b><small>Open orders</small></div></div>
+        ${reasons.length ? `<ul class="blocked">${reasons.map(r => `<li class="${/^Decision needed/i.test(r) ? 'decide' : ''}"><span>${esc(r)}</span></li>`).join('')}</ul>` : '<p class="hint">Nothing blocking.</p>'}
+        ${(desk.health_problems || []).length ? `<p class="hint" style="color:var(--bad)">${esc(desk.health_problems.join(' · '))}</p>` : ''}`;
+    }
+
+    const jobs = (x.automations || []);
+    $('#panel-auto').hidden = !jobs.length;
+    if (jobs.length) {
+      const failing = jobs.filter(j => j.active && j.last_status === 'failed');
+      const okJobs = jobs.filter(j => !(j.active && j.last_status === 'failed'));
+      $('#auto-count').textContent = `${jobs.length - failing.length} ok · ${failing.length} failing`;
+      const row = (j, bad) => `<li><i class="sdot ${bad ? 'bad' : j.active ? '' : 'idle'}"></i><div><div class="nm">${esc(j.name)}</div>${bad ? `<div class="err">${esc(String(j.last_message || '').replace(/\s+/g, ' ').slice(0, 140))}</div>` : ''}${j.failed_7d ? `<div class="hint">${esc(j.failed_7d)} failed in 7 days</div>` : ''}</div><time>${j.last_start ? esc(clockStr(j.last_start)) : 'never'}</time></li>`;
+      $('#auto').innerHTML = (failing.length ? `<ul class="autolist">${failing.map(j => row(j, true)).join('')}</ul>` : '<p class="hint">Every scheduled job succeeded on its last run.</p>')
+        + `<details class="more"><summary>All ${jobs.length} scheduled jobs</summary><ul class="autolist">${okJobs.map(j => row(j, false)).join('')}</ul></details>`;
+    }
+  }
+
   function nowLine(a, d) {
     const b = a.board || {}; const st = a.state;
     const run = d.latestRun[a.agent_key];
@@ -605,6 +737,7 @@
     if (boardNewer && (b.result || b.task)) return ['Last', b.result || b.task, false];
     if (a.last_summary) return ['Last', a.last_summary, false];
     if (st === 'unlinked') return ['Last', 'No telemetry yet. Press Connect to give it a key.', false];
+    if (st === 'routed') return ['Runs', `When a task arrives, Zapier routes it to ${ROUTE_NAME[a.route] || a.route}. Press Task to give it one.`, false];
     if (st === 'logical') return ['Role', 'A reporting line, not a running process.', false];
     return ['Last', 'Not run yet.', false];
   }
@@ -626,7 +759,7 @@
     if (b.schedule) meta.push(b.schedule);
     if (dur) meta.push(`Took ${dur}`);
     if (a.open_tasks) meta.push(`${a.open_tasks} open task${a.open_tasks === 1 ? '' : 's'}`);
-    meta.push(a.agent_os_api_connected ? 'OS-linked' : (a.connection_mode === 'logical' ? 'logical' : 'not linked'));
+    meta.push(a.agent_os_api_connected ? 'OS-linked' : a.connection_mode === 'logical' ? 'logical' : a.route ? `routed → ${ROUTE_NAME[a.route] || a.route}` : 'not linked');
     const metrics = metricsOf(a, d);
     const prog = st === 'running' && typeof b.progress === 'number' ? `<div class="progress" role="progressbar" aria-valuenow="${Math.round(b.progress * 100)}" aria-valuemin="0" aria-valuemax="100"><i style="width:${Math.round(b.progress * 100)}%"></i></div>` : '';
     const dis = state.preview ? 'disabled' : '';
@@ -635,7 +768,7 @@
     else if (a.connection_mode !== 'logical') acts.push(`<button class="btn sm" data-act="task" ${dis} aria-label="Give ${esc(a.display_name)} a task">Task</button>`);
     if (st === 'paused') { acts.push(`<button class="btn sm good" data-act="resume" ${dis} aria-label="Resume ${esc(a.display_name)}">Resume</button>`); acts.push(`<button class="btn sm quiet danger" data-act="retire" ${dis} aria-label="Retire ${esc(a.display_name)}">Retire</button>`); }
     else if (a.connection_mode !== 'logical') acts.push(`<button class="btn sm" data-act="pause" ${dis} aria-label="Pause ${esc(a.display_name)}">Pause</button>`);
-    if (!a.agent_os_api_connected && a.connection_mode !== 'logical') acts.push(`<button class="btn sm quiet" data-act="connect" ${dis} aria-label="Connect ${esc(a.display_name)} to the OS">Connect</button>`);
+    if (!a.agent_os_api_connected && a.connection_mode !== 'logical' && !a.route) acts.push(`<button class="btn sm quiet" data-act="connect" ${dis} aria-label="Connect ${esc(a.display_name)} to the OS">Connect</button>`);
     if (b.url) acts.push(`<a class="btn sm quiet" href="${esc(b.url)}" target="_blank" rel="noopener" aria-label="Open ${esc(a.display_name)}">Open</a>`);
     const kind = [isSup ? 'Supervisor' : a.role === 'venture' ? 'Venture' : '', PROVIDER[a.provider] || a.provider || '', a.domain].filter(Boolean).join(' · ');
     el.innerHTML = `
@@ -789,6 +922,7 @@
     const parts = [d.headline.replace(/·/g, ',')];
     all.filter(a => a.attention).forEach(a => parts.push(`${a.display_name}: ${nowLine(a, d)[1]}.`));
     d.pending.forEach(p => parts.push(`Approval: ${p.action_summary}.`));
+    d.deskDecisions.forEach(r => parts.push(`Paper desk: ${r.replace(/^Decision needed:\s*/i, '')}.`));
     const running = all.filter(a => a.state === 'running');
     if (running.length) parts.push('Running now: ' + running.map(a => `${a.display_name}, ${(a.board || {}).task || ''}`).join('; ') + '.');
     const done = all.filter(a => (a.state === 'done' || a.state === 'idle' || a.state === 'recent' || a.state === 'active') && ageS((a.board || {}).updated_at || a.last_run_at) < 6 * 3600);
