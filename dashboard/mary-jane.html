@@ -1,0 +1,543 @@
+<title>Mary Jane Command</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one console column on phones; on wide screens the conversation leads
+   (left) and the ledger panels sit beside it (right). Numbers set in a ledger mono. */
+:root {
+  --bg: #f6f7f4;
+  --surface: #ffffff;
+  --sunk: #eef0ea;
+  --line: #dde1d7;
+  --fg: #17201b;
+  --muted: #5d685f;
+  --accent: #0d6b55;
+  --accent-ink: #ffffff;
+  --accent-soft: #dcefe7;
+  --good: #1f7a3f;
+  --warn: #9a6200;
+  --bad: #b3261e;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111613; --surface: #18201b; --sunk: #1f2823; --line: #2d3832;
+    --fg: #e7ece8; --muted: #9aa69e; --accent: #4cc39a; --accent-ink: #0b1a14; --accent-soft: #1c3a2f;
+    --good: #5ccf85; --warn: #e3a64b; --bad: #f2867c; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111613; --surface: #18201b; --sunk: #1f2823; --line: #2d3832;
+  --fg: #e7ece8; --muted: #9aa69e; --accent: #4cc39a; --accent-ink: #0b1a14; --accent-soft: #1c3a2f;
+  --good: #5ccf85; --warn: #e3a64b; --bad: #f2867c; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 16px/1.5 var(--body); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 16px; padding-block: 20px 40px; display: grid; gap: 20px; }
+h1, h2 { font-family: var(--display); text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.1rem); letter-spacing: -0.01em; }
+h2 { font-size: 1.05rem; }
+.eyebrow { font: 500 0.72rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+button { font: inherit; cursor: pointer; }
+button:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+header.top { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
+.top .meta { color: var(--muted); font-size: 0.85rem; }
+.btn { border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 10px; padding: 10px 16px; min-height: 44px; }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+.btn[disabled] { opacity: 0.55; cursor: progress; }
+
+.banner { border: 1px solid var(--line); border-left: 4px solid var(--warn); background: var(--surface); border-radius: 10px; padding: 12px 16px; }
+.banner.bad { border-left-color: var(--bad); }
+.banner strong { display: block; margin-bottom: 2px; }
+
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 4px; min-width: 0; }
+.kpi .value { font: 500 clamp(1.3rem, 1.1rem + 0.9vw, 1.75rem)/1.15 var(--mono); font-variant-numeric: tabular-nums; }
+.kpi .sub { color: var(--muted); font-size: 0.85rem; }
+.bar { height: 8px; border-radius: 99px; background: var(--sunk); overflow: hidden; margin-top: 6px; }
+.bar > i { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
+.pill { display: inline-block; font: 500 0.75rem/1 var(--mono); letter-spacing: 0.04em; padding: 5px 8px; border-radius: 99px; background: var(--sunk); color: var(--fg); }
+.pill.good { background: color-mix(in srgb, var(--good) 18%, transparent); color: var(--good); }
+.pill.warn { background: color-mix(in srgb, var(--warn) 18%, transparent); color: var(--warn); }
+.pill.bad { background: color-mix(in srgb, var(--bad) 16%, transparent); color: var(--bad); }
+
+.main { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 14px; min-width: 0; }
+
+/* conversation */
+.convbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+select { font: inherit; border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 10px; padding: 8px 10px; min-height: 44px; max-width: 100%; }
+.quick { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.quick .btn { text-align: left; }
+.log { display: grid; gap: 12px; max-height: 60vh; overflow-y: auto; padding-right: 4px; }
+.msg { border-radius: 12px; padding: 12px 14px; min-width: 0; overflow-wrap: anywhere; }
+.msg.user { background: var(--sunk); justify-self: end; max-width: 92%; }
+.msg.mj { background: var(--surface); border: 1px solid var(--line); }
+.msg.mj .who { font: 600 0.8rem/1 var(--display); color: var(--accent); margin-bottom: 6px; }
+.msg p { margin: 0 0 8px; } .msg p:last-child { margin-bottom: 0; }
+.msg ol, .msg ul { margin: 0 0 8px; padding-left: 22px; }
+.msg .decision { margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: var(--accent-soft); font-weight: 600; }
+.msg details { margin-top: 8px; font-size: 0.85rem; color: var(--muted); }
+.msg .tag { display: block; margin-top: 8px; font-size: 0.85rem; }
+.empty { color: var(--muted); }
+.compose { display: grid; gap: 8px; }
+textarea { font: inherit; width: 100%; min-height: 84px; resize: vertical; border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--surface); color: var(--fg); }
+.compose .row { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.hint { color: var(--muted); font-size: 0.82rem; }
+.thinking { display: flex; gap: 10px; align-items: center; color: var(--muted); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.2s infinite ease-in-out; }
+@keyframes pulse { 50% { opacity: 0.25; } }
+@media (prefers-reduced-motion: reduce) { .dot { animation: none; } }
+
+/* ledger panels */
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+.tabs button { border: 0; background: none; color: var(--muted); padding: 10px 12px; min-height: 44px; border-bottom: 3px solid transparent; }
+.tabs button[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); font-weight: 600; }
+.scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th { text-align: left; font: 500 0.72rem/1.2 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+td.r, th.r { text-align: right; }
+.pos { color: var(--good); } .neg { color: var(--bad); }
+.lesson { border-bottom: 1px solid var(--line); padding-bottom: 10px; display: grid; gap: 4px; }
+.lesson:last-child { border-bottom: 0; }
+.lesson small { color: var(--muted); }
+.chart { position: relative; }
+.chart svg { width: 100%; height: 150px; display: block; }
+.chart .tip { position: absolute; top: 0; pointer-events: none; background: var(--fg); color: var(--bg); font: 500 0.78rem/1.3 var(--mono); padding: 4px 8px; border-radius: 6px; transform: translateX(-50%); white-space: nowrap; }
+.foot { color: var(--muted); font-size: 0.8rem; }
+
+@media (max-width: 900px) {
+  .main { grid-template-columns: minmax(0, 1fr); }
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 420px) { .quick { grid-template-columns: minmax(0, 1fr); } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Joe Moyo family office · finance chief</div>
+      <h1>Mary Jane Command</h1>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <span class="meta" id="fresh">Connecting to your finance database…</span>
+      <button class="btn" id="refresh" type="button">Refresh</button>
+    </div>
+  </header>
+
+  <div id="banner" hidden></div>
+
+  <section class="kpis" aria-label="Headline numbers">
+    <div class="kpi"><span class="eyebrow">Portfolio, live</span><span class="value" id="k-total">—</span><span class="sub" id="k-total-sub">ISA + GIA</span></div>
+    <div class="kpi"><span class="eyebrow">North Star £1,000,000</span><span class="value" id="k-ns">—</span><div class="bar" aria-hidden="true"><i id="k-ns-bar" style="width:0%"></i></div></div>
+    <div class="kpi"><span class="eyebrow">Passive income now</span><span class="value" id="k-inc">—</span><span class="sub" id="k-inc-sub">target £1,000/month</span></div>
+    <div class="kpi"><span class="eyebrow">Risk regime</span><span class="value" id="k-risk">—</span><span class="sub" id="k-risk-sub">&nbsp;</span></div>
+  </section>
+
+  <div class="main">
+    <section class="panel" aria-label="Ask Mary Jane">
+      <div class="convbar">
+        <h2>Ask Mary Jane</h2>
+        <select id="conv" aria-label="Conversation"><option value="">New conversation</option></select>
+      </div>
+      <div class="quick" id="quick">
+        <button class="btn" type="button" data-q="Give me my morning brief: portfolio, risk state, open alerts and anything I need to decide today.">Morning brief</button>
+        <button class="btn" type="button" data-q="Am I on track for £1,000,000 and £1,000 a month passive income? What is the single biggest lever?">Am I on track?</button>
+        <button class="btn" type="button" data-q="What is the single biggest risk in my portfolio right now, and what would you do about it?">Biggest risk</button>
+        <button class="btn" type="button" data-q="If I add new cash this month, where should it go and why? Respect my rules and the risk state.">New cash</button>
+      </div>
+      <div class="log" id="log" aria-live="polite">
+        <p class="empty" id="log-empty">Ask anything about your portfolio. Mary Jane checks your live data first, logs any real call so it can be graded, and learns from how those calls turn out.</p>
+      </div>
+      <form class="compose" id="compose">
+        <label class="eyebrow" for="q">Your question</label>
+        <textarea id="q" placeholder="Type or dictate… e.g. Should I add to NVDA this month?"></textarea>
+        <div class="row">
+          <span class="hint">Ctrl + Enter sends. Answers take about 30–90 seconds.</span>
+          <button class="btn primary" id="send" type="submit">Ask Mary Jane</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel" aria-label="Ledger">
+      <div class="tabs" role="tablist">
+        <button role="tab" type="button" aria-selected="true" data-tab="holdings">Holdings</button>
+        <button role="tab" type="button" aria-selected="false" data-tab="record">Track record</button>
+        <button role="tab" type="button" aria-selected="false" data-tab="lessons">Lessons</button>
+        <button role="tab" type="button" aria-selected="false" data-tab="runs">Runs &amp; cost</button>
+      </div>
+
+      <div data-pane="holdings">
+        <div class="chart" id="chart"></div>
+        <div class="scroll"><table id="t-hold"><thead><tr><th>Ticker</th><th>Acct</th><th class="r">Value £</th><th class="r">P&amp;L</th><th class="r">Weight</th></tr></thead><tbody><tr><td colspan="5" class="empty">Loading holdings…</td></tr></tbody></table></div>
+        <div id="alerts"></div>
+      </div>
+
+      <div data-pane="record" hidden>
+        <p class="foot">Every call Mary Jane logs is graded against SPY at 30, 90 and 365 days. Edge is how many percentage points the call beat the market by (for trims and sells, how much it avoided).</p>
+        <div class="scroll"><table id="t-cal"><thead><tr><th>Horizon</th><th>Confidence</th><th class="r">Calls</th><th class="r">Hit rate</th><th class="r">Avg edge</th></tr></thead><tbody></tbody></table></div>
+        <div class="scroll"><table id="t-rec"><thead><tr><th>Date</th><th>Call</th><th class="r">Conf.</th><th class="r">Since</th><th class="r">Edge 30d</th><th class="r">Edge 90d</th></tr></thead><tbody></tbody></table></div>
+        <button class="btn" id="reflect" type="button">Run reflection now</button>
+        <p class="foot" id="reflect-out">Reflection grades any calls that are due, reviews your trade history and updates the lessons below. It also runs by itself every Saturday morning.</p>
+      </div>
+
+      <div data-pane="lessons" hidden>
+        <p class="foot">Mary Jane reads these at the start of every conversation.</p>
+        <div id="lessons" style="display:grid;gap:10px"></div>
+      </div>
+
+      <div data-pane="runs" hidden>
+        <div class="kpi" style="border:0;padding:0"><span class="eyebrow">Agent cost, last 7 days</span><span class="value" id="cost7">—</span></div>
+        <div class="scroll"><table id="t-runs"><thead><tr><th>When</th><th>Type</th><th>Status</th><th class="r">Cost</th><th>Summary</th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </section>
+  </div>
+
+  <p class="foot">Mary Jane recommends; she never trades. Figures come from your finance chief database (Trading 212 sync and Alpaca prices). Education and decision support, not regulated financial advice.</p>
+</div>
+
+<script>
+const PROJECT = "qxwfrsoztfddwicqtuar";
+const FN_URL = "https://qxwfrsoztfddwicqtuar.supabase.co/functions/v1/mj-agent";
+const SERVER = "Supabase";
+const $ = (id) => document.getElementById(id);
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const gbp = (v) => (v == null || isNaN(v)) ? "—" : "£" + Math.round(Number(v)).toLocaleString("en-GB");
+const pct = (v, d = 1) => (v == null || isNaN(v)) ? "—" : (Number(v) > 0 ? "+" : "") + Number(v).toFixed(d) + "%";
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch {} } };
+
+let mcp = null;
+let busy = false;
+let conversationId = store.get("mj.conversation") || "";
+
+// ---------------------------------------------------------------- transport
+// The page reaches Mary Jane through the viewer's own Supabase connector:
+// execute_sql queues a pg_net call to the mj-agent function (the token is read
+// from vault inside the database, never by the page), then polls the reply.
+
+function friendly(err) {
+  const code = err && err.code;
+  if (code === "needs_reauth") return ["Supabase needs reconnecting", "Reconnect Supabase in claude.ai Settings → Connectors, then press Refresh."];
+  if (code === "server_not_connected" || code === "selection_required") return ["Supabase isn't connected", "Add Supabase in claude.ai Settings → Connectors, then press Refresh."];
+  if (code === "not_in_manifest") return ["Supabase is switched off for this page", "Allow Supabase for this page from its Permissions menu, then press Refresh."];
+  if (code === "approval_required") return ["Waiting for your approval", "Press Refresh and choose Allow when Claude asks to use Supabase."];
+  if (code === "blocked_by_policy") return ["Blocked by your organisation", "Your organisation's settings block this Supabase tool."];
+  if (code === "server_unavailable") return ["Supabase didn't answer", "It may be busy. Press Refresh in a moment."];
+  if (code === "tool_error") return ["The database reported a problem", String(err.message || "").slice(0, 300)];
+  if (code === "not_granted" || code === "capability_disabled" || code === "capability_removed") return ["Live data is off in this view", "Open this page inside Claude to connect it to your database."];
+  return ["Something went wrong", String((err && err.message) || err).slice(0, 300)];
+}
+
+function parseRows(res) {
+  let p = res && res.payload;
+  if (p == null) p = ((res && res.content) || []).filter((b) => b.type === "text").map((b) => b.text).join("\n");
+  if (typeof p === "string") { try { p = JSON.parse(p); } catch { /* wrapped text, handled below */ } }
+  if (p && typeof p === "object" && !Array.isArray(p) && typeof p.result === "string") p = p.result;
+  if (Array.isArray(p)) return p;
+  const text = String(p ?? "");
+  // The connector names its data tag once in a preamble sentence, then wraps
+  // the rows in it: take the text between the last opening tag and the close.
+  const close = text.search(/<\/untrusted-data-[^>]*>/);
+  if (close < 0) return JSON.parse(text);
+  const open = text.lastIndexOf("<untrusted-data-", close);
+  return JSON.parse(text.slice(text.indexOf(">", open) + 1, close).trim());
+}
+
+async function sql(query) {
+  const res = await mcp.callTool(SERVER, "execute_sql", { project_id: PROJECT, query }, { cache: false });
+  return parseRows(res);
+}
+
+async function agent(action, extra = {}, timeoutMs = 60000) {
+  // Base64 keeps the question's words out of the SQL text, so a question that
+  // mentions "update" or "delete" is never mistaken for a write by the connector.
+  const bytes = new TextEncoder().encode(JSON.stringify({ action, ...extra }));
+  let bin = "";
+  for (const b of bytes) bin += String.fromCharCode(b);
+  const b64 = btoa(bin);
+  const rows = await sql(
+    `select net.http_post(url := '${FN_URL}', body := convert_from(decode('${b64}', 'base64'), 'UTF8')::jsonb, ` +
+    `headers := jsonb_build_object('content-type','application/json','x-mj-token',` +
+    `(select decrypted_secret from vault.decrypted_secrets where name = 'MJ_AGENT_TOKEN')), ` +
+    `timeout_milliseconds := ${timeoutMs}) as id`);
+  const id = Number(rows[0] && rows[0].id);
+  if (!Number.isInteger(id)) throw new Error("The request could not be queued.");
+  const started = Date.now();
+  for (let i = 0; ; i++) {
+    await sleep(i < 4 ? 1500 : 3000);
+    const out = await sql(`select status_code, error_msg, content from net._http_response where id = ${id}`);
+    if (out.length) {
+      const r = out[0];
+      if (r.status_code == null) throw new Error(r.error_msg || "Mary Jane did not answer in time.");
+      let data = {};
+      try { data = JSON.parse(r.content || "{}"); } catch { throw new Error("Unexpected reply from Mary Jane."); }
+      if (r.status_code >= 300) {
+        if (data.error === "anthropic_key_missing") throw new Error("Mary Jane can't think yet: add ANTHROPIC_API_KEY in Supabase → finance chief → Edge Functions → Secrets.");
+        throw new Error([data.error, data.detail || data.hint].filter(Boolean).join(": ") || ("HTTP " + r.status_code));
+      }
+      return data;
+    }
+    if (Date.now() - started > timeoutMs + 30000) throw new Error("Mary Jane is taking too long. Try again, or ask a narrower question.");
+  }
+}
+
+function showBanner(title, text, bad) {
+  const b = $("banner");
+  b.className = "banner" + (bad ? " bad" : "");
+  b.innerHTML = "<strong>" + esc(title) + "</strong>" + esc(text);
+  b.hidden = false;
+}
+
+// ------------------------------------------------------------------ overview
+
+async function loadOverview() {
+  $("refresh").disabled = true;
+  $("fresh").textContent = "Refreshing…";
+  try {
+    const d = await agent("overview", {}, 60000);
+    $("banner").hidden = true;
+    renderOverview(d);
+  } catch (err) {
+    const [t, m] = err && err.code ? friendly(err) : ["Couldn't load your dashboard", String(err.message || err)];
+    showBanner(t, " " + m, true);
+    $("fresh").textContent = "Not loaded";
+  } finally {
+    $("refresh").disabled = false;
+  }
+}
+
+function renderOverview(d) {
+  const ns = d.north_star || {}, inc = d.income || {}, risk = d.risk || {}, fr = d.freshness || {};
+  const synced = fr.portfolio_snapshot ? new Date(fr.portfolio_snapshot) : null;
+  $("fresh").textContent = "Holdings synced " + (synced ? synced.toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" }) : "unknown") + " · prices " + (fr.prices_date || "unknown");
+
+  $("k-total").textContent = gbp(ns.live_total_gbp);
+  $("k-total-sub").textContent = (d.holdings || []).length + " holdings across ISA and GIA";
+  const prog = Number(ns.progress_pct || 0);
+  $("k-ns").textContent = prog.toFixed(1) + "%";
+  $("k-ns-bar").style.width = Math.min(100, Math.max(0, prog)) + "%";
+  $("k-inc").textContent = gbp(inc.est_income_now_gbp_per_month) + "/mo";
+  $("k-inc-sub").textContent = "target " + gbp(inc.target_monthly_income_gbp) + "/mo at " + (inc.assumed_portfolio_yield_pct ?? "—") + "% yield";
+  const regime = String(risk.regime || "unknown");
+  const tone = /normal/i.test(regime) ? "good" : /defens/i.test(regime) ? "bad" : "warn";
+  $("k-risk").innerHTML = '<span class="pill ' + tone + '">' + esc(regime) + "</span>";
+  $("k-risk-sub").textContent = risk.deployment_bias ? "Deployment: " + risk.deployment_bias : " ";
+
+  renderChart(ns.history || []);
+  const hb = $("t-hold").tBodies[0];
+  const hold = d.holdings || [];
+  hb.innerHTML = hold.length ? hold.map((h) =>
+    "<tr><td><strong>" + esc(h.ticker) + "</strong></td><td>" + esc(h.account) + '</td><td class="r num">' + gbp(h.current_value_gbp) +
+    '</td><td class="r num ' + (h.pnl_pct >= 0 ? "pos" : "neg") + '">' + pct(h.pnl_pct) + '</td><td class="r num">' + (h.weight_pct == null ? "—" : Number(h.weight_pct).toFixed(1) + "%") + "</td></tr>").join("")
+    : '<tr><td colspan="5" class="empty">No holdings found.</td></tr>';
+
+  const alerts = d.alerts || [];
+  $("alerts").innerHTML = alerts.length ? "<h2 style=\"margin:14px 0 8px\">Open alerts</h2>" + alerts.slice(0, 8).map((a) =>
+    '<p style="margin:0 0 6px"><span class="pill ' + (/red|high|crit/i.test(a.severity) ? "bad" : "warn") + '">' + esc(a.severity || "info") + "</span> " + esc(a.ticker || "") + " " + esc(a.headline) + "</p>").join("")
+    : '<p class="foot" style="margin-top:12px">No open alerts.</p>';
+
+  const cb = $("t-cal").tBodies[0];
+  const cal = d.calibration || [];
+  cb.innerHTML = cal.length ? cal.map((c) => "<tr><td>" + c.horizon_days + " days</td><td>" + esc(c.confidence_band) + '</td><td class="r num">' + c.graded_calls +
+    '</td><td class="r num">' + Number(c.hit_rate_pct).toFixed(0) + '%</td><td class="r num ' + (c.avg_edge_vs_spy_pct >= 0 ? "pos" : "neg") + '">' + pct(c.avg_edge_vs_spy_pct) + "</td></tr>").join("")
+    : '<tr><td colspan="5" class="empty">No calls graded yet. The first grades arrive 30 days after Mary Jane logs her first call.</td></tr>';
+
+  const rb = $("t-rec").tBodies[0];
+  const rec = d.track_record || [];
+  rb.innerHTML = rec.length ? rec.map((r) => "<tr><td class=\"num\">" + esc(String(r.created_at).slice(0, 10)) + "</td><td><strong>" + esc(r.action) + " " + esc(r.ticker) +
+    '</strong></td><td class="r num">' + (r.confidence ?? "—") + '%</td><td class="r num">' + pct(r.return_to_date_pct) + '</td><td class="r num">' + pct(r.edge_30d_pct) + '</td><td class="r num">' + pct(r.edge_90d_pct) + "</td></tr>").join("")
+    : '<tr><td colspan="6" class="empty">No calls logged yet. Ask Mary Jane for a view on a holding and she will log it.</td></tr>';
+
+  const ls = d.lessons || [];
+  $("lessons").innerHTML = ls.length ? ls.map((l) => '<div class="lesson"><strong>' + esc(l.title || "Lesson") + "</strong><span>" + esc(l.content) + "</span><small>" +
+    esc(l.memory_type) + " · importance " + l.importance + (l.ticker ? " · " + esc(l.ticker) : "") + " · " + esc(((l.metadata || {}).source || "").replace("_", " ")) + " · " + esc(l.source_date || "") + "</small></div>").join("")
+    : '<p class="empty">No lessons yet. Press "Run reflection now" in Track record to mine your trade history for the first ones.</p>';
+
+  const runs = d.runs || [];
+  const week = Date.now() - 7 * 864e5;
+  const cost = runs.filter((r) => Date.parse(r.started_at) > week).reduce((s, r) => s + Number((r.stats || {}).est_cost_usd || 0), 0);
+  $("cost7").textContent = "$" + cost.toFixed(2);
+  $("t-runs").tBodies[0].innerHTML = runs.length ? runs.map((r) => '<tr><td class="num">' + esc(new Date(r.started_at).toLocaleString("en-GB", { dateStyle: "short", timeStyle: "short" })) + "</td><td>" + esc(r.run_type) +
+    '</td><td><span class="pill ' + (r.status === "ok" ? "good" : r.status === "error" ? "bad" : "warn") + '">' + esc(r.status) + '</span></td><td class="r num">' + ((r.stats || {}).est_cost_usd != null ? "$" + Number(r.stats.est_cost_usd).toFixed(2) : "—") +
+    "</td><td>" + esc(r.error || r.summary || "") + "</td></tr>").join("")
+    : '<tr><td colspan="5" class="empty">No runs yet.</td></tr>';
+
+  const sel = $("conv");
+  const convs = d.conversations || [];
+  sel.innerHTML = '<option value="">New conversation</option>' + convs.map((c) => '<option value="' + esc(c.id) + '">' + esc((c.title || "Untitled").slice(0, 60)) + " · " + esc(String(c.updated_at).slice(0, 10)) + "</option>").join("");
+  if (conversationId && !convs.some((c) => c.id === conversationId)) sel.insertAdjacentHTML("beforeend", '<option value="' + esc(conversationId) + '">Current conversation</option>');
+  sel.value = conversationId || "";
+}
+
+function renderChart(history) {
+  const box = $("chart");
+  const pts = history.filter((h) => h.total_value_gbp != null).map((h) => ({ x: Date.parse(h.snapshot_date), y: Number(h.total_value_gbp), d: h.snapshot_date }));
+  if (pts.length < 2) { box.innerHTML = ""; return; }
+  const W = 600, H = 150, L = 8, R = 8, T = 22, B = 20;
+  const xs = pts.map((p) => p.x), ys = pts.map((p) => p.y);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys) * 0.98, y1 = Math.max(...ys) * 1.02;
+  const sx = (x) => L + (x - x0) / (x1 - x0 || 1) * (W - L - R), sy = (y) => T + (1 - (y - y0) / (y1 - y0 || 1)) * (H - T - B);
+  const line = pts.map((p, i) => (i ? "L" : "M") + sx(p.x).toFixed(1) + " " + sy(p.y).toFixed(1)).join(" ");
+  const area = line + " L" + sx(x1).toFixed(1) + " " + (H - B) + " L" + sx(x0).toFixed(1) + " " + (H - B) + " Z";
+  const last = pts[pts.length - 1];
+  const fmtD = (s) => new Date(s).toLocaleDateString("en-GB", { month: "short", year: "2-digit" });
+  box.innerHTML = '<div class="eyebrow" style="margin-bottom:4px">Portfolio value</div>' +
+    '<svg viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="none" role="img" aria-label="Portfolio value from ' + esc(fmtD(pts[0].d)) + " to " + esc(fmtD(last.d)) + '">' +
+    '<path d="' + area + '" fill="var(--accent-soft)" stroke="none"/>' +
+    '<path d="' + line + '" fill="none" stroke="var(--accent)" stroke-width="2" vector-effect="non-scaling-stroke"/>' +
+    '<circle cx="' + sx(last.x).toFixed(1) + '" cy="' + sy(last.y).toFixed(1) + '" r="4" fill="var(--accent)"/>' +
+    '<text x="' + L + '" y="' + (H - 4) + '" font-size="11" fill="var(--muted)" font-family="IBM Plex Mono, monospace">' + esc(fmtD(pts[0].d)) + "</text>" +
+    '<text x="' + (W - R) + '" y="' + (H - 4) + '" font-size="11" text-anchor="end" fill="var(--muted)" font-family="IBM Plex Mono, monospace">' + esc(fmtD(last.d)) + "</text>" +
+    '<line id="cross" y1="' + T + '" y2="' + (H - B) + '" stroke="var(--muted)" stroke-dasharray="3 3" hidden/></svg><div class="tip" id="tip" hidden></div>';
+  const svg = box.querySelector("svg"), tip = $("tip"), cross = svg.querySelector("#cross");
+  const move = (clientX) => {
+    const r = svg.getBoundingClientRect();
+    const xv = x0 + ((clientX - r.left) / r.width * W - L) / (W - L - R) * (x1 - x0);
+    let best = pts[0];
+    for (const p of pts) if (Math.abs(p.x - xv) < Math.abs(best.x - xv)) best = p;
+    const px = sx(best.x) / W * r.width;
+    cross.setAttribute("x1", sx(best.x)); cross.setAttribute("x2", sx(best.x)); cross.hidden = false;
+    tip.hidden = false; tip.style.left = Math.min(Math.max(px, 60), r.width - 60) + "px";
+    tip.textContent = new Date(best.d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) + " · " + gbp(best.y);
+  };
+  svg.addEventListener("pointermove", (e) => move(e.clientX));
+  svg.addEventListener("pointerleave", () => { tip.hidden = true; cross.hidden = true; });
+}
+
+// ---------------------------------------------------------------------- chat
+
+function md(text) {
+  const lines = String(text || "").split(/\r?\n/);
+  let html = "", list = null;
+  const inline = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  const close = () => { if (list) { html += "</" + list + ">"; list = null; } };
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) { close(); continue; }
+    let m;
+    if ((m = line.match(/^\d+[.)]\s+(.*)$/))) { if (list !== "ol") { close(); html += "<ol>"; list = "ol"; } html += "<li>" + inline(m[1]) + "</li>"; continue; }
+    if ((m = line.match(/^[-*•]\s+(.*)$/))) { if (list !== "ul") { close(); html += "<ul>"; list = "ul"; } html += "<li>" + inline(m[1]) + "</li>"; continue; }
+    close();
+    if (/^#+\s/.test(line)) { html += "<p><strong>" + inline(line.replace(/^#+\s*/, "")) + "</strong></p>"; continue; }
+    if (/^\**decision:/i.test(line)) { html += '<p class="decision">' + inline(line.replace(/\*\*/g, "")) + "</p>"; continue; }
+    html += "<p>" + inline(line) + "</p>";
+  }
+  close();
+  return html;
+}
+
+function addMessage(role, text, extras = {}) {
+  $("log-empty").hidden = true;
+  const div = document.createElement("div");
+  div.className = "msg " + (role === "user" ? "user" : "mj");
+  if (role === "user") { div.textContent = text; }
+  else {
+    let html = '<div class="who">Mary Jane</div>' + md(text);
+    for (const r of extras.recommendations || []) html += '<span class="tag"><span class="pill good">Logged for grading</span> ' + esc(r.action) + " " + esc(r.ticker) + " at " + esc(r.confidence) + "% confidence</span>";
+    for (const l of extras.lessons || []) html += '<span class="tag"><span class="pill">New lesson</span> ' + esc(l.title) + "</span>";
+    if ((extras.trace || []).length) html += "<details><summary>What I checked</summary><ul>" + extras.trace.map((t) => "<li>" + (t.ok ? "" : "⚠ ") + esc(t.tool) + ": " + esc(t.summary) + "</li>").join("") + "</ul></details>";
+    if (extras.est_cost_usd != null) html += '<span class="tag foot">Cost of this answer: about $' + Number(extras.est_cost_usd).toFixed(2) + "</span>";
+    div.innerHTML = html;
+  }
+  $("log").appendChild(div);
+  div.scrollIntoView({ block: "nearest" });
+  return div;
+}
+
+function clearLog() {
+  [...$("log").querySelectorAll(".msg, .thinking")].forEach((n) => n.remove());
+  $("log-empty").hidden = false;
+}
+
+async function openConversation(id) {
+  conversationId = id;
+  store.set("mj.conversation", id || null);
+  clearLog();
+  if (!id) return;
+  try {
+    const d = await agent("conversation", { conversation_id: id }, 30000);
+    for (const m of d.messages || []) addMessage(m.role === "user" ? "user" : "mj", m.content, { trace: m.citations || [] });
+  } catch (err) {
+    addMessage("mj", "I couldn't load that conversation. " + (err.code ? friendly(err).join(": ") : err.message));
+  }
+}
+
+async function ask(question) {
+  question = String(question || "").trim();
+  if (!question || busy || !mcp) return;
+  busy = true;
+  $("send").disabled = true;
+  addMessage("user", question);
+  const wait = document.createElement("div");
+  wait.className = "thinking";
+  wait.innerHTML = '<span class="dot"></span><span>Mary Jane is checking your data…</span>';
+  $("log").appendChild(wait);
+  wait.scrollIntoView({ block: "nearest" });
+  try {
+    const r = await agent("chat", conversationId ? { message: question, conversation_id: conversationId } : { message: question }, 240000);
+    wait.remove();
+    addMessage("mj", r.reply, r);
+    if (r.conversation_id && r.conversation_id !== conversationId) {
+      conversationId = r.conversation_id;
+      store.set("mj.conversation", conversationId);
+    }
+    loadOverview();
+  } catch (err) {
+    wait.remove();
+    addMessage("mj", err.code ? friendly(err).join(": ") : String(err.message || err));
+  } finally {
+    busy = false;
+    $("send").disabled = false;
+  }
+}
+
+// --------------------------------------------------------------------- wire
+
+$("compose").addEventListener("submit", (e) => { e.preventDefault(); const q = $("q").value; $("q").value = ""; ask(q); });
+$("q").addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); $("compose").requestSubmit(); } });
+$("quick").addEventListener("click", (e) => { const b = e.target.closest("button[data-q]"); if (b) ask(b.dataset.q); });
+$("conv").addEventListener("change", (e) => openConversation(e.target.value));
+$("refresh").addEventListener("click", () => { if (mcp) loadOverview(); });
+document.querySelectorAll(".tabs button").forEach((b) => b.addEventListener("click", () => {
+  document.querySelectorAll(".tabs button").forEach((x) => x.setAttribute("aria-selected", String(x === b)));
+  document.querySelectorAll("[data-pane]").forEach((p) => { p.hidden = p.dataset.pane !== b.dataset.tab; });
+  store.set("mj.tab", b.dataset.tab);
+}));
+const savedTab = store.get("mj.tab");
+if (savedTab) { const b = document.querySelector('.tabs button[data-tab="' + savedTab + '"]'); if (b) b.click(); }
+
+$("reflect").addEventListener("click", async () => {
+  if (!mcp) return;
+  const btn = $("reflect");
+  btn.disabled = true;
+  $("reflect-out").textContent = "Reflecting on the track record and your trading history… this takes a minute or two.";
+  try {
+    const r = await agent("reflect", {}, 280000);
+    $("reflect-out").textContent = (r.summary || "Done.") + " (Lessons added " + (r.lessons_added || 0) + ", retired " + (r.lessons_retired || 0) + "; cost about $" + Number(r.est_cost_usd || 0).toFixed(2) + ".)";
+    loadOverview();
+  } catch (err) {
+    $("reflect-out").textContent = err.code ? friendly(err).join(": ") : String(err.message || err);
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+(async () => {
+  mcp = window.claude && window.claude.use ? await window.claude.use("mcp") : null;
+  if (!mcp) {
+    showBanner("Live data is off in this view", " Open this page inside Claude, where it can use your Supabase connection.", true);
+    $("fresh").textContent = "Not connected";
+    $("send").disabled = true;
+    return;
+  }
+  await loadOverview();
+  if (conversationId) openConversation(conversationId);
+})();
+</script>
