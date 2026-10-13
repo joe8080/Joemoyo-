@@ -485,16 +485,19 @@ async function chat(db: SupabaseClient, client: Anthropic, body: Record<string, 
     if (!reply) reply = stopNote || "I could not produce an answer this time.";
     else if (stopNote) reply += `\n\n(${stopNote})`;
 
+    // Both rows carry every column: a bulk insert sends null for any key one row
+    // leaves out, and citations / page_context are NOT NULL.
     const { error: saveError } = await db.from("mj_messages").insert([
-      { owner_key: profile.owner_key, conversation_id: conversationId, role: "user", content: message, page_context: { source: "dashboard" }, policy_version: policyVersion },
+      { owner_key: profile.owner_key, conversation_id: conversationId, role: "user", content: message, citations: [], page_context: { source: "dashboard" }, policy_version: policyVersion },
       { owner_key: profile.owner_key, conversation_id: conversationId, role: "assistant", content: reply, citations: trace, page_context: { source: "dashboard", effects }, policy_version: policyVersion },
     ]);
-    if (saveError) throw new Error(saveError.message);
     await db.from("mj_conversations").update({ updated_at: new Date().toISOString() }).eq("id", conversationId);
-    const stats = { ...effects, est_cost_usd: Number(costUsd(usage).toFixed(4)) };
+    const stats = { ...effects, est_cost_usd: Number(costUsd(usage).toFixed(4)), cache_write_tokens: usage.cacheWrite };
+    // A failed save is recorded on the run but never hides the answer from Joe.
     if (run) {
       await db.from("mj_agent_runs").update({
-        status: "ok", finished_at: new Date().toISOString(), input_tokens: usage.input, output_tokens: usage.output,
+        status: saveError ? "error" : "ok", error: saveError ? clip(`answer shown but not saved: ${saveError.message}`, 2000) : null,
+        finished_at: new Date().toISOString(), input_tokens: usage.input, output_tokens: usage.output,
         cache_read_tokens: usage.cacheRead, tool_calls: trace.length, summary: clip(message, 200), stats,
       }).eq("id", run.id);
     }
