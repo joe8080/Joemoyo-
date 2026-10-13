@@ -31,6 +31,16 @@ contacts and the SCIP property data.
 | `functions/mj-agent/` | The agent (Deno edge function) |
 | `../dashboard/pages/1_Mary_Jane.py` | The dashboard page (Streamlit) |
 
+## Status (13 Oct 2026)
+
+The migration was applied in pieces as `mj_learning_loop_1` … `_7`, all
+live except the grader function `mj_grade_due_evaluations()`. The Supabase
+connector holds any statement that modifies rows for a separate
+confirmation, and that confirmation has not come through yet. The edge
+function is deployed, the token is in vault, and the two cron jobs are
+scheduled. The nightly grading job fails harmlessly until the grader exists.
+No calls are due before mid-November anyway.
+
 ## Go-live steps
 
 1. Apply the migration to the finance chief project.
