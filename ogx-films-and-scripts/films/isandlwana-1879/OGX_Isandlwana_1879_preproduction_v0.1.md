@@ -60,6 +60,32 @@ Evidence level: **secondary and reference sources via web search summaries**. Pr
 | I29 | Cetshwayo ordered a purely defensive war / not to cross into Natal | ❌ (as a general order) | Not confirmed | Only the Rorke's Drift attribution (I23) is used |
 | I30 | Direct quotations from any participant | ❌ | — | No quotes; paraphrase with attribution only |
 
+## 2a. OGX Supabase check (21 Oct 2026, read-only)
+I searched the OGX research database (`citations`, `documents`, `people`, `events`, `scholarly_debates`, `ogx_assets`, `content_ideas`, `video_*`) for Isandlwana, Zulu, Cetshwayo, Chelmsford, Rorke, Ntshingwayo and Ulundi.
+
+**What the database adds**
+- **Scholarly spine already in the DB**, all `verified = true`, but **no page references yet**:
+  - Laband, *The Rise and Fall of the Zulu Nation* (1997);
+  - Knight, *The Anatomy of the Zulu Army* (1995);
+  - *The James Stuart Archive of Recorded Oral Evidence* (6 vols, reliability "high"). This is the route to **Zulu voices** for the film, and answers MJ's "African perspectives" ask.
+- **I07, the horns of the buffalo:** the OGX Military Research Pack cites Knight (1995) ch. 4 and Ditsong National Museum documentation. This upgrades the claim to chapter level.
+- **I05/I06, the age-regiment system and the iklwa:** the same pack cites Knight (1995) ch. 2 and Laband (1997) pp. 34–37. Those pages cover Shaka-era weapon development, which is background for the 1879 claim but not proof of it.
+- **I24/I25, Ulundi:** the `events` row (confidence 72) gives 4 July 1879, the 13 chiefdoms and Cetshwayo's exile. It matches the ledger.
+- **I-A04, Cetshwayo photograph:** the `people` row lists Commons `Cetshwayo_kaMpande2.jpg`, photograph c. 1875, tagged Public Domain. That's the lead for lines 9 and 50, still to confirm on Commons.
+
+**Problems in the DB (flag for Joe; I have not edited the DB)**
+- The `events` row "Battle of Isandlwana" (confidence 52) and the `people` row "Cetshwayo" both say a British **column of 1,300 men** was destroyed. That's wrong: **about 1,300 were killed**, out of ~1,800 in and around the camp, and Chelmsford's main party was elsewhere. Correct both rows before any agent reuses them.
+- The `events` row's "shattered myth of European superiority" is interpretive. Don't narrate it as fact.
+
+**Gaps in the DB**
+- `scholarly_debates` has **no Isandlwana entries**. Proposed new rows:
+  - whether an attack was planned for 22 Jan (the moon accounts);
+  - the ammunition-supply myth;
+  - Zulu casualty estimates;
+  - whether the Rorke's Drift attack broke the king's wishes.
+- `oral_evidence` is empty. Zulu testimony (Mehlokazulu, Mitford's 1882 interviews, the Stuart Archive) should be catalogued there with page numbers.
+- `ogx_assets` has no Isandlwana images.
+
 **Limits of colonial accounts (said on screen once, in the script):** most detailed records were written by the British side. The Zulu accounts were often collected months or years later, through interpreters, by British interviewers (e.g. Mitford, 1882). We can't fully hear Zulu voices in their own words, and the film says so.
 
 ## 3. Clean narration v0.1 (Joe's voice bible; ~950 words; numbers as words for voice)
