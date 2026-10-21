@@ -1,34 +1,39 @@
-# Sources and checks
+# Sources and verification log (21 Oct 2026)
 
-Primary source = Joe's own tracker data (Supabase project "finance chief", snapshot 2026-10-09) and the artifacts built from it (Data Centre Power Map, AI Stack Money Map, AI Stack Tracker). External web search was used only for the IEA figures.
-NOTE: an earlier draft used web-search capex figures. They were out of date and are SUPERSEDED by the vault figures below.
+Primary data: Joe's Supabase "finance chief" vault (snapshot 2026-10-09) and the Data Centre Power Map / AI Stack artifacts built from it.
+Second check: web search against company results coverage. Script = VOICEOVER.txt (796 words).
 
-## Spend (stack_unit_register, layer L1, snapshot 2026-10-09)
-- [ ] Amazon: 2026 capex guide raised to ~$220B from ~$200B (Q2 capex $53.1B, +69% y/y). Backlog $496B.
-- [ ] Alphabet: 2026 guide raised to $195–205B from $180–190B (Q2 capex $44.9B, +100% y/y). Cloud backlog $514B. Funded partly by ~$100B debt and ~$30.5B stock issuance in Q2.
-- [ ] Microsoft: CY26 guide ~$175B, reset from ~$190B purely by lease reclassification (useful life 15 to 25 yrs). Underlying plan unchanged per management. Q4 FY26 capex $41.4B (+71%).
-- [ ] Meta: 2026 guide $130–145B (low end raised). Q2 free cash flow only $0.8B. El Paso 1 GW campus moved into an 80/20 JV with BlackRock (off-balance-sheet).
-- [ ] Sum of guides is "more than $700B" under either Microsoft figure (about $730B to $750B).
-- [ ] "Close to double last year": earlier web figure had 2025 at ~$413B (Statista). Confirm.
-- [ ] Circular financing: Amazon $50B equity into OpenAI ($15B funded, $35B conditional) alongside OpenAI's $100B AWS expansion.
-- [ ] Backlogs "around $500B each": Amazon $496B, Alphabet $514B (Oracle RPO $664B, mostly OpenAI). The film says "the biggest cloud providers" and "around five hundred billion each": true for two, not for Microsoft. Reword if you want to be exact.
+## CONFIRMED (vault AND web agree)
+- Alphabet 2026 capex guide raised to $195–205B from $180–190B; Q2 capex $44.9B; Cloud backlog $514B.
+- Amazon 2026 capex guide ~$220B (from ~$200B); AWS +36.7% to ~$42B; backlog $496B.
+- Microsoft CY26 capex ~$175B after lease reclassification, from ~$190B. CFO: underlying plan unchanged. (Film only says "more than $700B" in total, so it holds under either figure.)
+- Meta Q2 free cash flow ~$0.8B (sources show $784M).
+- Combined 2026 spend is more than $700B: Amazon 220 + Alphabet ~200 + Microsoft ~175 + Meta ~137 = about $730B.
+- Big-four Q2 capex growth +79%: $170.5B vs $95.0B (checked by arithmetic from the four reported quarters).
 
-## Chain checks (stack_pulse, snapshot 2026-10-09)
-- [ ] C1 ok: chip DC revenue growth (Nvidia +117%, AMD +107%, Broadcom AI +221%) at or above big-four capex growth (+79%). Film says "one hundred to two hundred percent" vs "around eighty percent".
-- [ ] C2 warn: HBM sold out into 2027; CoWoS sold out through 2026; one chip maker says supply caps next year's growth at ~70% vs demand ~140% (reported).
-- [ ] C3 ALERT: only ~30% of MW due in the next 12 months has documented secured power.
-- [ ] C4 ok: every maker reporting book-to-bill is above 1.2; lead times lengthening.
-- [ ] C5 warn: cloud revenue growth ~40% vs big-four capex growth ~79%. NOTE: one stored C5 row says ~94% capex growth; a later row (corrected 11 Oct) says ~79%. The film says "nearer eighty".
+## CORRECTED in the script after checking
+1. "Close to double last year" -> "up around eighty percent". Q2 y/y was +79%.
+2. "One giant raised ~$100B of debt" was NOT supported. Replaced by: Amazon, Alphabet, Meta and Oracle together issued close to $200B of bonds this year (web: ~$194B through 7 Jul, Bloomberg-sourced via an aggregator). Alphabet's own bond sales found: ~$15B (Feb), $25B, ~$3.6B yen (May).
+3. Removed "Alphabet ~$30.5B stock issuance": web found no Alphabet equity offering, so the vault row conflicts. Check that vault row (stack_unit_register, Alphabet Q2 2026 capex).
+4. Removed "one chip maker says supply caps growth at ~70% vs demand ~140%": not found anywhere. Memory "booked into 2027" is now attributed to "my tracker" (single source, the vault). Web confirms HBM and CoWoS sold out for 2026.
+5. "Cloud revenue +40%" in the tracker (stack_pulse C5, cloud_growth_pct 40.2) looks like AWS + Azure only; Google Cloud grew +82%. Script now says Amazon's and Microsoft's clouds ~40%, Google faster. The capex-vs-cloud gap is still large.
+6. "Biggest cloud providers each ~$500B backlog" -> "Amazon and Google each ~$500B" (Microsoft's backlog is not in the film).
 
-## Site register (dc_site_register, snapshot 2026-10-09)
-- [ ] 106 sites; 77,345 MW planned; 7,826 MW operating; 54 of 106 have power secured = yes. Register is US-heavy and only holds sites where data was found, so say "I track" not "there are".
-- [ ] Slippage: Hyperion first 2 GW 2028 to ~2030 ("about two years"). Project Jupiter ~7 months behind, gas pipeline denied twice. 7 sites worse, 5 better since last snapshot.
-- [ ] UK (5 sites): Culham 500 MW (planned), Loughton 50, Cobalt Park/Stargate UK 50, Cambois/Blyth 50, Kao Harlow 22 = ~672 MW planned; MW operating 0 or unknown for all. CHECK: Cambois has status "operating" but 0 MW operating and first energisation "2028 (reported)": likely a status mislabel. The film says "none is running yet".
-- [ ] Vault note on Cobalt Park says OpenAI paused Stargate UK in Apr 2026 and the UK AI Growth Zone programme is "in limbo after DSIT was aboli..." (text cut off). Not used in the film. Confirm before saying anything about UK policy.
+## ADDED nuance
+- C3 power: ~30% of MW due in 12 months has documented secured power (1,688 of 5,598 MW). If partial arrangements count, ~18% has none. The film says both.
 
-## External (web search, 21 Oct 2026)
-- [ ] IEA Energy and AI (Apr 2025): data centres ~415 TWh in 2024 (~1.5%) to ~945 TWh by 2030 (~3%); ~20% of planned sites could face grid delays. The film says "roughly double" and "around a fifth". Check for a newer IEA edition.
+## STILL SINGLE-SOURCE (vault only; fine for "I track", check before posting)
+- 106 sites, 77,345 MW planned, 7,826 MW operating. Register is US-heavy.
+- Hyperion first 2 GW slipped ~2 years (2028 -> ~2030); Project Jupiter ~7 months behind (pipeline denied twice).
+- UK: 5 tracked sites, ~672 MW planned, none operating. One UK row (Cambois) is labelled "operating" with 0 MW operating and a 2028 first-power date: likely a label error, fix in the vault.
+- C4: every maker reporting book-to-bill is above 1.2.
+- Meta El Paso 1 GW moved into an 80/20 JV with BlackRock.
+- Amazon: $50B equity into OpenAI alongside OpenAI's $100B AWS expansion (the circular-financing point).
+
+## EXTERNAL (checked once, 21 Oct)
+- IEA Energy and AI (Apr 2025): ~415 TWh in 2024 (~1.5%) to ~945 TWh by 2030 (~3%); ~20% of planned sites could face grid delays. Newer IEA edition not checked.
 
 ## Compliance
-- [ ] Education only, no tickers on screen, no price targets, no personal advice.
-- [ ] Disclosure: the film says "I may hold some of the companies in this theme". Joe's own vault shows holdings in this theme, so keep that line. Do not show weights or £ values (percentages-only rule from the Investment Review format).
+- Education only. No tickers, price targets or advice on screen. No portfolio weights or £ shown (percentages-only rule).
+- Disclosure line kept: "I may hold some of the companies in this theme."
+- Photo credits (if any images) go in the description. No standalone .srt unless re-exported.
