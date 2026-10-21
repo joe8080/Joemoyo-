@@ -37,3 +37,8 @@ Second check: web search against company results coverage. Script = VOICEOVER.tx
 - Education only. No tickers, price targets or advice on screen. No portfolio weights or £ shown (percentages-only rule).
 - Disclosure line kept: "I may hold some of the companies in this theme."
 - Photo credits (if any images) go in the description. No standalone .srt unless re-exported.
+
+## Known small mismatch in the finished video (v1)
+- Q1 chart shows the third chip maker at +221% (AI revenue growth); the voiceover says "between one hundred and two hundred percent". Fix options: pick up one sentence in the voice (about 3p) or change the bar label. Everything else on screen matches the voiceover.
+- Visuals use a generated background (no photos), so there are no photo credits to add.
+- Captions are burned in (word-highlighted). No separate .srt exists, so there is nothing to go out of sync.
