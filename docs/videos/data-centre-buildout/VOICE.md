@@ -14,3 +14,8 @@ End-to-end target 5:00 includes about 30 s of section cards and graphic holds.
 
 ## Film built 21 Oct 2026
 Video v1: 1920x1080, 30 fps, 4:28, -14.3 LUFS (voice only, no music bed). Built from build/ in this folder. Rendered on the cloud machine (not the PC).
+
+## v2 (21 Oct 2026, Remotion build)
+- Voiceover v2 = v1 with the Question 1 paragraph re-recorded (same voice, +462 credits, about 8p) so it says "between one hundred and two hundred and twenty percent a year", matching the +221% bar. Spliced at the pause between paragraphs; audio/voiceover_v2.mp3 (4:29).
+- Sound design is synthesised (audio/ stems not stored; remotion/audio/sound_design.py regenerates them): ambient bed that follows the colour script, UI sounds keyed to the visuals, ducked under the voice. Final mix -14.0 LUFS, peak -1.6 dBFS.
+- Claude cannot hear audio. Listen to the bed and effects; if they are not to taste, the voice-only file is audio/voiceover_v2.mp3.

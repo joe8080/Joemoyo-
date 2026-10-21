@@ -38,7 +38,12 @@ Second check: web search against company results coverage. Script = VOICEOVER.tx
 - Disclosure line kept: "I may hold some of the companies in this theme."
 - Photo credits (if any images) go in the description. No standalone .srt unless re-exported.
 
-## Known small mismatch in the finished video (v1)
+## Mismatch noted in v1 (FIXED in v2: voiceover re-recorded to say "two hundred and twenty percent")
 - Q1 chart shows the third chip maker at +221% (AI revenue growth); the voiceover says "between one hundred and two hundred percent". Fix options: pick up one sentence in the voice (about 3p) or change the bar label. Everything else on screen matches the voiceover.
 - Visuals use a generated background (no photos), so there are no photo credits to add.
 - Captions are burned in (word-highlighted). No separate .srt exists, so there is nothing to go out of sync.
+
+## v2 additions to check
+- [ ] Globe pillars come from the vault register (106 sites, 9 Oct 2026): US-heavy and not a census; the on-screen footnote says so.
+- [ ] Q3 card text: 'Count partial deals too: ~18% still has nothing on paper' (vault stack_pulse C3).
+- [ ] IEA card: Energy and AI, April 2025; a newer edition may exist.
