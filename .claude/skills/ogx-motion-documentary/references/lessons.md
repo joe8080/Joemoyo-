@@ -88,3 +88,26 @@ He likes it cohesive and captivating, and he notices picture–voice mismatches.
   - a ~6:20 film with 35 stills, 33 Kling clips and 9 cues came to about 22k ElevenLabs credits plus 381 Higgsfield credits;
   - voice and stills are the big ElevenLabs items;
   - Kling is about 11.5 Higgsfield credits a clip.
+
+## Isandlwana v1.0 creative audit (22 Oct 2026, MJ correction)
+- **What went wrong:** v1.0 copied Adwa's frame almost line for line:
+  - the opener sentence;
+  - the "artist wasn't there" beat;
+  - the question card at 0:34;
+  - "This is the story of…";
+  - numbered acts;
+  - the "To understand what happened next…" transition;
+  - the losses and consequences acts in the same slots;
+  - the callback ending and recap triad;
+  - the sign-off;
+  - the badge at 2:00;
+  - one music cue per act.
+
+  The visual mix also matched to within a few points (AI ~53%, archive ~20%, maps 15–21%), with a 5–6 s cut rhythm.
+- **Root cause:** the skill's examples were applied as a recipe.
+- **Fix:** design each film's spine, visual grammar and sound arc from its own history first, and write the differentiation note before rendering (see SKILL.md, Creative originality).
+- **What was right about Isandlwana and should be kept:**
+  - the hidden-army build;
+  - the doctrine diagram;
+  - the road-cut beat;
+  - the honest still eclipse.

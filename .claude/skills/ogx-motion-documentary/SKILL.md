@@ -22,6 +22,30 @@ Its latest reviewed state is **v1.5**, with the MJ fact-check applied.
 
 Joe (the owner) is a disabled quadruple amputee who reviews on his phone. Keep updates short and numbered. Send the **720p review copy**, the production pack and the SRT; he watches and replies with timestamps.
 
+## Creative originality (MJ correction, 22 Oct 2026; overrides creative defaults below)
+Adwa 1896 v1.5 is a **quality benchmark and a reusable technical pipeline**. It is **not** a template for story, shot order, visuals, pacing or maps. Eden note: "OGX — Creative originality correction to Adwa motion skill · 22 Oct 2026".
+
+**Treat as examples only:**
+- the numbers in this skill: the 0.6 / 0.8 / 1.8 s gaps, the ~2:00 subscribe badge, one cue per act, map-per-manoeuvre;
+- Adwa's devices: the "Have a look at this picture…" opener, the "artist wasn't there" beat, the THE QUESTION card, "This is the story of X", numbered parchment acts, the "It won because… Because…" recap and the callback ending.
+
+**Keep as standards:**
+- the evidence and rights ledgers;
+- reconstruction labels;
+- Joe's voice;
+- motion QC;
+- readable real maps where the geography matters;
+- OGX type and colour;
+- loudness;
+- private preview and MJ QC.
+
+**For every new film or re-edit:**
+1. Start from the episode's own question, evidence and narrative spine. Find its strongest true moment, and decide whether it's a battle-in-a-day, a biography, an object mystery or a trade route.
+2. Before full render, write a **creative differentiation note**: what this film does differently from Adwa and from the previous OGX film in its hook, structure, visual grammar, map use, sound, emotional arc and ending.
+3. Review the first 60–90 s and a middle section against Adwa. Reject disguised reskins.
+
+Example audit: `ogx-films-and-scripts/films/isandlwana-1879/docs/OGX_Isandlwana_1879_v1.0_creative_divergence_audit.md`.
+
 ## Pipeline position (this skill is the hub)
 1. `ogx-research-pdf-script` → research, a claim ledger and the first script. If no researched script exists, run it first. Never voice unverified claims.
 2. `ogx-video-build-engine` → build sheet (scene plan). Optional: this skill can plan scenes itself from the script.
