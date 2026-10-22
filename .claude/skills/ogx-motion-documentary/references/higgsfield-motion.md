@@ -49,6 +49,12 @@ This cloud session's proxy blocks Higgsfield's upload host and its CDN. Routes t
    3. Run the node. Its output `content_url` is on storage.googleapis.com, which this session *can* download.
    4. curl it down and split it back into per-still clips with `scripts/split_chunk.py`. The split is frame-exact, using `framecounts.json` and `chunks.json`, re-encoded at CRF 15 with GOP 24.
 4. Verify every clip's frame count against `framecounts.json`.
+5. **Isandlwana additions (22 Oct 2026):**
+   - **Pack size:** ElevenLabs `creative_attach_reference_file` timed out on a 293 MB pack. Packs of about 40–100 MB work, so re-pack at CRF 19 into 6 packs rather than 3–4 big ones.
+   - **PUT headers:** a presigned `media_upload` PUT needs `Content-Type: video/mp4` and `If-None-Match: *`, or it is refused. Call `media_confirm` after each PUT.
+   - **Sandbox concat:** ffmpeg concat lists inside the sandbox need **absolute paths**. Relative ones fail with "Impossible to open p6/norm/...".
+   - **Odd source frames:** a Kling result from a re-framed still can come back with a different picture area (Z34 had a moon to lose). Crop and scale it to 1920×1080 in the sandbox before packing, and note the crop in STATE.md.
+   - Never `pkill -f <pattern>` in the session shell: it can match and kill the shell itself (exit 144). `kill <pid>` instead.
 
 ## QC (do not skip)
 - Build contact sheets with the start, middle and end frame of every clip. Look for:

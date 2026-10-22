@@ -64,3 +64,27 @@ He likes it cohesive and captivating, and he notices picture–voice mismatches.
     4. Patch timeline.json by shot number, keeping each shot's lead and gap, adding map holds, and renumbering (`scripts/patch_timeline.py`).
     5. Rebuild the mix and SRT, then do a full render.
   - **Deliver with a fact-check pass:** a change log (old wording / new wording / final timecode / source), the final script, the SRT, updated claim and asset ledgers, and an honest list of what's still unresolved.
+
+## Isandlwana 1879 v1.0 (22 Oct 2026): first full film from the next-film prompt
+- **Gate skipped at Joe's instruction** ("you make the whole film now"). The MJ fact-check is then owed on the finished cut. Say so on the pack's first page and list the priority lines.
+- **No real photograph? Use a dated print, and say the artist wasn't there.** The planned 1879 battlefield photo had no confirmed PD copy. The cold open used *The Graphic*, 15 March 1879, voiced as "The artist wasn't there. But the battle behind it was real", with the tag "DRAWN IN LONDON". Honest, and a stronger hook.
+- **Sentinel-2 metadata cloud % is unreliable.** A "0%" scene had cloud over the battlefield. Rank candidate scenes by the bright-pixel fraction inside the area of interest (`geo/pick_s2.py`) and force the winner (`FORCE_SCENE`). Check one rendered map frame before the full render.
+- **Draw map labels last, on plates.** Route lines drawn after the hill or camp labels ran straight through them ("Rritish camp"). Draw the place labels after all routes, on a dark rounded plate. Check the busiest battle frame (the final "closed" map) as a still before rendering.
+- **Doctrine diagrams need their own tag:** "SCHEMATIC · THE DOCTRINE, NOT A RECORD OF THE BATTLE". This keeps the idealised horns diagram separate from the real-ground battle maps.
+- **Contested items, as framed in this film:**
+  - the moon: "Several Zulu accounts say… historians still debate";
+  - Mkhosana: "by Zulu accounts", no quote;
+  - Rorke's Drift: "by most accounts against the king's wishes";
+  - casualties: ranges.
+
+  The myths (the ammunition-box screwdrivers, "day of the dead moon") stayed out completely.
+- **Eclipse:** keep it as a still and say it came after the camp fell. An animated eclipse oversells it.
+- **HyperFrames stings work for title and question cards:**
+  1. Build the card as HTML with a paused GSAP timeline on `window.__timelines["main"]`.
+  2. Use local fonts and a **local gsap.min.js**: the CDN is blocked here, so get it with `npm pack gsap@3.12.5`.
+  3. Render with `npx hyperframes render --fps 24 --quality looks`. Run `npx hyperframes browser ensure` once first.
+  4. In render.py, `hf_clip()` swaps the card for `motion/HF_*.mp4` and skips the static overlay.
+- **Cost reference:**
+  - a ~6:20 film with 35 stills, 33 Kling clips and 9 cues came to about 22k ElevenLabs credits plus 381 Higgsfield credits;
+  - voice and stills are the big ElevenLabs items;
+  - Kling is about 11.5 Higgsfield credits a clip.

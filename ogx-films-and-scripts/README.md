@@ -8,7 +8,7 @@ This is the home of OrigineX Human Archives (OGX) film-making: the production sk
 | `../.claude/skills/ogx-motion-documentary/` | **The base OGX film skill.** Claude Code loads it automatically in this repo. The same skill is on claude.ai (Save skill) and on Eden's Skills page. |
 | `prompts/` | Director prompts, e.g. `next-film-prompt-v0.1.md` (MJ's gated next-film test). |
 | `films/adwa-1896/` | Reference film. `pipeline/` is the working code (render, maps, mix, captions, motion, voice split and patch). `docs/` holds the v1.5 change log, final script, production pack, SRT and the v05 voiced script. `voice-patch/` holds the v1.5 patch split. |
-| `films/isandlwana-1879/` | Next film (test of prompt v0.1): pre-production pack for MJ review. |
+| `films/isandlwana-1879/` | Second film, v1.0 private preview (built 22 Oct 2026). `docs/` holds the production pack (titles, thumbnails, Short, claim and rights ledgers, spend), QC statement, change log, voiced script and SRT. `pipeline/` is the editable project, including the HyperFrames sting sources. `thumbnails/` holds the 2 concepts. Also: the pre-production pack v0.1 and `LEARNING_LOG.md`. MJ's fact-check is still owed. |
 
 ## Not in git
 Media lives in the build workspace and Drive, not here: masters, review MP4s, voice and music audio, generated stills and motion clips, map tiles and fonts. Rebuild the maps with `pipeline/geo/fetch_tiles.py`, `build_terrain.py` and `build_s2.py`.

@@ -182,6 +182,8 @@ Work in a scratch project folder, one subfolder per version (`v13/`, `v14/` …)
    - Overlays: act headers, on-screen text, AI tag, credit strips, wordmark, subscribe badge.
    - Render in 32 segments with `.ok` markers, 4 in parallel. It is resumable, because cloud workers can restart and kill background jobs.
    - Before any full render, check stills first with `python3 render.py still <t1> <t2> ...` and look at them.
+   - **Optional HyperFrames stings** for the title and question cards. Build them as HTML + GSAP and render them locally with the `hyperframes` CLI. See lessons → Isandlwana for the route (local gsap, `hf_clip()` hook).
+   - **Map check:** look at the busiest battle frame as a still. Place labels must be drawn last, on plates.
 10. **Finalize** (`scripts/finalize.sh`).
     - Concatenate the segments, mux the audio (AAC 320k), and make the 720p review copy.
     - QC checks: streams, blackdetect, ebur128 loudness, md5.
@@ -235,5 +237,5 @@ When MJ or Joe hands over a fact-check, apply it to the **latest** edit, matchin
   - The same badge sits on the end card under "If this record is worth keeping,".
 - Sign-off is voiced "OR-ih-jin-EX", but on screen it stays "OrigineX".
 
-## Lessons from Adwa (read `references/lessons.md` before starting)
+## Lessons from Adwa and Isandlwana (read `references/lessons.md` before starting)
 These are Joe's and MJ's corrections, round by round. Re-read them before each new film, so the same notes don't come back.

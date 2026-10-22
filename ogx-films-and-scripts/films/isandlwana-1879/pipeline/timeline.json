@@ -1,0 +1,5997 @@
+[
+ {
+  "n": 1,
+  "act": "COLD OPEN",
+  "act_title": null,
+  "act_first": true,
+  "text": "Have a look at this picture. It was printed in a London newspaper in March, eighteen seventy-nine.",
+  "vis": [
+   "arch",
+   "I01",
+   null
+  ],
+  "ost": "THE GRAPHIC \u00b7 LONDON \u00b7 1879",
+  "start": 0.0,
+  "dur": 6.39,
+  "vo_file": "vowav/a0_l00.wav",
+  "vo_at": 0.6,
+  "vo_dur": 4.99,
+  "words": [
+   [
+    "Have",
+    0.0,
+    0.197
+   ],
+   [
+    "a",
+    0.221,
+    0.244
+   ],
+   [
+    "look",
+    0.279,
+    0.418
+   ],
+   [
+    "at",
+    0.453,
+    0.499
+   ],
+   [
+    "this",
+    0.534,
+    0.65
+   ],
+   [
+    "picture.",
+    0.708,
+    1.196
+   ],
+   [
+    "It",
+    1.312,
+    1.428
+   ],
+   [
+    "was",
+    1.463,
+    1.556
+   ],
+   [
+    "printed",
+    1.614,
+    1.939
+   ],
+   [
+    "in",
+    1.985,
+    2.043
+   ],
+   [
+    "a",
+    2.101,
+    2.125
+   ],
+   [
+    "London",
+    2.183,
+    2.473
+   ],
+   [
+    "newspaper",
+    2.531,
+    3.019
+   ],
+   [
+    "in",
+    3.053,
+    3.123
+   ],
+   [
+    "March,",
+    3.193,
+    3.564
+   ],
+   [
+    "eighteen",
+    3.622,
+    3.971
+   ],
+   [
+    "seventy-nine.",
+    4.029,
+    4.899
+   ]
+  ]
+ },
+ {
+  "n": 2,
+  "act": "COLD OPEN",
+  "act_title": null,
+  "act_first": false,
+  "text": "Two British officers are riding for their lives. One is clutching his regiment's colours.",
+  "vis": [
+   "arch",
+   "I01",
+   [
+    0.22,
+    0.08,
+    0.92,
+    0.62
+   ]
+  ],
+  "ost": null,
+  "start": 6.39,
+  "dur": 5.42,
+  "vo_file": "vowav/a0_l01.wav",
+  "vo_at": 6.39,
+  "vo_dur": 4.62,
+  "words": [
+   [
+    "Two",
+    0.026,
+    0.211
+   ],
+   [
+    "British",
+    0.281,
+    0.606
+   ],
+   [
+    "officers",
+    0.652,
+    1.024
+   ],
+   [
+    "are",
+    1.07,
+    1.152
+   ],
+   [
+    "riding",
+    1.198,
+    1.512
+   ],
+   [
+    "for",
+    1.57,
+    1.663
+   ],
+   [
+    "their",
+    1.709,
+    1.86
+   ],
+   [
+    "lives.",
+    1.918,
+    2.44
+   ],
+   [
+    "One",
+    2.522,
+    2.742
+   ],
+   [
+    "is",
+    2.777,
+    2.847
+   ],
+   [
+    "clutching",
+    2.905,
+    3.253
+   ],
+   [
+    "his",
+    3.311,
+    3.404
+   ],
+   [
+    "regiment's",
+    3.462,
+    3.892
+   ],
+   [
+    "colours.",
+    3.95,
+    4.472
+   ]
+  ]
+ },
+ {
+  "n": 3,
+  "act": "COLD OPEN",
+  "act_title": null,
+  "act_first": false,
+  "text": "The artist wasn't there. But the battle behind it was real.",
+  "vis": [
+   "arch",
+   "I01",
+   [
+    0.0,
+    0.0,
+    0.62,
+    0.5
+   ]
+  ],
+  "ost": "DRAWN IN LONDON",
+  "start": 11.81,
+  "dur": 4.04,
+  "vo_file": "vowav/a0_l02.wav",
+  "vo_at": 11.81,
+  "vo_dur": 3.24,
+  "words": [
+   [
+    "The",
+    0.026,
+    0.154
+   ],
+   [
+    "artist",
+    0.212,
+    0.526
+   ],
+   [
+    "wasn't",
+    0.572,
+    0.851
+   ],
+   [
+    "there.",
+    0.897,
+    1.28
+   ],
+   [
+    "But",
+    1.396,
+    1.547
+   ],
+   [
+    "the",
+    1.582,
+    1.652
+   ],
+   [
+    "battle",
+    1.698,
+    1.965
+   ],
+   [
+    "behind",
+    2.0,
+    2.336
+   ],
+   [
+    "it",
+    2.394,
+    2.464
+   ],
+   [
+    "was",
+    2.51,
+    2.638
+   ],
+   [
+    "real.",
+    2.719,
+    3.149
+   ]
+  ]
+ },
+ {
+  "n": 4,
+  "act": "COLD OPEN",
+  "act_title": null,
+  "act_first": false,
+  "text": "On the twenty-second of January, eighteen seventy-nine, a Zulu army destroyed a British camp here, beneath a hill called Isandlwana.",
+  "vis": [
+   "map",
+   "zoom_isa"
+  ],
+  "ost": "22 JANUARY 1879",
+  "start": 15.85,
+  "dur": 9.52,
+  "vo_file": "vowav/a0_l03.wav",
+  "vo_at": 15.85,
+  "vo_dur": 8.72,
+  "words": [
+   [
+    "On",
+    0.118,
+    0.269
+   ],
+   [
+    "the",
+    0.304,
+    0.373
+   ],
+   [
+    "twenty-second",
+    0.408,
+    1.024
+   ],
+   [
+    "of",
+    1.07,
+    1.116
+   ],
+   [
+    "January,",
+    1.175,
+    1.801
+   ],
+   [
+    "eighteen",
+    1.976,
+    2.336
+   ],
+   [
+    "seventy-nine,",
+    2.394,
+    3.253
+   ],
+   [
+    "a",
+    3.427,
+    3.508
+   ],
+   [
+    "Zulu",
+    3.578,
+    3.891
+   ],
+   [
+    "army",
+    3.961,
+    4.228
+   ],
+   [
+    "destroyed",
+    4.309,
+    4.808
+   ],
+   [
+    "a",
+    4.867,
+    4.901
+   ],
+   [
+    "British",
+    4.971,
+    5.296
+   ],
+   [
+    "camp",
+    5.343,
+    5.61
+   ],
+   [
+    "here,",
+    5.679,
+    6.004
+   ],
+   [
+    "beneath",
+    6.12,
+    6.445
+   ],
+   [
+    "a",
+    6.492,
+    6.527
+   ],
+   [
+    "hill",
+    6.585,
+    6.817
+   ],
+   [
+    "called",
+    6.91,
+    7.235
+   ],
+   [
+    "Isandlwana.",
+    7.351,
+    8.558
+   ]
+  ]
+ },
+ {
+  "n": 5,
+  "act": "COLD OPEN",
+  "act_title": null,
+  "act_first": false,
+  "text": "More than thirteen hundred men on the British side were killed in a single afternoon.",
+  "vis": [
+   "ai",
+   "Z01"
+  ],
+  "ost": null,
+  "start": 25.37,
+  "dur": 5.218,
+  "vo_file": "vowav/a0_l04.wav",
+  "vo_at": 25.37,
+  "vo_dur": 4.418,
+  "words": [
+   [
+    "More",
+    0.2,
+    0.362
+   ],
+   [
+    "than",
+    0.397,
+    0.525
+   ],
+   [
+    "thirteen",
+    0.583,
+    0.966
+   ],
+   [
+    "hundred",
+    1.012,
+    1.279
+   ],
+   [
+    "men",
+    1.337,
+    1.488
+   ],
+   [
+    "on",
+    1.558,
+    1.651
+   ],
+   [
+    "the",
+    1.686,
+    1.755
+   ],
+   [
+    "British",
+    1.802,
+    2.092
+   ],
+   [
+    "side",
+    2.127,
+    2.429
+   ],
+   [
+    "were",
+    2.475,
+    2.614
+   ],
+   [
+    "killed",
+    2.661,
+    2.94
+   ],
+   [
+    "in",
+    2.998,
+    3.079
+   ],
+   [
+    "a",
+    3.125,
+    3.149
+   ],
+   [
+    "single",
+    3.207,
+    3.532
+   ],
+   [
+    "afternoon.",
+    3.578,
+    4.286
+   ]
+  ]
+ },
+ {
+  "n": 6,
+  "act": "COLD OPEN",
+  "act_title": null,
+  "act_first": false,
+  "text": "The usual story is about what went wrong for the British.",
+  "vis": [
+   "arch",
+   "I06",
+   null
+  ],
+  "ost": "A VICTORIAN PAINTING",
+  "start": 30.588,
+  "dur": 4.13,
+  "vo_file": "vowav/a0_l05.wav",
+  "vo_at": 30.588,
+  "vo_dur": 3.33,
+  "words": [
+   [
+    "The",
+    0.147,
+    0.263
+   ],
+   [
+    "usual",
+    0.344,
+    0.635
+   ],
+   [
+    "story",
+    0.693,
+    1.122
+   ],
+   [
+    "is",
+    1.204,
+    1.32
+   ],
+   [
+    "about",
+    1.366,
+    1.61
+   ],
+   [
+    "what",
+    1.645,
+    1.772
+   ],
+   [
+    "went",
+    1.819,
+    2.005
+   ],
+   [
+    "wrong",
+    2.051,
+    2.272
+   ],
+   [
+    "for",
+    2.33,
+    2.434
+   ],
+   [
+    "the",
+    2.469,
+    2.539
+   ],
+   [
+    "British.",
+    2.585,
+    3.189
+   ]
+  ]
+ },
+ {
+  "n": 7,
+  "act": "COLD OPEN",
+  "act_title": null,
+  "act_first": false,
+  "text": "But that's only half of it. The real question is how the Zulu army did it.",
+  "vis": [
+   "card",
+   "THE QUESTION",
+   "How did the Zulu army win?"
+  ],
+  "ost": null,
+  "start": 34.718,
+  "dur": 7.69,
+  "vo_file": "vowav/a0_l06.wav",
+  "vo_at": 34.718,
+  "vo_dur": 4.49,
+  "words": [
+   [
+    "But",
+    0.068,
+    0.242
+   ],
+   [
+    "that's",
+    0.277,
+    0.497
+   ],
+   [
+    "only",
+    0.567,
+    0.846
+   ],
+   [
+    "half",
+    0.962,
+    1.206
+   ],
+   [
+    "of",
+    1.287,
+    1.345
+   ],
+   [
+    "it.",
+    1.426,
+    1.67
+   ],
+   [
+    "The",
+    1.844,
+    1.972
+   ],
+   [
+    "real",
+    2.042,
+    2.227
+   ],
+   [
+    "question",
+    2.285,
+    2.622
+   ],
+   [
+    "is",
+    2.68,
+    2.761
+   ],
+   [
+    "how",
+    2.831,
+    3.017
+   ],
+   [
+    "the",
+    3.086,
+    3.168
+   ],
+   [
+    "Zulu",
+    3.214,
+    3.539
+   ],
+   [
+    "army",
+    3.621,
+    3.876
+   ],
+   [
+    "did",
+    3.946,
+    4.131
+   ],
+   [
+    "it.",
+    4.189,
+    4.41
+   ]
+  ]
+ },
+ {
+  "n": 8,
+  "act": "COLD OPEN",
+  "act_title": null,
+  "act_first": false,
+  "text": "And the answer starts with the army itself.",
+  "vis": [
+   "ai",
+   "Z03"
+  ],
+  "ost": null,
+  "start": 42.408,
+  "dur": 3.34,
+  "vo_file": "vowav/a0_l07.wav",
+  "vo_at": 42.408,
+  "vo_dur": 2.54,
+  "words": [
+   [
+    "And",
+    0.129,
+    0.268
+   ],
+   [
+    "the",
+    0.315,
+    0.384
+   ],
+   [
+    "answer",
+    0.454,
+    0.756
+   ],
+   [
+    "starts",
+    0.814,
+    1.116
+   ],
+   [
+    "with",
+    1.139,
+    1.267
+   ],
+   [
+    "the",
+    1.302,
+    1.371
+   ],
+   [
+    "army",
+    1.429,
+    1.661
+   ],
+   [
+    "itself.",
+    1.731,
+    2.346
+   ]
+  ]
+ },
+ {
+  "n": 9,
+  "act": "TITLE",
+  "act_title": null,
+  "act_first": true,
+  "text": "This is the story of Isandlwana.",
+  "vis": [
+   "title"
+  ],
+  "ost": null,
+  "start": 45.748,
+  "dur": 6.593,
+  "vo_file": "vowav/a0_l08.wav",
+  "vo_at": 45.748,
+  "vo_dur": 2.593,
+  "words": [
+   [
+    "This",
+    0.05,
+    0.236
+   ],
+   [
+    "is",
+    0.294,
+    0.387
+   ],
+   [
+    "the",
+    0.445,
+    0.526
+   ],
+   [
+    "story",
+    0.584,
+    1.037
+   ],
+   [
+    "of",
+    1.153,
+    1.293
+   ],
+   [
+    "Isandlwana.",
+    1.409,
+    2.593
+   ]
+  ]
+ },
+ {
+  "n": 10,
+  "act": "01",
+  "act_title": "AN ULTIMATUM",
+  "act_first": true,
+  "text": "In December eighteen seventy-eight, Britain's High Commissioner, Sir Bartle Frere, sent the Zulu king an ultimatum.",
+  "vis": [
+   "arch",
+   "I03",
+   null
+  ],
+  "ost": "SIR BARTLE FRERE",
+  "start": 52.341,
+  "dur": 6.79,
+  "vo_file": "vowav/a1_l00.wav",
+  "vo_at": 52.341,
+  "vo_dur": 5.99,
+  "words": [
+   [
+    "In",
+    0.0,
+    0.139
+   ],
+   [
+    "December",
+    0.186,
+    0.627
+   ],
+   [
+    "eighteen",
+    0.697,
+    1.045
+   ],
+   [
+    "seventy-eight,",
+    1.091,
+    1.811
+   ],
+   [
+    "Britain's",
+    1.892,
+    2.264
+   ],
+   [
+    "High",
+    2.31,
+    2.461
+   ],
+   [
+    "Commissioner,",
+    2.508,
+    3.053
+   ],
+   [
+    "Sir",
+    3.1,
+    3.239
+   ],
+   [
+    "Bartle",
+    3.286,
+    3.576
+   ],
+   [
+    "Frere,",
+    3.622,
+    4.063
+   ],
+   [
+    "sent",
+    4.18,
+    4.423
+   ],
+   [
+    "the",
+    4.458,
+    4.528
+   ],
+   [
+    "Zulu",
+    4.574,
+    4.853
+   ],
+   [
+    "king",
+    4.899,
+    5.097
+   ],
+   [
+    "an",
+    5.143,
+    5.201
+   ],
+   [
+    "ultimatum.",
+    5.259,
+    5.944
+   ]
+  ]
+ },
+ {
+  "n": 11,
+  "act": "01",
+  "act_title": "AN ULTIMATUM",
+  "act_first": false,
+  "text": "The king was Cetshwayo. He was told, among other things, to break up the Zulu military system.",
+  "vis": [
+   "arch",
+   "I02",
+   null
+  ],
+  "ost": "CETSHWAYO kaMPANDE",
+  "start": 59.131,
+  "dur": 5.74,
+  "vo_file": "vowav/a1_l01.wav",
+  "vo_at": 59.131,
+  "vo_dur": 4.94,
+  "words": [
+   [
+    "The",
+    0.105,
+    0.221
+   ],
+   [
+    "king",
+    0.279,
+    0.477
+   ],
+   [
+    "was",
+    0.546,
+    0.686
+   ],
+   [
+    "Cetshwayo.",
+    0.755,
+    1.487
+   ],
+   [
+    "He",
+    1.51,
+    1.591
+   ],
+   [
+    "was",
+    1.638,
+    1.742
+   ],
+   [
+    "told,",
+    1.8,
+    2.149
+   ],
+   [
+    "among",
+    2.172,
+    2.427
+   ],
+   [
+    "other",
+    2.485,
+    2.671
+   ],
+   [
+    "things,",
+    2.717,
+    3.008
+   ],
+   [
+    "to",
+    3.031,
+    3.101
+   ],
+   [
+    "break",
+    3.159,
+    3.368
+   ],
+   [
+    "up",
+    3.426,
+    3.519
+   ],
+   [
+    "the",
+    3.565,
+    3.635
+   ],
+   [
+    "Zulu",
+    3.681,
+    3.948
+   ],
+   [
+    "military",
+    3.995,
+    4.389
+   ],
+   [
+    "system.",
+    4.436,
+    4.912
+   ]
+  ]
+ },
+ {
+  "n": 12,
+  "act": "01",
+  "act_title": "AN ULTIMATUM",
+  "act_first": false,
+  "text": "No king could agree to that.",
+  "vis": [
+   "arch",
+   "I02",
+   [
+    0.1,
+    0.05,
+    0.9,
+    0.6
+   ]
+  ],
+  "ost": null,
+  "start": 64.871,
+  "dur": 2.27,
+  "vo_file": "vowav/a1_l02.wav",
+  "vo_at": 64.871,
+  "vo_dur": 1.47,
+  "words": [
+   [
+    "No",
+    0.041,
+    0.204
+   ],
+   [
+    "king",
+    0.285,
+    0.494
+   ],
+   [
+    "could",
+    0.541,
+    0.692
+   ],
+   [
+    "agree",
+    0.727,
+    0.982
+   ],
+   [
+    "to",
+    1.029,
+    1.087
+   ],
+   [
+    "that.",
+    1.156,
+    1.423
+   ]
+  ]
+ },
+ {
+  "n": 13,
+  "act": "01",
+  "act_title": "AN ULTIMATUM",
+  "act_first": false,
+  "text": "London hadn't approved a war. Frere went ahead anyway.",
+  "vis": [
+   "ai",
+   "Z31"
+  ],
+  "ost": null,
+  "start": 67.141,
+  "dur": 3.89,
+  "vo_file": "vowav/a1_l03.wav",
+  "vo_at": 67.141,
+  "vo_dur": 3.09,
+  "words": [
+   [
+    "London",
+    0.069,
+    0.441
+   ],
+   [
+    "hadn't",
+    0.511,
+    0.766
+   ],
+   [
+    "approved",
+    0.789,
+    1.184
+   ],
+   [
+    "a",
+    1.219,
+    1.254
+   ],
+   [
+    "war.",
+    1.312,
+    1.718
+   ],
+   [
+    "Frere",
+    1.834,
+    2.113
+   ],
+   [
+    "went",
+    2.159,
+    2.333
+   ],
+   [
+    "ahead",
+    2.368,
+    2.589
+   ],
+   [
+    "anyway.",
+    2.635,
+    3.065
+   ]
+  ]
+ },
+ {
+  "n": 14,
+  "act": "01",
+  "act_title": "AN ULTIMATUM",
+  "act_first": false,
+  "text": "In January, British columns crossed into Zululand. One, under Lord Chelmsford, crossed at Rorke's Drift.",
+  "vis": [
+   "map",
+   "columns"
+  ],
+  "ost": "JANUARY 1879",
+  "start": 71.031,
+  "dur": 7.5,
+  "vo_file": "vowav/a1_l04.wav",
+  "vo_at": 71.031,
+  "vo_dur": 5.64,
+  "words": [
+   [
+    "In",
+    0.01,
+    0.126
+   ],
+   [
+    "January,",
+    0.184,
+    0.764
+   ],
+   [
+    "British",
+    0.799,
+    1.159
+   ],
+   [
+    "columns",
+    1.205,
+    1.542
+   ],
+   [
+    "crossed",
+    1.6,
+    1.89
+   ],
+   [
+    "into",
+    1.925,
+    2.099
+   ],
+   [
+    "Zululand.",
+    2.146,
+    2.819
+   ],
+   [
+    "One,",
+    2.935,
+    3.214
+   ],
+   [
+    "under",
+    3.26,
+    3.481
+   ],
+   [
+    "Lord",
+    3.539,
+    3.736
+   ],
+   [
+    "Chelmsford,",
+    3.771,
+    4.259
+   ],
+   [
+    "crossed",
+    4.294,
+    4.607
+   ],
+   [
+    "at",
+    4.642,
+    4.712
+   ],
+   [
+    "Rorke's",
+    4.781,
+    5.095
+   ],
+   [
+    "Drift.",
+    5.141,
+    5.64
+   ]
+  ]
+ },
+ {
+  "n": 15,
+  "act": "02",
+  "act_title": "AN ARMY OF THE NATION",
+  "act_first": true,
+  "text": "Now, to understand what happened next, you need to understand the army Chelmsford was walking towards.",
+  "vis": [
+   "ai",
+   "Z06"
+  ],
+  "ost": null,
+  "start": 78.531,
+  "dur": 5.61,
+  "vo_file": "vowav/a2_l00.wav",
+  "vo_at": 78.531,
+  "vo_dur": 4.81,
+  "words": [
+   [
+    "Now,",
+    0.0,
+    0.29
+   ],
+   [
+    "to",
+    0.325,
+    0.43
+   ],
+   [
+    "understand",
+    0.511,
+    0.906
+   ],
+   [
+    "what",
+    0.952,
+    1.057
+   ],
+   [
+    "happened",
+    1.103,
+    1.393
+   ],
+   [
+    "next,",
+    1.44,
+    1.707
+   ],
+   [
+    "you",
+    1.73,
+    1.8
+   ],
+   [
+    "need",
+    1.846,
+    2.009
+   ],
+   [
+    "to",
+    2.043,
+    2.101
+   ],
+   [
+    "understand",
+    2.171,
+    2.612
+   ],
+   [
+    "the",
+    2.659,
+    2.728
+   ],
+   [
+    "army",
+    2.775,
+    2.972
+   ],
+   [
+    "Chelmsford",
+    3.03,
+    3.46
+   ],
+   [
+    "was",
+    3.495,
+    3.599
+   ],
+   [
+    "walking",
+    3.646,
+    3.901
+   ],
+   [
+    "towards.",
+    3.959,
+    4.528
+   ]
+  ]
+ },
+ {
+  "n": 16,
+  "act": "02",
+  "act_title": "AN ARMY OF THE NATION",
+  "act_first": false,
+  "text": "Zulu men were organised into regiments by age, called amabutho. When the king called, they came.",
+  "vis": [
+   "ai",
+   "Z03"
+  ],
+  "ost": "AMABUTHO \u00b7 AGE REGIMENTS",
+  "start": 84.141,
+  "dur": 6.46,
+  "vo_file": "vowav/a2_l01.wav",
+  "vo_at": 84.141,
+  "vo_dur": 5.66,
+  "words": [
+   [
+    "Zulu",
+    0.043,
+    0.391
+   ],
+   [
+    "men",
+    0.438,
+    0.565
+   ],
+   [
+    "were",
+    0.612,
+    0.74
+   ],
+   [
+    "organised",
+    0.786,
+    1.262
+   ],
+   [
+    "into",
+    1.308,
+    1.483
+   ],
+   [
+    "regiments",
+    1.564,
+    1.959
+   ],
+   [
+    "by",
+    2.005,
+    2.156
+   ],
+   [
+    "age,",
+    2.237,
+    2.574
+   ],
+   [
+    "called",
+    2.667,
+    2.934
+   ],
+   [
+    "amabutho.",
+    2.98,
+    3.851
+   ],
+   [
+    "When",
+    4.06,
+    4.234
+   ],
+   [
+    "the",
+    4.257,
+    4.327
+   ],
+   [
+    "king",
+    4.373,
+    4.571
+   ],
+   [
+    "called,",
+    4.629,
+    4.931
+   ],
+   [
+    "they",
+    4.954,
+    5.082
+   ],
+   [
+    "came.",
+    5.128,
+    5.546
+   ]
+  ]
+ },
+ {
+  "n": 17,
+  "act": "02",
+  "act_title": "AN ARMY OF THE NATION",
+  "act_first": false,
+  "text": "Most fought with a short stabbing spear and a cowhide shield. Many carried guns too, but mostly old ones, with poor powder.",
+  "vis": [
+   "ai",
+   "Z04"
+  ],
+  "ost": null,
+  "start": 90.601,
+  "dur": 7.0,
+  "vo_file": "vowav/a2_l02.wav",
+  "vo_at": 90.601,
+  "vo_dur": 6.2,
+  "words": [
+   [
+    "Most",
+    0.06,
+    0.292
+   ],
+   [
+    "fought",
+    0.339,
+    0.536
+   ],
+   [
+    "with",
+    0.559,
+    0.676
+   ],
+   [
+    "a",
+    0.71,
+    0.734
+   ],
+   [
+    "short",
+    0.78,
+    1.024
+   ],
+   [
+    "stabbing",
+    1.07,
+    1.419
+   ],
+   [
+    "spear",
+    1.465,
+    1.755
+   ],
+   [
+    "and",
+    1.814,
+    1.906
+   ],
+   [
+    "a",
+    1.953,
+    1.976
+   ],
+   [
+    "cowhide",
+    2.034,
+    2.475
+   ],
+   [
+    "shield.",
+    2.51,
+    2.905
+   ],
+   [
+    "Many",
+    2.986,
+    3.207
+   ],
+   [
+    "carried",
+    3.253,
+    3.578
+   ],
+   [
+    "guns",
+    3.625,
+    3.868
+   ],
+   [
+    "too,",
+    3.938,
+    4.217
+   ],
+   [
+    "but",
+    4.252,
+    4.403
+   ],
+   [
+    "mostly",
+    4.461,
+    4.762
+   ],
+   [
+    "old",
+    4.821,
+    4.96
+   ],
+   [
+    "ones,",
+    5.018,
+    5.215
+   ],
+   [
+    "with",
+    5.25,
+    5.401
+   ],
+   [
+    "poor",
+    5.436,
+    5.598
+   ],
+   [
+    "powder.",
+    5.656,
+    6.086
+   ]
+  ]
+ },
+ {
+  "n": 18,
+  "act": "02",
+  "act_title": "AN ARMY OF THE NATION",
+  "act_first": false,
+  "text": "What they had was speed, discipline, and a plan of attack every warrior knew.",
+  "vis": [
+   "ai",
+   "Z05"
+  ],
+  "ost": null,
+  "start": 97.601,
+  "dur": 4.78,
+  "vo_file": "vowav/a2_l03.wav",
+  "vo_at": 97.601,
+  "vo_dur": 3.98,
+  "words": [
+   [
+    "What",
+    0.037,
+    0.223
+   ],
+   [
+    "they",
+    0.258,
+    0.385
+   ],
+   [
+    "had",
+    0.443,
+    0.583
+   ],
+   [
+    "was",
+    0.641,
+    0.768
+   ],
+   [
+    "speed,",
+    0.815,
+    1.256
+   ],
+   [
+    "discipline,",
+    1.326,
+    1.918
+   ],
+   [
+    "and",
+    1.941,
+    2.069
+   ],
+   [
+    "a",
+    2.115,
+    2.138
+   ],
+   [
+    "plan",
+    2.185,
+    2.382
+   ],
+   [
+    "of",
+    2.429,
+    2.487
+   ],
+   [
+    "attack",
+    2.533,
+    2.847
+   ],
+   [
+    "every",
+    2.905,
+    3.125
+   ],
+   [
+    "warrior",
+    3.183,
+    3.497
+   ],
+   [
+    "knew.",
+    3.543,
+    3.845
+   ]
+  ]
+ },
+ {
+  "n": 19,
+  "act": "02",
+  "act_title": "AN ARMY OF THE NATION",
+  "act_first": false,
+  "text": "They called it the horns of the buffalo.",
+  "vis": [
+   "map",
+   "horns_doctrine"
+  ],
+  "ost": "THE HORNS OF THE BUFFALO",
+  "start": 102.381,
+  "dur": 2.74,
+  "vo_file": "vowav/a2_l04.wav",
+  "vo_at": 102.381,
+  "vo_dur": 1.94,
+  "words": [
+   [
+    "They",
+    0.016,
+    0.178
+   ],
+   [
+    "called",
+    0.237,
+    0.48
+   ],
+   [
+    "it",
+    0.515,
+    0.573
+   ],
+   [
+    "the",
+    0.608,
+    0.678
+   ],
+   [
+    "horns",
+    0.724,
+    1.014
+   ],
+   [
+    "of",
+    1.061,
+    1.119
+   ],
+   [
+    "the",
+    1.177,
+    1.247
+   ],
+   [
+    "buffalo.",
+    1.293,
+    1.815
+   ]
+  ]
+ },
+ {
+  "n": 20,
+  "act": "02",
+  "act_title": "AN ARMY OF THE NATION",
+  "act_first": false,
+  "text": "The chest pins the enemy in front. The horns run wide and close round the sides. The loins wait behind, in reserve.",
+  "vis": [
+   "map",
+   "horns_doctrine2"
+  ],
+  "ost": null,
+  "start": 105.121,
+  "dur": 9.0,
+  "vo_file": "vowav/a2_l05.wav",
+  "vo_at": 105.121,
+  "vo_dur": 6.22,
+  "words": [
+   [
+    "The",
+    0.026,
+    0.142
+   ],
+   [
+    "chest",
+    0.201,
+    0.467
+   ],
+   [
+    "pins",
+    0.525,
+    0.804
+   ],
+   [
+    "the",
+    0.851,
+    0.92
+   ],
+   [
+    "enemy",
+    0.99,
+    1.234
+   ],
+   [
+    "in",
+    1.292,
+    1.35
+   ],
+   [
+    "front.",
+    1.419,
+    1.768
+   ],
+   [
+    "The",
+    1.826,
+    1.942
+   ],
+   [
+    "horns",
+    2.0,
+    2.279
+   ],
+   [
+    "run",
+    2.325,
+    2.464
+   ],
+   [
+    "wide",
+    2.522,
+    2.778
+   ],
+   [
+    "and",
+    2.813,
+    2.894
+   ],
+   [
+    "close",
+    2.94,
+    3.242
+   ],
+   [
+    "round",
+    3.289,
+    3.474
+   ],
+   [
+    "the",
+    3.509,
+    3.579
+   ],
+   [
+    "sides.",
+    3.625,
+    4.101
+   ],
+   [
+    "The",
+    4.171,
+    4.287
+   ],
+   [
+    "loins",
+    4.357,
+    4.612
+   ],
+   [
+    "wait",
+    4.67,
+    4.833
+   ],
+   [
+    "behind,",
+    4.879,
+    5.239
+   ],
+   [
+    "in",
+    5.286,
+    5.39
+   ],
+   [
+    "reserve.",
+    5.448,
+    5.982
+   ]
+  ]
+ },
+ {
+  "n": 21,
+  "act": "02",
+  "act_title": "AN ARMY OF THE NATION",
+  "act_first": false,
+  "text": "In the middle of January, the army set out from the king's homestead. Estimates run from about twenty to twenty-five thousand men.",
+  "vis": [
+   "ai",
+   "Z06"
+  ],
+  "ost": "ESTIMATES \u00b7 20,000\u201325,000",
+  "start": 114.121,
+  "dur": 7.33,
+  "vo_file": "vowav/a2_l06.wav",
+  "vo_at": 114.121,
+  "vo_dur": 6.53,
+  "words": [
+   [
+    "In",
+    0.006,
+    0.122
+   ],
+   [
+    "the",
+    0.157,
+    0.227
+   ],
+   [
+    "middle",
+    0.261,
+    0.459
+   ],
+   [
+    "of",
+    0.482,
+    0.528
+   ],
+   [
+    "January,",
+    0.586,
+    1.121
+   ],
+   [
+    "the",
+    1.155,
+    1.271
+   ],
+   [
+    "army",
+    1.33,
+    1.515
+   ],
+   [
+    "set",
+    1.573,
+    1.771
+   ],
+   [
+    "out",
+    1.829,
+    1.956
+   ],
+   [
+    "from",
+    1.991,
+    2.131
+   ],
+   [
+    "the",
+    2.177,
+    2.247
+   ],
+   [
+    "king's",
+    2.293,
+    2.549
+   ],
+   [
+    "homestead.",
+    2.583,
+    3.152
+   ],
+   [
+    "Estimates",
+    3.28,
+    3.814
+   ],
+   [
+    "run",
+    3.872,
+    4.035
+   ],
+   [
+    "from",
+    4.081,
+    4.22
+   ],
+   [
+    "about",
+    4.278,
+    4.522
+   ],
+   [
+    "twenty",
+    4.557,
+    4.894
+   ],
+   [
+    "to",
+    4.952,
+    5.01
+   ],
+   [
+    "twenty-five",
+    5.056,
+    5.636
+   ],
+   [
+    "thousand",
+    5.671,
+    6.043
+   ],
+   [
+    "men.",
+    6.101,
+    6.426
+   ]
+  ],
+  "vis2": [
+   "ai",
+   "Z32"
+  ],
+  "switch": 3.302
+ },
+ {
+  "n": 22,
+  "act": "02",
+  "act_title": "AN ARMY OF THE NATION",
+  "act_first": false,
+  "text": "It was led by an experienced commander, Ntshingwayo kaMahole, with Mavumengwana kaNdlela.",
+  "vis": [
+   "ai",
+   "Z07"
+  ],
+  "ost": "NTSHINGWAYO kaMAHOLE",
+  "start": 121.451,
+  "dur": 7.792,
+  "vo_file": "vowav/a2_l07.wav",
+  "vo_at": 121.451,
+  "vo_dur": 5.992,
+  "words": [
+   [
+    "It",
+    0.14,
+    0.256
+   ],
+   [
+    "was",
+    0.291,
+    0.384
+   ],
+   [
+    "led",
+    0.43,
+    0.593
+   ],
+   [
+    "by",
+    0.639,
+    0.732
+   ],
+   [
+    "an",
+    0.778,
+    0.825
+   ],
+   [
+    "experienced",
+    0.871,
+    1.359
+   ],
+   [
+    "commander,",
+    1.394,
+    1.939
+   ],
+   [
+    "Ntshingwayo",
+    2.021,
+    2.903
+   ],
+   [
+    "kaMahole,",
+    3.031,
+    3.785
+   ],
+   [
+    "with",
+    3.901,
+    4.052
+   ],
+   [
+    "Mavumengwana",
+    4.099,
+    5.039
+   ],
+   [
+    "kaNdlela.",
+    5.19,
+    5.991
+   ]
+  ]
+ },
+ {
+  "n": 23,
+  "act": "03",
+  "act_title": "THE ARMY NOBODY SAW",
+  "act_first": true,
+  "text": "Chelmsford pitched his camp at the foot of Isandlwana.",
+  "vis": [
+   "arch",
+   "I08",
+   null
+  ],
+  "ost": "ISANDLWANA TODAY",
+  "start": 129.243,
+  "dur": 3.68,
+  "vo_file": "vowav/a3_l00.wav",
+  "vo_at": 129.243,
+  "vo_dur": 2.88,
+  "words": [
+   [
+    "Chelmsford",
+    0.0,
+    0.546
+   ],
+   [
+    "pitched",
+    0.592,
+    0.848
+   ],
+   [
+    "his",
+    0.871,
+    0.964
+   ],
+   [
+    "camp",
+    1.022,
+    1.265
+   ],
+   [
+    "at",
+    1.312,
+    1.382
+   ],
+   [
+    "the",
+    1.405,
+    1.474
+   ],
+   [
+    "foot",
+    1.521,
+    1.741
+   ],
+   [
+    "of",
+    1.8,
+    1.869
+   ],
+   [
+    "Isandlwana.",
+    1.939,
+    2.775
+   ]
+  ]
+ },
+ {
+  "n": 24,
+  "act": "03",
+  "act_title": "THE ARMY NOBODY SAW",
+  "act_first": false,
+  "text": "He was expecting to find the Zulu army. He just didn't know where it was.",
+  "vis": [
+   "ai",
+   "Z09"
+  ],
+  "ost": null,
+  "start": 132.923,
+  "dur": 4.41,
+  "vo_file": "vowav/a3_l01.wav",
+  "vo_at": 132.923,
+  "vo_dur": 3.61,
+  "words": [
+   [
+    "He",
+    0.011,
+    0.115
+   ],
+   [
+    "was",
+    0.162,
+    0.266
+   ],
+   [
+    "expecting",
+    0.324,
+    0.754
+   ],
+   [
+    "to",
+    0.8,
+    0.847
+   ],
+   [
+    "find",
+    0.916,
+    1.125
+   ],
+   [
+    "the",
+    1.16,
+    1.23
+   ],
+   [
+    "Zulu",
+    1.276,
+    1.601
+   ],
+   [
+    "army.",
+    1.671,
+    2.043
+   ],
+   [
+    "He",
+    2.066,
+    2.17
+   ],
+   [
+    "just",
+    2.24,
+    2.414
+   ],
+   [
+    "didn't",
+    2.449,
+    2.658
+   ],
+   [
+    "know",
+    2.693,
+    2.832
+   ],
+   [
+    "where",
+    2.879,
+    3.053
+   ],
+   [
+    "it",
+    3.099,
+    3.157
+   ],
+   [
+    "was.",
+    3.204,
+    3.575
+   ]
+  ]
+ },
+ {
+  "n": 25,
+  "act": "03",
+  "act_title": "THE ARMY NOBODY SAW",
+  "act_first": false,
+  "text": "The Zulu commanders moved their regiments across country in small groups, and brought them together in a valley called Ngwebeni.",
+  "vis": [
+   "ai",
+   "Z10"
+  ],
+  "ost": null,
+  "start": 137.333,
+  "dur": 7.5,
+  "vo_file": "vowav/a3_l02.wav",
+  "vo_at": 137.333,
+  "vo_dur": 6.7,
+  "words": [
+   [
+    "The",
+    0.0,
+    0.104
+   ],
+   [
+    "Zulu",
+    0.163,
+    0.441
+   ],
+   [
+    "commanders",
+    0.499,
+    0.998
+   ],
+   [
+    "moved",
+    1.08,
+    1.312
+   ],
+   [
+    "their",
+    1.335,
+    1.474
+   ],
+   [
+    "regiments",
+    1.509,
+    1.939
+   ],
+   [
+    "across",
+    1.985,
+    2.264
+   ],
+   [
+    "country",
+    2.322,
+    2.659
+   ],
+   [
+    "in",
+    2.705,
+    2.775
+   ],
+   [
+    "small",
+    2.844,
+    3.123
+   ],
+   [
+    "groups,",
+    3.181,
+    3.68
+   ],
+   [
+    "and",
+    3.704,
+    3.831
+   ],
+   [
+    "brought",
+    3.878,
+    4.087
+   ],
+   [
+    "them",
+    4.11,
+    4.226
+   ],
+   [
+    "together",
+    4.272,
+    4.609
+   ],
+   [
+    "in",
+    4.655,
+    4.713
+   ],
+   [
+    "a",
+    4.76,
+    4.783
+   ],
+   [
+    "valley",
+    4.853,
+    5.166
+   ],
+   [
+    "called",
+    5.236,
+    5.515
+   ],
+   [
+    "Ngwebeni.",
+    5.584,
+    6.629
+   ]
+  ]
+ },
+ {
+  "n": 26,
+  "act": "03",
+  "act_title": "THE ARMY NOBODY SAW",
+  "act_first": false,
+  "text": "It was just a few miles from the British camp. Tens of thousands of men. And nobody in the camp knew they were there.",
+  "vis": [
+   "map",
+   "ngwebeni"
+  ],
+  "ost": "A FEW MILES APART",
+  "start": 144.833,
+  "dur": 6.95,
+  "vo_file": "vowav/a3_l03.wav",
+  "vo_at": 144.833,
+  "vo_dur": 6.15,
+  "words": [
+   [
+    "It",
+    0.103,
+    0.208
+   ],
+   [
+    "was",
+    0.243,
+    0.324
+   ],
+   [
+    "just",
+    0.37,
+    0.544
+   ],
+   [
+    "a",
+    0.579,
+    0.602
+   ],
+   [
+    "few",
+    0.661,
+    0.823
+   ],
+   [
+    "miles",
+    0.881,
+    1.137
+   ],
+   [
+    "from",
+    1.171,
+    1.299
+   ],
+   [
+    "the",
+    1.334,
+    1.404
+   ],
+   [
+    "British",
+    1.438,
+    1.729
+   ],
+   [
+    "camp.",
+    1.775,
+    2.193
+   ],
+   [
+    "Tens",
+    2.472,
+    2.808
+   ],
+   [
+    "of",
+    2.843,
+    2.913
+   ],
+   [
+    "thousands",
+    2.959,
+    3.366
+   ],
+   [
+    "of",
+    3.4,
+    3.459
+   ],
+   [
+    "men.",
+    3.528,
+    3.888
+   ],
+   [
+    "And",
+    4.039,
+    4.19
+   ],
+   [
+    "nobody",
+    4.248,
+    4.561
+   ],
+   [
+    "in",
+    4.596,
+    4.643
+   ],
+   [
+    "the",
+    4.678,
+    4.747
+   ],
+   [
+    "camp",
+    4.782,
+    5.049
+   ],
+   [
+    "knew",
+    5.119,
+    5.281
+   ],
+   [
+    "they",
+    5.339,
+    5.444
+   ],
+   [
+    "were",
+    5.479,
+    5.606
+   ],
+   [
+    "there.",
+    5.641,
+    5.978
+   ]
+  ],
+  "vis2": [
+   "ai",
+   "Z33"
+  ],
+  "switch": 3.063
+ },
+ {
+  "n": 27,
+  "act": "03",
+  "act_title": "THE ARMY NOBODY SAW",
+  "act_first": false,
+  "text": "Before dawn on the twenty-second, Chelmsford got reports of Zulu forces to the south-east.",
+  "vis": [
+   "ai",
+   "Z12"
+  ],
+  "ost": null,
+  "start": 151.783,
+  "dur": 5.87,
+  "vo_file": "vowav/a3_l04.wav",
+  "vo_at": 151.783,
+  "vo_dur": 5.07,
+  "words": [
+   [
+    "Before",
+    0.037,
+    0.374
+   ],
+   [
+    "dawn",
+    0.42,
+    0.664
+   ],
+   [
+    "on",
+    0.699,
+    0.768
+   ],
+   [
+    "the",
+    0.792,
+    0.861
+   ],
+   [
+    "twenty-second,",
+    0.896,
+    1.767
+   ],
+   [
+    "Chelmsford",
+    1.894,
+    2.394
+   ],
+   [
+    "got",
+    2.463,
+    2.603
+   ],
+   [
+    "reports",
+    2.649,
+    3.021
+   ],
+   [
+    "of",
+    3.067,
+    3.125
+   ],
+   [
+    "Zulu",
+    3.183,
+    3.497
+   ],
+   [
+    "forces",
+    3.555,
+    3.961
+   ],
+   [
+    "to",
+    4.007,
+    4.077
+   ],
+   [
+    "the",
+    4.147,
+    4.216
+   ],
+   [
+    "south-east.",
+    4.263,
+    4.948
+   ]
+  ]
+ },
+ {
+  "n": 28,
+  "act": "03",
+  "act_title": "THE ARMY NOBODY SAW",
+  "act_first": false,
+  "text": "He took a large part of his force out of camp to go after them.",
+  "vis": [
+   "map",
+   "split"
+  ],
+  "ost": null,
+  "start": 157.653,
+  "dur": 4.1,
+  "vo_file": "vowav/a3_l05.wav",
+  "vo_at": 157.653,
+  "vo_dur": 3.3,
+  "words": [
+   [
+    "He",
+    0.052,
+    0.145
+   ],
+   [
+    "took",
+    0.191,
+    0.342
+   ],
+   [
+    "a",
+    0.389,
+    0.412
+   ],
+   [
+    "large",
+    0.482,
+    0.807
+   ],
+   [
+    "part",
+    0.853,
+    1.074
+   ],
+   [
+    "of",
+    1.12,
+    1.167
+   ],
+   [
+    "his",
+    1.213,
+    1.306
+   ],
+   [
+    "force",
+    1.364,
+    1.643
+   ],
+   [
+    "out",
+    1.677,
+    1.828
+   ],
+   [
+    "of",
+    1.863,
+    1.91
+   ],
+   [
+    "camp",
+    1.968,
+    2.177
+   ],
+   [
+    "to",
+    2.223,
+    2.281
+   ],
+   [
+    "go",
+    2.351,
+    2.455
+   ],
+   [
+    "after",
+    2.525,
+    2.792
+   ],
+   [
+    "them.",
+    2.838,
+    3.129
+   ]
+  ]
+ },
+ {
+  "n": 29,
+  "act": "03",
+  "act_title": "THE ARMY NOBODY SAW",
+  "act_first": false,
+  "text": "About eighteen hundred men stayed behind, under Lieutenant-Colonel Henry Pulleine. Mid-morning, Colonel Anthony Durnford arrived with more troops.",
+  "vis": [
+   "ai",
+   "Z08"
+  ],
+  "ost": "ABOUT 1,800 IN AND NEAR THE CAMP",
+  "start": 161.753,
+  "dur": 8.76,
+  "vo_file": "vowav/a3_l06.wav",
+  "vo_at": 161.753,
+  "vo_dur": 7.96,
+  "words": [
+   [
+    "About",
+    0.038,
+    0.34
+   ],
+   [
+    "eighteen",
+    0.398,
+    0.769
+   ],
+   [
+    "hundred",
+    0.816,
+    1.083
+   ],
+   [
+    "men",
+    1.141,
+    1.315
+   ],
+   [
+    "stayed",
+    1.384,
+    1.663
+   ],
+   [
+    "behind,",
+    1.71,
+    2.186
+   ],
+   [
+    "under",
+    2.244,
+    2.453
+   ],
+   [
+    "Lieutenant-Colonel",
+    2.511,
+    3.358
+   ],
+   [
+    "Henry",
+    3.439,
+    3.706
+   ],
+   [
+    "Pulleine.",
+    3.776,
+    4.333
+   ],
+   [
+    "Mid-morning,",
+    4.612,
+    5.343
+   ],
+   [
+    "Colonel",
+    5.436,
+    5.738
+   ],
+   [
+    "Anthony",
+    5.808,
+    6.156
+   ],
+   [
+    "Durnford",
+    6.226,
+    6.679
+   ],
+   [
+    "arrived",
+    6.713,
+    7.027
+   ],
+   [
+    "with",
+    7.062,
+    7.178
+   ],
+   [
+    "more",
+    7.236,
+    7.41
+   ],
+   [
+    "troops.",
+    7.456,
+    7.921
+   ]
+  ],
+  "vis2": [
+   "ai",
+   "Z13"
+  ],
+  "switch": 4.483
+ },
+ {
+  "n": 30,
+  "act": "03",
+  "act_title": "THE ARMY NOBODY SAW",
+  "act_first": false,
+  "text": "Several Zulu accounts say they weren't planning to fight that day, because of the moon. Historians still debate how far the attack was planned.",
+  "vis": [
+   "ai",
+   "Z14"
+  ],
+  "ost": "SEVERAL ZULU ACCOUNTS \u00b7 DEBATED",
+  "start": 170.513,
+  "dur": 8.948,
+  "vo_file": "vowav/a3_l07.wav",
+  "vo_at": 170.513,
+  "vo_dur": 7.148,
+  "words": [
+   [
+    "Several",
+    0.077,
+    0.425
+   ],
+   [
+    "Zulu",
+    0.472,
+    0.797
+   ],
+   [
+    "accounts",
+    0.843,
+    1.226
+   ],
+   [
+    "say",
+    1.261,
+    1.447
+   ],
+   [
+    "they",
+    1.505,
+    1.621
+   ],
+   [
+    "weren't",
+    1.667,
+    1.876
+   ],
+   [
+    "planning",
+    1.911,
+    2.213
+   ],
+   [
+    "to",
+    2.248,
+    2.306
+   ],
+   [
+    "fight",
+    2.387,
+    2.619
+   ],
+   [
+    "that",
+    2.654,
+    2.805
+   ],
+   [
+    "day,",
+    2.863,
+    3.188
+   ],
+   [
+    "because",
+    3.27,
+    3.583
+   ],
+   [
+    "of",
+    3.618,
+    3.676
+   ],
+   [
+    "the",
+    3.722,
+    3.792
+   ],
+   [
+    "moon.",
+    3.85,
+    4.175
+   ],
+   [
+    "Historians",
+    4.268,
+    4.837
+   ],
+   [
+    "still",
+    4.86,
+    5.057
+   ],
+   [
+    "debate",
+    5.115,
+    5.452
+   ],
+   [
+    "how",
+    5.487,
+    5.615
+   ],
+   [
+    "far",
+    5.696,
+    5.859
+   ],
+   [
+    "the",
+    5.917,
+    5.986
+   ],
+   [
+    "attack",
+    6.021,
+    6.288
+   ],
+   [
+    "was",
+    6.335,
+    6.439
+   ],
+   [
+    "planned.",
+    6.509,
+    7.147
+   ]
+  ]
+ },
+ {
+  "n": 31,
+  "act": "04",
+  "act_title": "FOUND",
+  "act_first": true,
+  "text": "Around midday, a patrol of British horsemen rode up onto the high ground and looked down into the Ngwebeni valley.",
+  "vis": [
+   "ai",
+   "Z15"
+  ],
+  "ost": "AROUND MIDDAY",
+  "start": 179.461,
+  "dur": 6.84,
+  "vo_file": "vowav/a4_l00.wav",
+  "vo_at": 179.461,
+  "vo_dur": 6.04,
+  "words": [
+   [
+    "Around",
+    0.0,
+    0.313
+   ],
+   [
+    "midday,",
+    0.372,
+    0.906
+   ],
+   [
+    "a",
+    0.964,
+    1.022
+   ],
+   [
+    "patrol",
+    1.103,
+    1.498
+   ],
+   [
+    "of",
+    1.556,
+    1.602
+   ],
+   [
+    "British",
+    1.672,
+    1.974
+   ],
+   [
+    "horsemen",
+    2.02,
+    2.45
+   ],
+   [
+    "rode",
+    2.543,
+    2.775
+   ],
+   [
+    "up",
+    2.81,
+    2.902
+   ],
+   [
+    "onto",
+    2.961,
+    3.135
+   ],
+   [
+    "the",
+    3.193,
+    3.262
+   ],
+   [
+    "high",
+    3.309,
+    3.471
+   ],
+   [
+    "ground",
+    3.518,
+    3.808
+   ],
+   [
+    "and",
+    3.855,
+    3.924
+   ],
+   [
+    "looked",
+    3.971,
+    4.168
+   ],
+   [
+    "down",
+    4.191,
+    4.365
+   ],
+   [
+    "into",
+    4.412,
+    4.551
+   ],
+   [
+    "the",
+    4.621,
+    4.69
+   ],
+   [
+    "Ngwebeni",
+    4.737,
+    5.352
+   ],
+   [
+    "valley.",
+    5.422,
+    5.886
+   ]
+  ]
+ },
+ {
+  "n": 32,
+  "act": "04",
+  "act_title": "FOUND",
+  "act_first": false,
+  "text": "The whole Zulu army was there.",
+  "vis": [
+   "ai",
+   "Z11"
+  ],
+  "ost": null,
+  "start": 186.301,
+  "dur": 3.58,
+  "vo_file": "vowav/a4_l01.wav",
+  "vo_at": 186.301,
+  "vo_dur": 1.78,
+  "words": [
+   [
+    "The",
+    0.02,
+    0.148
+   ],
+   [
+    "whole",
+    0.195,
+    0.473
+   ],
+   [
+    "Zulu",
+    0.508,
+    0.868
+   ],
+   [
+    "army",
+    0.938,
+    1.158
+   ],
+   [
+    "was",
+    1.205,
+    1.321
+   ],
+   [
+    "there.",
+    1.379,
+    1.739
+   ]
+  ]
+ },
+ {
+  "n": 33,
+  "act": "04",
+  "act_title": "FOUND",
+  "act_first": false,
+  "text": "The regiments didn't wait for orders. They rose and came on.",
+  "vis": [
+   "ai",
+   "Z16"
+  ],
+  "ost": null,
+  "start": 189.881,
+  "dur": 3.81,
+  "vo_file": "vowav/a4_l02.wav",
+  "vo_at": 189.881,
+  "vo_dur": 3.01,
+  "words": [
+   [
+    "The",
+    0.04,
+    0.156
+   ],
+   [
+    "regiments",
+    0.226,
+    0.609
+   ],
+   [
+    "didn't",
+    0.655,
+    0.864
+   ],
+   [
+    "wait",
+    0.899,
+    1.062
+   ],
+   [
+    "for",
+    1.096,
+    1.213
+   ],
+   [
+    "orders.",
+    1.271,
+    1.735
+   ],
+   [
+    "They",
+    1.781,
+    1.944
+   ],
+   [
+    "rose",
+    2.014,
+    2.292
+   ],
+   [
+    "and",
+    2.327,
+    2.408
+   ],
+   [
+    "came",
+    2.455,
+    2.664
+   ],
+   [
+    "on.",
+    2.71,
+    2.942
+   ]
+  ]
+ },
+ {
+  "n": 34,
+  "act": "04",
+  "act_title": "FOUND",
+  "act_first": false,
+  "text": "Over the hills, across a front of several miles, the horns of the buffalo began to open.",
+  "vis": [
+   "map",
+   "horns_open"
+  ],
+  "ost": null,
+  "start": 193.691,
+  "dur": 8.0,
+  "vo_file": "vowav/a4_l03.wav",
+  "vo_at": 193.691,
+  "vo_dur": 4.309,
+  "words": [
+   [
+    "Over",
+    0.049,
+    0.269
+   ],
+   [
+    "the",
+    0.316,
+    0.385
+   ],
+   [
+    "hills,",
+    0.443,
+    0.826
+   ],
+   [
+    "across",
+    0.849,
+    1.174
+   ],
+   [
+    "a",
+    1.209,
+    1.232
+   ],
+   [
+    "front",
+    1.29,
+    1.523
+   ],
+   [
+    "of",
+    1.557,
+    1.615
+   ],
+   [
+    "several",
+    1.674,
+    1.952
+   ],
+   [
+    "miles,",
+    2.01,
+    2.37
+   ],
+   [
+    "the",
+    2.405,
+    2.486
+   ],
+   [
+    "horns",
+    2.544,
+    2.776
+   ],
+   [
+    "of",
+    2.811,
+    2.858
+   ],
+   [
+    "the",
+    2.893,
+    2.962
+   ],
+   [
+    "buffalo",
+    2.997,
+    3.345
+   ],
+   [
+    "began",
+    3.415,
+    3.67
+   ],
+   [
+    "to",
+    3.717,
+    3.775
+   ],
+   [
+    "open.",
+    3.856,
+    4.309
+   ]
+  ]
+ },
+ {
+  "n": 35,
+  "act": "05",
+  "act_title": "THE HORNS CLOSE",
+  "act_first": true,
+  "text": "In front of the camp, the British infantry formed a long firing line.",
+  "vis": [
+   "ai",
+   "Z18"
+  ],
+  "ost": null,
+  "start": 201.691,
+  "dur": 4.49,
+  "vo_file": "vowav/a5_l00.wav",
+  "vo_at": 201.691,
+  "vo_dur": 3.69,
+  "words": [
+   [
+    "In",
+    0.0,
+    0.128
+   ],
+   [
+    "front",
+    0.163,
+    0.337
+   ],
+   [
+    "of",
+    0.372,
+    0.418
+   ],
+   [
+    "the",
+    0.464,
+    0.534
+   ],
+   [
+    "camp,",
+    0.58,
+    1.01
+   ],
+   [
+    "the",
+    1.103,
+    1.196
+   ],
+   [
+    "British",
+    1.254,
+    1.556
+   ],
+   [
+    "infantry",
+    1.614,
+    2.02
+   ],
+   [
+    "formed",
+    2.101,
+    2.368
+   ],
+   [
+    "a",
+    2.403,
+    2.426
+   ],
+   [
+    "long",
+    2.485,
+    2.694
+   ],
+   [
+    "firing",
+    2.763,
+    3.158
+   ],
+   [
+    "line.",
+    3.216,
+    3.576
+   ]
+  ]
+ },
+ {
+  "n": 36,
+  "act": "05",
+  "act_title": "THE HORNS CLOSE",
+  "act_first": false,
+  "text": "For a while, it held. Rifle and artillery fire stopped the chest at a distance. Warriors went to ground.",
+  "vis": [
+   "ai",
+   "Z19"
+  ],
+  "ost": null,
+  "start": 206.181,
+  "dur": 6.67,
+  "vo_file": "vowav/a5_l01.wav",
+  "vo_at": 206.181,
+  "vo_dur": 5.87,
+  "words": [
+   [
+    "For",
+    0.06,
+    0.234
+   ],
+   [
+    "a",
+    0.281,
+    0.304
+   ],
+   [
+    "while,",
+    0.35,
+    0.699
+   ],
+   [
+    "it",
+    0.745,
+    0.873
+   ],
+   [
+    "held.",
+    0.942,
+    1.314
+   ],
+   [
+    "Rifle",
+    1.43,
+    1.86
+   ],
+   [
+    "and",
+    1.906,
+    2.022
+   ],
+   [
+    "artillery",
+    2.08,
+    2.533
+   ],
+   [
+    "fire",
+    2.591,
+    2.893
+   ],
+   [
+    "stopped",
+    2.939,
+    3.23
+   ],
+   [
+    "the",
+    3.253,
+    3.322
+   ],
+   [
+    "chest",
+    3.357,
+    3.636
+   ],
+   [
+    "at",
+    3.694,
+    3.764
+   ],
+   [
+    "a",
+    3.822,
+    3.845
+   ],
+   [
+    "distance.",
+    3.903,
+    4.518
+   ],
+   [
+    "Warriors",
+    4.576,
+    4.983
+   ],
+   [
+    "went",
+    5.029,
+    5.203
+   ],
+   [
+    "to",
+    5.238,
+    5.296
+   ],
+   [
+    "ground.",
+    5.354,
+    5.819
+   ]
+  ]
+ },
+ {
+  "n": 37,
+  "act": "05",
+  "act_title": "THE HORNS CLOSE",
+  "act_first": false,
+  "text": "Then, by Zulu accounts, an induna named Mkhosana kaMvundlana stood up in the open and shamed his men for lying down.",
+  "vis": [
+   "ai",
+   "Z20"
+  ],
+  "ost": "BY ZULU ACCOUNTS",
+  "start": 212.851,
+  "dur": 8.19,
+  "vo_file": "vowav/a5_l02.wav",
+  "vo_at": 212.851,
+  "vo_dur": 7.39,
+  "words": [
+   [
+    "Then,",
+    0.099,
+    0.494
+   ],
+   [
+    "by",
+    0.564,
+    0.726
+   ],
+   [
+    "Zulu",
+    0.796,
+    1.075
+   ],
+   [
+    "accounts,",
+    1.133,
+    1.632
+   ],
+   [
+    "an",
+    1.655,
+    1.806
+   ],
+   [
+    "induna",
+    1.864,
+    2.282
+   ],
+   [
+    "named",
+    2.34,
+    2.63
+   ],
+   [
+    "Mkhosana",
+    2.747,
+    3.641
+   ],
+   [
+    "kaMvundlana",
+    3.734,
+    4.674
+   ],
+   [
+    "stood",
+    4.79,
+    5.057
+   ],
+   [
+    "up",
+    5.092,
+    5.185
+   ],
+   [
+    "in",
+    5.243,
+    5.301
+   ],
+   [
+    "the",
+    5.347,
+    5.417
+   ],
+   [
+    "open",
+    5.475,
+    5.73
+   ],
+   [
+    "and",
+    5.777,
+    5.847
+   ],
+   [
+    "shamed",
+    5.916,
+    6.206
+   ],
+   [
+    "his",
+    6.23,
+    6.323
+   ],
+   [
+    "men",
+    6.381,
+    6.52
+   ],
+   [
+    "for",
+    6.578,
+    6.682
+   ],
+   [
+    "lying",
+    6.741,
+    6.984
+   ],
+   [
+    "down.",
+    7.031,
+    7.391
+   ]
+  ]
+ },
+ {
+  "n": 38,
+  "act": "05",
+  "act_title": "THE HORNS CLOSE",
+  "act_first": false,
+  "text": "He was shot dead. But the regiment rose, and the charge went in.",
+  "vis": [
+   "ai",
+   "Z21"
+  ],
+  "ost": null,
+  "start": 221.041,
+  "dur": 5.09,
+  "vo_file": "vowav/a5_l03.wav",
+  "vo_at": 221.041,
+  "vo_dur": 3.69,
+  "words": [
+   [
+    "He",
+    0.152,
+    0.256
+   ],
+   [
+    "was",
+    0.314,
+    0.419
+   ],
+   [
+    "shot",
+    0.453,
+    0.662
+   ],
+   [
+    "dead.",
+    0.721,
+    1.069
+   ],
+   [
+    "But",
+    1.243,
+    1.394
+   ],
+   [
+    "the",
+    1.417,
+    1.487
+   ],
+   [
+    "regiment",
+    1.545,
+    1.928
+   ],
+   [
+    "rose,",
+    1.974,
+    2.369
+   ],
+   [
+    "and",
+    2.404,
+    2.543
+   ],
+   [
+    "the",
+    2.59,
+    2.659
+   ],
+   [
+    "charge",
+    2.706,
+    2.996
+   ],
+   [
+    "went",
+    3.031,
+    3.228
+   ],
+   [
+    "in.",
+    3.298,
+    3.542
+   ]
+  ]
+ },
+ {
+  "n": 39,
+  "act": "05",
+  "act_title": "THE HORNS CLOSE",
+  "act_first": false,
+  "text": "Meanwhile the left horn was working round one side of the camp.",
+  "vis": [
+   "map",
+   "left_horn"
+  ],
+  "ost": null,
+  "start": 226.131,
+  "dur": 3.98,
+  "vo_file": "vowav/a5_l04.wav",
+  "vo_at": 226.131,
+  "vo_dur": 3.18,
+  "words": [
+   [
+    "Meanwhile",
+    0.177,
+    0.641
+   ],
+   [
+    "the",
+    0.676,
+    0.746
+   ],
+   [
+    "left",
+    0.792,
+    0.978
+   ],
+   [
+    "horn",
+    1.024,
+    1.233
+   ],
+   [
+    "was",
+    1.28,
+    1.396
+   ],
+   [
+    "working",
+    1.454,
+    1.767
+   ],
+   [
+    "round",
+    1.825,
+    2.0
+   ],
+   [
+    "one",
+    2.069,
+    2.232
+   ],
+   [
+    "side",
+    2.267,
+    2.499
+   ],
+   [
+    "of",
+    2.522,
+    2.568
+   ],
+   [
+    "the",
+    2.615,
+    2.685
+   ],
+   [
+    "camp.",
+    2.719,
+    3.126
+   ]
+  ]
+ },
+ {
+  "n": 40,
+  "act": "05",
+  "act_title": "THE HORNS CLOSE",
+  "act_first": false,
+  "text": "And the right horn had gone wide, behind the hill itself, out of sight.",
+  "vis": [
+   "map",
+   "right_horn"
+  ],
+  "ost": null,
+  "start": 230.111,
+  "dur": 6.5,
+  "vo_file": "vowav/a5_l05.wav",
+  "vo_at": 230.111,
+  "vo_dur": 3.88,
+  "words": [
+   [
+    "And",
+    0.015,
+    0.155
+   ],
+   [
+    "the",
+    0.201,
+    0.271
+   ],
+   [
+    "right",
+    0.329,
+    0.538
+   ],
+   [
+    "horn",
+    0.584,
+    0.816
+   ],
+   [
+    "had",
+    0.863,
+    0.967
+   ],
+   [
+    "gone",
+    1.025,
+    1.234
+   ],
+   [
+    "wide,",
+    1.281,
+    1.722
+   ],
+   [
+    "behind",
+    1.768,
+    2.07
+   ],
+   [
+    "the",
+    2.117,
+    2.186
+   ],
+   [
+    "hill",
+    2.221,
+    2.372
+   ],
+   [
+    "itself,",
+    2.43,
+    2.941
+   ],
+   [
+    "out",
+    2.964,
+    3.138
+   ],
+   [
+    "of",
+    3.173,
+    3.231
+   ],
+   [
+    "sight.",
+    3.278,
+    3.707
+   ]
+  ]
+ },
+ {
+  "n": 41,
+  "act": "05",
+  "act_title": "THE HORNS CLOSE",
+  "act_first": false,
+  "text": "It came down onto the track back to Rorke's Drift, the camp's road home, and closed it.",
+  "vis": [
+   "map",
+   "closed"
+  ],
+  "ost": "THE ROAD HOME CUT",
+  "start": 236.611,
+  "dur": 7.0,
+  "vo_file": "vowav/a5_l06.wav",
+  "vo_at": 236.611,
+  "vo_dur": 4.19,
+  "words": [
+   [
+    "It",
+    0.036,
+    0.164
+   ],
+   [
+    "came",
+    0.199,
+    0.396
+   ],
+   [
+    "down",
+    0.443,
+    0.64
+   ],
+   [
+    "onto",
+    0.675,
+    0.826
+   ],
+   [
+    "the",
+    0.884,
+    0.954
+   ],
+   [
+    "track",
+    0.988,
+    1.197
+   ],
+   [
+    "back",
+    1.267,
+    1.418
+   ],
+   [
+    "to",
+    1.464,
+    1.522
+   ],
+   [
+    "Rorke's",
+    1.592,
+    1.847
+   ],
+   [
+    "Drift,",
+    1.882,
+    2.161
+   ],
+   [
+    "the",
+    2.184,
+    2.265
+   ],
+   [
+    "camp's",
+    2.312,
+    2.579
+   ],
+   [
+    "road",
+    2.637,
+    2.823
+   ],
+   [
+    "home,",
+    2.881,
+    3.217
+   ],
+   [
+    "and",
+    3.31,
+    3.45
+   ],
+   [
+    "closed",
+    3.496,
+    3.81
+   ],
+   [
+    "it.",
+    3.856,
+    4.065
+   ]
+  ]
+ },
+ {
+  "n": 42,
+  "act": "05",
+  "act_title": "THE HORNS CLOSE",
+  "act_first": false,
+  "text": "The British line began to pull back. And as it did, it broke.",
+  "vis": [
+   "ai",
+   "Z22"
+  ],
+  "ost": null,
+  "start": 243.611,
+  "dur": 4.551,
+  "vo_file": "vowav/a5_l07.wav",
+  "vo_at": 243.611,
+  "vo_dur": 3.751,
+  "words": [
+   [
+    "The",
+    0.084,
+    0.188
+   ],
+   [
+    "British",
+    0.235,
+    0.525
+   ],
+   [
+    "line",
+    0.583,
+    0.804
+   ],
+   [
+    "began",
+    0.839,
+    1.071
+   ],
+   [
+    "to",
+    1.117,
+    1.175
+   ],
+   [
+    "pull",
+    1.233,
+    1.419
+   ],
+   [
+    "back.",
+    1.477,
+    1.837
+   ],
+   [
+    "And",
+    1.953,
+    2.104
+   ],
+   [
+    "as",
+    2.162,
+    2.255
+   ],
+   [
+    "it",
+    2.325,
+    2.394
+   ],
+   [
+    "did,",
+    2.441,
+    2.754
+   ],
+   [
+    "it",
+    2.87,
+    2.998
+   ],
+   [
+    "broke.",
+    3.045,
+    3.451
+   ]
+  ]
+ },
+ {
+  "n": 43,
+  "act": "05",
+  "act_title": "THE HORNS CLOSE",
+  "act_first": false,
+  "text": "In the early afternoon, the camp was overrun. The fighting went on, through the tents and wagons, and along every path out.",
+  "vis": [
+   "ai",
+   "Z24"
+  ],
+  "ost": "EARLY AFTERNOON",
+  "start": 248.162,
+  "dur": 7.06,
+  "vo_file": "vowav/a5_l08.wav",
+  "vo_at": 248.162,
+  "vo_dur": 6.26,
+  "words": [
+   [
+    "In",
+    0.006,
+    0.134
+   ],
+   [
+    "the",
+    0.168,
+    0.238
+   ],
+   [
+    "early",
+    0.296,
+    0.505
+   ],
+   [
+    "afternoon,",
+    0.563,
+    1.144
+   ],
+   [
+    "the",
+    1.213,
+    1.318
+   ],
+   [
+    "camp",
+    1.364,
+    1.573
+   ],
+   [
+    "was",
+    1.62,
+    1.724
+   ],
+   [
+    "overrun.",
+    1.794,
+    2.398
+   ],
+   [
+    "The",
+    2.642,
+    2.758
+   ],
+   [
+    "fighting",
+    2.816,
+    3.164
+   ],
+   [
+    "went",
+    3.21,
+    3.361
+   ],
+   [
+    "on,",
+    3.419,
+    3.686
+   ],
+   [
+    "through",
+    3.756,
+    3.988
+   ],
+   [
+    "the",
+    4.023,
+    4.093
+   ],
+   [
+    "tents",
+    4.116,
+    4.418
+   ],
+   [
+    "and",
+    4.453,
+    4.546
+   ],
+   [
+    "wagons,",
+    4.592,
+    4.975
+   ],
+   [
+    "and",
+    4.998,
+    5.08
+   ],
+   [
+    "along",
+    5.126,
+    5.358
+   ],
+   [
+    "every",
+    5.428,
+    5.614
+   ],
+   [
+    "path",
+    5.672,
+    5.939
+   ],
+   [
+    "out.",
+    6.008,
+    6.264
+   ]
+  ],
+  "vis2": [
+   "ai",
+   "Z23"
+  ],
+  "switch": 3.314
+ },
+ {
+  "n": 44,
+  "act": "05",
+  "act_title": "THE HORNS CLOSE",
+  "act_first": false,
+  "text": "That afternoon a partial eclipse dimmed the sun, but by then, the battle for the camp had already been decided.",
+  "vis": [
+   "ai",
+   "Z25"
+  ],
+  "ost": "PARTIAL ECLIPSE \u00b7 AFTER THE CAMP FELL",
+  "start": 255.222,
+  "dur": 7.76,
+  "vo_file": "vowav/a5_l09.wav",
+  "vo_at": 255.222,
+  "vo_dur": 5.96,
+  "words": [
+   [
+    "That",
+    0.155,
+    0.352
+   ],
+   [
+    "afternoon",
+    0.41,
+    0.921
+   ],
+   [
+    "a",
+    0.991,
+    1.026
+   ],
+   [
+    "partial",
+    1.084,
+    1.42
+   ],
+   [
+    "eclipse",
+    1.478,
+    1.861
+   ],
+   [
+    "dimmed",
+    1.896,
+    2.128
+   ],
+   [
+    "the",
+    2.152,
+    2.221
+   ],
+   [
+    "sun,",
+    2.268,
+    2.639
+   ],
+   [
+    "but",
+    2.732,
+    2.883
+   ],
+   [
+    "by",
+    2.93,
+    3.057
+   ],
+   [
+    "then,",
+    3.127,
+    3.429
+   ],
+   [
+    "the",
+    3.545,
+    3.649
+   ],
+   [
+    "battle",
+    3.707,
+    4.009
+   ],
+   [
+    "for",
+    4.044,
+    4.137
+   ],
+   [
+    "the",
+    4.172,
+    4.242
+   ],
+   [
+    "camp",
+    4.276,
+    4.543
+   ],
+   [
+    "had",
+    4.613,
+    4.729
+   ],
+   [
+    "already",
+    4.776,
+    5.077
+   ],
+   [
+    "been",
+    5.124,
+    5.263
+   ],
+   [
+    "decided.",
+    5.31,
+    5.96
+   ]
+  ]
+ },
+ {
+  "n": 45,
+  "act": "06",
+  "act_title": "THE COST",
+  "act_first": true,
+  "text": "More than thirteen hundred men on the British side were killed. Several hundred of them were African soldiers, fighting for the British.",
+  "vis": [
+   "arch",
+   "I09",
+   null
+  ],
+  "ost": "CAIRNS ON THE FIELD TODAY",
+  "start": 262.982,
+  "dur": 7.277,
+  "vo_file": "vowav/a6_l00.wav",
+  "vo_at": 262.982,
+  "vo_dur": 6.477,
+  "words": [
+   [
+    "More",
+    0.0,
+    0.186
+   ],
+   [
+    "than",
+    0.209,
+    0.325
+   ],
+   [
+    "thirteen",
+    0.372,
+    0.731
+   ],
+   [
+    "hundred",
+    0.778,
+    1.033
+   ],
+   [
+    "men",
+    1.08,
+    1.207
+   ],
+   [
+    "on",
+    1.265,
+    1.324
+   ],
+   [
+    "the",
+    1.358,
+    1.428
+   ],
+   [
+    "British",
+    1.463,
+    1.741
+   ],
+   [
+    "side",
+    1.776,
+    2.032
+   ],
+   [
+    "were",
+    2.067,
+    2.194
+   ],
+   [
+    "killed.",
+    2.229,
+    2.635
+   ],
+   [
+    "Several",
+    2.914,
+    3.274
+   ],
+   [
+    "hundred",
+    3.332,
+    3.599
+   ],
+   [
+    "of",
+    3.646,
+    3.715
+   ],
+   [
+    "them",
+    3.762,
+    3.878
+   ],
+   [
+    "were",
+    3.924,
+    4.052
+   ],
+   [
+    "African",
+    4.098,
+    4.435
+   ],
+   [
+    "soldiers,",
+    4.493,
+    5.027
+   ],
+   [
+    "fighting",
+    5.12,
+    5.445
+   ],
+   [
+    "for",
+    5.492,
+    5.584
+   ],
+   [
+    "the",
+    5.619,
+    5.689
+   ],
+   [
+    "British.",
+    5.724,
+    6.177
+   ]
+  ]
+ },
+ {
+  "n": 46,
+  "act": "06",
+  "act_title": "THE COST",
+  "act_first": false,
+  "text": "The Zulu army paid heavily too. Nobody made a full count. Estimates run from about one thousand to more than three thousand dead.",
+  "vis": [
+   "ai",
+   "Z26"
+  ],
+  "ost": "ZULU DEAD \u00b7 ESTIMATES 1,000\u20133,000+",
+  "start": 270.259,
+  "dur": 7.99,
+  "vo_file": "vowav/a6_l01.wav",
+  "vo_at": 270.259,
+  "vo_dur": 7.19,
+  "words": [
+   [
+    "The",
+    0.01,
+    0.126
+   ],
+   [
+    "Zulu",
+    0.184,
+    0.462
+   ],
+   [
+    "army",
+    0.52,
+    0.753
+   ],
+   [
+    "paid",
+    0.822,
+    1.02
+   ],
+   [
+    "heavily",
+    1.066,
+    1.368
+   ],
+   [
+    "too.",
+    1.426,
+    1.798
+   ],
+   [
+    "Nobody",
+    1.949,
+    2.297
+   ],
+   [
+    "made",
+    2.343,
+    2.506
+   ],
+   [
+    "a",
+    2.541,
+    2.564
+   ],
+   [
+    "full",
+    2.61,
+    2.773
+   ],
+   [
+    "count.",
+    2.831,
+    3.191
+   ],
+   [
+    "Estimates",
+    3.632,
+    4.131
+   ],
+   [
+    "run",
+    4.178,
+    4.34
+   ],
+   [
+    "from",
+    4.398,
+    4.538
+   ],
+   [
+    "about",
+    4.596,
+    4.851
+   ],
+   [
+    "one",
+    4.909,
+    5.071
+   ],
+   [
+    "thousand",
+    5.118,
+    5.489
+   ],
+   [
+    "to",
+    5.547,
+    5.617
+   ],
+   [
+    "more",
+    5.687,
+    5.838
+   ],
+   [
+    "than",
+    5.861,
+    5.989
+   ],
+   [
+    "three",
+    6.035,
+    6.244
+   ],
+   [
+    "thousand",
+    6.279,
+    6.627
+   ],
+   [
+    "dead.",
+    6.685,
+    6.987
+   ]
+  ]
+ },
+ {
+  "n": 47,
+  "act": "06",
+  "act_title": "THE COST",
+  "act_first": false,
+  "text": "Most of what we know comes from British records. Zulu accounts were often collected later, through interpreters, by British interviewers.",
+  "vis": [
+   "arch",
+   "I04",
+   null
+  ],
+  "ost": "A BRITISH SKETCH \u00b7 1879",
+  "start": 278.249,
+  "dur": 7.83,
+  "vo_file": "vowav/a6_l02.wav",
+  "vo_at": 278.249,
+  "vo_dur": 7.03,
+  "words": [
+   [
+    "Most",
+    0.041,
+    0.273
+   ],
+   [
+    "of",
+    0.32,
+    0.378
+   ],
+   [
+    "what",
+    0.424,
+    0.54
+   ],
+   [
+    "we",
+    0.575,
+    0.633
+   ],
+   [
+    "know",
+    0.679,
+    0.819
+   ],
+   [
+    "comes",
+    0.888,
+    1.097
+   ],
+   [
+    "from",
+    1.132,
+    1.26
+   ],
+   [
+    "British",
+    1.306,
+    1.608
+   ],
+   [
+    "records.",
+    1.655,
+    2.177
+   ],
+   [
+    "Zulu",
+    2.421,
+    2.758
+   ],
+   [
+    "accounts",
+    2.816,
+    3.141
+   ],
+   [
+    "were",
+    3.176,
+    3.303
+   ],
+   [
+    "often",
+    3.35,
+    3.582
+   ],
+   [
+    "collected",
+    3.628,
+    4.035
+   ],
+   [
+    "later,",
+    4.081,
+    4.429
+   ],
+   [
+    "through",
+    4.453,
+    4.685
+   ],
+   [
+    "interpreters,",
+    4.72,
+    5.498
+   ],
+   [
+    "by",
+    5.579,
+    5.718
+   ],
+   [
+    "British",
+    5.788,
+    6.113
+   ],
+   [
+    "interviewers.",
+    6.159,
+    6.833
+   ]
+  ],
+  "vis2": [
+   "ai",
+   "Z30"
+  ],
+  "switch": 3.453
+ },
+ {
+  "n": 48,
+  "act": "06",
+  "act_title": "THE COST",
+  "act_first": false,
+  "text": "So some of this story we only hear second-hand. But the outcome isn't in doubt.",
+  "vis": [
+   "ai",
+   "Z35"
+  ],
+  "ost": null,
+  "start": 286.079,
+  "dur": 5.782,
+  "vo_file": "vowav/a6_l03.wav",
+  "vo_at": 286.079,
+  "vo_dur": 3.982,
+  "words": [
+   [
+    "So",
+    0.081,
+    0.244
+   ],
+   [
+    "some",
+    0.302,
+    0.464
+   ],
+   [
+    "of",
+    0.488,
+    0.534
+   ],
+   [
+    "this",
+    0.569,
+    0.697
+   ],
+   [
+    "story",
+    0.732,
+    1.045
+   ],
+   [
+    "we",
+    1.091,
+    1.173
+   ],
+   [
+    "only",
+    1.231,
+    1.393
+   ],
+   [
+    "hear",
+    1.451,
+    1.579
+   ],
+   [
+    "second-hand.",
+    1.637,
+    2.287
+   ],
+   [
+    "But",
+    2.496,
+    2.636
+   ],
+   [
+    "the",
+    2.67,
+    2.752
+   ],
+   [
+    "outcome",
+    2.81,
+    3.146
+   ],
+   [
+    "isn't",
+    3.17,
+    3.344
+   ],
+   [
+    "in",
+    3.379,
+    3.448
+   ],
+   [
+    "doubt.",
+    3.495,
+    3.982
+   ]
+  ]
+ },
+ {
+  "n": 49,
+  "act": "07",
+  "act_title": "A BATTLE, NOT A WAR",
+  "act_first": true,
+  "text": "That same afternoon and night, part of the reserve attacked the small post at Rorke's Drift, by most accounts against the king's wishes. About a hundred and fifty men held it.",
+  "vis": [
+   "ai",
+   "Z27"
+  ],
+  "ost": "RORKE'S DRIFT \u00b7 22\u201323 JANUARY",
+  "start": 291.861,
+  "dur": 9.67,
+  "vo_file": "vowav/a7_l00.wav",
+  "vo_at": 291.861,
+  "vo_dur": 8.87,
+  "words": [
+   [
+    "That",
+    0.0,
+    0.29
+   ],
+   [
+    "same",
+    0.348,
+    0.58
+   ],
+   [
+    "afternoon",
+    0.615,
+    1.022
+   ],
+   [
+    "and",
+    1.08,
+    1.161
+   ],
+   [
+    "night,",
+    1.219,
+    1.498
+   ],
+   [
+    "part",
+    1.567,
+    1.8
+   ],
+   [
+    "of",
+    1.846,
+    1.892
+   ],
+   [
+    "the",
+    1.939,
+    2.009
+   ],
+   [
+    "reserve",
+    2.055,
+    2.473
+   ],
+   [
+    "attacked",
+    2.508,
+    2.868
+   ],
+   [
+    "the",
+    2.902,
+    2.972
+   ],
+   [
+    "small",
+    3.019,
+    3.274
+   ],
+   [
+    "post",
+    3.332,
+    3.611
+   ],
+   [
+    "at",
+    3.657,
+    3.727
+   ],
+   [
+    "Rorke's",
+    3.785,
+    4.087
+   ],
+   [
+    "Drift,",
+    4.133,
+    4.516
+   ],
+   [
+    "by",
+    4.574,
+    4.725
+   ],
+   [
+    "most",
+    4.807,
+    5.016
+   ],
+   [
+    "accounts",
+    5.05,
+    5.41
+   ],
+   [
+    "against",
+    5.445,
+    5.712
+   ],
+   [
+    "the",
+    5.747,
+    5.817
+   ],
+   [
+    "king's",
+    5.851,
+    6.107
+   ],
+   [
+    "wishes.",
+    6.153,
+    6.676
+   ],
+   [
+    "About",
+    7.001,
+    7.291
+   ],
+   [
+    "a",
+    7.314,
+    7.338
+   ],
+   [
+    "hundred",
+    7.384,
+    7.639
+   ],
+   [
+    "and",
+    7.663,
+    7.732
+   ],
+   [
+    "fifty",
+    7.79,
+    8.081
+   ],
+   [
+    "men",
+    8.139,
+    8.301
+   ],
+   [
+    "held",
+    8.371,
+    8.615
+   ],
+   [
+    "it.",
+    8.684,
+    8.835
+   ]
+  ],
+  "vis2": [
+   "ai",
+   "Z34"
+  ],
+  "switch": 4.666
+ },
+ {
+  "n": 50,
+  "act": "07",
+  "act_title": "A BATTLE, NOT A WAR",
+  "act_first": false,
+  "text": "And Britain did what an empire could do. It sent more men.",
+  "vis": [
+   "ai",
+   "Z28"
+  ],
+  "ost": null,
+  "start": 301.531,
+  "dur": 4.16,
+  "vo_file": "vowav/a7_l01.wav",
+  "vo_at": 301.531,
+  "vo_dur": 3.36,
+  "words": [
+   [
+    "And",
+    0.035,
+    0.186
+   ],
+   [
+    "Britain",
+    0.244,
+    0.546
+   ],
+   [
+    "did",
+    0.615,
+    0.813
+   ],
+   [
+    "what",
+    0.871,
+    1.033
+   ],
+   [
+    "an",
+    1.08,
+    1.126
+   ],
+   [
+    "empire",
+    1.173,
+    1.556
+   ],
+   [
+    "could",
+    1.602,
+    1.765
+   ],
+   [
+    "do.",
+    1.811,
+    2.101
+   ],
+   [
+    "It",
+    2.148,
+    2.287
+   ],
+   [
+    "sent",
+    2.345,
+    2.565
+   ],
+   [
+    "more",
+    2.612,
+    2.798
+   ],
+   [
+    "men.",
+    2.844,
+    3.146
+   ]
+  ]
+ },
+ {
+  "n": 51,
+  "act": "07",
+  "act_title": "A BATTLE, NOT A WAR",
+  "act_first": false,
+  "text": "On the fourth of July, eighteen seventy-nine, at Ulundi, the Zulu army was defeated, and the royal homestead burned.",
+  "vis": [
+   "map",
+   "ulundi"
+  ],
+  "ost": "ULUNDI \u00b7 4 JULY 1879",
+  "start": 305.691,
+  "dur": 8.36,
+  "vo_file": "vowav/a7_l02.wav",
+  "vo_at": 305.691,
+  "vo_dur": 7.56,
+  "words": [
+   [
+    "On",
+    0.111,
+    0.239
+   ],
+   [
+    "the",
+    0.274,
+    0.343
+   ],
+   [
+    "fourth",
+    0.39,
+    0.61
+   ],
+   [
+    "of",
+    0.657,
+    0.703
+   ],
+   [
+    "July,",
+    0.761,
+    1.295
+   ],
+   [
+    "eighteen",
+    1.469,
+    1.853
+   ],
+   [
+    "seventy-nine,",
+    1.911,
+    2.77
+   ],
+   [
+    "at",
+    2.921,
+    3.048
+   ],
+   [
+    "Ulundi,",
+    3.118,
+    3.896
+   ],
+   [
+    "the",
+    4.012,
+    4.116
+   ],
+   [
+    "Zulu",
+    4.175,
+    4.488
+   ],
+   [
+    "army",
+    4.569,
+    4.836
+   ],
+   [
+    "was",
+    4.906,
+    5.022
+   ],
+   [
+    "defeated,",
+    5.068,
+    5.672
+   ],
+   [
+    "and",
+    5.788,
+    5.928
+   ],
+   [
+    "the",
+    5.962,
+    6.032
+   ],
+   [
+    "royal",
+    6.09,
+    6.334
+   ],
+   [
+    "homestead",
+    6.392,
+    6.845
+   ],
+   [
+    "burned.",
+    6.891,
+    7.332
+   ]
+  ],
+  "vis2": [
+   "ai",
+   "Z29"
+  ],
+  "switch": 4.046
+ },
+ {
+  "n": 52,
+  "act": "07",
+  "act_title": "A BATTLE, NOT A WAR",
+  "act_first": false,
+  "text": "In August, Cetshwayo was captured and sent into exile. Zululand was divided into thirteen chiefdoms.",
+  "vis": [
+   "arch",
+   "I10",
+   null
+  ],
+  "ost": "CETSHWAYO \u00b7 CAPTURED AUGUST 1879",
+  "start": 314.051,
+  "dur": 7.66,
+  "vo_file": "vowav/a7_l03.wav",
+  "vo_at": 314.051,
+  "vo_dur": 6.86,
+  "words": [
+   [
+    "In",
+    0.098,
+    0.225
+   ],
+   [
+    "August,",
+    0.295,
+    0.852
+   ],
+   [
+    "Cetshwayo",
+    0.922,
+    1.444
+   ],
+   [
+    "was",
+    1.491,
+    1.595
+   ],
+   [
+    "captured",
+    1.653,
+    2.118
+   ],
+   [
+    "and",
+    2.187,
+    2.35
+   ],
+   [
+    "sent",
+    2.419,
+    2.652
+   ],
+   [
+    "into",
+    2.698,
+    2.872
+   ],
+   [
+    "exile.",
+    2.954,
+    3.522
+   ],
+   [
+    "Zululand",
+    4.033,
+    4.66
+   ],
+   [
+    "was",
+    4.73,
+    4.834
+   ],
+   [
+    "divided",
+    4.881,
+    5.322
+   ],
+   [
+    "into",
+    5.368,
+    5.531
+   ],
+   [
+    "thirteen",
+    5.612,
+    6.019
+   ],
+   [
+    "chiefdoms.",
+    6.077,
+    6.785
+   ]
+  ]
+ },
+ {
+  "n": 53,
+  "act": "07",
+  "act_title": "A BATTLE, NOT A WAR",
+  "act_first": false,
+  "text": "So the Zulu won the battle. But the kingdom lost the war.",
+  "vis": [
+   "ai",
+   "Z02"
+  ],
+  "ost": null,
+  "start": 321.711,
+  "dur": 6.257,
+  "vo_file": "vowav/a7_l04.wav",
+  "vo_at": 321.711,
+  "vo_dur": 3.257,
+  "words": [
+   [
+    "So",
+    0.053,
+    0.192
+   ],
+   [
+    "the",
+    0.238,
+    0.308
+   ],
+   [
+    "Zulu",
+    0.366,
+    0.668
+   ],
+   [
+    "won",
+    0.726,
+    0.865
+   ],
+   [
+    "the",
+    0.912,
+    0.981
+   ],
+   [
+    "battle.",
+    1.028,
+    1.492
+   ],
+   [
+    "But",
+    1.643,
+    1.794
+   ],
+   [
+    "the",
+    1.829,
+    1.899
+   ],
+   [
+    "kingdom",
+    1.957,
+    2.293
+   ],
+   [
+    "lost",
+    2.351,
+    2.56
+   ],
+   [
+    "the",
+    2.595,
+    2.665
+   ],
+   [
+    "war.",
+    2.711,
+    3.257
+   ]
+  ]
+ },
+ {
+  "n": 54,
+  "act": "CLOSE",
+  "act_title": null,
+  "act_first": true,
+  "text": "In January nineteen ninety-nine, a memorial was unveiled on the battlefield. It is a bronze isiqu, a necklace of valour.",
+  "vis": [
+   "arch",
+   "I07",
+   null
+  ],
+  "ost": "ZULU MEMORIAL \u00b7 1999",
+  "start": 327.968,
+  "dur": 7.99,
+  "vo_file": "vowav/a8_l00.wav",
+  "vo_at": 327.968,
+  "vo_dur": 7.19,
+  "words": [
+   [
+    "In",
+    0.0,
+    0.128
+   ],
+   [
+    "January",
+    0.186,
+    0.615
+   ],
+   [
+    "nineteen",
+    0.685,
+    1.057
+   ],
+   [
+    "ninety-nine,",
+    1.091,
+    1.741
+   ],
+   [
+    "a",
+    1.8,
+    1.858
+   ],
+   [
+    "memorial",
+    1.939,
+    2.38
+   ],
+   [
+    "was",
+    2.426,
+    2.543
+   ],
+   [
+    "unveiled",
+    2.612,
+    3.007
+   ],
+   [
+    "on",
+    3.042,
+    3.111
+   ],
+   [
+    "the",
+    3.146,
+    3.216
+   ],
+   [
+    "battlefield.",
+    3.251,
+    3.889
+   ],
+   [
+    "It",
+    4.272,
+    4.4
+   ],
+   [
+    "is",
+    4.447,
+    4.528
+   ],
+   [
+    "a",
+    4.574,
+    4.598
+   ],
+   [
+    "bronze",
+    4.644,
+    5.027
+   ],
+   [
+    "isiqu,",
+    5.097,
+    5.909
+   ],
+   [
+    "a",
+    6.037,
+    6.107
+   ],
+   [
+    "necklace",
+    6.2,
+    6.583
+   ],
+   [
+    "of",
+    6.606,
+    6.664
+   ],
+   [
+    "valour.",
+    6.722,
+    7.129
+   ]
+  ]
+ },
+ {
+  "n": 55,
+  "act": "CLOSE",
+  "act_title": null,
+  "act_first": false,
+  "text": "So, how did the Zulu army win at Isandlwana?",
+  "vis": [
+   "arch",
+   "I01",
+   null
+  ],
+  "ost": null,
+  "start": 335.958,
+  "dur": 4.11,
+  "vo_file": "vowav/a8_l01.wav",
+  "vo_at": 335.958,
+  "vo_dur": 3.31,
+  "words": [
+   [
+    "So,",
+    0.066,
+    0.403
+   ],
+   [
+    "how",
+    0.554,
+    0.705
+   ],
+   [
+    "did",
+    0.751,
+    0.879
+   ],
+   [
+    "the",
+    0.914,
+    0.983
+   ],
+   [
+    "Zulu",
+    1.03,
+    1.343
+   ],
+   [
+    "army",
+    1.413,
+    1.68
+   ],
+   [
+    "win",
+    1.773,
+    1.97
+   ],
+   [
+    "at",
+    2.028,
+    2.098
+   ],
+   [
+    "Isandlwana?",
+    2.179,
+    3.027
+   ]
+  ]
+ },
+ {
+  "n": 56,
+  "act": "CLOSE",
+  "act_title": null,
+  "act_first": false,
+  "text": "Not by luck. And not just because of British mistakes.",
+  "vis": [
+   "ai",
+   "Z05"
+  ],
+  "ost": "THE ANSWER",
+  "start": 340.068,
+  "dur": 4.16,
+  "vo_file": "vowav/a8_l02.wav",
+  "vo_at": 340.068,
+  "vo_dur": 3.36,
+  "words": [
+   [
+    "Not",
+    0.042,
+    0.228
+   ],
+   [
+    "by",
+    0.286,
+    0.425
+   ],
+   [
+    "luck.",
+    0.495,
+    0.843
+   ],
+   [
+    "And",
+    1.087,
+    1.238
+   ],
+   [
+    "not",
+    1.296,
+    1.435
+   ],
+   [
+    "just",
+    1.493,
+    1.69
+   ],
+   [
+    "because",
+    1.737,
+    2.016
+   ],
+   [
+    "of",
+    2.05,
+    2.097
+   ],
+   [
+    "British",
+    2.155,
+    2.445
+   ],
+   [
+    "mistakes.",
+    2.492,
+    3.142
+   ]
+  ]
+ },
+ {
+  "n": 57,
+  "act": "CLOSE",
+  "act_title": null,
+  "act_first": false,
+  "text": "It won because a nation could put a trained army in the field, move it unseen, and attack in a way every man understood.",
+  "vis": [
+   "ai",
+   "Z10"
+  ],
+  "ost": null,
+  "start": 344.228,
+  "dur": 7.42,
+  "vo_file": "vowav/a8_l03.wav",
+  "vo_at": 344.228,
+  "vo_dur": 6.62,
+  "words": [
+   [
+    "It",
+    0.061,
+    0.2
+   ],
+   [
+    "won",
+    0.258,
+    0.514
+   ],
+   [
+    "because",
+    0.583,
+    0.862
+   ],
+   [
+    "a",
+    0.897,
+    0.92
+   ],
+   [
+    "nation",
+    0.99,
+    1.303
+   ],
+   [
+    "could",
+    1.361,
+    1.5
+   ],
+   [
+    "put",
+    1.535,
+    1.686
+   ],
+   [
+    "a",
+    1.721,
+    1.744
+   ],
+   [
+    "trained",
+    1.802,
+    2.092
+   ],
+   [
+    "army",
+    2.139,
+    2.348
+   ],
+   [
+    "in",
+    2.383,
+    2.441
+   ],
+   [
+    "the",
+    2.476,
+    2.545
+   ],
+   [
+    "field,",
+    2.603,
+    3.045
+   ],
+   [
+    "move",
+    3.195,
+    3.451
+   ],
+   [
+    "it",
+    3.486,
+    3.555
+   ],
+   [
+    "unseen,",
+    3.625,
+    4.252
+   ],
+   [
+    "and",
+    4.275,
+    4.438
+   ],
+   [
+    "attack",
+    4.484,
+    4.786
+   ],
+   [
+    "in",
+    4.856,
+    4.925
+   ],
+   [
+    "a",
+    4.972,
+    5.007
+   ],
+   [
+    "way",
+    5.053,
+    5.227
+   ],
+   [
+    "every",
+    5.297,
+    5.564
+   ],
+   [
+    "man",
+    5.622,
+    5.831
+   ],
+   [
+    "understood.",
+    5.889,
+    6.527
+   ]
+  ]
+ },
+ {
+  "n": 58,
+  "act": "CLOSE",
+  "act_title": null,
+  "act_first": false,
+  "text": "Because its commanders used the ground. And because, when the charge stalled, its regiments got up and went on.",
+  "vis": [
+   "ai",
+   "Z21"
+  ],
+  "ost": null,
+  "start": 351.648,
+  "dur": 6.51,
+  "vo_file": "vowav/a8_l04.wav",
+  "vo_at": 351.648,
+  "vo_dur": 5.71,
+  "words": [
+   [
+    "Because",
+    0.0,
+    0.279
+   ],
+   [
+    "its",
+    0.314,
+    0.418
+   ],
+   [
+    "commanders",
+    0.465,
+    0.976
+   ],
+   [
+    "used",
+    1.057,
+    1.254
+   ],
+   [
+    "the",
+    1.289,
+    1.359
+   ],
+   [
+    "ground.",
+    1.405,
+    1.858
+   ],
+   [
+    "And",
+    1.904,
+    2.044
+   ],
+   [
+    "because,",
+    2.09,
+    2.601
+   ],
+   [
+    "when",
+    2.694,
+    2.868
+   ],
+   [
+    "the",
+    2.903,
+    2.973
+   ],
+   [
+    "charge",
+    3.007,
+    3.298
+   ],
+   [
+    "stalled,",
+    3.332,
+    3.855
+   ],
+   [
+    "its",
+    3.913,
+    4.087
+   ],
+   [
+    "regiments",
+    4.145,
+    4.598
+   ],
+   [
+    "got",
+    4.644,
+    4.784
+   ],
+   [
+    "up",
+    4.83,
+    4.935
+   ],
+   [
+    "and",
+    4.993,
+    5.062
+   ],
+   [
+    "went",
+    5.109,
+    5.295
+   ],
+   [
+    "on.",
+    5.365,
+    5.655
+   ]
+  ]
+ },
+ {
+  "n": 59,
+  "act": "CLOSE",
+  "act_title": null,
+  "act_first": false,
+  "text": "And it won because the British camp it found was split, spread out, and too sure of itself.",
+  "vis": [
+   "map",
+   "closed"
+  ],
+  "ost": null,
+  "start": 358.158,
+  "dur": 7.0,
+  "vo_file": "vowav/a8_l05.wav",
+  "vo_at": 358.158,
+  "vo_dur": 4.88,
+  "words": [
+   [
+    "And",
+    0.015,
+    0.165
+   ],
+   [
+    "it",
+    0.235,
+    0.293
+   ],
+   [
+    "won",
+    0.34,
+    0.537
+   ],
+   [
+    "because",
+    0.607,
+    0.874
+   ],
+   [
+    "the",
+    0.897,
+    0.967
+   ],
+   [
+    "British",
+    1.013,
+    1.315
+   ],
+   [
+    "camp",
+    1.361,
+    1.57
+   ],
+   [
+    "it",
+    1.628,
+    1.698
+   ],
+   [
+    "found",
+    1.756,
+    1.953
+   ],
+   [
+    "was",
+    2.0,
+    2.116
+   ],
+   [
+    "split,",
+    2.162,
+    2.65
+   ],
+   [
+    "spread",
+    2.801,
+    3.126
+   ],
+   [
+    "out,",
+    3.184,
+    3.44
+   ],
+   [
+    "and",
+    3.463,
+    3.614
+   ],
+   [
+    "too",
+    3.672,
+    3.846
+   ],
+   [
+    "sure",
+    3.904,
+    4.113
+   ],
+   [
+    "of",
+    4.148,
+    4.206
+   ],
+   [
+    "itself.",
+    4.252,
+    4.775
+   ]
+  ]
+ },
+ {
+  "n": 60,
+  "act": "CLOSE",
+  "act_title": null,
+  "act_first": false,
+  "text": "This has been OrigineX Human Archives.",
+  "vis": [
+   "endcard"
+  ],
+  "ost": null,
+  "start": 365.158,
+  "dur": 3.15,
+  "vo_file": "vowav/a8_l06.wav",
+  "vo_at": 365.158,
+  "vo_dur": 2.35,
+  "words": [
+   [
+    "This",
+    0.011,
+    0.208
+   ],
+   [
+    "has",
+    0.255,
+    0.371
+   ],
+   [
+    "been",
+    0.429,
+    0.626
+   ],
+   [
+    "OrigineX",
+    0.707,
+    1.253
+   ],
+   [
+    "Human",
+    1.323,
+    1.566
+   ],
+   [
+    "Archives.",
+    1.625,
+    2.24
+   ]
+  ]
+ },
+ {
+  "n": 61,
+  "act": "CLOSE",
+  "act_title": null,
+  "act_first": false,
+  "text": "If you think this record is worth keeping, please subscribe.",
+  "vis": [
+   "endcard"
+  ],
+  "ost": null,
+  "start": 368.308,
+  "dur": 11.36,
+  "vo_file": "vowav/a8_l07.wav",
+  "vo_at": 368.308,
+  "vo_dur": 3.36,
+  "words": [
+   [
+    "If",
+    0.006,
+    0.145
+   ],
+   [
+    "you",
+    0.192,
+    0.273
+   ],
+   [
+    "think",
+    0.331,
+    0.505
+   ],
+   [
+    "this",
+    0.552,
+    0.691
+   ],
+   [
+    "record",
+    0.761,
+    1.062
+   ],
+   [
+    "is",
+    1.109,
+    1.179
+   ],
+   [
+    "worth",
+    1.213,
+    1.434
+   ],
+   [
+    "keeping,",
+    1.492,
+    2.014
+   ],
+   [
+    "please",
+    2.165,
+    2.432
+   ],
+   [
+    "subscribe.",
+    2.456,
+    3.361
+   ]
+  ]
+ }
+]
