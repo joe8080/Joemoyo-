@@ -41,8 +41,9 @@ Adwa 1896 v1.5 is a **quality benchmark and a reusable technical pipeline**. It 
 
 **For every new film or re-edit:**
 1. Start from the episode's own question, evidence and narrative spine. Find its strongest true moment, and decide whether it's a battle-in-a-day, a biography, an object mystery or a trade route.
-2. Before full render, write a **creative differentiation note**: what this film does differently from Adwa and from the previous OGX film in its hook, structure, visual grammar, map use, sound, emotional arc and ending.
-3. Review the first 60–90 s and a middle section against Adwa. Reject disguised reskins.
+2. **Write the story treatment before building any visual timeline.** It covers the question, spine, point of view and the ending. Let the history shape the film, not the production code. When re-ordering existing lines, check every join, and check what each new juxtaposition implies.
+3. Before full render, write a **creative differentiation note**: what this film does differently from Adwa and from the previous OGX film in its hook, structure, visual grammar, map use, sound, emotional arc and ending.
+4. Review the first 60–90 s and a middle section against Adwa. Reject disguised reskins.
 
 Example audit: `ogx-films-and-scripts/films/isandlwana-1879/docs/OGX_Isandlwana_1879_v1.0_creative_divergence_audit.md`.
 
