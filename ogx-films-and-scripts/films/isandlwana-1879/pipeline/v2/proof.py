@@ -10,6 +10,8 @@ S = "/tmp/claude-0/-home-user/c8a2a160-21fc-57ae-b255-e46475a247d7/scratchpad"
 from plate import P as PL
 import terrain3d as T
 import sfx
+sys.path.append(f"{S}/isa/build11")
+import geomap as OLD
 
 W, H, FPS = 1920, 1080, 24
 GOLD = (201, 164, 92); CREAM = (239, 230, 210); BRIT = (222, 70, 50); ZULU = (250, 204, 64); INK = (10, 14, 14)
@@ -307,6 +309,10 @@ def render_shot(sh, t):
         cam = map_cam(sh["cam"], t); img = map_frame(cam)
         sh["draw"](d, t, cam)
         tag(d, "TERRAIN MODEL + SATELLITE IMAGE 2025  ·  MOVEMENTS SCHEMATIC, POSITIONS APPROXIMATE")
+    elif k == "oldmap":
+        img = OLD.render(sh["name"], t, dur)
+        tag(d, OLD.tag_for(sh["name"]))
+        d.text((40, 1040), OLD.CREDITS[OLD.credit_key(sh["name"])], font=font("Lora.ttf", 18, 500), fill=CREAM + (165,), anchor="lm")
     elif k == "clip":
         img = clip_frame(sh["name"], t, sh.get("speed", 1.0), sh.get("start", 0.0), sh.get("punch", 1.0),
                          sh.get("cx", 0.5), sh.get("cy", 0.5), sh.get("drift", (0, 0, 0)), dur)
@@ -437,37 +443,32 @@ def d_horns(d, t, cam):
 # ---------------------------------------------------------------- the two proofs
 CRED_N01 = "Public domain  ·  Wikimedia Commons  ·  identification as given there, not independently confirmed"
 OPENING = dict(name="opening", total=56.0, shots=[
-    dict(k="flight", name="O1", start=0.0, dur=7.0, tin=("fade", 0.8), grade="morning",
-         labels=[("ISANDLWANA", *PLACE["hill"], 60, 2.4, CREAM)],
+    dict(k="oldmap", name="zoom_isa", start=0.0, dur=7.0, tin=("fade", 0.8),
          marker=[("22 JANUARY 1879  ·  MORNING", 0.6, 6.8)]),
-    dict(k="map", start=7.0, dur=4.0, tin=("dissolve", 0.8), cam=[(0, 30.700, -28.322, 0.36), (4.0, 30.700, -28.323, 0.40)], draw=d_approach),
+    dict(k="oldmap", name="ngwebeni", start=7.0, dur=4.0, tin=("dissolve", 0.8)),
     dict(k="arch", name="N01", start=11.0, dur=6.5, tin=("dissolve", 0.6), kb=(1.0, 1.55, (0.5, 0.5), (0.57, 0.46)),
          cap="IDENTIFIED AS NTSHINGWAYO KAMAHOLE (SEATED)  ·  PHOTOGRAPH, c. 1879", credit=CRED_N01),
     dict(k="clip", name="Z33", start=17.5, dur=9.5, tin=("dissolve", 0.5), speed=0.53, grade="morning", punch=1.05, drift=(0.02, 0, 0.06),
          cards=[("At first we had not intended attacking the camp that day, as the moon was 'wrong'.",
                  "AN UMBONAMBI VETERAN, INTERVIEWED ON THE FIELD", "Bertram Mitford, Through the Zulu Country (1883), p. 93", 22.4 - 17.5, 27.2 - 17.5)]),
-    dict(k="map", start=27.0, dur=3.6, tin=("dissolve", 0.5), cam=[(0, 30.698, -28.318, 0.52), (3.6, 30.702, -28.316, 0.58)], draw=d_patrol,
-         marker=[("AROUND MIDDAY  ·  TIMES APPROXIMATE", 0.3, 3.6)]),
-    dict(k="clip", name="Z15", start=30.6, dur=3.0, tin=("cut", 0), grade="midday", punch=1.06, drift=(0.0, 0, 0.05),
-         marker=[("AROUND MIDDAY  ·  TIMES APPROXIMATE", -1, 3.2)]),
+    dict(k="clip", name="Z15", start=27.0, dur=6.6, tin=("dissolve", 0.5), grade="midday", punch=1.06, drift=(0.0, 0, 0.07), speed=0.75,
+         marker=[("AROUND MIDDAY  ·  TIMES APPROXIMATE", 0.3, 6.6)]),
     dict(k="clip", name="Z11", start=33.6, dur=2.3, tin=("cut", 0), grade="midday", punch=1.1, drift=(0, 0, 0.12)),
     dict(k="clip", name="Z16", start=35.9, dur=4.7, tin=("flash", 0.25), grade="midday", punch=1.08, drift=(0, -0.02, 0.08),
          cards=[("Then the whole impi became very excited and sprang up.", "AN UMBONAMBI VETERAN", "Mitford, 1883, p. 90", 0.4, 4.6, "lower")]),
     dict(k="clip", name="Z05", start=40.6, dur=3.8, tin=("cut", 0), grade="midday", punch=1.04),
     dict(k="clip", name="Z32", start=44.4, dur=2.8, tin=("cut", 0), grade="midday", punch=1.12, drift=(0, 0, 0.1), speed=0.8),
-    dict(k="flight", name="O11", start=46.6, dur=9.4, tin=("smoke", 0.9), grade="midday",
-         labels=[("ISANDLWANA", *PLACE["hill"], 60, 0.6, CREAM, 2.8)],
-         title=(2.6, 9.0)),
+    dict(k="clip", name="Z01", start=46.6, dur=9.4, tin=("smoke", 0.9), grade="midday", speed=0.53, punch=1.02, drift=(0, 0, 0.08),
+         title=(1.6, 9.0)),
 ], vo=[("a3_l02", 1.2), ("a2_l07", 11.4), ("vo/a3_l07_trim", 17.8), ("a4_l00", 27.2), ("a4_l01", 33.8), ("a4_l02", 40.8)],
    music=[("C03", 0.3, 35.0, 0.0, 3.0, 0.8), ("C05", 35.9, 56.0, 0.0, 0.05, 2.5)],
    sfx=lambda: [("wind", 0.0, 56.0), ("rush", 36.0, 11.0), ("volley_near", 35.85), ("sub", 49.1), ("whoosh", 46.3)],
    fade_out=(55.0, 56.0))
 
 BATTLE = dict(name="battle", total=60.0, shots=[
-    dict(k="flight", name="B1", start=0.0, dur=6.0, tin=("fade", 0.6), grade="battle",
-         labels=[("ISANDLWANA", *PLACE["hill"], 60, 0.8, CREAM), ("BRITISH CAMP", *PLACE["camp"], 0, 1.4, BRIT), ("THE NEK", *PLACE["nek"], 0, 2.2, CREAM)],
-         marker=[("MIDDAY TO EARLY AFTERNOON  ·  TIMES APPROXIMATE", 0.4, 5.9)]),
-    dict(k="map", start=6.0, dur=7.5, tin=("dissolve", 0.6), cam=[(0, 30.6640, -28.3490, 1.05), (7.5, 30.6645, -28.3485, 1.16)], draw=d_fireline),
+    dict(k="oldmap", name="horns_open", start=0.0, dur=6.0, tin=("fade", 0.6)),
+    dict(k="clip", name="Z19", start=6.0, dur=7.5, tin=("dissolve", 0.6), grade="battle", speed=0.68, punch=1.05, drift=(0.02, 0, 0.06),
+         marker=[("MIDDAY TO EARLY AFTERNOON  ·  TIMES APPROXIMATE", 0.6, 7.4)]),
     dict(k="clip", name="Z18", start=13.5, dur=4.5, tin=("cut", 0), grade="battle", punch=1.05, drift=(0.02, 0, 0.05),
          cards=[("They kept tumbling over one upon another.", "AN UMBONAMBI VETERAN, ON THE BRITISH VOLLEYS", "Mitford, 1883, p. 90", 0.4, 4.4, "lower")]),
     dict(k="arch", name="N06", start=18.0, dur=3.8, tin=("dissolve", 0.5), kb=(1.05, 1.22, (0.45, 0.55), (0.55, 0.5)), fh=860,
@@ -477,9 +478,9 @@ BATTLE = dict(name="battle", total=60.0, shots=[
     dict(k="clip", name="Z21", start=26.2, dur=6.0, tin=("cut", 0), grade="battle", speed=0.62, punch=1.05,
          cards=[("The chief was shot through the forehead and dropped down dead, but the Kandampemvu rushed over his body.",
                  "AN UMBONAMBI VETERAN, ON THE KANDAMPEMVU'S CHARGE", "Bertram Mitford, Through the Zulu Country (1883), p. 91", 0.6, 6.0)]),
-    dict(k="map", start=32.2, dur=12.6, tin=("smoke", 0.7), cam=[(0, 30.6640, -28.3500, 0.62), (3.6, 30.6650, -28.3520, 0.66),
-                                                               (4.4, 30.6560, -28.3480, 0.66), (7.6, 30.6520, -28.3500, 0.72),
-                                                               (8.4, 30.6560, -28.3540, 0.80), (12.6, 30.6560, -28.3545, 0.86)], draw=d_horns),
+    dict(k="oldmap", name="left_horn", start=32.2, dur=4.2, tin=("smoke", 0.7)),
+    dict(k="oldmap", name="right_horn", start=36.4, dur=4.0, tin=("dissolve", 0.4)),
+    dict(k="oldmap", name="closed", start=40.4, dur=4.4, tin=("dissolve", 0.4)),
     dict(k="clip", name="Z24", start=44.8, dur=3.8, tin=("cut", 0), grade="battle", punch=1.05, drift=(0, 0, 0.06),
          marker=[("EARLY AFTERNOON", 0.3, 3.8)]),
     dict(k="clip", name="Z22", start=48.6, dur=3.0, tin=("cut", 0), grade="battle", punch=1.08),
@@ -607,8 +608,8 @@ if __name__ == "__main__":
         sys.exit()
     if len(sys.argv) > 2 and sys.argv[2] == "audio":
         render_audio(pf, f"{HERE}/out/{which}_mix.wav"); sys.exit()
-    render_picture(pf, f"{HERE}/out/{which}_pic.mp4")
+    render_picture(pf, f"{HERE}/out/{which}_pic_r2.mp4")
     render_audio(pf, f"{HERE}/out/{which}_mix.wav")
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{HERE}/out/{which}_pic.mp4", "-i", f"{HERE}/out/{which}_mix.wav",
-                    "-c:v", "copy", "-c:a", "aac", "-b:a", "320k", "-shortest", f"{HERE}/out/OGX_Isandlwana_v2_proof_{which}.mp4"], check=True)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{HERE}/out/{which}_pic_r2.mp4", "-i", f"{HERE}/out/{which}_mix.wav",
+                    "-c:v", "copy", "-c:a", "aac", "-b:a", "320k", "-shortest", f"{HERE}/out/OGX_Isandlwana_v2_proof_{which}_r2.mp4"], check=True)
     print("done", which)

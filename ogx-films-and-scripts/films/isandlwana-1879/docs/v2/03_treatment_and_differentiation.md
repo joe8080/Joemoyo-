@@ -1,6 +1,9 @@
 # Isandlwana v2: story treatment and creative differentiation note
 Prepared by Claude, 22 October 2026. **Private. For MJ and Joe.**
 
+> **Joe's decision, 22 Oct (proof r2):** keep the **original v1 maps** (satellite, horns sequence). The new relief maps and 3D terrain flights are dropped. Archive images, testimony cards, regraded clips, sound design and cutting stay. Wherever this doc says `3D` or new `MAP`, read it as the matching original v1 map, or an AI or archive shot.
+
+
 ## Logline
 One day in January 1879, told from the valley where the Zulu army waited, in the words of the men who fought it.
 

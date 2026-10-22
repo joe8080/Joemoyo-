@@ -1,6 +1,9 @@
 # Isandlwana v2: credit costs for Joe's approval
 Prepared by Claude, 22 October 2026. **Nothing below has been spent.** The two proofs cost **0 credits**.
 
+> **Joe's decision, 22 Oct (proof r2):** keep the **original v1 maps** (satellite, horns sequence). The new relief maps and 3D terrain flights are dropped. Archive images, testimony cards, regraded clips, sound design and cutting stay. Wherever this doc says `3D` or new `MAP`, read it as the matching original v1 map, or an AI or archive shot.
+
+
 ## How the estimates are worked out
 These are rates from the actual Isandlwana and Adwa builds, not list prices.
 

@@ -10,7 +10,25 @@ Prepared by Claude, 22 October 2026. **Private proofs, not a cut of the film. 0 
 
 v1.0 and v1.1 are untouched.
 
-## Technical QC
+## Revision r2: original maps restored (Joe, 22 Oct)
+Joe preferred the original maps. **r2 keeps everything else from r1 and swaps only the maps:**
+
+| Proof | r1 (new maps) | r2 (original maps) |
+|---|---|---|
+| Opening 0:00–0:07 | 3D flight | v1 `zoom_isa` (Southern Africa down to Isandlwana) |
+| Opening 0:07–0:11 | Relief approach map | v1 `ngwebeni` (Zulu army in the valley, the camp, Rorke's Drift) |
+| Opening 0:27–0:34 | Patrol map, then Z15 | Z15 held longer (no second map, so no map repeats) |
+| Opening 0:47–0:56 | 3D flight under the title | AI Z01 (the hill under a storm sky) under the title |
+| Battle 0:00–0:06 | 3D flight | v1 `horns_open` |
+| Battle 0:06–0:13 | Firing-line relief map | AI Z19 (men flat in the grass under smoke) |
+| Battle 0:32–0:45 | Three-beat relief map | v1 `left_horn`, then `right_horn`, then `closed` (as in v1.1) |
+
+Files: `OGX_Isandlwana_v2_proof_opening_r2.mp4` and `OGX_Isandlwana_v2_proof_battle_r2.mp4`, plus 720p review copies. The r1 files are kept.
+
+**r2 technical QC:** opening 56.0 s, −14.1 LUFS; battle 60.0 s, −14.0 LUFS. No decode errors, no black gaps. Contact sheets: `proof_frames/cs_opening_r2.jpg` and `proof_frames/cs_battle_r2.jpg`.
+md5: opening r2 `86c2c7e29d7c23467d676ffc18c88e9c` (720p `f3beb132…`); battle r2 `a281306383ac0f83cc64bbf3a01b927f` (720p `eec844b1…`).
+
+## Technical QC (r1)
 | Check | Opening | Battle |
 |---|---|---|
 | Decode errors | none | none |

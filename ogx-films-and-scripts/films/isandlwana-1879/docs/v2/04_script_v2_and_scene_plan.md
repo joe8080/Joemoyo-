@@ -1,6 +1,9 @@
 # Isandlwana v2: strengthened script and revised scene plan
 Prepared by Claude, 22 October 2026. **Draft for MJ's script review. Not locked.**
 
+> **Joe's decision, 22 Oct (proof r2):** keep the **original v1 maps** (satellite, horns sequence). The new relief maps and 3D terrain flights are dropped. Archive images, testimony cards, regraded clips, sound design and cutting stay. Wherever this doc says `3D` or new `MAP`, read it as the matching original v1 map, or an AI or archive shot.
+
+
 **Target runtime:** 8:30 to 9:30. That's about 1,150 narrated words, plus about 90 seconds of testimony cards, maps and sound-led beats, against v1.1's 5:43 and 832 words.
 
 **Line status key:**
