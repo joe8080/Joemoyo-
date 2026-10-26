@@ -31,3 +31,7 @@
 | SET-03 Mary Jane's room | 9Yolu3Z0VmJGhVHGHI2v | 6RYAiS7DluK1Ss3vLPqD |
 
 Budget check (26 Oct): Higgsfield 407 credits, OpenArt 7,442. Kling 2.6 animation = 10 Higgsfield credits per 10s; Kling 3.0 std (no sound) = 12.5 per 10s; Seedance 2.5 480p = 30 per 10s.
+
+**Joe's note (26 Oct):** in the first drafts Mary Jane looked older than Isaiah. Recast so Isaiah reads clearly older (mid-to-late 30s look, grey at the temples) and Mary Jane clearly younger (early-20s look). Script ages stay 31 / 27 unless Joe changes them.
+| Isaiah v2 (2 options) | tgZLsHT92Kl3KYoF1KOF |
+| Mary Jane v2 (2 options) | qQLPevAMdGENBiCs5gFD |
