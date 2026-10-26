@@ -45,11 +45,11 @@ def main():
     n = len(SHOTS)
     g.append("".join(f"[v{i}]" for i in range(n)) + f"concat=n={n}:v=1:a=0,"
              "eq=contrast=1.04:saturation=0.9,vignette=PI/5,noise=alls=7:allf=t,"
-             f"fade=t=in:st=0:d=0.8,fade=t=out:st={total - 1.2:.2f}:d=1.2[vout]")
+             "fade=t=in:st=0:d=0.8[vout]")   # no fade out: smash cut into Block 4 (Joe)
 
     k = n
     g.append(f"[{k}:a]atrim=0:{total:.3f},volume={STREET_VOL},afade=t=in:d=0.8,"
-             f"afade=t=out:st={total - 1.5:.3f}:d=1.5[street]")
+             f"afade=t=out:st={total - 0.04:.3f}:d=0.04[street]")   # street plays right up to the cut
     labels = ["[street]"]
     for j, (f, shot, off) in enumerate(LINES):
         g.append(f"[{k+1+j}:a]volume=1.6,adelay={ms(s[shot] + off)}:all=1[l{j}]")
