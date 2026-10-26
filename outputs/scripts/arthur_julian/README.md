@@ -64,8 +64,8 @@ Rules:
 | 4 | `cf5a7e69` | Victor, Arthur | `c335dd67` | Done |
 | 5 | `2ea45f03` | Victor, Arthur, Marcus | `0a11d187` | Done |
 | 6 | `b244323a` | Victor, Arthur, Marcus | `b71fdcb8` | Done |
-| 7 | `cb5327eb` | Julian (jumpsuit), Arthur, Marcus; Victor voice only | `477df7e4` | Rendering |
-| 6 fix (0–10s) | `c2c613cb` | Victor, Arthur, Marcus | `34a4085c` (first 10s of Ep 6 track) | Rendering. Replaces the stiff wide opening with close-ups; contractors already in place |
+| 7 | `cb5327eb` | Julian (jumpsuit), Arthur, Marcus; Victor voice only | `477df7e4` | Done |
+| 6 fix (0–10s) | `c2c613cb` | Victor, Arthur, Marcus | `34a4085c` (first 10s of Ep 6 track) | Done. Replaces the stiff wide opening with close-ups; contractors already in place |
 
 Dialogue offsets: Ep 4 Victor 0.5s, Victor 10.0s, Arthur 22.0s. Ep 5 Victor 1.5s, Marcus 12.5s, Victor 23.0s. Ep 6 Victor 1.0s, Arthur 12.0s, Arthur 23.0s. Ep 7 Marcus 1.0s, Julian 3.2s, Julian 9.6s, Arthur 16.6s, Victor (voiceover) 22.5s.
 
