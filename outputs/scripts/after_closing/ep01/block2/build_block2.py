@@ -13,10 +13,11 @@ SHOTS = [
     ("S2", 0, 7),    # Mary Jane steps into the light: "Hard not to. Same mistake, six weeks."
     ("S3", 0, 10),   # wide: he plays; "Better?" / "Getting there."
 ]
-# (file, shot, seconds into that shot) - same offsets as the lip-sync audio references
+# (file, shot, seconds into that shot): the reference offsets, nudged to where the
+# rendered lips actually move (measured: S1 renders ~1.04s late, S2 ~0.2s early)
 LINES = [
-    ("../audio/s01_ir1.mp3", "S1", 1.0),
-    ("../audio/s01_mj2.mp3", "S2", 1.4),
+    ("../audio/s01_ir1.mp3", "S1", 2.04),
+    ("../audio/s01_mj2.mp3", "S2", 1.2),
     ("audio/ir_better.mp3", "S3", 3.2),
     ("audio/mj_gettingthere.mp3", "S3", 4.6),
 ]
