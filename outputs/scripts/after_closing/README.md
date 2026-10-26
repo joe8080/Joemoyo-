@@ -59,3 +59,12 @@ Budget check (26 Oct): Higgsfield 407 credits, OpenArt 7,442. Kling 2.6 animatio
 | 01C MJ listening (5s) | Kling 2.6 | 576a2045 | 4a38e301 |
 | 01D dialogue two-shot, lip-synced (12s) | Seedance 2.5 480p | ace75ecd + refs + audio a69f7e7c | f63d3112 |
 | 01E Isaiah rueful smile (5s) | Kling 2.6 | 97e3af65 | 25739a7f |
+
+## Ep 1 Scene 01 v2 — "The City and the Room" (opening, 2:00)
+
+- Final: `ep01/AfterClosing_E01_S01_TheCityAndTheRoom_16x9.mp4` (1920x1080, 24 fps, -16 LUFS). Replaces the 35s test cut.
+- Build: `ep01/v2/build_opening_v2.py` (shot in/out points, sound cues, two-pass linear loudnorm). Clips (Kling 2.6) in `ep01/v2/clips/` are git-ignored; job IDs in `ep01/v2/jobs.tsv`.
+- Stills: OpenArt Nano Banana 2 (17 stills incl. a V12b retake: first take had her in black with patrons in the background).
+- Sound: all ElevenLabs, 4 takes each in `ep01/v2/audio_raw/`. Used: sax_1, piano_4 (swells at 50–65s), chord_3, street_1, steps_4, tray_2, room_4.
+- Rules honoured: piano muffled through the doors, full inside, cut dead on the wrong chord (80.95s); 2.0s of near-silence (room tone only) before "You always stop there."
+- Known nit: V08 (over-the-shoulder) has Isaiah still wearing his jacket; every other shot has it draped over the chair.
