@@ -1,0 +1,55 @@
+SCENE CONTEXT
+Morning, 9:00 a.m., in a 9th-floor glass-walled boardroom. Julian sits with his feet on the table and shouts at the people entering. Arthur walks in wearing a bespoke suit, Marcus a step behind him, and every board member stands in respect. Arthur tells Julian he is in his seat. Julian realises who Arthur is and turns pale.
+
+ACTIVE REFERENCES
+@image1: Julian, 28, an original fictional character, narrow angular face, long thin nose, pale grey-green eyes, light freckles, a faint scar through the left eyebrow, dark brown hair slicked straight back, charcoal three-piece suit, white shirt, dark navy tie. Face, hair and outfit 100% match @image1.
+@image2: Arthur, 68, weathered lined face, neatly combed silver hair, calm pale blue eyes. Face and hair 100% match @image2. Here he wears an immaculate custom-tailored navy Savile Row suit, a crisp white shirt and a dark burgundy tie. Appears from 8.0s to 18.5s.
+@image3: Marcus, early 40s, Black British, broad build, short neat beard with grey flecks, close-cropped hair, wearing a clean grey work shirt with his hi-vis vest folded over one arm. Face 100% matches @image3. Appears from 8.0s to 18.5s, one step behind Arthur.
+Board members (no reference): six men and women in their 50s and 60s in dark business suits, seated around the table.
+@audio1: the dialogue track. Each word, voice and timing matches @audio1 exactly, and the speaker's lips are synced to it. Julian speaks at 1.5s; Arthur speaks at 13.0s on camera and at 22.0s off camera.
+
+LOCATION MAP
+A long glass conference table runs away from the camera. The head of the table, with Julian's black leather chair, is at the far end. The double glass door is on screen left. Behind the head of the table are floor-to-ceiling windows with a bright morning city skyline. The camera starts at the door end.
+
+FORMAT MODE
+Timed multishot, 9:16 vertical, 30 seconds, real time. Cuts only at the specified points; the camera does not cut on its own.
+
+0.0s to 8.0s
+OPTICS: wide shot, 63 degrees, no drift mid-segment. CAMERA: static, eye level.
+ACTION: Julian lounges in the head chair with both polished loafers up on the glass table. The board members sit stiffly. The doors swing open on screen left; Julian's head snaps toward them, his face twisting with anger, and he shouts, lips synced to @audio1: "Who the hell let you losers onto this floor? Security!"
+
+8.0s HARD CUT
+
+8.0s to 18.5s
+OPTICS: MS, 47 degrees, no drift mid-segment. CAMERA: a slow backward tracking shot ahead of Arthur at 3 km/h.
+ACTION: Arthur walks slowly through the doorway in the navy suit, Marcus one step behind. As Arthur passes, each board member rises from their chair in respect, one after another. Arthur stops at the far end beside Julian's raised feet, looks down at him, and says calmly, lips synced to @audio1: "Sit down, Julian. You're sitting in my seat."
+
+18.5s HARD CUT
+
+18.5s to 21.5s
+OPTICS: MCU, 29 degrees, no drift mid-segment. CAMERA: locked off.
+ACTION: Julian slowly lowers his feet from the table; his smirk collapses and he swallows hard.
+
+21.5s HARD CUT
+
+21.5s to 30.0s
+OPTICS: ECU on Julian's eyes and the bridge of his nose, 12 degrees, no drift mid-segment. CAMERA: an almost imperceptible push-in.
+ACTION: Julian's face drains pale and his pupils widen. Reflected in his eyes is a printed company ownership certificate with an official seal. Arthur, off camera, speaks quietly and finally, matching @audio1: "You wanted to fire everyone who didn't fit your vision. Let's start with you." Julian's lips part but no sound comes out. Hold on his terrified eyes to the final frame.
+
+PERFORMANCE
+Julian goes from arrogant fury to visible fear: his hands grip the chair arms, his breathing turns shallow, a bead of sweat forms at his temple. Arthur is completely composed, with slow deliberate steps and no wasted motion. Marcus is quietly vindicated: his chin is up and his eyes are steady. The board members show deference, with heads slightly bowed as they stand. Pore-level skin realism, catch-lights in the eyes.
+
+PHYSICS
+The doors swing on heavy hinges. Chairs roll back on the carpet as the board members stand. Julian's loafers slide off the glass with a soft squeak.
+
+LIGHTING
+Bright 5600K morning daylight from the windows behind the head of the table, giving a strong rim on Julian. Soft fill from the white ceiling. In the ECU, the cold window light reflects in his eyes. The same light logic in every segment.
+
+AUDIO
+The dialogue is exactly @audio1. Door swing, chairs rolling, a hush in the room. No music.
+
+STYLE
+Photoreal cinematic vertical short drama, fine film grain, shallow depth of field, a cool clean corporate palette with deep navy and burgundy accents.
+
+POSITIVE LOCKS
+Julian matches @image1, Arthur matches @image2 in the navy suit, and Marcus matches @image3, in every shot they appear in. Only the lines in @audio1 are spoken. Clean picture without on-screen text or subtitles.
