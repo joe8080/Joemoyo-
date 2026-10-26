@@ -16,7 +16,7 @@ SHOTS = [
     ("V01", 0, 5),     # V-01 street, cab
     ("V02", 0, 3),     # V-02 doors push-in (0:08)
     ("V03", 0, 5),     # V-03 empty ballroom
-    ("V03b", 0, 5),    # V-04 macro: cloth across the table
+    ("V04new", 0, 5),  # V-04 macro: cloth across the table (retake: her bare forearm, empty crystal glass)
     ("B05", 0, 7),     # V-05 MJ wiping, exhausted (0:25)
     ("B06", 0, 10),    # V-06 Isaiah, eyes closed
     ("B07", 0, 10),    # V-07 MJ captivated, held (0:45); the piano dies away on her; mirrored so she looks screen-left
@@ -61,7 +61,7 @@ def graph(total, s):
     ms = lambda t: int(t * 1000)
     g += [
         # 0:00-0:08 the city: rain loud, sax soft, both gone once we're inside
-        f"[{k}:a]volume=0.8,afade=t=in:d=0.8,afade=t=out:st={inside - 0.5}:d=1.5,atrim=0:{inside + 1}[street]",
+        f"[{k}:a]volume=0.55,afade=t=in:d=0.8,afade=t=out:st={inside - 0.5}:d=1.5,atrim=0:{inside + 1}[street]",
         f"[{k+1}:a]volume=0.25,afade=t=in:d=1.5,afade=t=out:st={PIANO_IN}:d={inside + 1 - PIANO_IN},atrim=0:{inside + 1}[sax]",
         # piano: muffled J-cut under the doors, clear inside, gently ends on Mary Jane
         f"[{k+2}:a]atrim={p0}:{p1:.3f},asetpts=PTS-STARTPTS,asplit=2[p1][p2]",
@@ -72,9 +72,9 @@ def graph(total, s):
         # room tone from the cut inside to the end
         f"[{k+3}:a]atrim=0:{total - inside:.3f},volume=2,afade=t=in:d=1.5,"
         f"afade=t=out:st={total - inside - 2:.3f}:d=2,adelay={ms(inside)}:all=1[room]",
-        # cloth foley, synced to the wipes
-        f"[{k+4}:a]volume=0.5,adelay={ms(s['V03b'])}:all=1[cloth1]",
-        f"[{k+5}:a]volume=0.35,adelay={ms(s['B05'])}:all=1[cloth2]",
+        # cloth foley (ElevenLabs take), kept soft under the piano per Joe
+        f"[{k+4}:a]atrim=0:5,volume=1.4,afade=t=out:st=4.6:d=0.4,adelay={ms(s['V04new'])}:all=1[cloth1]",
+        f"[{k+5}:a]atrim=5:9,asetpts=PTS-STARTPTS,volume=1.0,afade=t=out:st=3.4:d=0.6,adelay={ms(s['B05'])}:all=1[cloth2]",
         # "You always stop there." with a little of the room on it
         f"[{k+6}:a]volume=4,apad=pad_dur=2,aecho=0.8:0.6:90|160:0.22|0.12,adelay={ms(line)}:all=1[line]",
         "[street][sax][pmuff][pclean][room][cloth1][cloth2][line]"
@@ -91,7 +91,7 @@ def inputs():
     for f in ["street_1", "sax_1", "piano_4"]:
         args += ["-i", f"{A}/{f}.mp3"]
     args += ["-stream_loop", "-1", "-i", f"{A}/room_4.mp3"]
-    args += ["-i", "audio/cloth_macro.wav", "-i", "audio/cloth_mj.wav", "-i", "../audio/s01_mj1.mp3"]
+    args += ["-i", "audio/cloth_real.mp3", "-i", "audio/cloth_real.mp3", "-i", "../audio/s01_mj1.mp3"]
     return args
 
 
