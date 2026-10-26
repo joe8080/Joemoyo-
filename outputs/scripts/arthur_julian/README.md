@@ -1,6 +1,6 @@
 # The Founder's Test — Arthur & Julian (vertical micro-drama)
 
-Format: 9:16 vertical, 50–60s per episode, 3 episodes per day (12:00 / 16:00 / 20:00 UK).
+Format: 9:16 vertical, **~30s per episode** (Joe's decision: one Seedance 2.5 generation, 210 Higgsfield credits), 3 episodes per day (12:00 / 16:00 / 20:00 UK).
 
 | Day | Episodes | File |
 |-----|----------|------|
