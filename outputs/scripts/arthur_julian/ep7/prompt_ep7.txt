@@ -1,0 +1,60 @@
+SCENE CONTEXT
+Night, on the floor of the same high-tech logistics warehouse from Episode 1. The roles have reversed: Julian, stripped of everything, now works the night janitor shift and mops the floor where his grandfather Arthur once knelt. Marcus, now in charge, finds him. Julian begs Arthur for one chance. Then a message from the disgraced rival Victor tempts him to betray Arthur again.
+
+ACTIVE REFERENCES
+@image1: Julian, 28, an original fictional character, narrow angular face, long thin nose, pale grey-green eyes, light freckles, a faint scar through the left eyebrow. Face 100% matches @image1. In this episode his dark brown hair is no longer slicked back; it falls loose and messy over his forehead, and he wears a faded blue warehouse janitor jumpsuit over a white T-shirt, with a tired, humbled expression.
+@image2: Arthur, 68, weathered lined face, neatly combed silver hair, calm pale blue eyes. Face and hair 100% match @image2. He wears the immaculate custom-tailored navy Savile Row suit, a crisp white shirt and a dark burgundy tie. Appears only from 9.0s to 20.0s.
+@image3: Marcus, early 40s, Black British, broad build, short neat beard with grey flecks, close-cropped hair, a high-visibility yellow vest over a grey work shirt. Face and outfit 100% match @image3. Appears only from 0.0s to 9.0s.
+@audio1: the dialogue track. Each word, voice and timing matches @audio1 exactly. Marcus speaks at 1.0s; Julian speaks on camera at 3.2s and 9.6s; Arthur speaks on camera at 16.6s; Victor is heard only as a voiceover from his phone message at 22.5s, with no on-screen speaker.
+
+LOCATION
+The warehouse floor at night: polished grey concrete with a wet sheen, a yellow mop bucket, towering steel pallet racks stacked with shrink-wrapped boxes receding into haze, cold blue overhead industrial lights hung high above.
+
+FORMAT MODE
+Timed multishot, 9:16 vertical, 30 seconds, real time. Cuts only at the specified points; the camera does not cut on its own. Every character is already in position at the start of each shot; nobody walks across the frame.
+
+0.0s to 9.0s
+OPTICS: low-angle CU on Julian, 29 degrees, no drift mid-segment. CAMERA: a slow push-in at 1 km/h.
+ACTION: Julian kneels on the wet concrete in the jumpsuit, pushing a mop in slow strokes. Marcus stands over him, framed from the chest up at the top edge of the frame, looking down with dry disapproval, and says, lips synced to @audio1: "You missed a spot." Julian keeps his eyes on the floor and answers quietly, lips synced to @audio1: "I know. I've missed a lot of them." His mop stops.
+
+9.0s HARD CUT
+
+9.0s to 16.3s
+OPTICS: MCU on Julian over Arthur's right shoulder, 35 degrees, no drift mid-segment. CAMERA: locked off.
+ACTION: Julian stands facing Arthur in the aisle, mop still in one hand, eyes wet. His voice cracks as he speaks, lips synced to @audio1: "Grandfather. I was wrong about everything. Give me one chance. I'll start at the bottom."
+
+16.3s HARD CUT
+
+16.3s to 20.0s
+OPTICS: CU on Arthur, 29 degrees, no drift mid-segment. CAMERA: locked off.
+ACTION: Arthur looks at his grandson for a long moment, then the faintest smile appears and he says calmly, lips synced to @audio1: "You already have."
+
+20.0s HARD CUT
+
+20.0s to 23.0s
+OPTICS: ECU insert of a cracked smartphone in Julian's hand, 18 degrees, no drift mid-segment. CAMERA: locked off.
+ACTION: The phone buzzes and lights up with a new message notification. The sender name on the screen reads "VICTOR". Julian's thumb hovers over it.
+
+23.0s HARD CUT
+
+23.0s to 30.0s
+OPTICS: ECU on Julian's eyes and the bridge of his nose, lit by the cold glow of the phone screen, 12 degrees, no drift mid-segment. CAMERA: an almost imperceptible push-in.
+ACTION: Victor's voice plays from the phone message, matching @audio1, while Julian's lips stay closed. Julian's eyes flick between the screen and the direction where Arthur stood; temptation and guilt fight across his face. Hold on his eyes, then fade to black in the final half second.
+
+PERFORMANCE
+Julian is humbled and exhausted, then desperate and sincere, then torn. Marcus is dry and unimpressed, with a hint of grim satisfaction. Arthur is calm and unreadable, with quiet warmth. Pore-level skin realism, catch-lights in the eyes, visible breath in the cold air.
+
+PHYSICS
+The mop drags water across the concrete, leaving a glossy streak. The phone vibrates in Julian's palm. Haze hangs in the light beams.
+
+LIGHTING
+Cold 5600K overhead industrial light from high above, giving a hard rim on hair and shoulders, haze density 30%, faces lit by a soft bounce from the wet floor. In the final segments, the cold blue-white phone glow lights Julian's eyes. The same light logic in every segment.
+
+AUDIO
+The dialogue is exactly @audio1. Mop strokes and water on concrete, a faint warehouse hum, a phone buzz, then near silence under Victor's voice. No music.
+
+STYLE
+Photoreal cinematic vertical short drama, fine film grain, shallow depth of field, cold blue and steel palette with a warm hi-vis yellow accent on Marcus.
+
+POSITIVE LOCKS
+Julian matches @image1 in the faded blue jumpsuit with loose hair, Arthur matches @image2 in the navy suit, and Marcus matches @image3, in every shot they appear in. Each character appears only in their stated time ranges. Only the lines in @audio1 are spoken. The only text in the picture is "VICTOR" on the phone screen; otherwise a clean picture without subtitles.

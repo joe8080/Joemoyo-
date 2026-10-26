@@ -1,4 +1,4 @@
-# Episode 7 — The Prodigal (DRAFT, awaiting Joe's approval)
+# Episode 7 — The Prodigal (approved by Joe; rendering)
 
 ~30s, one Seedance 2.5 generation (~210 Higgsfield credits). Follows the no-long-walks rule: characters start in position, nobody walks on screen for more than 2s.
 

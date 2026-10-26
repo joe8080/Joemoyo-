@@ -56,7 +56,7 @@ Rules:
 2. Wardrobe or location changes go in the prompt text; the face image stays the same.
 3. Voices: ElevenLabs "Posh Josh" for Julian, "Alistair" for Arthur, "Hymzy" for Marcus, "Victor – Deep British Male / Dark Psychology" for Victor and "PETER Mature Northern British" for the security guard. New lines are cheap (~50–150 EL credits each).
 
-## Ep 2–6 render log (Higgsfield Seedance 2.5, 720p, 9:16, 30s, ~210 credits each)
+## Ep 2–7 render log (Higgsfield Seedance 2.5, 720p, 9:16, 30s, ~210 credits each)
 | Ep | Job | References | Dialogue audio | Status |
 |---|---|---|---|---|
 | 2 | `03b26f8a` | Julian, Arthur, Marcus | `614643a0` | Done |
@@ -64,8 +64,9 @@ Rules:
 | 4 | `cf5a7e69` | Victor, Arthur | `c335dd67` | Done |
 | 5 | `2ea45f03` | Victor, Arthur, Marcus | `0a11d187` | Done |
 | 6 | `b244323a` | Victor, Arthur, Marcus | `b71fdcb8` | Done |
+| 7 | `cb5327eb` | Julian (jumpsuit), Arthur, Marcus; Victor voice only | `477df7e4` | Rendering |
 
-Dialogue offsets: Ep 4 Victor 0.5s, Victor 10.0s, Arthur 22.0s. Ep 5 Victor 1.5s, Marcus 12.5s, Victor 23.0s. Ep 6 Victor 1.0s, Arthur 12.0s, Arthur 23.0s.
+Dialogue offsets: Ep 4 Victor 0.5s, Victor 10.0s, Arthur 22.0s. Ep 5 Victor 1.5s, Marcus 12.5s, Victor 23.0s. Ep 6 Victor 1.0s, Arthur 12.0s, Arthur 23.0s. Ep 7 Marcus 1.0s, Julian 3.2s, Julian 9.6s, Arthur 16.6s, Victor (voiceover) 22.5s.
 
 ## Lessons from Higgsfield's "5-Step Workflow" tutorial (60M-view AI drama)
 1. Character sheets: plain grey background; full-body front (face erased), back, and a face close-up, so the model has one face to follow.
