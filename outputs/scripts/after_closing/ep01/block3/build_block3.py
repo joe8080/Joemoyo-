@@ -24,7 +24,6 @@ LINES = [
 ]
 # (file, shot, seconds into that shot, volume)
 FOLEY = [
-    ("audio/sewing_machine.mp3", "R1", 0.0, 0.35),   # Joe: 2-3s of the machine before any dialogue, kept low
     ("audio/needle.mp3", "R1", 2.6, 0.4),
     ("audio/needle.mp3", "R4", 8.6, 0.35),           # she goes back to her stitching
 ]
@@ -57,7 +56,7 @@ def main():
         labels.append(f"[l{j}]")
     base = k + 1 + len(LINES)
     for j, (f, shot, off, vol) in enumerate(FOLEY):
-        dur = min(3.2 if "machine" in f else 7.0, total - (s[shot] + off))
+        dur = min(7.0, total - (s[shot] + off))
         g.append(f"[{base+j}:a]atrim=0:{dur:.3f},volume={vol},afade=t=out:st={dur - 0.6:.3f}:d=0.6,"
                  f"adelay={ms(s[shot] + off)}:all=1[f{j}]")
         labels.append(f"[f{j}]")
