@@ -12,16 +12,16 @@ import subprocess
 # (clip, in, out) in seconds
 SHOTS = [
     ("C1", 0, 6),         # The Reveal: she holds up the sage collar, the note rings
-    ("C2v2", 1.8, 9.0),   # His Respect (set from measurement)
-    ("C3v2", 0.0, 9.0),   # Her Challenge (set from measurement)
+    ("C2v2", 1.0, 7.6),   # His Respect: he looks up from the collar; lips 2.6-6.9 in the clip
+    ("C3v2", 1.96, 8.5),  # Her Challenge: in so she speaks 1.5s after his line ends
 ]
 # (file, shot, seconds into that shot as cut)
 LINES = [
-    ("audio/ir_seriouswork.mp3", "C2v2", 0.0),
-    ("audio/mj_melody.mp3", "C3v2", 0.0),
+    ("audio/ir_seriouswork.mp3", "C2v2", 1.54),           # lips run ~2.24s after the 0.3s reference
+    ("audio/mj_line_C3v2_aligned.wav", "C3v2", 0.0),      # re-laid phrase by phrase onto her lips
 ]
 NOTE_AT = 0.05      # the single key lands right on the cut
-NOTE_VOL = 1.6
+NOTE_VOL = 0.45
 ROOM_VOL = 2.0
 OUT = "../AfterClosing_E01_Block4_TheAmbition_16x9.mp4"
 A = "../v2/audio_raw"
@@ -45,10 +45,8 @@ def main():
 
     k = n
     g.append(f"[{k}:a]atrim=0:{total:.3f},volume={ROOM_VOL},afade=t=out:st={total - 1.2:.3f}:d=1.2[room]")
-    # the note: first 2.6s of the take (before a stray knock), with a long soft room tail
-    g.append(f"[{k+1}:a]atrim=0:2.6,asetpts=PTS-STARTPTS,volume={NOTE_VOL},apad=pad_dur=4,"
-             "aecho=0.8:0.7:120|260|450:0.35|0.22|0.12,afade=t=out:st=3.5:d=2.5,"
-             f"adelay={ms(NOTE_AT)}:all=1[note]")
+    # the note with its long ballroom ring (note_ring.py)
+    g.append(f"[{k+1}:a]volume={NOTE_VOL},adelay={ms(NOTE_AT)}:all=1[note]")
     labels = ["[room]", "[note]"]
     for j, (f, shot, off) in enumerate(LINES):
         g.append(f"[{k+2+j}:a]volume=1.6,adelay={ms(s[shot] + off)}:all=1[l{j}]")
@@ -59,7 +57,7 @@ def main():
     ins = []
     for name, _, _ in SHOTS:
         ins += ["-i", f"clips/{name}.mp4"]
-    ins += ["-stream_loop", "-1", "-i", f"{A}/room_4.mp3", "-i", "audio/piano_note.mp3"]
+    ins += ["-stream_loop", "-1", "-i", f"{A}/room_4.mp3", "-i", "audio/piano_note_ring.wav"]
     for f, _, _ in LINES:
         ins += ["-i", f]
 
@@ -67,9 +65,9 @@ def main():
                            ";".join(g[n + 1:]) + ";[mix]loudnorm=I=-16:TP=-1.5:LRA=20:print_format=json[o]",
                            "-map", "[o]", "-f", "null", "-"], capture_output=True, text=True).stderr
     m = json.loads(meas[meas.rindex("{"):])
-    ln = (f"loudnorm=I=-16:TP=-1.5:LRA=20:linear=true:measured_I={m['input_i']}:"
-          f"measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}:"
-          f"measured_thresh={m['input_thresh']}:offset={m['target_offset']}")
+    # one fixed gain to -16 LUFS plus a peak limiter: loudnorm fell back to dynamic
+    # mode on the piano note's transient and pumped the room tone under Shot 1
+    ln = f"volume={-16 - float(m['input_i']):.2f}dB,alimiter=limit=0.84:level=false"
     g[-1] = g[-1].replace("[mix]", f",{ln}[aout]")
     subprocess.run(["ffmpeg", "-y", "-v", "error", *ins, "-filter_complex", ";".join(g),
                     "-map", "[vout]", "-map", "[aout]", "-c:v", "libx264", "-preset", "slow",
