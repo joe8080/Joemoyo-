@@ -1,0 +1,33 @@
+# After Closing — 1962 period drama (series bible)
+
+**Format:** 16:9 widescreen, ~5 min episodes. Style lock for every visual:
+> Cinematic 1962 period drama, 16:9 aspect ratio, 35mm film grain, moody amber practical lighting, deep shadows, premium television aesthetic.
+
+**Pipeline (Joe's call):** OpenArt makes every still (cast, sets, one keyframe per shot) → Higgsfield animates the stills (Kling 2.6 / 3.0 std ≈ 1–1.25 credits per second; Seedance 2.5 480p with an audio reference only for shots that need visible lip-sync) → ElevenLabs voices, piano and room tone → ffmpeg edit.
+
+## Cast (original fictional characters; distinctive, ordinary faces)
+| ID | Character | Look | Wardrobe codes |
+|---|---|---|---|
+| IR | Isaiah, 31, Black man, pianist at the Marigold | (set when the portrait is locked) | IR-W01 charcoal suit |
+| MJ | Mary Jane, 27, white woman, waitress and gifted seamstress | (set when the portrait is locked) | MJ-W01 sage work dress with apron; MJ-W02 neutral blouse, hair pinned |
+| VB | Vincent Bell, 38, club owner | (set when the portrait is locked) | immaculate tailoring |
+| ED | Eddie, Bell's silent associate | (set when the portrait is locked) | — |
+
+## Sets and props
+- SET-01 Marigold Ballroom (after hours) · SET-03 Mary Jane's room
+- PROP-01 Isaiah's grand piano · PROP-03 Mary Jane's departure letter (New York)
+
+## Locked references
+(Filled in as each portrait and set is approved. Reuse; never regenerate.)
+
+### Draft references (OpenArt, Nano Banana 2, awaiting Joe's approval)
+| Item | OpenArt historyId | Resource id |
+|---|---|---|
+| Isaiah portrait | 6JQeDehMr96UUN359r7u | zTO1KllGj48oAaUb7obr |
+| Mary Jane portrait (MJ-W01) | Ee8QgjwYN7OhEu7IbJRC | hamwSpl4RLkRBTaatzno |
+| Vincent Bell portrait | x95QFhFy0YkzqisAbt1T | n1AuPgUO2yDT6Go6GvZO |
+| Eddie portrait | 75XIPI6dsBWoFcEPPjD3 | QethMDPuVQDEuWj5jK2a |
+| SET-01 Marigold Ballroom | eXXyjlIj38DWV7paeoty | BM3EzZCWUKTPETW5OJYt |
+| SET-03 Mary Jane's room | 9Yolu3Z0VmJGhVHGHI2v | 6RYAiS7DluK1Ss3vLPqD |
+
+Budget check (26 Oct): Higgsfield 407 credits, OpenArt 7,442. Kling 2.6 animation = 10 Higgsfield credits per 10s; Kling 3.0 std (no sound) = 12.5 per 10s; Seedance 2.5 480p = 30 per 10s.
