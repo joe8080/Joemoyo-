@@ -28,3 +28,14 @@ Format: 9:16 vertical, 50–60s per episode, 3 episodes per day (12:00 / 16:00 /
 4. Julian is demoted to the night shift under Marcus. An anonymous text points him to the shredder room.
 5. The shredded files show 300 pallets going missing every month. Victor catches Julian reading them.
 6. Victor has forged Julian's signature on every theft. Marcus records Victor's confession. Victor hints that someone in the family wants Arthur gone.
+
+## Production log
+
+### Ep 1, The Setup (finished: `ep1/Ep1_The_Setup_9x16.mp4`, 29s, 720×1280)
+- **Voices (ElevenLabs, eleven_v4):** Julian = "Posh Josh". Arthur = "Alistair – Cultured and Articulate". Reuse these for every episode.
+- **Character lock:** `assets/character_ref_arthur_julian.png`. Wire it into every scene clip as the reference image.
+- **Video:** Seedance 2.5, 9:16, 720p. Each clip gets the reference image plus its voice line as reference audio, so the lips sync.
+- **Fix:** scene 1 came back with improvised dialogue. It was re-synced with Sync 3 lip-sync (silence mode). Always check each clip's audio against its line.
+- **Music:** ElevenLabs Music v2.5, 32s instrumental tension bed, ducked under dialogue.
+- **Edit:** `python3 assemble.py ep1`. This burns bold yellow captions, adds the "PART 1" tag, ducks the music and normalises to -14 LUFS.
+- **Cost:** about £15 (images £2.70, voices £0.70, 4 clips £10.80, lip-sync fix £0.65, music £0.50).
