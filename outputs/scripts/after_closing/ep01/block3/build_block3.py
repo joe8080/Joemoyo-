@@ -10,21 +10,22 @@ import subprocess
 
 # (clip, in, out) in seconds
 SHOTS = [
-    ("R1", 0, 6),       # The Skill: stitching the sage collar
-    ("R2v2", 0, 4.5),   # The Letter & The Suitcase (Ruth V.O.)
-    ("R3", 0, 6.5),     # The Friend: Ruth in the doorway
+    ("R1", 0, 6),       # The Skill: sewing machine first, then Ruth's line over her working (J-cut)
+    ("R2v2", 0, 3.5),   # The Letter & The Suitcase
+    ("R3", 0.4, 6.9),   # The Friend: Ruth in the doorway, in just before she speaks
     ("R4", 0, 9.8),     # The Resolve: Mary Jane answers, back to her stitching
 ]
 FLIP = {"R3"}
 # (file, shot, seconds into that shot)
 LINES = [
-    ("audio/ruth_doit.mp3", "R2v2", 1.0),            # V.O. over the letter
-    ("audio/ruth_newyork.mp3", "R3", 0.92),          # lips run ~0.6s after the 0.3s reference
+    ("audio/ruth_doit.mp3", "R1", 2.8),              # J-cut (Joe): heard over Mary Jane working, before we see Ruth
+    ("audio/ruth_newyork.mp3", "R3", 0.52),          # lips ~0.92s into the clip; shot starts at 0.4
     ("audio/mj_theydonthaveme.mp3", "R4", 2.4),      # lips run ~2.1s after the 0.3s reference
 ]
 # (file, shot, seconds into that shot, volume)
 FOLEY = [
-    ("audio/needle.mp3", "R1", 0.0, 0.5),
+    ("audio/sewing_machine.mp3", "R1", 0.0, 0.35),   # Joe: 2-3s of the machine before any dialogue, kept low
+    ("audio/needle.mp3", "R1", 2.6, 0.4),
     ("audio/needle.mp3", "R4", 8.6, 0.35),           # she goes back to her stitching
 ]
 STREET_VOL = 0.35
@@ -56,7 +57,7 @@ def main():
         labels.append(f"[l{j}]")
     base = k + 1 + len(LINES)
     for j, (f, shot, off, vol) in enumerate(FOLEY):
-        dur = min(7.0, total - (s[shot] + off))
+        dur = min(3.2 if "machine" in f else 7.0, total - (s[shot] + off))
         g.append(f"[{base+j}:a]atrim=0:{dur:.3f},volume={vol},afade=t=out:st={dur - 0.6:.3f}:d=0.6,"
                  f"adelay={ms(s[shot] + off)}:all=1[f{j}]")
         labels.append(f"[f{j}]")
