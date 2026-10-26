@@ -60,9 +60,17 @@ Rules:
 | Ep | Job | References | Dialogue audio | Status |
 |---|---|---|---|---|
 | 2 | `03b26f8a` | Julian, Arthur, Marcus | `614643a0` | Done |
-| 3 | `455cfc39` | Julian, Arthur, Marcus | `2a40c235` | Rendering |
-| 4 | `cf5a7e69` | Victor, Arthur | `c335dd67` | Rendering |
-| 5 | `2ea45f03` | Victor, Arthur, Marcus | `0a11d187` | Rendering |
-| 6 | `b244323a` | Victor, Arthur, Marcus | `b71fdcb8` | Rendering |
+| 3 | `455cfc39` | Julian, Arthur, Marcus | `2a40c235` | Done |
+| 4 | `cf5a7e69` | Victor, Arthur | `c335dd67` | Done |
+| 5 | `2ea45f03` | Victor, Arthur, Marcus | `0a11d187` | Done |
+| 6 | `b244323a` | Victor, Arthur, Marcus | `b71fdcb8` | Done |
 
 Dialogue offsets: Ep 4 Victor 0.5s, Victor 10.0s, Arthur 22.0s. Ep 5 Victor 1.5s, Marcus 12.5s, Victor 23.0s. Ep 6 Victor 1.0s, Arthur 12.0s, Arthur 23.0s.
+
+## Lessons from Higgsfield's "5-Step Workflow" tutorial (60M-view AI drama)
+1. Character sheets: plain grey background; full-body front (face erased), back, and a face close-up, so the model has one face to follow.
+2. Locations: one three-quarter-view set image per recurring location (warehouse, boardroom, Victor's office) to keep layouts consistent.
+3. Hook: open on the loudest moment; an emotional swing every 20–30s; end right before the reveal.
+4. Voices: describe each accent in detail and carry the description into every scene.
+5. Fix takes: keep what works, describe exactly what to change, regenerate, compare.
+6. Money: client dramas, brand integrations, paid early access to the next episode.
