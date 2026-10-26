@@ -10,16 +10,17 @@ import subprocess
 # (clip, in, out) in seconds
 SHOTS = [
     ("S1", 0, 6),    # Isaiah turns: "You always listen?"
-    ("S2", 0, 7),    # Mary Jane steps into the light: "Hard not to. Same mistake, six weeks."
-    ("S3", 0, 10),   # wide: he plays; "Better?" / "Getting there."
+    ("S2v2", 0, 7.5),  # Mary Jane, still, by the light: "Hard not to. Same mistake, six weeks." (retake)
+    ("S3v2", 0, 10),   # locked-off wide, she stays by the piano; "Better?" / "Getting there." (retake)
 ]
-# (file, shot, seconds into that shot): the reference offsets, nudged to where the
-# rendered lips actually move (measured: S1 renders ~1.04s late, S2 ~0.2s early)
+# (file, shot, seconds into that shot): placed where the rendered lips actually move.
+# S1 renders ~1.04s late; in S2v2 her lips run 2.8-6.0s, so her line is re-laid
+# phrase by phrase onto those moments (mj_line_S2v2_aligned.wav); S3v2 answer +0.5s.
 LINES = [
     ("../audio/s01_ir1.mp3", "S1", 2.04),
-    ("../audio/s01_mj2.mp3", "S2", 1.2),
-    ("audio/ir_better.mp3", "S3", 3.2),
-    ("audio/mj_gettingthere.mp3", "S3", 4.6),
+    ("audio/mj_line_S2v2_aligned.wav", "S2v2", 0.0),
+    ("audio/ir_better.mp3", "S3v2", 3.2),
+    ("audio/mj_gettingthere.mp3", "S3v2", 5.1),
 ]
 PIANO_SRC = 20.4     # piano_4 position: the same melody Block 1 opens with inside
 PIANO_VOL = 0.5
@@ -44,7 +45,7 @@ def main():
              f"fade=t=out:st={total - 1.2:.2f}:d=1.2[vout]")
 
     k = n
-    p0 = s["S3"]
+    p0 = s["S3v2"]
     g.append(f"[{k}:a]atrim=0:{total:.3f},volume=2[room]")
     g.append(f"[{k+1}:a]atrim={PIANO_SRC}:{PIANO_SRC + total - p0:.3f},asetpts=PTS-STARTPTS,"
              f"volume={PIANO_VOL},afade=t=in:d=1.2,afade=t=out:st={total - p0 - 1.5:.3f}:d=1.5,"
