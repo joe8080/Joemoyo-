@@ -76,4 +76,5 @@ Budget check (26 Oct): Higgsfield 407 credits, OpenArt 7,442. Kling 2.6 animatio
 - Isaiah now wears the charcoal suit jacket throughout Block 1, per the map.
 - B07 is mirrored so Mary Jane looks screen-left, toward the piano (the render had her looking right).
 - Cloth foley is synthesised by `ep01/block1/cloth_foley.py` from the hand's on-screen motion: ElevenLabs credits ran out (quota hit), so no new ElevenLabs audio.
-- Sound timing: piano J-cut muffled from 0:06, clear inside from 0:08, swell on Mary Jane's hold; bad chord at 0:47.6, stops dead at 0:48.7; room tone only until "You always stop there." at 0:55.8 (slight echo).
+- Sound timing: piano J-cut muffled from 0:06, clear inside from 0:08, swell on Mary Jane's hold; room tone only until "You always stop there." at 0:51.8 (slight echo).
+- Joe's revision: no bad chord and no hands-faltering shot (B08 dropped). The piano ends gently on a soft phrase while we hold on Mary Jane (fades 0:41.6–0:43.55), then we cut back to Isaiah rubbing his eyes. Block is now exactly 1:00.

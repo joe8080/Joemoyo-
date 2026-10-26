@@ -3,7 +3,10 @@
 Run from this folder after cloth_foley.py has made audio/cloth_*.wav. Street,
 doors, ballroom and macro clips are reused from ../v2/clips (symlinked here);
 B05-B10 are new Kling 2.6 renders. Two-pass loudnorm with linear gain so the
-four seconds of room tone after the chord stay quiet.
+room tone after the piano stops stays quiet.
+
+Joe's note: no wrong chord and no hands on the keys. The piano ends gently on a
+soft phrase while we hold on Mary Jane, then we cut back to Isaiah rubbing his eyes.
 """
 import json
 import subprocess
@@ -16,17 +19,16 @@ SHOTS = [
     ("V03b", 0, 5),    # V-04 macro: cloth across the table
     ("B05", 0, 7),     # V-05 MJ wiping, exhausted (0:25)
     ("B06", 0, 10),    # V-06 Isaiah, eyes closed
-    ("B07", 0, 10),    # V-07 MJ captivated, held (0:45); mirrored so she looks screen-left
-    ("B08", 0, 4),     # V-08 hands falter
-    ("B09", 0, 6),     # V-09 Isaiah rubs his eyes (0:55)
-    ("B10", 0, 7),     # MJ empathetic: "You always stop there."
+    ("B07", 0, 10),    # V-07 MJ captivated, held (0:45); the piano dies away on her; mirrored so she looks screen-left
+    ("B09", 0, 6),     # V-09 Isaiah rubs his eyes
+    ("B10", 0, 9),     # MJ empathetic: "You always stop there."
 ]
-CHORD_IN_B08 = 2.6   # frame-checked: his fingers jerk onto the wrong keys
-CHORD_HOLD = 1.1     # the bad chord sounds, then everything stops dead
+PIANO_STOP = 41.6    # film time the last soft note starts to die away (on Mary Jane)
+PIANO_TAIL = 1.95    # gentle fade on that last phrase, done before the next loud note (58.04s in piano_4)
 LINE_IN_B10 = 0.8
 FLIP = {"B07"}     # Joe's map: Mary Jane looks screen-left, toward the piano
 PIANO_IN = 6.0       # J-cut: piano starts under the doors at 0:06
-PIANO_OFFSET = 17.0  # piano_4 position at film time 0, so its swell lands on V-07
+PIANO_OFFSET = 14.4  # piano_4 position at film time 0: its phrase ending (55.9s) lands at 0:41.5
 
 A = "../v2/audio_raw"
 OUT = "../AfterClosing_E01_Block1_TheEmptyRoom_16x9.mp4"
@@ -41,10 +43,10 @@ def starts():
 
 
 def graph(total, s):
-    chord = s["B08"] + CHORD_IN_B08
+    stop = PIANO_STOP + PIANO_TAIL
     line = s["B10"] + LINE_IN_B10
     inside = s["V03"]
-    p0, p1 = PIANO_IN + PIANO_OFFSET, chord + PIANO_OFFSET   # piano_4 source times
+    p0, p1 = PIANO_IN + PIANO_OFFSET, stop + PIANO_OFFSET   # piano_4 source times
     muff = inside - PIANO_IN
 
     V = "scale=-2:1080:flags=lanczos,crop=1920:1080,setsar=1,fps=24,format=yuv420p"
@@ -61,34 +63,32 @@ def graph(total, s):
         # 0:00-0:08 the city: rain loud, sax soft, both gone once we're inside
         f"[{k}:a]volume=0.8,afade=t=in:d=0.8,afade=t=out:st={inside - 0.5}:d=1.5,atrim=0:{inside + 1}[street]",
         f"[{k+1}:a]volume=0.25,afade=t=in:d=1.5,afade=t=out:st={PIANO_IN}:d={inside + 1 - PIANO_IN},atrim=0:{inside + 1}[sax]",
-        # piano: muffled J-cut under the doors, clear inside, dead on the chord
+        # piano: muffled J-cut under the doors, clear inside, gently ends on Mary Jane
         f"[{k+2}:a]atrim={p0}:{p1:.3f},asetpts=PTS-STARTPTS,asplit=2[p1][p2]",
         f"[p1]atrim=0:{muff},lowpass=f=450,lowpass=f=450,volume=0.7,afade=t=in:d=2,"
         f"afade=t=out:st={muff - 0.15}:d=0.15,adelay={ms(PIANO_IN)}:all=1[pmuff]",
         f"[p2]atrim={muff}:{p1 - p0:.3f},asetpts=PTS-STARTPTS,volume=0.85,afade=t=in:d=0.15,"
-        f"afade=t=out:st={p1 - p0 - muff - 0.01:.3f}:d=0.01,adelay={ms(inside)}:all=1[pclean]",
-        f"[{k+3}:a]atrim=0:{CHORD_HOLD},volume=0.95,afade=t=out:st={CHORD_HOLD - 0.08}:d=0.08,"
-        f"adelay={ms(chord)}:all=1[chord]",
+        f"afade=t=out:st={PIANO_STOP - inside:.3f}:d={PIANO_TAIL}:curve=qsin,adelay={ms(inside)}:all=1[pclean]",
         # room tone from the cut inside to the end
-        f"[{k+4}:a]atrim=0:{total - inside:.3f},volume=2,afade=t=in:d=1.5,"
+        f"[{k+3}:a]atrim=0:{total - inside:.3f},volume=2,afade=t=in:d=1.5,"
         f"afade=t=out:st={total - inside - 2:.3f}:d=2,adelay={ms(inside)}:all=1[room]",
         # cloth foley, synced to the wipes
-        f"[{k+5}:a]volume=0.5,adelay={ms(s['V03b'])}:all=1[cloth1]",
-        f"[{k+6}:a]volume=0.35,adelay={ms(s['B05'])}:all=1[cloth2]",
+        f"[{k+4}:a]volume=0.5,adelay={ms(s['V03b'])}:all=1[cloth1]",
+        f"[{k+5}:a]volume=0.35,adelay={ms(s['B05'])}:all=1[cloth2]",
         # "You always stop there." with a little of the room on it
-        f"[{k+7}:a]volume=4,apad=pad_dur=2,aecho=0.8:0.6:90|160:0.22|0.12,adelay={ms(line)}:all=1[line]",
-        "[street][sax][pmuff][pclean][chord][room][cloth1][cloth2][line]"
-        f"amix=inputs=9:normalize=0:duration=longest,atrim=0:{total:.3f},"
+        f"[{k+6}:a]volume=4,apad=pad_dur=2,aecho=0.8:0.6:90|160:0.22|0.12,adelay={ms(line)}:all=1[line]",
+        "[street][sax][pmuff][pclean][room][cloth1][cloth2][line]"
+        f"amix=inputs=8:normalize=0:duration=longest,atrim=0:{total:.3f},"
         "aresample=48000,aformat=channel_layouts=stereo[mix]",
     ]
-    return g, dict(chord=chord, chord_stops=chord + CHORD_HOLD, line=line)
+    return g, dict(piano_fades=PIANO_STOP, piano_silent=stop, line=line)
 
 
 def inputs():
     args = []
     for name, _, _ in SHOTS:
         args += ["-i", f"clips/{name}.mp4"]
-    for f in ["street_1", "sax_1", "piano_4", "chord_3"]:
+    for f in ["street_1", "sax_1", "piano_4"]:
         args += ["-i", f"{A}/{f}.mp3"]
     args += ["-stream_loop", "-1", "-i", f"{A}/room_4.mp3"]
     args += ["-i", "audio/cloth_macro.wav", "-i", "audio/cloth_mj.wav", "-i", "../audio/s01_mj1.mp3"]
