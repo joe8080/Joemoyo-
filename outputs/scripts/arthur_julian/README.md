@@ -74,3 +74,9 @@ Dialogue offsets: Ep 4 Victor 0.5s, Victor 10.0s, Arthur 22.0s. Ep 5 Victor 1.5s
 4. Voices: describe each accent in detail and carry the description into every scene.
 5. Fix takes: keep what works, describe exactly what to change, regenerate, compare.
 6. Money: client dramas, brand integrations, paid early access to the next episode.
+
+## Joe's review of Ep 1–6 (rules for Ep 7 onward)
+- Working: locked faces (Victor, Arthur across wardrobe changes), haze and contrast, legible phone text ("FUNDS FROZEN").
+- AI tell: floaty, frictionless walking (Arthur's aisle walk, the contractors, Victor approaching the workers).
+- Prompt rule: keep walking under 2s on screen. Enter characters already in place or from a cut; favour CU/ECU reactions, hands and props over full-body walks.
+- Edit rule (CapCut): hide existing walks with a punch-in on the face (keyframed zoom to ~140–160%) so the baked-in dialogue stays in sync.
