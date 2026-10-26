@@ -47,8 +47,9 @@ Saved in Higgsfield. Pass the media ID straight into `medias` with role `image_r
 |---|---|---|---|
 | Julian (v2, original face) | `4f83d792-578d-4a8f-a528-6aa16c6bed2a` | (OpenArt Seedream 4.5, option 1) | Replaces the Ep 1 v1 face, which the video models block as a real-actor look-alike |
 | Arthur (janitor jumpsuit) | `6c15c0c4-3bc3-4abe-ba1b-8e365d64bbe5` | `assets/ref_arthur_face.jpg` | From Ep 1 scene 3. Wardrobe changes (tweed, suit) go in the prompt, not a new image |
+| Marcus | `af05a25a-c522-480b-9c7f-b9195944349d` | (OpenArt Seedream 4.5, made once for Ep 2) | Hi-vis vest + grey shirt; navy suit from Ep 4 goes in the prompt |
 
 Rules:
 1. New images only for **new characters** (Marcus, Victor, the security guard). Make one portrait each, once, then add it to this table.
 2. Wardrobe or location changes go in the prompt text; the face image stays the same.
-3. Voices: ElevenLabs "Posh Josh" for Julian and "Alistair" for Arthur. New lines are cheap (~50–150 EL credits each).
+3. Voices: ElevenLabs "Posh Josh" for Julian, "Alistair" for Arthur and "PETER Mature Northern British" for the security guard. New lines are cheap (~50–150 EL credits each).

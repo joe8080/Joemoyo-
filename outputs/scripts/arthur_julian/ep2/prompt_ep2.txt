@@ -1,0 +1,55 @@
+SCENE CONTEXT
+Three locations in one story beat. Morning: in a corporate glass lobby, the security guard tells Marcus his badge has been deactivated on Julian's orders. Outside, Arthur steps out of a black luxury car and quietly tells Marcus to come to the boardroom tomorrow. Night: Julian laughs at their complaint in the boardroom and orders it shredded.
+
+ACTIVE REFERENCES
+@image1: Julian, 28, an original fictional character, narrow angular face, long thin nose, pale grey-green eyes, light freckles, a faint scar through the left eyebrow, dark brown hair slicked straight back, charcoal three-piece suit, white shirt, dark navy tie, white pocket square. Face, hair and outfit 100% match @image1. Appears only from 18.5s.
+@image2: Arthur, 68, weathered lined face, neatly combed silver hair, calm pale blue eyes. Face and hair 100% match @image2. In this episode he wears a classic brown herringbone tweed jacket over a cream shirt instead of the jumpsuit. Appears only from 9.0s to 18.5s.
+@image3: Marcus, early 40s, Black British, broad build, short neat beard with grey flecks, close-cropped hair, high-visibility yellow vest over a grey work shirt, lanyard and ID badge. Face and outfit 100% match @image3. Appears from 0.0s to 18.5s.
+Security guard (no reference): a stocky man in his fifties, grey moustache, navy security uniform; he appears only from 0.0s to 9.0s.
+@audio1: the dialogue track for every speaker. Each word, voice and timing matches @audio1 exactly, and the speaker's lips are synced to it. The guard speaks at 1.0s, Arthur at 10.0s, and Julian at 19.5s and 25.5s.
+
+FORMAT MODE
+Timed multishot, 9:16 vertical, 30 seconds, real time. Cuts only at the specified points; the camera does not cut on its own.
+
+0.0s to 9.0s — LOBBY, MORNING
+LOCATION: a bright corporate glass lobby, chrome security turnstiles in the midground, cold 6500K morning daylight through tall windows, polished white floor.
+OPTICS: MS, 47 degrees, no drift mid-segment. CAMERA: slow push-in at 1 km/h from behind the turnstile, on the shadow side.
+ACTION: Marcus taps his badge on the turnstile reader; the reader light flashes red with a buzz and the gate stays locked. He taps again; red again. The guard steps in on screen right, avoids eye contact, and speaks, lips synced to @audio1: "I'm sorry, Marcus. Direct orders from Mr. Julian. Your badge is deactivated." Marcus slowly lowers the badge and looks at it, jaw tight.
+
+9.0s HARD CUT
+
+9.0s to 18.5s — STREET OUTSIDE A GLASS SKYSCRAPER, MORNING
+LOCATION: the kerb outside a modern glass skyscraper, a polished black luxury saloon car parked at the kerb, reflections of the tower in its paint, cold daylight.
+OPTICS: low-angle MS, 29 degrees, no drift mid-segment. CAMERA: locked off, low, then a gentle tilt up as Arthur rises.
+ACTION: the rear door opens; Arthur steps out unhurried, buttons his tweed jacket and stands tall with an authoritative presence. Marcus stands on the pavement on screen left, holding his dead badge. Arthur looks at him with calm certainty and speaks quietly, lips synced to @audio1: "Don't hand in your badge, Marcus. Be at the ninth-floor boardroom tomorrow morning. Exactly at nine a.m." Marcus's eyes widen slightly; he grips the badge.
+
+18.5s HARD CUT
+
+18.5s to 25.0s — BOARDROOM, NIGHT
+LOCATION: a 9th-floor glass-walled boardroom, a long glass conference table, floor-to-ceiling windows with a blurred night city skyline in cold blue and amber points of light.
+OPTICS: MS, 47 degrees, no drift mid-segment. CAMERA: slow dolly-in along the table at 2 km/h.
+ACTION: Julian leans back in a black leather chair holding an open beige folder, smirking. He laughs and speaks to an out-of-focus assistant at frame left, lips synced to @audio1: "The old man and his little friend tried to complain?" He flicks the folder down the glass table toward camera; it slides and stops.
+
+25.0s HARD CUT
+
+25.0s to 30.0s — BOARDROOM CLOSE-UP
+OPTICS: CU, 18 degrees, portrait compression, no drift mid-segment. CAMERA: locked off.
+ACTION: Julian's smile drops into a cold stare and he says quietly and flatly, lips synced to @audio1: "Throw their files in the shredder." He holds the stare to the final frame.
+
+PERFORMANCE
+The guard is uncomfortable and apologetic, his eyes down. Marcus shows controlled hurt: jaw set, a slow breath out. Arthur is still and certain, with a faint knowing calm. Julian is entitled and amused, then ice-cold. Pore-level skin realism, catch-lights in the eyes.
+
+PHYSICS
+The badge reader light flashes; the turnstile arm stays locked. The car door swings with weight. The folder slides on the glass with friction and slows to a stop.
+
+LIGHTING
+Lobby and street: cold 6500K daylight, crisp and bright. Boardroom: a cool 5600K overhead strip key with a rim on Julian's hair, warm 3200K city glow fill at 20%, and half his face in shadow in the close-up.
+
+AUDIO
+The dialogue is exactly @audio1. Lobby echo and the turnstile buzz; city traffic hum and the car door; boardroom air-conditioning hum and the paper slide. No music.
+
+STYLE
+Photoreal cinematic vertical short drama, fine film grain, shallow depth of field; the daytime scenes are cold steel-grey, the night scene is cold blue with amber accents.
+
+POSITIVE LOCKS
+Julian matches @image1, Arthur matches @image2 with the tweed jacket, and Marcus matches @image3 in every shot they appear in. Each character appears only in their stated time ranges. Only the lines in @audio1 are spoken. Clean picture without on-screen text or subtitles.
