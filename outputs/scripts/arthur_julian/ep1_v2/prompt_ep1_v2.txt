@@ -1,0 +1,53 @@
+SCENE CONTEXT
+Night, on the floor of a high-tech corporate logistics warehouse. Julian, a 28-year-old heir and original fictional character, humiliates Arthur, a 68-year-old janitor he believes is nobody, then fires him. Arthur stays calm and knowing. Julian stands on screen right and Arthur on screen left whenever both are in frame.
+
+ACTIVE REFERENCES
+@image1: Julian, 28, narrow angular face, long thin nose, pale grey-green eyes, light freckles, a faint scar through the left eyebrow, dark brown hair slicked straight back, charcoal three-piece suit, white shirt, dark navy tie, white pocket square, polished black Italian loafers. Face, hair and outfit 100% match @image1.
+@image2: Arthur, 68, weathered lined face, neatly combed silver hair, calm pale blue eyes, a faded blue warehouse janitor jumpsuit over a white T-shirt. Face, hair and outfit 100% match @image2.
+@audio1: the dialogue track for both men. Every spoken word, voice and timing matches @audio1 exactly, and the speaker's lips are synced to it. Julian speaks at 0.3s, 6.0s and 21.5s; Arthur speaks at 13.2s.
+
+LOCATION MAP
+Foreground: polished grey concrete floor with a wet sheen and a yellow mop bucket. Midground: the two men in an aisle. Background: towering steel pallet racks stacked with shrink-wrapped boxes, receding into haze. Cold blue overhead industrial lights hang high above. The camera stays on the shadow side of the aisle.
+
+FIRST FRAME / BLOCKING
+Julian fills the frame from a low angle, looking down at the camera with open disgust, his chin raised. Haze glows behind his head.
+
+FORMAT MODE
+Timed multishot, 9:16 vertical, 28 seconds, real time. Cuts only at the specified points; the camera does not cut on its own.
+
+OPTICS
+0.0s to 5.8s: CU, 29 degrees, low angle from Arthur's eye-line, no drift mid-segment.
+5.8s HARD CUT
+5.8s to 12.8s: MS, 47 degrees, low angle, no drift mid-segment.
+12.8s HARD CUT
+12.8s to 21.0s: CU, 18 degrees, portrait compression, background melts into bokeh, no drift mid-segment.
+21.0s HARD CUT
+21.0s to 28.0s: over-the-shoulder MS from behind Arthur's left shoulder onto Julian, 47 degrees, no drift mid-segment.
+
+CAMERA
+Segment 1: a slow push-in at 1 km/h. Segment 2: a slow orbit around the pair at 2 km/h. Segment 3: locked off, an almost imperceptible push. Segment 4: handheld with a 1-2 cm tremor that sharpens on the shove. Soft highlight roll-off, rich shadow detail.
+
+ACTION
+0.0s to 5.8s: Julian looks down with disgust and speaks, lips synced to @audio1: "Do you have any idea how much these Italian loafers cost, old man?"
+5.8s to 12.8s: Arthur kneels on the wet floor, mopping beside a wooden pallet. Julian towers over him, jabs a finger downward and speaks coldly, lips synced to @audio1: "If you drop one more pallet on my shift, you're out on the street. You're invisible here." Arthur keeps mopping, unhurried.
+12.8s to 21.0s: close-up on Arthur. He slowly lifts his gaze to Julian, a calm, powerful, knowing half-smile forms, and he speaks quietly, lips synced to @audio1: "Every empire has a foundation, Julian. And every foundation can be pulled out from under you."
+21.0s to 26.0s: Julian scoffs and speaks sharply, lips synced to @audio1: "Spare me the philosophy. Pack your box. You're fired."
+26.0s to 28.0s: Julian shoves an empty cardboard box hard into Arthur's chest; Arthur catches it and rocks back half a step, his eyes staying locked on Julian.
+
+PERFORMANCE
+Julian: entitled, his upper lip curling, the eyes looking down the nose, sharp hand gestures. Arthur: still, grounded, with slow blinks and steady breathing, never flinching. Pore-level skin realism, a catch-light in the eyes, visible breath in the cold air.
+
+PHYSICS
+The mop drags water across the concrete, leaving a glossy streak. The cardboard box flexes on impact against Arthur's chest. Suit fabric creases at the elbow when Julian points.
+
+LIGHTING
+Key: cold 5600K overhead industrial light from high above and slightly behind the men, giving a hard rim on the hair and shoulders. Haze density 30%, visible at 10 meters depth. Faces are lit by a soft bounce from the wet floor. The same light logic in every segment.
+
+AUDIO
+The dialogue is exactly @audio1. A faint warehouse hum, a drip of water, mop strokes on concrete and the thud of the box. No music.
+
+STYLE
+Photoreal cinematic vertical short drama, fine film grain, shallow depth of field, cold blue and steel palette.
+
+POSITIVE LOCKS
+Julian matches @image1 and Arthur matches @image2 in every segment. Julian's hair stays slicked back; Arthur's jumpsuit stays faded blue. Julian stays on screen right and Arthur on screen left. Only the four lines in @audio1 are spoken. Clean picture without on-screen text or subtitles.
