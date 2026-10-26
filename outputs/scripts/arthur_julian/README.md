@@ -39,3 +39,16 @@ Format: 9:16 vertical, 50–60s per episode, 3 episodes per day (12:00 / 16:00 /
 - **Music:** ElevenLabs Music v2.5, 32s instrumental tension bed, ducked under dialogue.
 - **Edit:** `python3 assemble.py ep1`. This burns bold yellow captions, adds the "PART 1" tag, ducks the music and normalises to -14 LUFS.
 - **Cost:** about £15 (images £2.70, voices £0.70, 4 clips £10.80, lip-sync fix £0.65, music £0.50).
+
+## Locked references (reuse these; never regenerate)
+Saved in Higgsfield. Pass the media ID straight into `medias` with role `image_references`.
+
+| Character | Higgsfield media ID | Local file | Notes |
+|---|---|---|---|
+| Julian (v2, original face) | `4f83d792-578d-4a8f-a528-6aa16c6bed2a` | (OpenArt Seedream 4.5, option 1) | Replaces the Ep 1 v1 face, which the video models block as a real-actor look-alike |
+| Arthur (janitor jumpsuit) | `6c15c0c4-3bc3-4abe-ba1b-8e365d64bbe5` | `assets/ref_arthur_face.jpg` | From Ep 1 scene 3. Wardrobe changes (tweed, suit) go in the prompt, not a new image |
+
+Rules:
+1. New images only for **new characters** (Marcus, Victor, the security guard). Make one portrait each, once, then add it to this table.
+2. Wardrobe or location changes go in the prompt text; the face image stays the same.
+3. Voices: ElevenLabs "Posh Josh" for Julian and "Alistair" for Arthur. New lines are cheap (~50–150 EL credits each).
