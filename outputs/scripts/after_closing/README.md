@@ -68,3 +68,12 @@ Budget check (26 Oct): Higgsfield 407 credits, OpenArt 7,442. Kling 2.6 animatio
 - Sound: all ElevenLabs, 4 takes each in `ep01/v2/audio_raw/`. Used: sax_1, piano_4 (swells at 50–65s), chord_3, street_1, steps_4, tray_2, room_4.
 - Rules honoured: piano muffled through the doors, full inside, cut dead on the wrong chord (80.95s); 2.0s of near-silence (room tone only) before "You always stop there."
 - Known nit: V08 (over-the-shoulder) has Isaiah still wearing his jacket; every other shot has it draped over the chair.
+
+## Ep 1 Block 1 — "The Empty Room" (0:00–1:00, cut to Joe's director's map)
+
+- Final: `ep01/AfterClosing_E01_Block1_TheEmptyRoom_16x9.mp4` (1:02, 1920x1080, -16 LUFS). Map: `ep01/block1/director_map_block1.md`.
+- Build: `ep01/block1/build_block1.py`. Reuses v2 street, doors, ballroom and macro clips; B05–B10 are new (OpenArt stills → Kling 2.6, job IDs in `ep01/block1/jobs.tsv`).
+- Isaiah now wears the charcoal suit jacket throughout Block 1, per the map.
+- B07 is mirrored so Mary Jane looks screen-left, toward the piano (the render had her looking right).
+- Cloth foley is synthesised by `ep01/block1/cloth_foley.py` from the hand's on-screen motion: ElevenLabs credits ran out (quota hit), so no new ElevenLabs audio.
+- Sound timing: piano J-cut muffled from 0:06, clear inside from 0:08, swell on Mary Jane's hold; bad chord at 0:47.6, stops dead at 0:48.7; room tone only until "You always stop there." at 0:55.8 (slight echo).
