@@ -1,0 +1,54 @@
+SCENE CONTEXT
+Night, in the logistics warehouse. Victor's security contractors advance on Arthur and Marcus while Victor gloats. Arthur calmly presses one button on his phone, his eyes flash blue, and Victor's buyout collapses as his funds are frozen. The warehouse lights cut out, leaving a single spotlight on Arthur.
+
+ACTIVE REFERENCES
+@image1: Victor, 45, an original fictional character, sharp angular features, a hawkish nose with a pronounced bridge, a sharp widow's peak, short dark hair with silver at the temples swept back, close-trimmed salt-and-pepper stubble, cold steel-grey eyes, thin unsmiling lips, an aggressive navy pinstripe three-piece suit, a black shirt and a silver tie bar. Face, hair and outfit 100% match @image1.
+@image2: Arthur, 68, weathered lined face, neatly combed silver hair, calm pale blue eyes. Face and hair 100% match @image2. He wears the immaculate custom-tailored navy Savile Row suit, a crisp white shirt and a dark burgundy tie.
+@image3: Marcus, early 40s, Black British, broad build, short neat beard with grey flecks, close-cropped hair, a high-visibility yellow vest over a grey work shirt. Face and outfit 100% match @image3. He stands one step behind Arthur's left shoulder.
+Security contractors (no reference): four large men in plain black suits with earpieces.
+@audio1: the dialogue track. Each word, voice and timing matches @audio1 exactly, and the speaker's lips are synced to it. Victor speaks at 1.0s; Arthur speaks at 12.0s and 23.0s.
+
+LOCATION: the floor of a high-tech corporate logistics warehouse at night: polished grey concrete, towering steel pallet racks stacked with shrink-wrapped boxes receding into haze, cold blue overhead industrial lights hung high above.
+
+FORMAT MODE
+Timed multishot, 9:16 vertical, 30 seconds, real time. Cuts only at the specified points; the camera does not cut on its own.
+
+0.0s to 10.0s
+OPTICS: wide shot, 63 degrees, no drift mid-segment. CAMERA: a slow push-in at 2 km/h.
+ACTION: The four security contractors walk slowly down the aisle toward Arthur and Marcus, who stand their ground. Victor follows behind the contractors with his arms spread wide and speaks with mocking triumph, lips synced to @audio1: "You're living in the past, Arthur. I own the supply chains. I own the politicians. You have nothing." The contractors stop a few metres from Arthur.
+
+10.0s HARD CUT
+
+10.0s to 20.0s
+OPTICS: CU on Arthur, 29 degrees, no drift mid-segment. CAMERA: locked off, an almost imperceptible push.
+ACTION: Arthur lifts a black smartphone and, without looking down, presses a single glowing red button on its screen with his thumb. His pale blue eyes flash with a bright electric-blue glow, and a confident smirk forms. He speaks calmly, almost gently, lips synced to @audio1: "I don't need politicians. I own the global server grid you just tried to route your buyout through."
+
+20.0s HARD CUT
+
+20.0s to 23.0s
+OPTICS: ECU insert of Victor's smartphone in his hand, 18 degrees, no drift mid-segment. CAMERA: locked off.
+ACTION: Victor's phone screen flashes red with a large banking alert reading "FUNDS FROZEN". His thumb trembles over the screen. Then, with a heavy electrical clunk, the warehouse lights go out one bank at a time.
+
+23.0s HARD CUT
+
+23.0s to 30.0s
+OPTICS: MS on Arthur, 47 degrees, no drift mid-segment. CAMERA: locked off.
+ACTION: The warehouse is dark except for a single white spotlight from above on Arthur, Marcus a silhouette at his shoulder. Victor stands at the edge of the light, face lit red from his phone, panicking. Arthur speaks quietly and finally, with the faintest smile, lips synced to @audio1: "Check your accounts, Victor. You just bought yourself a one-way ticket to bankruptcy." Hold on Arthur in the spotlight to the final frame.
+
+PERFORMANCE
+Victor goes from arrogant triumph to open panic: wide eyes, shallow breathing. Arthur is serene and in control, with slow deliberate movement. Marcus is steady and protective. The contractors hesitate and glance at one another when the lights cut. Pore-level skin realism, catch-lights in the eyes.
+
+PHYSICS
+The light banks shut off in sequence with an echoing clunk. The phone screen glow spills onto Victor's fingers. Haze hangs in the spotlight beam.
+
+LIGHTING
+Segments 1 and 2: cold 5600K overhead industrial light, haze density 30%, with a cool blue phone glow on Arthur's face at the button press. Segments 3 and 4: darkness, a red phone glow on Victor, and a single hard white 5600K spotlight from directly above Arthur with a visible beam through the haze.
+
+AUDIO
+The dialogue is exactly @audio1. Footsteps on concrete, a soft digital chime at the button press, a phone alarm buzz, the heavy clunk of the lights shutting off, then near silence. No music.
+
+STYLE
+Photoreal cinematic vertical short drama, fine film grain, shallow depth of field, cold blue and steel palette turning to near-black with one white spotlight and red phone accents.
+
+POSITIVE LOCKS
+Victor matches @image1, Arthur matches @image2 in the navy suit, and Marcus matches @image3, in every shot they appear in. Only the lines in @audio1 are spoken. The only text in the picture is "FUNDS FROZEN" on Victor's phone screen; otherwise a clean picture without subtitles.

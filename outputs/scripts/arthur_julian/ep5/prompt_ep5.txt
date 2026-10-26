@@ -1,0 +1,48 @@
+SCENE CONTEXT
+Night, in the logistics warehouse. Victor tries to buy Marcus's loyalty with a stack of cash. Marcus refuses, glancing at Arthur, who watches from the background. Humiliated, Victor signals his security contractors forward.
+
+ACTIVE REFERENCES
+@image1: Victor, 45, an original fictional character, sharp angular features, a hawkish nose with a pronounced bridge, a sharp widow's peak, short dark hair with silver at the temples swept back, close-trimmed salt-and-pepper stubble, cold steel-grey eyes, thin unsmiling lips, an aggressive navy pinstripe three-piece suit, a black shirt and a silver tie bar. Face, hair and outfit 100% match @image1.
+@image2: Arthur, 68, weathered lined face, neatly combed silver hair, calm pale blue eyes. Face and hair 100% match @image2. He wears the immaculate custom-tailored navy Savile Row suit, a crisp white shirt and a dark burgundy tie. In this episode he stays in the background, out of focus, from 10.0s to 21.0s.
+@image3: Marcus, early 40s, Black British, broad build, short neat beard with grey flecks, close-cropped hair, a high-visibility yellow vest over a grey work shirt. Face and outfit 100% match @image3.
+Security contractors (no reference): two large men in plain black suits with earpieces.
+@audio1: the dialogue track. Each word, voice and timing matches @audio1 exactly, and the speaker's lips are synced to it. Victor speaks at 1.5s and 23.0s; Marcus speaks at 12.5s.
+
+LOCATION: the floor of a high-tech corporate logistics warehouse at night: polished grey concrete, towering steel pallet racks stacked with shrink-wrapped boxes receding into haze, cold blue overhead industrial lights hung high above.
+
+FORMAT MODE
+Timed multishot, 9:16 vertical, 30 seconds, real time. Cuts only at the specified points; the camera does not cut on its own.
+
+0.0s to 10.0s
+OPTICS: MCU, 35 degrees, no drift mid-segment. CAMERA: a slow push-in at 1 km/h.
+ACTION: Victor drops a thick banded stack of cash onto the lid of a wooden packing crate between himself and Marcus; it lands with a heavy slap. Victor leans in and speaks smoothly, lips synced to @audio1: "Walk away right now, Marcus. I'll triple your salary. The old man can't protect you." Marcus stays still, arms at his sides.
+
+10.0s HARD CUT
+
+10.0s to 21.0s
+OPTICS: MCU on Marcus, 29 degrees, Arthur soft in the background over Marcus's shoulder, no drift mid-segment. CAMERA: locked off.
+ACTION: Marcus looks down at the cash, then slowly lifts his eyes past Victor toward Arthur in the background. He straightens, and speaks steadily with quiet pride, lips synced to @audio1: "I don't work for a paycheck, Victor. I work for the man who built this place with his bare hands." He pushes the cash back across the crate with two fingers.
+
+21.0s HARD CUT
+
+21.0s to 30.0s
+OPTICS: ECU on Victor's face, 18 degrees, no drift mid-segment. CAMERA: an almost imperceptible push-in.
+ACTION: Victor's jaw tightens, a vein shows at his temple and his cold eyes narrow in humiliation. He lifts two fingers to signal behind him and speaks through gritted teeth, lips synced to @audio1: "Loyalty is a disease. Clear them out. By force if you have to." In soft focus behind him, the two security contractors step forward. Hold on Victor's furious stare to the final frame.
+
+PERFORMANCE
+Victor goes from smooth and manipulative to barely contained fury. Marcus shows calm conviction: chin up, steady breathing. Arthur, in the background, is still and watchful. Pore-level skin realism, catch-lights in the eyes.
+
+PHYSICS
+The cash stack lands with weight and the band holds; the bills slide a few centimetres on the crate when pushed back. Dust motes drift in the light beams.
+
+LIGHTING
+Cold 5600K overhead industrial light from high above, giving a hard rim on hair and shoulders, haze density 30%, soft bounce from the concrete floor. In the ECU, half of Victor's face falls into shadow. The same light logic in every segment.
+
+AUDIO
+The dialogue is exactly @audio1. Warehouse hum, the slap of the cash on wood, footsteps of the contractors. No music.
+
+STYLE
+Photoreal cinematic vertical short drama, fine film grain, shallow depth of field, cold blue and steel palette with a warm hi-vis yellow accent on Marcus.
+
+POSITIVE LOCKS
+Victor matches @image1, Arthur matches @image2 in the navy suit, and Marcus matches @image3, in every shot they appear in. Only the lines in @audio1 are spoken. Clean picture without on-screen text or subtitles.

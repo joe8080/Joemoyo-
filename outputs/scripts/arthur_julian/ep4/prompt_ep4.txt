@@ -1,0 +1,48 @@
+SCENE CONTEXT
+Rival CEO Victor sees Julian's fall as his chance and launches a hostile buyout of the logistics company. He marches into the night warehouse with two security contractors and announces a takeover, only to find Arthur waiting calmly at the end of the aisle holding the land deed.
+
+ACTIVE REFERENCES
+@image1: Victor, 45, an original fictional character, sharp angular features, a hawkish nose with a pronounced bridge, a sharp widow's peak, short dark hair with silver at the temples swept back, close-trimmed salt-and-pepper stubble, cold steel-grey eyes, thin unsmiling lips, an aggressive navy pinstripe three-piece suit, a black shirt and a silver tie bar. Face, hair and outfit 100% match @image1.
+@image2: Arthur, 68, weathered lined face, neatly combed silver hair, calm pale blue eyes. Face and hair 100% match @image2. He wears the immaculate custom-tailored navy Savile Row suit, a crisp white shirt and a dark burgundy tie. Appears only from 20.0s.
+Security contractors (no reference): two large men in plain black suits with earpieces, standing a step behind Victor, hands clasped in front.
+Warehouse workers (no reference): six men and women in hi-vis vests and work clothes.
+@audio1: the dialogue track. Each word, voice and timing matches @audio1 exactly, and the speaker's lips are synced to it. Victor speaks at 0.5s and 10.0s; Arthur speaks at 22.0s.
+
+FORMAT MODE
+Timed multishot, 9:16 vertical, 30 seconds, real time. Cuts only at the specified points; the camera does not cut on its own.
+
+0.0s to 9.0s — VICTOR'S OFFICE, NIGHT
+LOCATION: a hyper-modern minimalist corporate office with black marble walls and desk, stark white overhead light, floor-to-ceiling windows overlooking a night city skyline.
+OPTICS: low-angle MCU, 35 degrees, no drift mid-segment. CAMERA: a slow push-in at 1 km/h.
+ACTION: Victor stands behind the black marble desk holding a glowing tablet that lights his face from below. He looks up from it with a slow, sinister smile and speaks, lips synced to @audio1: "Julian is out. The old man is exposed. It's time to bleed them dry. Start the buyout." He sets the tablet down on the marble.
+
+9.0s HARD CUT
+
+9.0s to 20.0s — WAREHOUSE AISLE
+LOCATION: the floor of a high-tech corporate logistics warehouse at night: polished grey concrete, towering steel pallet racks stacked with shrink-wrapped boxes receding into haze, cold blue overhead industrial lights hung high above.
+OPTICS: MS, 47 degrees, no drift mid-segment. CAMERA: a backward tracking shot ahead of Victor at 4 km/h.
+ACTION: Victor strides down the central aisle, the two security contractors a step behind him. The workers stop and turn, looking nervous. Victor stops, spreads his hands and announces loudly, lips synced to @audio1: "Attention everyone! As of midnight, this facility belongs to Ravencore Logistics. Your current contracts are void." The workers exchange worried glances.
+
+20.0s HARD CUT
+
+20.0s to 30.0s — THE END OF THE AISLE
+OPTICS: over-the-shoulder MS from behind Victor's right shoulder, 47 degrees, Arthur sharp at the far end of the aisle, no drift mid-segment. CAMERA: locked off, then an almost imperceptible push toward Arthur.
+ACTION: At the far end of the aisle, in a pool of cold light, Arthur stands perfectly still in the navy suit, holding a single sheet of paper at his side. He raises the paper slightly and speaks calmly, with quiet amusement, lips synced to @audio1: "You're trespassing, Victor. And you clearly didn't read the fine print on the land deed." On the last word, Arthur's pale blue eyes flash with a faint electric-blue glow. Hold on Arthur to the final frame.
+
+PERFORMANCE
+Victor is predatory and certain, with a cold smile and sharp, theatrical gestures. The workers are anxious and quiet. Arthur is completely composed: still, grounded, with slow blinks and the faintest smile. Pore-level skin realism, catch-lights in the eyes.
+
+PHYSICS
+The tablet glow flickers across Victor's face. Footsteps echo on the concrete. The sheet of paper stirs slightly in the air from the ventilation.
+
+LIGHTING
+Office: stark white 6500K overhead light reflecting off the black marble, with a cool tablet uplight on Victor's face. Warehouse: cold 5600K overhead industrial light, haze density 30%, and a hard pool of light on Arthur at the end of the aisle.
+
+AUDIO
+The dialogue is exactly @audio1. Office: a low city hum. Warehouse: footsteps echoing, a faint machinery hum, uneasy murmurs from the workers. No music.
+
+STYLE
+Photoreal cinematic vertical short drama, fine film grain, shallow depth of field; the office is black marble and stark white, the warehouse is a cold blue and steel palette.
+
+POSITIVE LOCKS
+Victor matches @image1 in every shot he appears in, and Arthur matches @image2 in the navy suit. Each character appears only in their stated time ranges. Only the lines in @audio1 are spoken. Clean picture without on-screen text or subtitles.
