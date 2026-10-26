@@ -35,3 +35,27 @@ Budget check (26 Oct): Higgsfield 407 credits, OpenArt 7,442. Kling 2.6 animatio
 **Joe's note (26 Oct):** in the first drafts Mary Jane looked older than Isaiah. Recast so Isaiah reads clearly older (mid-to-late 30s look, grey at the temples) and Mary Jane clearly younger (early-20s look). Script ages stay 31 / 27 unless Joe changes them.
 | Isaiah v2 (2 options) | tgZLsHT92Kl3KYoF1KOF |
 | Mary Jane v2 (2 options) | qQLPevAMdGENBiCs5gFD |
+
+## LOCKED cast (Joe approved 26 Oct)
+| Character | Source | OpenArt ref (upload id) | Higgsfield media id |
+|---|---|---|---|
+| Isaiah | Joe's chosen image, `assets/ref_isaiah.png` | moabcp0m2ks3poYuhE0M | 16119c6e-e38f-47c9-a812-73082085b871 |
+| Mary Jane (MJ-W01) | Joe's chosen image, `assets/ref_maryjane.png` | lI9jMJ5TYm06MdZF1v6t | b43e2285-cdda-418a-bd5d-ac6bf1cfdf72 |
+| Vincent Bell | draft above (resource n1AuPgUO2yDT6Go6GvZO), approved by default | — | — |
+| Eddie | draft above (resource QethMDPuVQDEuWj5jK2a), approved by default | — | — |
+| SET-01 ballroom | resource BM3EzZCWUKTPETW5OJYt | — | — |
+| SET-03 MJ's room | resource 6RYAiS7DluK1Ss3vLPqD | — | — |
+
+## Voices (ElevenLabs, eleven_v4; flow nkBdd9MZSFBLq5mfO3Iw)
+- Isaiah: "Jasper's Pro Voice" nzU5ko5DAR6BBpafyNfM (warm, calm, mid-30s African American)
+- Mary Jane: "Boo – Warm & Expressive" Y0G5nEDw2qHnUHGmtoM9 (early 20s, warm, wry)
+- Bell: to pick when Scene 5 is made
+
+## Ep 1 Scene 1 (first test) — Higgsfield jobs
+| Shot | Model | Start still (Higgsfield) | Job |
+|---|---|---|---|
+| 01A wide, piano stops, MJ listens (10s) | Kling 2.6 | fc64777b | bd11f6f4 |
+| 01B hands freeze on keys (5s) | Kling 2.6 | f8ff2925 | 8e3151bf |
+| 01C MJ listening (5s) | Kling 2.6 | 576a2045 | 4a38e301 |
+| 01D dialogue two-shot, lip-synced (12s) | Seedance 2.5 480p | ace75ecd + refs + audio a69f7e7c | f63d3112 |
+| 01E Isaiah rueful smile (5s) | Kling 2.6 | 97e3af65 | 25739a7f |
