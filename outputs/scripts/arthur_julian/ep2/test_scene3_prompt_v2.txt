@@ -1,0 +1,46 @@
+SCENE CONTEXT
+Night, a 9th-floor executive boardroom with glass walls. Julian, a 28-year-old heir, sits at the head of a long glass conference table and laughs at a complaint he has just been handed. He tosses the two complaint folders down the table for his assistant to shred. A young female assistant stands at the left edge of frame, mostly out of focus.
+
+ACTIVE REFERENCES
+@image1: Julian, an original fictional character, 28, lean build, slicked-back dark hair, clean-shaven, charcoal three-piece suit, white shirt, dark navy tie, white pocket square. Outfit and hair 100% match the reference; a distinctive face with a narrow jaw, slightly hooked nose and thin lips. Voice: posh southern English received-pronunciation accent, smooth light baritone, unhurried, smug drawl, crisp consonants.
+
+LOCATION MAP
+Foreground: the near end of a long glass conference table with reflections on the glass. Midground: Julian in a black leather executive chair at the far end of the table, facing camera. Background: a floor-to-ceiling window with a blurred night city skyline in cold blue and amber points of light. Frame left: the assistant's shoulder and hands holding two beige folders, soft focus. The camera sits low at the near end of the table, on the shadow side.
+
+FIRST FRAME / BLOCKING
+Julian leans back in the chair with one ankle resting on his knee and holds an open beige folder in his right hand. He is already reading and already smirking in frame one. Vertical composition, his eyes in the upper third.
+
+FORMAT MODE
+Sequence of cuts, 9:16 vertical, 10 seconds. Cuts only at the specified points; the camera does not cut on its own.
+
+OPTICS
+0.0s to 6.0s: MS, 47°, natural perspective, no drift mid-segment.
+6.0s HARD CUT
+6.0s to 10.0s: CU, 18°, portrait compression, background melts into bokeh, no drift mid-segment.
+
+CAMERA
+Segment 1: slow dolly-in along the table at 2 km/h, eye level with seated Julian. Segment 2: locked off, a slight push on his face. Soft highlight roll-off, rich shadow detail.
+
+ACTION
+0.0s to 2.0s: Julian scans the folder, one eyebrow lifts, a short dry laugh escapes through his nose.
+2.0s to 5.5s: he snaps the folder shut and speaks to the assistant at frame left, amused: "The old man and his little friend tried to complain?"
+5.5s to 6.0s: he flicks the folder down the glass table toward camera; it slides 50 cm and stops.
+6.0s to 10.0s: close-up. His smile drops into a cold stare straight at the assistant, and he says quietly and flatly: "Throw their files in the shredder." He holds the stare for one beat after the line.
+
+PERFORMANCE
+Segment 1: a relaxed, entitled posture and loose shoulders, with the corner of the mouth pulled up on one side. Segment 2: the jaw sets, the eyes narrow slightly and the gaze stays locked. Pore-level skin realism, a catch-light in both eyes, a calm breath before the last line.
+
+PHYSICS
+The folder slides on the glass with friction and slows to a stop. The papers inside shift slightly. The suit fabric creases at the elbow when he leans.
+
+LIGHTING
+Key: a cool 5600K overhead strip light above the table, slightly behind Julian, giving a rim on his hair and shoulders. Fill: warm 3200K city glow through the window at 20%. Face: a soft side key from frame right leaves half his face in shadow in the close-up. The same light logic across both segments.
+
+AUDIO
+Only Julian speaks, only the two quoted lines. Quiet air-conditioning hum, a soft paper slide on glass. No music.
+
+STYLE
+Photoreal cinematic vertical short drama, fine film grain, shallow depth of field, cold blue and steel palette with amber city accents.
+
+POSITIVE LOCKS
+Julian's face, hair and outfit stay identical across both segments and match @image1. Hair stays slicked back. Only the two quoted lines are spoken, in the voice described. Clean picture without on-screen text or subtitles. The assistant stays at the frame-left edge and in soft focus.
