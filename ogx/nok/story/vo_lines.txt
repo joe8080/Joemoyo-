@@ -22,7 +22,7 @@ L21	Very few Nok figures come from recorded excavations, and complete ones are e
 L22	That loss makes even a simple question hard. When?
 L23	Britannica still describes Nok as existing between about 500 BCE and 200 CE.
 L24	That range came from a handful of early radiocarbon and thermoluminescence dates.
-L25	Museum labels vary too: the Cleveland Museum of Art gives this head a thermoluminescence date of 20 to 620 CE.
+L25	Museum records vary too: the Cleveland Museum of Art gives this head a thermoluminescence date of 20 to 620 CE.
 L26	The Frankfurt team began fieldwork in 2005, and from 2009 its long-term project was funded by the German Research Foundation.
 L27	They excavated, built a pottery sequence, and gathered more than two hundred radiocarbon dates.
 L28	On their chronology, Nok began around 1500 BC.

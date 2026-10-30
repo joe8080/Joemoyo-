@@ -1,0 +1,6 @@
+*.wav
+build/layers/
+build/parts/
+build/parts_qa/
+build/test/
+build/preview/t*.jpg

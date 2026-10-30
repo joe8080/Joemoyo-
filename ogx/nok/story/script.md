@@ -1,4 +1,4 @@
-# OGX Nok — "Nok: great art without a great state?" — narration DRAFT v0.2 (30 Oct 2026)
+# OGX Nok — "Nok: great art without a great state?" — narration LOCKED v1.0 (30 Oct 2026; Research lock-check Eden 23b6b02f, picture fixes applied)
 Written only from the OGX Research Nok evidence pack (Eden 6015c5ee-…). Claim IDs are the pack's. Not lock-checked by Research yet.
 Picture key: REAL = cleared image from the pack (one credit line from credits.md); GFX = animated graphic; AI = OpenArt still, unlabelled. One picture per line.
 Spoken text = narration as written (raw spellings, per producer 30 Oct: respell only a line the full-VO transcript mishears). `tools/vo_text.py` writes `vo_lines.txt`; this file is the master.
@@ -6,13 +6,13 @@ Spoken text = narration as written (raw spellings, per producer 30 Oct: respell 
 | Line | Scene | Narration | Claims | Picture |
 |---|---|---|---|---|
 | L01 | S01 | Triangular eyes, the pupils pierced right through. | C15 | REAL NOK01 |
-| L02 | S01 | Above them, an elaborate hairstyle, worked in fired clay. | C15 | REAL NOK05 |
+| L02 | S01 | Above them, an elaborate hairstyle, worked in fired clay. | C15 | REAL NOK01 (hold from L01, tilt up to the hairstyle) |
 | L03 | S01 | The style is called Nok, after a culture of central Nigeria. | C01 | AI: wooded plateau of central Nigeria at first light, granite outcrops, mist in valleys |
 | L04 | S01 | Its excavators describe Nok as the earliest large-scale sculptural tradition in sub-Saharan Africa. | C16 | AI: excavation trench edge at dawn, trowel and brush on red earth |
 | L05 | S01 | Yet they found no evidence of a state, of towns, or of an elite. | C09, C14 | AI: open savanna woodland, no buildings, long shadows |
 | L06 | S01 | So could small, scattered farming communities have made art on this scale? | C09 | AI: a lone thatched homestead far off across a millet field at dusk |
 | L07 | S02 | The first of these terracottas was noticed in 1928, during tin mining at the village of Nok. | C01 | GFX: animated locator, Africa to central Nigeria, Nok village dot |
-| L08 | S02 | The British archaeologist Bernard Fagg collected the finds, and gave them a name: the Nok culture. | C18 | AI: 1940s field desk, oil lamp, clay fragments on paper, notebook, no person |
+| L08 | S02 | The British archaeologist Bernard Fagg collected the finds, and gave them a name: the Nok culture. | C18 | AI: generic mid-century archive shelves with closed boxes, soft window light, no desk, no person, no papers with writing |
 | L09 | S02 | Many of his pieces came from tin-mine gravels, moved from where they had first lain. | C18 | AI: wet alluvial gravels in an old tin-mine cutting, overcast |
 | L10 | S02 | A separate find came in 1943. | C19 | AI: road through farmland, 1940s, heat haze |
 | L11 | S02 | According to Fagg's later account, as retold in Archaeology magazine, a terracotta head had been used on a scarecrow in a yam field. | C19 | AI: yam mounds in a field, a scarecrow silhouette against sky, head not shown |
@@ -29,7 +29,7 @@ Spoken text = narration as written (raw spellings, per producer 30 Oct: respell 
 | L22 | S04 | That loss makes even a simple question hard. When? | C04 | AI: soil section with charcoal lenses, side light |
 | L23 | S04 | Britannica still describes Nok as existing between about 500 BCE and 200 CE. | C02 | GFX: chronology bar A builds |
 | L24 | S04 | That range came from a handful of early radiocarbon and thermoluminescence dates. | C04 | AI: old laboratory bench, glassware, sample tins |
-| L25 | S04 | Museum labels vary too: the Cleveland Museum of Art gives this head a thermoluminescence date of 20 to 620 CE. | C04 | REAL NOK04 |
+| L25 | S04 | Museum records vary too: the Cleveland Museum of Art gives this head a thermoluminescence date of 20 to 620 CE. | C04 | REAL NOK04 |
 | L26 | S04 | The Frankfurt team began fieldwork in 2005, and from 2009 its long-term project was funded by the German Research Foundation. | Brief corr. 2 | AI: grid of excavation squares, string lines, morning |
 | L27 | S04 | They excavated, built a pottery sequence, and gathered more than two hundred radiocarbon dates. | C04 | AI: rows of labelled potsherds on a tarpaulin |
 | L28 | S04 | On their chronology, Nok began around 1500 BC. | C03 | GFX: chronology bar B starts at 1500 BC beside bar A |
@@ -44,7 +44,7 @@ Spoken text = narration as written (raw spellings, per producer 30 Oct: respell 
 | L37 | S06 | Many sites cover roughly one or two hectares. | C14 | AI: low hillside with a few hut circles marked out in earth |
 | L38 | S06 | They look like brief occupations, scattered across the land. | C14 | AI: wide plateau, a few distant smoke columns far apart |
 | L39 | S06 | No towns, no monuments and no central workshops have been found so far. | C14 | AI: empty grassland at noon, heat shimmer |
-| L40 | S06 | Charred grains show what people grew: pearl millet, alongside cowpeas. | C13 | AI: pearl millet heads and cowpea pods, macro, warm light |
+| L40 | S06 | Charred grains show what people grew: pearl millet, alongside cowpeas. | C13 | REAL NOK06 |
 | L41 | S06 | Even the iron fits that picture: furnaces seem to have been used only once. | C06 | AI: broken clay furnace wall in a trench, slag |
 | L42 | S06 | The team reads that as a sign of travelling specialists, not a central workshop. | C06 | AI: footpath winding over hills at dawn |
 | L43 | S06 | As for iron objects, Breunig says everything they recovered fits into one hand. | C06 | AI: an open palm dusted with red earth, empty |
@@ -52,8 +52,8 @@ Spoken text = narration as written (raw spellings, per producer 30 Oct: respell 
 | L45 | S07 | Fragments lie in pits, and, as Breunig puts it, the pieces didn't fit together. | C11 | AI: a trowel beside scattered fired-clay fragments |
 | L46 | S07 | The team suspects the figures were broken deliberately before burial. | C11 | AI: pit cut in section, layers of soil, low sun |
 | L47 | S07 | Gabriele Franke says they can't prove it, but the pattern is striking. | C11 | AI: rain beginning on an excavation tarpaulin |
-| L48 | S07 | At Pangwari, excavated between 2011 and 2014, they found a terracotta deposit in a secure archaeological context for the first time. | C12 | AI: carefully exposed deposit under a shade tent, labels on pegs |
-| L49 | S07 | The team interprets some deposits as graves, marked by upright stones in a row; no human remains survive. | C12 | REAL NOK06 |
+| L48 | S07 | At Pangwari, excavated between 2011 and 2014, they found a terracotta deposit in a secure archaeological context for the first time. | C12 | AI: generic close-up of a trowel cleaning red soil, no finds visible |
+| L49 | S07 | The team interprets some deposits as graves, marked by upright stones in a row; no human remains survive. | C12 | AI: a row of plain upright field stones in grassland at dusk, no finds, no people |
 | L50 | S08 | So what kind of society was this? | C09 | AI: dusk over a dispersed farming landscape |
 | L51 | S08 | Breunig and Rupp concluded that Nok developed complexity only in terms of ritual. | C09 | AI: a row of upright stones at night, low firelight |
 | L52 | S08 | They describe small groups of farmers, living autonomously in dispersed settlements. | C09 | AI: a few homesteads spaced far apart across fields, morning |
@@ -64,9 +64,9 @@ Spoken text = narration as written (raw spellings, per producer 30 Oct: respell 
 | L57 | S09 | The work is unfinished. | C26 | AI: overgrown trench, weeds, collapsed string lines |
 | L58 | S09 | Fieldwork stopped after a deadly attack in 2017; the team has not gone back to the excavation area. | C26 | AI: an empty field camp at dusk, folded chairs |
 | L59 | S09 | Why Nok ended is still unknown; the team suggests environmental change as one possibility. | C24 | AI: storm light moving across the plateau |
-| L60 | S09 | Gabriele Franke puts it this way. | C25 | AI: plateau at last light |
+| L60 | S09 | Gabriele Franke puts it this way. | C25 | REAL NOK05 (no claim about the object) |
 | L61 | S09 | "The 'mystery of the Nok culture' hasn't been solved – but today we have a much clearer understanding of what that mystery actually is." | C25 | REAL NOK03 |
-| L62 | S09 | Great art – and, so far, no evidence of a great state. | C09 | REAL NOK01 (return) |
+| L62 | S09 | Great art – and, so far, no evidence of a great state. | C09 | REAL NOK01 (return; credit shown again) |
 
 End card: one only, after L62 (OGX identity; no credits, no sources, no subscribe badge).
 
@@ -87,3 +87,20 @@ Museum pieces: no VO line implies a find-spot or provenance for the piece on scr
 - L62: "without a great state" → "so far, no evidence of a great state" (hedge 3).
 - To verify when images arrive: L01 (eyes) must match NOK01 and L02 (hairstyle) must match NOK05.
 Corrections: 1928 Nok (L07) and 1943 Jemaa (L10–L13) kept apart; Jemaa attributed to its single source. No looting percentage (L17–L18). No Kagara. No find-spots for museum pieces.
+
+## On-screen credit lines (verbatim from credits.md, unlabelled form; Eden bba0f4d7)
+- NOK01: `Nok terracotta head · Honolulu Museum of Art (8349.1) · Photo: Hiart, CC0`
+- NOK02: `Nok kneeling figure · Honolulu Museum of Art (8348.1) · Photo: Hiart, CC0`
+- NOK03: `Nok seated figure · Louvre (70.1998.11.1) · Photo: Marie-Lan Nguyen, Public domain`
+- NOK04: `Nok terracotta head · Cleveland Museum of Art (1995.21) · CC0`
+- NOK05: `Nok head · Kimbell Art Museum (AP 1996.04) · Photo: FA2010, Public domain`
+- NOK06: `Excavation at the Nok site of Ido · Louis Champion et al. 2022 · CC BY 4.0`
+Real-image lines: L01 NOK01, L02 NOK01, L25 NOK04, L40 NOK06, L56 NOK02, L60 NOK05, L61 NOK03, L62 NOK01. Each shows its credit line once per appearance.
+
+## v1.0 lock changes (Research lock-check, picture column only; VO words unchanged except L25)
+- L02 NOK05 → NOK01 tilt-up (NOK05 has a smooth cap).
+- L08 generic archive shelves (must not read as Fagg's desk).
+- L25 "labels" → "records" (same word count).
+- L40 NOK06 (Ido, CH22 pearl-millet paper); L49 generic standing stones (Ido is a feasting context, not graves).
+- L48 generic trowel close-up (must not read as the Pangwari deposit). No GFX text: the AI option is used.
+- L60 NOK05 (no claim about the object). L62 NOK01 credit re-shown.
