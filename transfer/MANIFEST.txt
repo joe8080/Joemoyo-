@@ -31,3 +31,34 @@ FILE: OGX_Nok_v1.0_REVIEW_720p.mp4
     OGX_Nok_v1.0_REVIEW_720p.mp4.b64.part001  20000000 bytes
     OGX_Nok_v1.0_REVIEW_720p.mp4.b64.part002  17773492 bytes
 
+
+## v1.1 (added 30 Oct 2026; source branch claude/pensive-cerf-dtmspd @ 894be67)
+
+FILE: OGX_Nok_v1.1_REVIEW.mp4
+  bytes:    152359409
+  md5:      43765b8950768d052fdbc436cf9af2e2
+  sha256:   5b070524b7ac84c061e7434d44a9ac19fbe76cb8fd4c85340bb41694a64f3ec4
+  duration: 285.979000 s (ffprobe format=duration)
+  parts (in order):
+    OGX_Nok_v1.1_REVIEW.mp4.b64.part000  20000000 bytes
+    OGX_Nok_v1.1_REVIEW.mp4.b64.part001  20000000 bytes
+    OGX_Nok_v1.1_REVIEW.mp4.b64.part002  20000000 bytes
+    OGX_Nok_v1.1_REVIEW.mp4.b64.part003  20000000 bytes
+    OGX_Nok_v1.1_REVIEW.mp4.b64.part004  20000000 bytes
+    OGX_Nok_v1.1_REVIEW.mp4.b64.part005  20000000 bytes
+    OGX_Nok_v1.1_REVIEW.mp4.b64.part006  20000000 bytes
+    OGX_Nok_v1.1_REVIEW.mp4.b64.part007  20000000 bytes
+    OGX_Nok_v1.1_REVIEW.mp4.b64.part008  20000000 bytes
+    OGX_Nok_v1.1_REVIEW.mp4.b64.part009  20000000 bytes
+    OGX_Nok_v1.1_REVIEW.mp4.b64.part010  3145880 bytes
+
+FILE: OGX_Nok_v1.1_REVIEW_720p.mp4
+  bytes:    43564272
+  md5:      e9bef6b9052bf84406439f9cfdcd4133
+  sha256:   399f6a50e6e80ae7fbe2e0580b9b7dcf91c2ae4e5c89c84e06004c94d3755551
+  duration: 285.994000 s (ffprobe format=duration)
+  parts (in order):
+    OGX_Nok_v1.1_REVIEW_720p.mp4.b64.part000  20000000 bytes
+    OGX_Nok_v1.1_REVIEW_720p.mp4.b64.part001  20000000 bytes
+    OGX_Nok_v1.1_REVIEW_720p.mp4.b64.part002  18085696 bytes
+
