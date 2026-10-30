@@ -1,0 +1,142 @@
+{
+ "slice": 2,
+ "f0": 1704,
+ "f1": 2529,
+ "shots": [
+  {
+   "line": "L16",
+   "scene": "S03",
+   "t0": 67.053,
+   "t1": 71.007,
+   "text": "Later, archaeologists from Goethe University Frankfurt went looking.",
+   "move": "push_r",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L16.png",
+   "overlay": "dust",
+   "desc": "4x4 on a dirt track through the plateau, dust"
+  },
+  {
+   "line": "L17",
+   "scene": "S03",
+   "t0": 71.007,
+   "t1": 74.026,
+   "text": "All of the team's first thirty sites had been looted.",
+   "move": "push",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L17.png",
+   "overlay": "dust",
+   "desc": "field of abandoned looters' pits, spoil heaps, grass regrowing"
+  },
+  {
+   "line": "L18",
+   "scene": "S03",
+   "t0": 74.026,
+   "t1": 77.263,
+   "text": "In their key study area, plundered sites dominate.",
+   "move": "pan_r",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L18.png",
+   "overlay": "dust",
+   "desc": "aerial view of pitted ground among farmland"
+  },
+  {
+   "line": "L19",
+   "scene": "S03",
+   "t0": 77.263,
+   "t1": 79.446,
+   "text": "Forgeries became a known problem too.",
+   "move": "pull",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L19.png",
+   "overlay": "embers",
+   "desc": "kiln fire in darkness, sparks"
+  },
+  {
+   "line": "L20",
+   "scene": "S03",
+   "t0": 79.446,
+   "t1": 85.067,
+   "text": "Today, Nok terracottas are on the International Council of Museums' Red List of objects at risk.",
+   "move": "pan_l",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L20.png",
+   "overlay": "dust",
+   "desc": "empty museum plinth under a spotlight"
+  },
+  {
+   "line": "L21",
+   "scene": "S03",
+   "t0": 85.067,
+   "t1": 90.436,
+   "text": "Very few Nok figures come from recorded excavations, and complete ones are extremely rare.",
+   "move": "push_l",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L21.png",
+   "overlay": "dust",
+   "desc": "a single clay fragment on a sieve, soil falling through"
+  },
+  {
+   "line": "L22",
+   "scene": "S04",
+   "t0": 90.436,
+   "t1": 93.821,
+   "text": "That loss makes even a simple question hard. When?",
+   "move": "tilt_up",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L22.png",
+   "overlay": "dust",
+   "desc": "soil section with charcoal lenses, side light"
+  },
+  {
+   "line": "L23",
+   "scene": "S04",
+   "t0": 93.821,
+   "t1": 99.631,
+   "text": "Britannica still describes Nok as existing between about 500 BCE and 200 CE.",
+   "move": "pan_r",
+   "credit": null,
+   "kind": "gfx",
+   "gfx": "chrono",
+   "gfx_opts": {
+    "stage": "A"
+   },
+   "overlay": "dust"
+  },
+  {
+   "line": "L24",
+   "scene": "S04",
+   "t0": 99.631,
+   "t1": 105.362,
+   "text": "That range came from a handful of early radiocarbon and thermoluminescence dates.",
+   "move": "push_r",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L24.png",
+   "overlay": "dust",
+   "desc": "old laboratory bench, glassware, sample tins"
+  },
+  {
+   "line": "L25",
+   "scene": "S04",
+   "t0": 105.362,
+   "t1": 113.102,
+   "text": "Museum records vary too: the Cleveland Museum of Art gives this head a thermoluminescence date of 20 to 620 CE.",
+   "move": "push",
+   "credit": "Nok terracotta head · Cleveland Museum of Art (1995.21) · CC0",
+   "kind": "real",
+   "asset": "assets/real/NOK04_Cleveland_1995.21_head.jpg",
+   "real": "NOK04",
+   "overlay": "dust",
+   "view": {}
+  }
+ ],
+ "out": "/home/user/Joemoyo-/ogx/nok/build/parts/slice_02.mp4",
+ "out_qa": "/home/user/Joemoyo-/ogx/nok/build/parts_qa/slice_02.mp4"
+}

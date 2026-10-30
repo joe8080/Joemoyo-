@@ -22,8 +22,13 @@ for k, v in BANNED_OVERLAYS.items():
     if v: raise NotImplementedError(f"overlay '{k}' is banned by the Nok brief and is not implemented")
 
 # Motion floors (Lessons 28-29 Oct): FG travel >= 3% of width, FG/BG >= 2.
-FG_TRAVEL = 0.048          # of frame width, relative to the plate, per shot
-BG_TRAVEL = 0.012
+FG_TRAVEL = 0.035          # of plate width per shot (FG-only parallax, on top of the shared camera)
+FG_TRAVEL_REAL = 0.060     # photo panels over a blurred plate
+BG_TRAVEL = 0.006
+CAM_PAN = 0.012            # shared pan kept small so FG/BG stays >= 2 (QA 30 Oct: 0.035 gave ratios 1.2-1.9)
+# Shots that measured under the floors in QA round 2 (flat/dark plates) get a stronger FG-only push.
+FG_BOOST = {"L08": 1.6, "L20": 1.5, "L54": 1.5, "L24": 1.3}
+BG_ZOOM_SHARE = 0.3        # BG takes 30 % of the camera's push/pull: a dolly, not a flat zoom
 CAM = {"push": (1.00, 1.09, 0, 0), "pull": (1.09, 1.00, 0, 0), "pan_r": (1.05, 1.05, -1, 0),
        "pan_l": (1.05, 1.05, 1, 0), "push_l": (1.00, 1.08, 0.6, 0), "push_r": (1.00, 1.08, -0.6, 0),
        "pull_r": (1.08, 1.00, -0.6, 0), "tilt_up": (1.04, 1.04, 0, 1)}
@@ -94,17 +99,19 @@ def plate_frame(shot, u, qa=False, want_mask=False):
     base = W / layers.PW
     sc = scale / base
     # camera drift (shared) + parallax offsets (layer-specific), in plate pixels
-    cam_x = px * 0.035 * layers.PW * (e - 0.5)
+    cam_x = px * CAM_PAN * layers.PW * (e - 0.5)
     tall = fg.shape[0] > layers.PH
     cam_y = (py * (fg.shape[0] - layers.PH / sc) * (0.5 - e) * 0.9) if tall else py * 0.03 * layers.PH * (0.5 - e)
     dirx = 1 if px >= 0 else -1
     if shot["move"] in ("push", "pull") or py: dirx = 1 if shot["line"] < "L32" else -1
-    fg_dx = dirx * FG_TRAVEL * layers.PW * (e - 0.5)
+    fg_dx = dirx * (FG_TRAVEL_REAL if shot["kind"] == "real" else FG_TRAVEL) * FG_BOOST.get(shot["line"], 1.0) * layers.PW * (e - 0.5)
     bg_dx = dirx * BG_TRAVEL * layers.PW * (e - 0.5)
     fg_sc = sc * (1 + 0.035 * (e - 0.5) * (1 if shot["move"] != "pull" else -1))   # FG also scales a touch faster
-    B = warp(bg, base * sc, cam_x + bg_dx, cam_y)
-    F = warp(fg, base * fg_sc, cam_x + fg_dx, cam_y, border=cv2.BORDER_CONSTANT)
-    A = warp(a, base * fg_sc, cam_x + fg_dx, cam_y, border=cv2.BORDER_CONSTANT)[..., None]
+    sc_bg = 1 + (sc - 1) * BG_ZOOM_SHARE
+    B = warp(bg, base * sc_bg, cam_x + bg_dx, cam_y)
+    # replicate the FG edge outwards so a parallax shift never exposes an empty strip at the frame edge
+    F = warp(fg, base * fg_sc, cam_x + fg_dx, cam_y, border=cv2.BORDER_REPLICATE)
+    A = warp(a, base * fg_sc, cam_x + fg_dx, cam_y, border=cv2.BORDER_REPLICATE)[..., None]
     out = (B * (1 - A) + F * A).astype(np.uint8)
     return (out, A[..., 0]) if want_mask else out
 
@@ -154,6 +161,17 @@ def map_layers(u):
     A = cv2.GaussianBlur(a, (0, 0), 1)[..., None]
     return (bg * (1 - A) + fg * A).astype(np.uint8), A[..., 0]
 
+@functools.lru_cache(maxsize=1)
+def _grain():
+    """Soft procedural paper/terrain grain (2W x 2H), used on graphics so their layers carry visible texture."""
+    r = np.random.default_rng(1500)
+    t = sum(cv2.resize(r.random((9 * 2 ** k, 16 * 2 ** k)).astype(np.float32), (2 * W, 2 * H), interpolation=cv2.INTER_CUBIC) / 2 ** k
+            for k in range(5))
+    t = cv2.GaussianBlur(t, (0, 0), 2.0); return ((t - t.min()) / np.ptp(t) - 0.5).astype(np.float32)
+
+def grain_layer(scale, dx, dy):
+    return warp(_grain(), scale, dx, dy)[..., None]
+
 CHRONO_X0, CHRONO_X1 = -1600, 700        # years (negative = BC)
 def yx(y, dx): return int(180 + (y - CHRONO_X0) / (CHRONO_X1 - CHRONO_X0) * (W - 360) + dx)
 
@@ -161,8 +179,9 @@ def chrono_layers(stage, u):
     """Text-free chronology. Bar A (Britannica, c. 500 BCE-200 CE) above; bar B (Frankfurt) below:
     early from c. 1500 BC, main 9th-4th c. BC (bright), end around the turn of the era. 800 BC tick for iron."""
     e = ease(u)
-    bdx = -0.012 * W * (e - 0.5); fdx = -0.05 * W * (e - 0.5)
+    bdx = -0.03 * W * (e - 0.5); fdx = -0.10 * W * (e - 0.5) * (1.3 if stage == "A" else 1.0)
     bg = np.zeros((H, W, 3), np.uint8); bg[:] = GREEN
+    bg = np.clip(bg + grain_layer(1.0 + 0.03 * e, -bdx, 0) * 40, 0, 255).astype(np.uint8)
     for gx in range(-200, W + 200, 64):          # BG: faint dot field, slow layer (no data on it)
         for gy in range(40, H, 64):
             cv2.circle(bg, (int(gx + bdx), gy), 1, (48, 60, 60), -1, cv2.LINE_AA)
@@ -191,6 +210,9 @@ def chrono_layers(stage, u):
         for ang in range(0, 360, 24):
             p = (int(x + r * math.cos(math.radians(ang))), int(600 + r * math.sin(math.radians(ang))))
             cv2.circle(fg, p, 4, CREAM, -1, cv2.LINE_AA); cv2.circle(a, p, 4, 1.0, -1, cv2.LINE_AA)
+    z = 1.0 + 0.12 * e                                    # FG pushes in while the BG barely moves
+    fg = warp(fg, z, 0, 0, border=cv2.BORDER_CONSTANT); a = warp(a, z, 0, 0, border=cv2.BORDER_CONSTANT)
+    fg = np.clip(fg + grain_layer(z, -fdx / z, 0) * 40 * (a[..., None] > 0), 0, 255).astype(np.uint8)
     A = cv2.GaussianBlur(a, (0, 0), 1)[..., None]
     return (bg * (1 - A) + fg * A).astype(np.uint8), A[..., 0]
 
@@ -205,6 +227,15 @@ def credit(frame, text):
     x, y = 60, H - 60 - (24 + 2 * pad)
     d.rounded_rectangle((x, y, x + tw + 2 * pad, y + 24 + 2 * pad), 6, fill=(10, 14, 14, 175))
     d.text((x + pad, y + pad - 2), text, font=f, fill=(239, 230, 210, 255))
+    return cv2.cvtColor(np.array(im), cv2.COLOR_RGB2BGR)
+
+def name_sub(frame, text, k):
+    """Small name subtitle (producer rule 30 Oct): only for names the VO doesn't carry clearly. No box."""
+    im = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)); d = ImageDraw.Draw(im, "RGBA")
+    f = font("Lora-Italic[wght].ttf", 34); tw = d.textlength(text, font=f); x, y = (W - tw) / 2, H - 132
+    a = int(255 * k)
+    for ox, oy in ((2, 2), (0, 2), (2, 0)): d.text((x + ox, y + oy), text, font=f, fill=(0, 0, 0, int(a * 0.6)))
+    d.text((x, y), text, font=f, fill=(239, 230, 210, a))
     return cv2.cvtColor(np.array(im), cv2.COLOR_RGB2BGR)
 
 def end_card(u):
@@ -240,6 +271,9 @@ def frame_at(t, shots, qa=False):
     s = shots[i]
     fr = shot_frame(s, t, qa)
     if s["credit"]: fr = credit(fr, s["credit"])
+    nm = s.get("name")
+    if nm and nm["t0"] <= t <= nm["t1"]:
+        fr = name_sub(fr, nm["text"], min(1.0, (t - nm["t0"]) / 0.25, (nm["t1"] - t) / 0.25))
     # dissolve: previous shot fades out over the first XF/2 s, next one over the last XF/2 s
     if i > 0 and t < s["t0"] + XF / 2:
         p = shots[i - 1]; pf = shot_frame(p, t, qa)

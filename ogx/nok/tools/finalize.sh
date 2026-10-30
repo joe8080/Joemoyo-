@@ -1,0 +1,15 @@
+#!/bin/sh
+# Concat the rendered slices, mux the mastered mix, write the REVIEW export (never overwrites an existing file).
+set -e
+cd "$(dirname "$0")/.."
+OUT=deliverables/OGX_Nok_v1.0_REVIEW.mp4
+[ -e "$OUT" ] && { echo "refusing to overwrite $OUT"; exit 1; }
+ls build/parts/slice_*.mp4 | sort | sed "s#^#file '$PWD/#; s#\$#'#" > build/parts/concat.txt
+ls build/parts_qa/slice_*.mp4 | sort | sed "s#^#file '$PWD/#; s#\$#'#" > build/parts_qa/concat.txt
+ffmpeg -v error -y -f concat -safe 0 -i build/parts/concat.txt -c copy build/video_only.mp4
+ffmpeg -v error -y -f concat -safe 0 -i build/parts_qa/concat.txt -c copy build/qa/proxy_overlays_off.mp4
+ffmpeg -v error -i build/video_only.mp4 -i audio/MASTER_mix.wav -map 0:v:0 -map 1:a:0 -c:v copy \
+  -c:a aac -b:a 320k -ar 48000 -shortest -movflags +faststart "$OUT"
+ffmpeg -v error -y -i "$OUT" -vf scale=1280:720 -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 160k \
+  -movflags +faststart deliverables/OGX_Nok_v1.0_REVIEW_720p.mp4
+ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT"

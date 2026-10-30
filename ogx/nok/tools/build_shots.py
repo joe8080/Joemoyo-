@@ -20,6 +20,12 @@ REAL_FILES = {
     "NOK03": "NOK03_Louvre_70.1998.11.1_seated.jpg", "NOK04": "NOK04_Cleveland_1995.21_head.jpg",
     "NOK05": "NOK05_Kimbell_AP1996.04_head.jpg", "NOK06": "NOK06_Ido_excavation_Champion2022.webp",
 }
+# Per-image presentation. NOK06 is a multi-panel journal figure with printed labels ("a", "Feature 09-1"...):
+# only panel a (the Ido landscape) is used, cropped above its panel letter, so the credit carries "(cropped)" as
+# credits.md requires. scale_h = panel height as a multiple of frame height (NOK01 large enough for a real tilt).
+REAL_VIEW = {"NOK01": {"scale_h": 1.65}, "NOK06": {"crop": [0, 0, 989, 455]}}
+CROPPED_CREDIT = {"NOK06": "Excavation at the Nok site of Ido (cropped) · Louis Champion et al. 2022 · CC BY 4.0"}
+
 # Text-free animated graphics (no labels, no map tags, no numerals on screen).
 GFX = {"L07": ("map", {}), "L23": ("chrono", {"stage": "A"}), "L28": ("chrono", {"stage": "B_start"}),
        "L29": ("chrono", {"stage": "B_main"}), "L30": ("chrono", {"stage": "B_end"}),
@@ -30,6 +36,10 @@ STYLE = ("Cinematic documentary still photograph, natural light, warm earth pale
          "foreground subject and a distant background, rule-of-thirds composition, 16:9. ")
 NEGATIVE = (" No text, no letters, no numbers, no signage, no labels, no watermark, no logos, no flags, no sculptures "
             "or figurines, no artefacts that look like museum objects, no recognisable faces.")
+
+# Small name subtitle, only where Whisper medium.en could not resolve the name in the VO (asr check, 30 Oct):
+# Jemaa -> "Gemma", Breunig -> "Bruinig", Franke -> "Franca/Franco", Pangwari -> "Panguari". (line, text, delay after speech start)
+NAMES = {"L13": ("Jemaa", 0.6), "L35": ("Peter Breunig", 0.0), "L47": ("Gabriele Franke", 0.0), "L48": ("Pangwari", 0.0)}
 
 # camera move cycle: varied, never mechanical
 MOVES = ["push", "pan_r", "pull", "pan_l", "push_l", "tilt_up", "pull_r", "push_r"]
@@ -52,7 +62,8 @@ for i, l in enumerate(rows):
          "move": MOVES[i % len(MOVES)], "credit": None}
     if pic.startswith("REAL"):
         key = re.search(r"NOK0\d", pic).group(0)
-        s.update(kind="real", asset=f"assets/real/{REAL_FILES[key]}", real=key, credit=CREDITS[key], overlay="dust")
+        s.update(kind="real", asset=f"assets/real/{REAL_FILES[key]}", real=key, credit=CROPPED_CREDIT.get(key, CREDITS[key]),
+                 overlay="dust", view=REAL_VIEW.get(key, {}))
         if "tilt up" in pic: s["move"] = "tilt_up"
         if lid == "L01": s["move"] = "push"
     elif pic.startswith("GFX"):
@@ -62,6 +73,9 @@ for i, l in enumerate(rows):
         desc = pic.split(":", 1)[1].strip()
         s.update(kind="ai", asset=f"assets/ai/{lid}.png", overlay=overlay_for(desc), desc=desc)
         prompts[lid] = STYLE + desc[0].upper() + desc[1:] + "." + NEGATIVE
+    if lid in NAMES:
+        nm, d = NAMES[lid]; st = float(t["speech_t0"]) + d
+        s["name"] = {"text": nm, "t0": round(st, 3), "t1": round(min(st + 2.8, s["t1"] - 0.1), 3)}
     shots.append(s)
 # first frame starts at 0; end card after the last line
 total = shots[-1]["t1"] + END_CARD_S

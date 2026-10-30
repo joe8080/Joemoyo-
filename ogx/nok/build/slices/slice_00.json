@@ -1,0 +1,132 @@
+{
+ "slice": 0,
+ "f0": 0,
+ "f1": 900,
+ "shots": [
+  {
+   "line": "L01",
+   "scene": "S01",
+   "t0": 0.0,
+   "t1": 3.614,
+   "text": "Triangular eyes, the pupils pierced right through.",
+   "move": "push",
+   "credit": "Nok terracotta head · Honolulu Museum of Art (8349.1) · Photo: Hiart, CC0",
+   "kind": "real",
+   "asset": "assets/real/NOK01_Honolulu_8349.1_head.jpg",
+   "real": "NOK01",
+   "overlay": "dust",
+   "view": {
+    "scale_h": 1.65
+   }
+  },
+  {
+   "line": "L02",
+   "scene": "S01",
+   "t0": 3.614,
+   "t1": 7.511,
+   "text": "Above them, an elaborate hairstyle, worked in fired clay.",
+   "move": "tilt_up",
+   "credit": "Nok terracotta head · Honolulu Museum of Art (8349.1) · Photo: Hiart, CC0",
+   "kind": "real",
+   "asset": "assets/real/NOK01_Honolulu_8349.1_head.jpg",
+   "real": "NOK01",
+   "overlay": "dust",
+   "view": {
+    "scale_h": 1.65
+   }
+  },
+  {
+   "line": "L03",
+   "scene": "S01",
+   "t0": 7.511,
+   "t1": 11.363,
+   "text": "The style is called Nok, after a culture of central Nigeria.",
+   "move": "pull",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L03.png",
+   "overlay": "mist",
+   "desc": "wooded plateau of central Nigeria at first light, granite outcrops, mist in valleys"
+  },
+  {
+   "line": "L04",
+   "scene": "S01",
+   "t0": 11.363,
+   "t1": 17.516,
+   "text": "Its excavators describe Nok as the earliest large-scale sculptural tradition in sub-Saharan Africa.",
+   "move": "pan_l",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L04.png",
+   "overlay": "mist",
+   "desc": "excavation trench edge at dawn, trowel and brush on red earth"
+  },
+  {
+   "line": "L05",
+   "scene": "S01",
+   "t0": 17.516,
+   "t1": 21.892,
+   "text": "Yet they found no evidence of a state, of towns, or of an elite.",
+   "move": "push_l",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L05.png",
+   "overlay": "dust",
+   "desc": "open savanna woodland, no buildings, long shadows"
+  },
+  {
+   "line": "L06",
+   "scene": "S01",
+   "t0": 21.892,
+   "t1": 26.33,
+   "text": "So could small, scattered farming communities have made art on this scale?",
+   "move": "tilt_up",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L06.png",
+   "overlay": "mist",
+   "desc": "a lone thatched homestead far off across a millet field at dusk"
+  },
+  {
+   "line": "L07",
+   "scene": "S02",
+   "t0": 26.33,
+   "t1": 31.895,
+   "text": "The first of these terracottas was noticed in 1928, during tin mining at the village of Nok.",
+   "move": "push",
+   "credit": null,
+   "kind": "gfx",
+   "gfx": "map",
+   "gfx_opts": {},
+   "overlay": "dust"
+  },
+  {
+   "line": "L08",
+   "scene": "S02",
+   "t0": 31.895,
+   "t1": 37.503,
+   "text": "The British archaeologist Bernard Fagg collected the finds, and gave them a name: the Nok culture.",
+   "move": "push_r",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L08.png",
+   "overlay": "dust",
+   "desc": "generic mid-century archive shelves with closed boxes, soft window light, no desk, no person, no papers with writing"
+  },
+  {
+   "line": "L09",
+   "scene": "S02",
+   "t0": 37.503,
+   "t1": 42.312,
+   "text": "Many of his pieces came from tin-mine gravels, moved from where they had first lain.",
+   "move": "push",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L09.png",
+   "overlay": "dust",
+   "desc": "wet alluvial gravels in an old tin-mine cutting, overcast"
+  }
+ ],
+ "out": "/home/user/Joemoyo-/ogx/nok/build/parts/slice_00.mp4",
+ "out_qa": "/home/user/Joemoyo-/ogx/nok/build/parts_qa/slice_00.mp4"
+}

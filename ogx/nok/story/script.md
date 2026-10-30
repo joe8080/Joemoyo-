@@ -64,7 +64,7 @@ Spoken text = narration as written (raw spellings, per producer 30 Oct: respell 
 | L57 | S09 | The work is unfinished. | C26 | AI: overgrown trench, weeds, collapsed string lines |
 | L58 | S09 | Fieldwork stopped after a deadly attack in 2017; the team has not gone back to the excavation area. | C26 | AI: an empty field camp at dusk, folded chairs |
 | L59 | S09 | Why Nok ended is still unknown; the team suggests environmental change as one possibility. | C24 | AI: storm light moving across the plateau |
-| L60 | S09 | Gabriele Franke puts it this way. | C25 | REAL NOK05 (no claim about the object) |
+| L60 | S09 | Gabriele Franke puts it this way. | C25 | AI: plateau at last light (NOK05 not obtainable: Wikimedia returned HTTP 429 throughout the build) |
 | L61 | S09 | "The 'mystery of the Nok culture' hasn't been solved – but today we have a much clearer understanding of what that mystery actually is." | C25 | REAL NOK03 |
 | L62 | S09 | Great art – and, so far, no evidence of a great state. | C09 | REAL NOK01 (return; credit shown again) |
 
@@ -95,7 +95,7 @@ Corrections: 1928 Nok (L07) and 1943 Jemaa (L10–L13) kept apart; Jemaa attribu
 - NOK04: `Nok terracotta head · Cleveland Museum of Art (1995.21) · CC0`
 - NOK05: `Nok head · Kimbell Art Museum (AP 1996.04) · Photo: FA2010, Public domain`
 - NOK06: `Excavation at the Nok site of Ido · Louis Champion et al. 2022 · CC BY 4.0`
-Real-image lines: L01 NOK01, L02 NOK01, L25 NOK04, L40 NOK06, L56 NOK02, L60 NOK05, L61 NOK03, L62 NOK01. Each shows its credit line once per appearance.
+Real-image lines: L01 NOK01, L02 NOK01, L25 NOK04, L40 NOK06 (cropped, panel a), L56 NOK02, L61 NOK03, L62 NOK01. NOK05 unused (download refused, HTTP 429). Each shows its credit line once per appearance.
 
 ## v1.0 lock changes (Research lock-check, picture column only; VO words unchanged except L25)
 - L02 NOK05 → NOK01 tilt-up (NOK05 has a smooth cap).

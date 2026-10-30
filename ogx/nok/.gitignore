@@ -4,3 +4,12 @@ build/parts/
 build/parts_qa/
 build/test/
 build/preview/t*.jpg
+deliverables/*.mp4
+assets/ai/*.png
+assets/real/*.jpg
+assets/real/*.webp
+audio/stems/
+build/qa/*.mp4
+build/qa/c.txt
+build/parts_qa/
+build/logs/

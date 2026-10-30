@@ -1,0 +1,148 @@
+{
+ "slice": 3,
+ "f0": 2529,
+ "f1": 3530,
+ "shots": [
+  {
+   "line": "L24",
+   "scene": "S04",
+   "t0": 99.631,
+   "t1": 105.362,
+   "text": "That range came from a handful of early radiocarbon and thermoluminescence dates.",
+   "move": "push_r",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L24.png",
+   "overlay": "dust",
+   "desc": "old laboratory bench, glassware, sample tins"
+  },
+  {
+   "line": "L25",
+   "scene": "S04",
+   "t0": 105.362,
+   "t1": 113.102,
+   "text": "Museum records vary too: the Cleveland Museum of Art gives this head a thermoluminescence date of 20 to 620 CE.",
+   "move": "push",
+   "credit": "Nok terracotta head · Cleveland Museum of Art (1995.21) · CC0",
+   "kind": "real",
+   "asset": "assets/real/NOK04_Cleveland_1995.21_head.jpg",
+   "real": "NOK04",
+   "overlay": "dust",
+   "view": {}
+  },
+  {
+   "line": "L26",
+   "scene": "S04",
+   "t0": 113.102,
+   "t1": 121.397,
+   "text": "The Frankfurt team began fieldwork in 2005, and from 2009 its long-term project was funded by the German Research Foundation.",
+   "move": "pan_r",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L26.png",
+   "overlay": "dust",
+   "desc": "grid of excavation squares, string lines, morning"
+  },
+  {
+   "line": "L27",
+   "scene": "S04",
+   "t0": 121.397,
+   "t1": 126.935,
+   "text": "They excavated, built a pottery sequence, and gathered more than two hundred radiocarbon dates.",
+   "move": "pull",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L27.png",
+   "overlay": "dust",
+   "desc": "rows of labelled potsherds on a tarpaulin"
+  },
+  {
+   "line": "L28",
+   "scene": "S04",
+   "t0": 126.935,
+   "t1": 130.566,
+   "text": "On their chronology, Nok began around 1500 BC.",
+   "move": "pan_r",
+   "credit": null,
+   "kind": "gfx",
+   "gfx": "chrono",
+   "gfx_opts": {
+    "stage": "B_start"
+   },
+   "overlay": "dust"
+  },
+  {
+   "line": "L29",
+   "scene": "S04",
+   "t0": 130.566,
+   "t1": 136.029,
+   "text": "Its main phase ran from the ninth to the fourth century BC, when terracottas and iron appear.",
+   "move": "pan_r",
+   "credit": null,
+   "kind": "gfx",
+   "gfx": "chrono",
+   "gfx_opts": {
+    "stage": "B_main"
+   },
+   "overlay": "dust"
+  },
+  {
+   "line": "L30",
+   "scene": "S04",
+   "t0": 136.029,
+   "t1": 138.509,
+   "text": "And it ended around the turn of the Common Era.",
+   "move": "pan_r",
+   "credit": null,
+   "kind": "gfx",
+   "gfx": "chrono",
+   "gfx_opts": {
+    "stage": "B_end"
+   },
+   "overlay": "dust"
+  },
+  {
+   "line": "L31",
+   "scene": "S04",
+   "t0": 138.509,
+   "t1": 143.052,
+   "text": "The earliest furnace dates fall somewhere between 800 and 400 BC.",
+   "move": "pull_r",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L31.png",
+   "overlay": "embers",
+   "desc": "glowing clay furnace mouth at night, charcoal"
+  },
+  {
+   "line": "L32",
+   "scene": "S04",
+   "t0": 143.052,
+   "t1": 147.081,
+   "text": "But iron smelting by about 800 BC cannot yet be confirmed.",
+   "move": "pan_r",
+   "credit": null,
+   "kind": "gfx",
+   "gfx": "chrono",
+   "gfx_opts": {
+    "stage": "B_iron"
+   },
+   "overlay": "dust"
+  },
+  {
+   "line": "L33",
+   "scene": "S05",
+   "t0": 147.081,
+   "t1": 148.811,
+   "text": "So who made the figures?",
+   "move": "push",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L33.png",
+   "overlay": "dust",
+   "desc": "hands pressing wet clay, close up, no face"
+  }
+ ],
+ "out": "/home/user/Joemoyo-/ogx/nok/build/parts/slice_03.mp4",
+ "out_qa": "/home/user/Joemoyo-/ogx/nok/build/parts_qa/slice_03.mp4"
+}

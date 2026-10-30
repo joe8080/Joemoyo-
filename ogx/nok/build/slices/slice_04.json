@@ -1,0 +1,154 @@
+{
+ "slice": 4,
+ "f0": 3530,
+ "f1": 4238,
+ "shots": [
+  {
+   "line": "L32",
+   "scene": "S04",
+   "t0": 143.052,
+   "t1": 147.081,
+   "text": "But iron smelting by about 800 BC cannot yet be confirmed.",
+   "move": "pan_r",
+   "credit": null,
+   "kind": "gfx",
+   "gfx": "chrono",
+   "gfx_opts": {
+    "stage": "B_iron"
+   },
+   "overlay": "dust"
+  },
+  {
+   "line": "L33",
+   "scene": "S05",
+   "t0": 147.081,
+   "t1": 148.811,
+   "text": "So who made the figures?",
+   "move": "push",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L33.png",
+   "overlay": "dust",
+   "desc": "hands pressing wet clay, close up, no face"
+  },
+  {
+   "line": "L34",
+   "scene": "S05",
+   "t0": 148.811,
+   "t1": 155.165,
+   "text": "Art this accomplished, the thinking went, must have come from a complex society, with specialists to make it.",
+   "move": "pan_r",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L34.png",
+   "overlay": "dust",
+   "desc": "lamp-lit museum storeroom, shelves of covered objects"
+  },
+  {
+   "line": "L35",
+   "scene": "S05",
+   "t0": 155.165,
+   "t1": 159.174,
+   "text": "Peter Breunig has said that, at first, his team assumed the same.",
+   "move": "pull",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L35.png",
+   "overlay": "dust",
+   "desc": "field notebook open on a trench edge, pencil, wind",
+   "name": {
+    "text": "Peter Breunig",
+    "t0": 155.39,
+    "t1": 158.19
+   }
+  },
+  {
+   "line": "L36",
+   "scene": "S06",
+   "t0": 159.174,
+   "t1": 160.922,
+   "text": "What they found was smaller.",
+   "move": "pan_l",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L36.png",
+   "overlay": "dust",
+   "desc": "small clearing seen from above, woodland around"
+  },
+  {
+   "line": "L37",
+   "scene": "S06",
+   "t0": 160.922,
+   "t1": 163.823,
+   "text": "Many sites cover roughly one or two hectares.",
+   "move": "push_l",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L37.png",
+   "overlay": "dust",
+   "desc": "low hillside with a few hut circles marked out in earth"
+  },
+  {
+   "line": "L38",
+   "scene": "S06",
+   "t0": 163.823,
+   "t1": 167.225,
+   "text": "They look like brief occupations, scattered across the land.",
+   "move": "tilt_up",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L38.png",
+   "overlay": "mist",
+   "desc": "wide plateau, a few distant smoke columns far apart"
+  },
+  {
+   "line": "L39",
+   "scene": "S06",
+   "t0": 167.225,
+   "t1": 171.976,
+   "text": "No towns, no monuments and no central workshops have been found so far.",
+   "move": "pull_r",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L39.png",
+   "overlay": "dust",
+   "desc": "empty grassland at noon, heat shimmer"
+  },
+  {
+   "line": "L40",
+   "scene": "S06",
+   "t0": 171.976,
+   "t1": 176.582,
+   "text": "Charred grains show what people grew: pearl millet, alongside cowpeas.",
+   "move": "push_r",
+   "credit": "Excavation at the Nok site of Ido (cropped) · Louis Champion et al. 2022 · CC BY 4.0",
+   "kind": "real",
+   "asset": "assets/real/NOK06_Ido_excavation_Champion2022.webp",
+   "real": "NOK06",
+   "overlay": "dust",
+   "view": {
+    "crop": [
+     0,
+     0,
+     989,
+     455
+    ]
+   }
+  },
+  {
+   "line": "L41",
+   "scene": "S06",
+   "t0": 176.582,
+   "t1": 181.196,
+   "text": "Even the iron fits that picture: furnaces seem to have been used only once.",
+   "move": "push",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L41.png",
+   "overlay": "embers",
+   "desc": "broken clay furnace wall in a trench, slag"
+  }
+ ],
+ "out": "/home/user/Joemoyo-/ogx/nok/build/parts/slice_04.mp4",
+ "out_qa": "/home/user/Joemoyo-/ogx/nok/build/parts_qa/slice_04.mp4"
+}

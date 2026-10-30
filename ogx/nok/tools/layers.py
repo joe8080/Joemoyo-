@@ -42,28 +42,32 @@ def ai_layers(path, target=(0.22, 0.45)):
         elif area > target[1]: q += 0.04
         else: break
     mask = cv2.morphologyEx(keep * 255, cv2.MORPH_CLOSE, np.ones((25, 25), np.uint8))
-    alpha = cv2.GaussianBlur(mask, (0, 0), 6).astype(np.float32) / 255
+    alpha = cv2.GaussianBlur(mask, (0, 0), 11).astype(np.float32) / 255   # wide feather hides the parallax seam
     # background plate: remove the FG (dilated) and inpaint at quarter res, then blend back
-    hole = cv2.dilate(mask, np.ones((61, 61), np.uint8))
-    small = cv2.resize(img, (PW // 4, PH // 4), interpolation=cv2.INTER_AREA)
-    hs = cv2.resize(hole, (PW // 4, PH // 4), interpolation=cv2.INTER_NEAREST)
-    fill = cv2.resize(cv2.inpaint(small, hs, 9, cv2.INPAINT_TELEA), (PW, PH), interpolation=cv2.INTER_CUBIC)
-    fill = cv2.GaussianBlur(fill, (0, 0), 3)
+    hole = cv2.dilate(mask, np.ones((41, 41), np.uint8))
+    small = cv2.resize(img, (PW // 2, PH // 2), interpolation=cv2.INTER_AREA)
+    hs = cv2.resize(hole, (PW // 2, PH // 2), interpolation=cv2.INTER_NEAREST)
+    fill = cv2.resize(cv2.inpaint(small, hs, 15, cv2.INPAINT_TELEA), (PW, PH), interpolation=cv2.INTER_CUBIC)
+    fill = cv2.GaussianBlur(fill, (0, 0), 2)
     h = cv2.GaussianBlur(hole, (0, 0), 8).astype(np.float32)[..., None] / 255
     bg = (img * (1 - h) + fill * h).astype(np.uint8)
     return {"bg": bg, "fg": img, "alpha": alpha, "fg_area": float(alpha.mean()), "q": q}
 
-def real_layers(path, scale_h=1.18):
+def real_layers(path, scale_h=1.18, crop=None):
     """Museum or excavation photo: unaltered photo panel (FG) over a blurred extension (BG). The photo itself
     is never cropped for meaning or retouched; only scaled."""
     img = cv2.imread(str(path), cv2.IMREAD_COLOR)
     if img is None:  # webp via PIL fallback
         from PIL import Image
         img = cv2.cvtColor(np.array(Image.open(path).convert("RGB")), cv2.COLOR_RGB2BGR)
+    if crop: img = img[crop[1]:crop[3], crop[0]:crop[2]]
     bg = cv2.GaussianBlur(cover(img, PW // 4, PH // 4), (0, 0), 6)
     bg = (cv2.resize(bg, (PW, PH), interpolation=cv2.INTER_CUBIC) * 0.38).astype(np.uint8)
     ph = int(1080 * scale_h); pw = int(img.shape[1] * ph / img.shape[0])
     if pw > PW * 0.9: pw = int(PW * 0.9); ph = int(img.shape[0] * pw / img.shape[1])
+    # never upscale a real image more than 1.25x in the delivered 1920x1080 frame (plate->frame is W/PW)
+    up = (pw / img.shape[1]) * (1920 / PW)
+    if up > 1.25: k = 1.25 / up; pw, ph = int(pw * k), int(ph * k)
     panel = cv2.resize(img, (pw, ph), interpolation=cv2.INTER_AREA)
     fg = np.zeros((max(PH, ph), PW, 3), np.uint8); alpha = np.zeros(fg.shape[:2], np.float32)
     x = (PW - pw) // 2; y = (fg.shape[0] - ph) // 2
@@ -74,12 +78,13 @@ def real_layers(path, scale_h=1.18):
     return {"bg": bg, "fg": fg, "alpha": alpha, "fg_area": float(alpha.mean()), "q": None}
 
 def get(shot):
-    key = shot.get("real") or shot["line"]
+    v = shot.get("view", {})
+    key = (shot.get("real") or shot["line"]) + ("_" + "_".join(f"{k}{v[k]}" for k in sorted(v)).replace(" ", "").replace(",", "-") if v else "")
     cache = ROOT / "build/layers" / f"{key}.npz"
     if cache.exists():
         z = np.load(cache); return {k: z[k] for k in z.files}
     path = ROOT / shot["asset"]
-    L = real_layers(path) if shot["kind"] == "real" else ai_layers(path)
+    L = real_layers(path, **v) if shot["kind"] == "real" else ai_layers(path)
     cache.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(cache, bg=L["bg"], fg=L["fg"], alpha=L["alpha"].astype(np.float16))
     return L

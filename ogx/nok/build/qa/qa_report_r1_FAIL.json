@@ -1,0 +1,1235 @@
+{
+ "final": "deliverables/OGX_Nok_v1.0_REVIEW.mp4",
+ "proxy_overlays_off": "build/qa/proxy_overlays_off.mp4",
+ "runtime_s": 285.98,
+ "runtime_ok": true,
+ "loudness_I": -14.0,
+ "true_peak_dbtp": -1.9,
+ "loudness_ok": true,
+ "ocr": {
+  "grabs": 22,
+  "disallowed_strings": 0,
+  "allowed": [
+   "Excavation at the Nok site of Ido (cropped) · Louis Champion et al. 2022 · CC BY 4.0",
+   "Gabriele Franke",
+   "Jemaa",
+   "Nok kneeling figure · Honolulu Museum of Art (8348.1) · Photo: Hiart, CC0",
+   "Nok seated figure · Louvre (70.1998.11.1) · Photo: Marie-Lan Nguyen, Public domain",
+   "Nok terracotta head · Cleveland Museum of Art (1995.21) · CC0",
+   "Nok terracotta head · Honolulu Museum of Art (8349.1) · Photo: Hiart, CC0",
+   "ORIGINEX HUMAN ARCHIVES",
+   "Pangwari",
+   "Peter Breunig"
+  ],
+  "inventory": [
+   {
+    "t": 1.81,
+    "why": "credit L01 NOK01",
+    "found": [
+     {
+      "text": "Nok terracotta head : Honolulu Museum of Art (8349.1) : Photo: Hiart, CC0",
+      "conf": 0.91,
+      "allowed": true,
+      "match": "Nok terracotta head · Honolulu Museum of Art (8349.1) · Photo: Hiart, CC0"
+     }
+    ]
+   },
+   {
+    "t": 5.56,
+    "why": "credit L02 NOK01",
+    "found": [
+     {
+      "text": "Nok terracotta head : Honolulu Museum of Art (8349.1) · Photo: Hiart, CC0",
+      "conf": 0.9,
+      "allowed": true,
+      "match": "Nok terracotta head · Honolulu Museum of Art (8349.1) · Photo: Hiart, CC0"
+     }
+    ]
+   },
+   {
+    "t": 15.0,
+    "why": "every 30 s",
+    "found": []
+   },
+   {
+    "t": 45.0,
+    "why": "every 30 s",
+    "found": []
+   },
+   {
+    "t": 56.54,
+    "why": "name L13",
+    "found": [
+     {
+      "text": "Jemaa",
+      "conf": 0.83,
+      "allowed": true,
+      "match": "Jemaa"
+     }
+    ]
+   },
+   {
+    "t": 75.0,
+    "why": "every 30 s",
+    "found": []
+   },
+   {
+    "t": 105.0,
+    "why": "every 30 s",
+    "found": []
+   },
+   {
+    "t": 109.23,
+    "why": "credit L25 NOK04",
+    "found": [
+     {
+      "text": "Nok terracotta head · Cleveland Museum of Art (1995.21) · CC0",
+      "conf": 0.89,
+      "allowed": true,
+      "match": "Nok terracotta head · Cleveland Museum of Art (1995.21) · CC0"
+     }
+    ]
+   },
+   {
+    "t": 135.0,
+    "why": "every 30 s",
+    "found": []
+   },
+   {
+    "t": 156.79,
+    "why": "name L35",
+    "found": [
+     {
+      "text": "Peter Breunig",
+      "conf": 0.88,
+      "allowed": true,
+      "match": "Peter Breunig"
+     }
+    ]
+   },
+   {
+    "t": 165.0,
+    "why": "every 30 s",
+    "found": []
+   },
+   {
+    "t": 174.28,
+    "why": "credit L40 NOK06",
+    "found": [
+     {
+      "text": "Excavation at the Nok site of Ido (cropped) · Louis Champion et al. 2022 · CC BY 4.0",
+      "conf": 0.93,
+      "allowed": true,
+      "match": "Excavation at the Nok site of Ido (cropped) · Louis Champion et al. 2022 · CC BY 4.0"
+     }
+    ]
+   },
+   {
+    "t": 195.0,
+    "why": "every 30 s",
+    "found": []
+   },
+   {
+    "t": 203.51,
+    "why": "name L47",
+    "found": [
+     {
+      "text": "Gabriele Franke",
+      "conf": 0.9,
+      "allowed": true,
+      "match": "Gabriele Franke"
+     }
+    ]
+   },
+   {
+    "t": 207.45,
+    "why": "name L48",
+    "found": [
+     {
+      "text": "Pangwari",
+      "conf": 0.85,
+      "allowed": true,
+      "match": "Pangwari"
+     }
+    ]
+   },
+   {
+    "t": 225.0,
+    "why": "every 30 s",
+    "found": []
+   },
+   {
+    "t": 250.81,
+    "why": "credit L56 NOK02",
+    "found": [
+     {
+      "text": "Nok kneeling figure · Honolulu Museum of Art (8348.1) - Photo: Hiart, CCO",
+      "conf": 0.9,
+      "allowed": true,
+      "match": "Nok kneeling figure · Honolulu Museum of Art (8348.1) · Photo: Hiart, CC0"
+     }
+    ]
+   },
+   {
+    "t": 255.0,
+    "why": "every 30 s",
+    "found": []
+   },
+   {
+    "t": 273.18,
+    "why": "credit L61 NOK03",
+    "found": [
+     {
+      "text": "Nok seated figure · Louvre (70.1998.11.1) · Photo: Marie-Lan Nguyen, Public domain",
+      "conf": 0.92,
+      "allowed": true,
+      "match": "Nok seated figure · Louvre (70.1998.11.1) · Photo: Marie-Lan Nguyen, Public domain"
+     }
+    ]
+   },
+   {
+    "t": 278.93,
+    "why": "credit L62 NOK01",
+    "found": [
+     {
+      "text": "Nok terracotta head · Honolulu Museum of Art (8349.1) · Photo: Hiart, CCO",
+      "conf": 0.9,
+      "allowed": true,
+      "match": "Nok terracotta head · Honolulu Museum of Art (8349.1) · Photo: Hiart, CC0"
+     }
+    ]
+   },
+   {
+    "t": 283.98,
+    "why": "end card",
+    "found": [
+     {
+      "text": "ORIGINEX",
+      "conf": 0.83,
+      "allowed": true,
+      "match": "ORIGINEX HUMAN ARCHIVES"
+     },
+     {
+      "text": "HUMAN",
+      "conf": 0.67,
+      "allowed": true,
+      "match": "Jemaa"
+     },
+     {
+      "text": "ARCHIVES",
+      "conf": 0.7,
+      "allowed": true,
+      "match": "ORIGINEX HUMAN ARCHIVES"
+     }
+    ]
+   },
+   {
+    "t": 285.0,
+    "why": "every 30 s",
+    "found": [
+     {
+      "text": "ORIGINEXHUMAN",
+      "conf": 0.89,
+      "allowed": true,
+      "match": "ORIGINEX HUMAN ARCHIVES"
+     },
+     {
+      "text": "ARCHIVES",
+      "conf": 0.8,
+      "allowed": true,
+      "match": "ORIGINEX HUMAN ARCHIVES"
+     }
+    ]
+   }
+  ]
+ },
+ "credits_read_back": [
+  {
+   "line": "L01",
+   "image": "NOK01",
+   "expected": "Nok terracotta head · Honolulu Museum of Art (8349.1) · Photo: Hiart, CC0",
+   "read": "Nok terracotta head : Honolulu Museum of Art (8349.1) : Photo: Hiart, CC0",
+   "similarity": 1.0
+  },
+  {
+   "line": "L02",
+   "image": "NOK01",
+   "expected": "Nok terracotta head · Honolulu Museum of Art (8349.1) · Photo: Hiart, CC0",
+   "read": "Nok terracotta head : Honolulu Museum of Art (8349.1) · Photo: Hiart, CC0",
+   "similarity": 1.0
+  },
+  {
+   "line": "L25",
+   "image": "NOK04",
+   "expected": "Nok terracotta head · Cleveland Museum of Art (1995.21) · CC0",
+   "read": "Nok terracotta head · Cleveland Museum of Art (1995.21) · CC0",
+   "similarity": 1.0
+  },
+  {
+   "line": "L40",
+   "image": "NOK06",
+   "expected": "Excavation at the Nok site of Ido (cropped) · Louis Champion et al. 2022 · CC BY 4.0",
+   "read": "Excavation at the Nok site of Ido (cropped) · Louis Champion et al. 2022 · CC BY 4.0",
+   "similarity": 1.0
+  },
+  {
+   "line": "L56",
+   "image": "NOK02",
+   "expected": "Nok kneeling figure · Honolulu Museum of Art (8348.1) · Photo: Hiart, CC0",
+   "read": "Nok kneeling figure · Honolulu Museum of Art (8348.1) - Photo: Hiart, CCO",
+   "similarity": 0.981
+  },
+  {
+   "line": "L61",
+   "image": "NOK03",
+   "expected": "Nok seated figure · Louvre (70.1998.11.1) · Photo: Marie-Lan Nguyen, Public domain",
+   "read": "Nok seated figure · Louvre (70.1998.11.1) · Photo: Marie-Lan Nguyen, Public domain",
+   "similarity": 1.0
+  },
+  {
+   "line": "L62",
+   "image": "NOK01",
+   "expected": "Nok terracotta head · Honolulu Museum of Art (8349.1) · Photo: Hiart, CC0",
+   "read": "Nok terracotta head · Honolulu Museum of Art (8349.1) · Photo: Hiart, CCO",
+   "similarity": 0.981
+  }
+ ],
+ "flow": {
+  "fg_min": 0.0,
+  "fg_median": 5.4,
+  "ratio_min": 0.09,
+  "ratio_median": 2.62,
+  "fails": [
+   {
+    "line": "L04",
+    "kind": "ai",
+    "dur": 6.15,
+    "fg_travel_pct": 7.33,
+    "bg_travel_pct": 4.27,
+    "ratio": 1.72,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L07",
+    "kind": "gfx",
+    "dur": 5.57,
+    "fg_travel_pct": 1.27,
+    "bg_travel_pct": 0.0,
+    "ratio": null,
+    "pass_floor": false,
+    "pass_ratio": true
+   },
+   {
+    "line": "L08",
+    "kind": "ai",
+    "dur": 5.61,
+    "fg_travel_pct": 3.16,
+    "bg_travel_pct": 2.54,
+    "ratio": 1.24,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L12",
+    "kind": "ai",
+    "dur": 1.8,
+    "fg_travel_pct": 7.97,
+    "bg_travel_pct": 4.63,
+    "ratio": 1.72,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L18",
+    "kind": "ai",
+    "dur": 3.24,
+    "fg_travel_pct": 7.6,
+    "bg_travel_pct": 4.69,
+    "ratio": 1.62,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L19",
+    "kind": "ai",
+    "dur": 2.18,
+    "fg_travel_pct": 0.29,
+    "bg_travel_pct": 1.21,
+    "ratio": 0.24,
+    "pass_floor": false,
+    "pass_ratio": false
+   },
+   {
+    "line": "L20",
+    "kind": "ai",
+    "dur": 5.62,
+    "fg_travel_pct": 0.29,
+    "bg_travel_pct": 0.02,
+    "ratio": 13.14,
+    "pass_floor": false,
+    "pass_ratio": true
+   },
+   {
+    "line": "L23",
+    "kind": "gfx",
+    "dur": 5.81,
+    "fg_travel_pct": 0.25,
+    "bg_travel_pct": 0.01,
+    "ratio": 24.45,
+    "pass_floor": false,
+    "pass_ratio": true
+   },
+   {
+    "line": "L24",
+    "kind": "ai",
+    "dur": 5.73,
+    "fg_travel_pct": 3.16,
+    "bg_travel_pct": 2.25,
+    "ratio": 1.41,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L25",
+    "kind": "real",
+    "dur": 7.74,
+    "fg_travel_pct": 2.22,
+    "bg_travel_pct": 0.0,
+    "ratio": null,
+    "pass_floor": false,
+    "pass_ratio": true
+   },
+   {
+    "line": "L26",
+    "kind": "ai",
+    "dur": 8.3,
+    "fg_travel_pct": 6.75,
+    "bg_travel_pct": 4.17,
+    "ratio": 1.62,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L27",
+    "kind": "ai",
+    "dur": 5.54,
+    "fg_travel_pct": 4.48,
+    "bg_travel_pct": 2.37,
+    "ratio": 1.89,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L28",
+    "kind": "gfx",
+    "dur": 3.63,
+    "fg_travel_pct": 0.0,
+    "bg_travel_pct": 0.01,
+    "ratio": 0.23,
+    "pass_floor": false,
+    "pass_ratio": false
+   },
+   {
+    "line": "L29",
+    "kind": "gfx",
+    "dur": 5.46,
+    "fg_travel_pct": 0.0,
+    "bg_travel_pct": 0.0,
+    "ratio": 0.09,
+    "pass_floor": false,
+    "pass_ratio": false
+   },
+   {
+    "line": "L30",
+    "kind": "gfx",
+    "dur": 2.48,
+    "fg_travel_pct": 0.0,
+    "bg_travel_pct": 0.0,
+    "ratio": 0.0,
+    "pass_floor": false,
+    "pass_ratio": false
+   },
+   {
+    "line": "L32",
+    "kind": "gfx",
+    "dur": 4.03,
+    "fg_travel_pct": 0.0,
+    "bg_travel_pct": 0.01,
+    "ratio": 0.0,
+    "pass_floor": false,
+    "pass_ratio": false
+   },
+   {
+    "line": "L34",
+    "kind": "ai",
+    "dur": 6.35,
+    "fg_travel_pct": 5.48,
+    "bg_travel_pct": 4.33,
+    "ratio": 1.27,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L36",
+    "kind": "ai",
+    "dur": 1.75,
+    "fg_travel_pct": 8.22,
+    "bg_travel_pct": 5.02,
+    "ratio": 1.64,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L42",
+    "kind": "ai",
+    "dur": 4.48,
+    "fg_travel_pct": 7.7,
+    "bg_travel_pct": 4.13,
+    "ratio": 1.86,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L44",
+    "kind": "ai",
+    "dur": 2.53,
+    "fg_travel_pct": 8.19,
+    "bg_travel_pct": 5.09,
+    "ratio": 1.61,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L45",
+    "kind": "ai",
+    "dur": 5.21,
+    "fg_travel_pct": 5.29,
+    "bg_travel_pct": 3.28,
+    "ratio": 1.61,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L49",
+    "kind": "ai",
+    "dur": 6.7,
+    "fg_travel_pct": 2.79,
+    "bg_travel_pct": 1.78,
+    "ratio": 1.57,
+    "pass_floor": false,
+    "pass_ratio": false
+   },
+   {
+    "line": "L52",
+    "kind": "ai",
+    "dur": 4.79,
+    "fg_travel_pct": 7.34,
+    "bg_travel_pct": 4.1,
+    "ratio": 1.79,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L54",
+    "kind": "ai",
+    "dur": 6.01,
+    "fg_travel_pct": 3.4,
+    "bg_travel_pct": 2.38,
+    "ratio": 1.43,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L55",
+    "kind": "ai",
+    "dur": 4.42,
+    "fg_travel_pct": 6.04,
+    "bg_travel_pct": 3.23,
+    "ratio": 1.87,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L58",
+    "kind": "ai",
+    "dur": 6.16,
+    "fg_travel_pct": 7.24,
+    "bg_travel_pct": 4.01,
+    "ratio": 1.81,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L61",
+    "kind": "real",
+    "dur": 7.38,
+    "fg_travel_pct": 2.89,
+    "bg_travel_pct": 0.0,
+    "ratio": 1619.37,
+    "pass_floor": false,
+    "pass_ratio": true
+   }
+  ],
+  "shots": [
+   {
+    "line": "L01",
+    "kind": "real",
+    "dur": 3.61,
+    "fg_travel_pct": 4.14,
+    "bg_travel_pct": 0.0,
+    "ratio": 1959.07,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L02",
+    "kind": "real",
+    "dur": 3.9,
+    "fg_travel_pct": 20.87,
+    "bg_travel_pct": 0.0,
+    "ratio": 7558.91,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L03",
+    "kind": "ai",
+    "dur": 3.85,
+    "fg_travel_pct": 5.26,
+    "bg_travel_pct": 1.44,
+    "ratio": 3.66,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L04",
+    "kind": "ai",
+    "dur": 6.15,
+    "fg_travel_pct": 7.33,
+    "bg_travel_pct": 4.27,
+    "ratio": 1.72,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L05",
+    "kind": "ai",
+    "dur": 4.38,
+    "fg_travel_pct": 6.03,
+    "bg_travel_pct": 1.15,
+    "ratio": 5.22,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L06",
+    "kind": "ai",
+    "dur": 4.44,
+    "fg_travel_pct": 4.82,
+    "bg_travel_pct": 0.03,
+    "ratio": 169.74,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L07",
+    "kind": "gfx",
+    "dur": 5.57,
+    "fg_travel_pct": 1.27,
+    "bg_travel_pct": 0.0,
+    "ratio": null,
+    "pass_floor": false,
+    "pass_ratio": true
+   },
+   {
+    "line": "L08",
+    "kind": "ai",
+    "dur": 5.61,
+    "fg_travel_pct": 3.16,
+    "bg_travel_pct": 2.54,
+    "ratio": 1.24,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L09",
+    "kind": "ai",
+    "dur": 4.81,
+    "fg_travel_pct": 4.83,
+    "bg_travel_pct": 1.54,
+    "ratio": 3.14,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L10",
+    "kind": "ai",
+    "dur": 2.71,
+    "fg_travel_pct": 7.43,
+    "bg_travel_pct": 0.02,
+    "ratio": 480.27,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L11",
+    "kind": "ai",
+    "dur": 7.6,
+    "fg_travel_pct": 3.9,
+    "bg_travel_pct": 0.05,
+    "ratio": 85.12,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L12",
+    "kind": "ai",
+    "dur": 1.8,
+    "fg_travel_pct": 7.97,
+    "bg_travel_pct": 4.63,
+    "ratio": 1.72,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L13",
+    "kind": "ai",
+    "dur": 3.57,
+    "fg_travel_pct": 7.4,
+    "bg_travel_pct": 1.71,
+    "ratio": 4.33,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L14",
+    "kind": "ai",
+    "dur": 4.92,
+    "fg_travel_pct": 4.74,
+    "bg_travel_pct": 1.68,
+    "ratio": 2.82,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L15",
+    "kind": "ai",
+    "dur": 4.15,
+    "fg_travel_pct": 5.9,
+    "bg_travel_pct": 1.21,
+    "ratio": 4.87,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L16",
+    "kind": "ai",
+    "dur": 3.95,
+    "fg_travel_pct": 5.87,
+    "bg_travel_pct": 2.52,
+    "ratio": 2.33,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L17",
+    "kind": "ai",
+    "dur": 3.02,
+    "fg_travel_pct": 6.53,
+    "bg_travel_pct": 1.41,
+    "ratio": 4.63,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L18",
+    "kind": "ai",
+    "dur": 3.24,
+    "fg_travel_pct": 7.6,
+    "bg_travel_pct": 4.69,
+    "ratio": 1.62,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L19",
+    "kind": "ai",
+    "dur": 2.18,
+    "fg_travel_pct": 0.29,
+    "bg_travel_pct": 1.21,
+    "ratio": 0.24,
+    "pass_floor": false,
+    "pass_ratio": false
+   },
+   {
+    "line": "L20",
+    "kind": "ai",
+    "dur": 5.62,
+    "fg_travel_pct": 0.29,
+    "bg_travel_pct": 0.02,
+    "ratio": 13.14,
+    "pass_floor": false,
+    "pass_ratio": true
+   },
+   {
+    "line": "L21",
+    "kind": "ai",
+    "dur": 5.37,
+    "fg_travel_pct": 6.12,
+    "bg_travel_pct": 3.02,
+    "ratio": 2.03,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L22",
+    "kind": "ai",
+    "dur": 3.38,
+    "fg_travel_pct": 5.69,
+    "bg_travel_pct": 2.1,
+    "ratio": 2.71,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L23",
+    "kind": "gfx",
+    "dur": 5.81,
+    "fg_travel_pct": 0.25,
+    "bg_travel_pct": 0.01,
+    "ratio": 24.45,
+    "pass_floor": false,
+    "pass_ratio": true
+   },
+   {
+    "line": "L24",
+    "kind": "ai",
+    "dur": 5.73,
+    "fg_travel_pct": 3.16,
+    "bg_travel_pct": 2.25,
+    "ratio": 1.41,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L25",
+    "kind": "real",
+    "dur": 7.74,
+    "fg_travel_pct": 2.22,
+    "bg_travel_pct": 0.0,
+    "ratio": null,
+    "pass_floor": false,
+    "pass_ratio": true
+   },
+   {
+    "line": "L26",
+    "kind": "ai",
+    "dur": 8.3,
+    "fg_travel_pct": 6.75,
+    "bg_travel_pct": 4.17,
+    "ratio": 1.62,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L27",
+    "kind": "ai",
+    "dur": 5.54,
+    "fg_travel_pct": 4.48,
+    "bg_travel_pct": 2.37,
+    "ratio": 1.89,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L28",
+    "kind": "gfx",
+    "dur": 3.63,
+    "fg_travel_pct": 0.0,
+    "bg_travel_pct": 0.01,
+    "ratio": 0.23,
+    "pass_floor": false,
+    "pass_ratio": false
+   },
+   {
+    "line": "L29",
+    "kind": "gfx",
+    "dur": 5.46,
+    "fg_travel_pct": 0.0,
+    "bg_travel_pct": 0.0,
+    "ratio": 0.09,
+    "pass_floor": false,
+    "pass_ratio": false
+   },
+   {
+    "line": "L30",
+    "kind": "gfx",
+    "dur": 2.48,
+    "fg_travel_pct": 0.0,
+    "bg_travel_pct": 0.0,
+    "ratio": 0.0,
+    "pass_floor": false,
+    "pass_ratio": false
+   },
+   {
+    "line": "L31",
+    "kind": "ai",
+    "dur": 4.54,
+    "fg_travel_pct": 5.46,
+    "bg_travel_pct": 2.33,
+    "ratio": 2.35,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L32",
+    "kind": "gfx",
+    "dur": 4.03,
+    "fg_travel_pct": 0.0,
+    "bg_travel_pct": 0.01,
+    "ratio": 0.0,
+    "pass_floor": false,
+    "pass_ratio": false
+   },
+   {
+    "line": "L33",
+    "kind": "ai",
+    "dur": 1.73,
+    "fg_travel_pct": 3.4,
+    "bg_travel_pct": 0.49,
+    "ratio": 6.98,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L34",
+    "kind": "ai",
+    "dur": 6.35,
+    "fg_travel_pct": 5.48,
+    "bg_travel_pct": 4.33,
+    "ratio": 1.27,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L35",
+    "kind": "ai",
+    "dur": 4.01,
+    "fg_travel_pct": 4.14,
+    "bg_travel_pct": 1.97,
+    "ratio": 2.11,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L36",
+    "kind": "ai",
+    "dur": 1.75,
+    "fg_travel_pct": 8.22,
+    "bg_travel_pct": 5.02,
+    "ratio": 1.64,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L37",
+    "kind": "ai",
+    "dur": 2.9,
+    "fg_travel_pct": 6.57,
+    "bg_travel_pct": 2.49,
+    "ratio": 2.64,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L38",
+    "kind": "ai",
+    "dur": 3.4,
+    "fg_travel_pct": 5.15,
+    "bg_travel_pct": 2.11,
+    "ratio": 2.44,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L39",
+    "kind": "ai",
+    "dur": 4.75,
+    "fg_travel_pct": 5.2,
+    "bg_travel_pct": 0.31,
+    "ratio": 16.63,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L40",
+    "kind": "real",
+    "dur": 4.61,
+    "fg_travel_pct": 5.61,
+    "bg_travel_pct": 0.0,
+    "ratio": 1295.2,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L41",
+    "kind": "ai",
+    "dur": 4.61,
+    "fg_travel_pct": 5.34,
+    "bg_travel_pct": 2.37,
+    "ratio": 2.26,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L42",
+    "kind": "ai",
+    "dur": 4.48,
+    "fg_travel_pct": 7.7,
+    "bg_travel_pct": 4.13,
+    "ratio": 1.86,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L43",
+    "kind": "ai",
+    "dur": 4.92,
+    "fg_travel_pct": 3.59,
+    "bg_travel_pct": 1.38,
+    "ratio": 2.59,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L44",
+    "kind": "ai",
+    "dur": 2.53,
+    "fg_travel_pct": 8.19,
+    "bg_travel_pct": 5.09,
+    "ratio": 1.61,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L45",
+    "kind": "ai",
+    "dur": 5.21,
+    "fg_travel_pct": 5.29,
+    "bg_travel_pct": 3.28,
+    "ratio": 1.61,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L46",
+    "kind": "ai",
+    "dur": 3.58,
+    "fg_travel_pct": 4.83,
+    "bg_travel_pct": 2.29,
+    "ratio": 2.11,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L47",
+    "kind": "ai",
+    "dur": 3.92,
+    "fg_travel_pct": 5.54,
+    "bg_travel_pct": 2.55,
+    "ratio": 2.17,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L48",
+    "kind": "ai",
+    "dur": 8.96,
+    "fg_travel_pct": 4.56,
+    "bg_travel_pct": 1.01,
+    "ratio": 4.51,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L49",
+    "kind": "ai",
+    "dur": 6.7,
+    "fg_travel_pct": 2.79,
+    "bg_travel_pct": 1.78,
+    "ratio": 1.57,
+    "pass_floor": false,
+    "pass_ratio": false
+   },
+   {
+    "line": "L50",
+    "kind": "ai",
+    "dur": 2.46,
+    "fg_travel_pct": 7.54,
+    "bg_travel_pct": 2.34,
+    "ratio": 3.23,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L51",
+    "kind": "ai",
+    "dur": 4.75,
+    "fg_travel_pct": 6.47,
+    "bg_travel_pct": 0.07,
+    "ratio": 89.86,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L52",
+    "kind": "ai",
+    "dur": 4.79,
+    "fg_travel_pct": 7.34,
+    "bg_travel_pct": 4.1,
+    "ratio": 1.79,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L53",
+    "kind": "ai",
+    "dur": 3.52,
+    "fg_travel_pct": 6.16,
+    "bg_travel_pct": 1.06,
+    "ratio": 5.82,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L54",
+    "kind": "ai",
+    "dur": 6.01,
+    "fg_travel_pct": 3.4,
+    "bg_travel_pct": 2.38,
+    "ratio": 1.43,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L55",
+    "kind": "ai",
+    "dur": 4.42,
+    "fg_travel_pct": 6.04,
+    "bg_travel_pct": 3.23,
+    "ratio": 1.87,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L56",
+    "kind": "real",
+    "dur": 6.74,
+    "fg_travel_pct": 5.74,
+    "bg_travel_pct": 0.0,
+    "ratio": 1982.68,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L57",
+    "kind": "ai",
+    "dur": 1.57,
+    "fg_travel_pct": 6.49,
+    "bg_travel_pct": 1.71,
+    "ratio": 3.8,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L58",
+    "kind": "ai",
+    "dur": 6.16,
+    "fg_travel_pct": 7.24,
+    "bg_travel_pct": 4.01,
+    "ratio": 1.81,
+    "pass_floor": true,
+    "pass_ratio": false
+   },
+   {
+    "line": "L59",
+    "kind": "ai",
+    "dur": 5.53,
+    "fg_travel_pct": 4.83,
+    "bg_travel_pct": 1.09,
+    "ratio": 4.44,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L60",
+    "kind": "ai",
+    "dur": 2.05,
+    "fg_travel_pct": 7.11,
+    "bg_travel_pct": 0.34,
+    "ratio": 21.13,
+    "pass_floor": true,
+    "pass_ratio": true
+   },
+   {
+    "line": "L61",
+    "kind": "real",
+    "dur": 7.38,
+    "fg_travel_pct": 2.89,
+    "bg_travel_pct": 0.0,
+    "ratio": 1619.37,
+    "pass_floor": false,
+    "pass_ratio": true
+   },
+   {
+    "line": "L62",
+    "kind": "real",
+    "dur": 4.1,
+    "fg_travel_pct": 21.04,
+    "bg_travel_pct": 0.0,
+    "ratio": 8738.09,
+    "pass_floor": true,
+    "pass_ratio": true
+   }
+  ]
+ },
+ "freezedetect_-50dB": [
+  {
+   "start": 94.0417,
+   "dur": 1.625
+  },
+  {
+   "start": 95.6667,
+   "dur": 2.125
+  },
+  {
+   "start": 97.7917,
+   "dur": 1.875
+  },
+  {
+   "start": 127.167,
+   "dur": 1.83333
+  },
+  {
+   "start": 129.0,
+   "dur": 3.58333
+  },
+  {
+   "start": 132.583,
+   "dur": 2.625
+  },
+  {
+   "start": 136.167,
+   "dur": 2.0
+  },
+  {
+   "start": 143.292,
+   "dur": 2.75
+  },
+  {
+   "start": 146.042,
+   "dur": 1.04167
+  }
+ ]
+}
