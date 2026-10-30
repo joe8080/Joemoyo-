@@ -3,26 +3,10 @@ import re, sys, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
-# Respellings: pending the producer's verdict on pron_test_v2; edit here only.
-RESPELL = {
-    "Breunig": "Broy-nikh",
-    "Franke": "Frahn-keh",
-    "Goethe": "Gur-tuh",
-}
-SPOKEN = [
-    ("500 BCE and 200 CE", "five hundred B C E and two hundred C E"),
-    ("20 to 620 CE", "twenty to six hundred and twenty C E"),
-    ("800 and 400 BC", "eight hundred and four hundred B C"),
-    ("800 BC", "eight hundred B C"),
-    ("1500 BC", "fifteen hundred B C"),
-    ("ninth to the fourth century BC", "ninth to the fourth century B C"),
-    ("1928", "nineteen twenty-eight"),
-    ("1943", "nineteen forty-three"),
-    ("2005", "two thousand and five"),
-    ("2009", "two thousand and nine"),
-    ("2011 and 2014", "two thousand and eleven and two thousand and fourteen"),
-    ("2017", "twenty seventeen"),
-]
+# Raw spellings passed the producer's Whisper check (30 Oct). Add an entry here
+# only for a line the full-VO transcript mishears, then re-voice that line alone.
+RESPELL = {}
+SPOKEN = []  # same rule as RESPELL
 
 def spoken(text):
     for a, b in SPOKEN:

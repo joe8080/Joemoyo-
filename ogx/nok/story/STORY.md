@@ -1,4 +1,4 @@
-# OGX Nok — story-first plan (DRAFT v0.1, 30 Oct 2026)
+# OGX Nok — story-first plan (DRAFT v0.2, 30 Oct 2026)
 Source of every claim: OGX Research — Nok evidence pack (ogx-nok-1, 30 Oct 2026), Eden 6015c5ee-f0fb-4748-a157-52aca5ee0015. Source keys are the pack's own (BR16, FR16, MB16, JU16, CH22, UR26, BRIT, ICOM, ATW11, CMA). Nothing here comes from outside the pack.
 
 ## (a) Central question
@@ -22,7 +22,7 @@ Status: E established · D debated · I inference by named researchers. Scene ID
 | C11 | The team suspects deliberate breakage before burial; Franke: "We can't prove it, but the pattern is striking"; complete figures extremely rare. | UR26 (Franke, Breunig); MB16; BR16 p. 241, 249 | I | Softer 2026 wording used. Some fragments may be ordinary waste (BR16 p. 249). Purpose unknown. | S07 |
 | C12 | At Pangwari (2011–14) a terracotta deposit was found in a secure context for the first time; some deposits interpreted as graves marked by upright stones; no human remains survive. | UR26 (Franke); BR16 p. 251 | I | "Graves" are interpreted. | S07 |
 | C13 | Charred grains: pearl millet, alongside cowpeas. | BR16 p. 241–2; CH22; UR26 | E | CH22 feasting reading not used. | S06 |
-| C14 | Most sites roughly 1–2 ha, brief occupations, dispersed; no towns, monuments or central workshops found so far. | BR16 p. 244–5; UR26 | I | Sizes partly inferred from looters' pits, so "roughly". | S06 |
+| C14 | Many sites roughly 1–2 ha, brief occupations, dispersed; no towns, monuments or central workshops found so far. | BR16 p. 244–5; UR26 | I | Sizes partly inferred from looters' pits, so "roughly". | S06 |
 | C15 | Triangular or half-circle eyes with perforated pupils; elaborate hairstyles. | ICOM; BRIT | E | Descriptive only. | S01 |
 | C16 | "The earliest large-scale sculptural tradition in sub-Saharan Africa", always attributed to the excavators. | MB16 abstract; BR16 abstract | D | Never bare. | S01 |
 | C17 | Very few figures from recorded excavations; complete ones extremely rare. | MB16; UR26; BR16 p. 241 | E | No numerical share. | S03 |
@@ -52,14 +52,14 @@ Not used: C07 (Taruga, cuts a low-confidence name), C08 (independent-invention d
 ## Scene cards (condensed; full narration in script.md)
 Every narration line gets one picture: an AI still (OpenArt, unlabelled), a real image (one credit line from credits.md), or an animated graphic. No chapter cards, lower thirds, map tags or labels. One end card only.
 
-- **S01 The face** (L01–L06). Purpose: hook and question. Entry question: what is this? Exit: how could villages make this? Claims C15, C16, C09. Visual: NOK01, NOK05 (real), then AI plateau landscape. Sound: quiet room tone, low drone; music enters under L04. Leads to S02 via "where did this come from?"
+- **S01 The face** (L01–L06). Purpose: hook and question. Entry question: what is this? Exit: how could villages make this? Claims C15, C16, C09. Visual: NOK01, NOK05 (real), then AI plateau landscape. No VO line states where a museum piece came from. Sound: quiet room tone, low drone; music enters under L04. Leads to S02 via "where did this come from?"
 - **S02 Tin and a scarecrow** (L07–L13). Orientation. Claims C01, C18, C19. Visual: animated central-Nigeria locator (graphic), AI tin-mine gravels, AI field-desk with clay fragments (no face), AI yam field with scarecrow silhouette (no head shown). Continuity: 1928 ≠ 1943, kept apart by a cut. Leads to S03: publication brings buyers.
-- **S03 The market** (L14–L20). Claims C20, C17, C21, C22. Visual: AI night trench with spoil heaps (no people's faces), AI empty pit, NOK02 (real). Music thins. Leads to S04: lost context makes dating hard.
+- **S03 The market** (L14–L20). Claims C20, C17, C21, C22. Visual: AI night trench with spoil heaps (no people's faces), AI empty pits, AI sieve. No real museum piece under the looting lines. Music thins. Leads to S04: lost context makes dating hard.
 - **S04 Two clocks** (L21–L31). Claims C02, C04, C03, C05, brief corr. 2. Visual: animated chronology build (bar A, then bar B), NOK04 (real, TL label claim), AI excavation trench grid, AI charcoal sample, AI furnace glow. Hedges spoken exactly. Leads to S05: who could do this?
 - **S05 The assumption** (L32–L34). Claim C10. Visual: AI lamp-lit lab bench of sherds. Leads to S06: then they dug.
 - **S06 What the ground showed** (L35–L42). Claims C14, C13, C06. Visual: AI aerial of small clearing, AI dispersed homesteads, AI millet heads, AI cowpea pods, AI collapsed clay furnace. Leads to S07: and the sculptures?
 - **S07 Broken on purpose?** (L43–L48). Claims C11, C12. Visual: AI fragments in a pit, NOK06 (real excavation photo), AI upright stones in a row. Music near silence for L45–L46. Leads to S08.
-- **S08 Complexity in ritual** (L49–L55). Claim C09. Visual: AI dusk village, AI hands shaping clay (no face, no named person), NOK02 reprise not used (one still per line, new AI still). Leads to S09.
+- **S08 Complexity in ritual** (L49–L55). Claim C09. Visual: AI dusk landscapes and stones; NOK02 (real) under L56. Leads to S09.
 - **S09 Unfinished** (L56–L61). Claims C26, C24, C25. Visual: AI overgrown trench, AI weather over plateau, NOK03 (real) under the quote, NOK01 return. Music resolves; end card.
 
 ## Creative differentiation note (v. Adwa and Timbuktu)
