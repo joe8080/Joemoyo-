@@ -13,7 +13,9 @@ import render
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 FINAL, PROXY = sys.argv[1], sys.argv[2]
-OUT = ROOT / "build/qa"; OUT.mkdir(parents=True, exist_ok=True)
+import os
+VER = os.environ.get("OGX_VER")          # v1.1+: results go to build/<ver>/qa (v1.0's build/qa untouched)
+OUT = (ROOT / "build" / VER / "qa") if VER else (ROOT / "build/qa"); OUT.mkdir(parents=True, exist_ok=True)
 FILM = render.FILM; SH = FILM["shots"]; FPS = FILM["fps"]
 ALLOWED = sorted({s["credit"] for s in SH if s["credit"]} | {s["name"]["text"] for s in SH if s.get("name")}
                  | {"ORIGINEX HUMAN ARCHIVES"})

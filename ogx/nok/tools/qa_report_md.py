@@ -1,9 +1,10 @@
 """build/qa/qa_report.json -> deliverables/QA_REPORT.md (human-readable, phone-friendly)."""
-import json, pathlib
+import json, pathlib, os
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-r = json.load(open(ROOT / "build/qa/qa_report.json"))
+VER = os.environ.get("OGX_VER")          # v1.1+: build/<ver>/qa -> deliverables/QA_REPORT_<ver>.md
+r = json.load(open(ROOT / ("build/" + VER + "/qa" if VER else "build/qa") / "qa_report.json"))
 fl = r["flow"]; ok = lambda b: "PASS" if b else "FAIL"
-L = ["# OGX Nok v1.0 REVIEW — QA report (from rendered frames)", "",
+L = [f"# OGX Nok {VER or 'v1.0'} REVIEW — QA report (from rendered frames)", "",
      f"File: `{pathlib.Path(r['final']).name}` · overlays-off proxy for motion checks: `{pathlib.Path(r['proxy_overlays_off']).name}`", "",
      "| Check | Result | Verdict |", "|---|---|---|",
      f"| Runtime (4:30–5:30) | {r['runtime_s']:.2f} s ({int(r['runtime_s'] // 60)}:{r['runtime_s'] % 60:04.1f}) | {ok(r['runtime_ok'])} |",
@@ -24,5 +25,5 @@ for e in r["ocr"]["inventory"]:
 L += ["", "## Credits read back", "", "| Line | Image | Expected (credits.md) | Similarity |", "|---|---|---|---|"]
 for c in r["credits_read_back"]:
     L.append(f"| {c['line']} | {c['image']} | `{c['expected']}` | {c['similarity']} |")
-(ROOT / "deliverables/QA_REPORT.md").write_text("\n".join(L) + "\n")
+(ROOT / ("deliverables/QA_REPORT_" + VER + ".md" if VER else "deliverables/QA_REPORT.md")).write_text("\n".join(L) + "\n")
 print("written")

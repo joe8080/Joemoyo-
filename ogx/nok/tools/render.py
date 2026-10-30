@@ -92,6 +92,28 @@ def cam_params(shot, u):
     scale = (s0 + (s1 - s0) * e) * (W / layers.PW) * 1.0
     return scale, e, px, py
 
+@functools.lru_cache(maxsize=None)
+def _guard(line, move, kind, h, slide=False, boost=None):
+    """Smallest constant zoom (>= 1) that keeps both layers inside the plate for the whole shot. In v1.0 the
+    frame at scale 1.0 showed the full plate width, so any FG shift smeared the replicated edge pixels."""
+    PW = layers.PW; g = 1.0
+    for u in np.linspace(0, 1, 49):
+        e = ease(u); s0, s1, px, py = CAM[move]; sc = s0 + (s1 - s0) * e
+        cam_x = px * CAM_PAN * PW * (e - 0.5)
+        dirx = 1 if px >= 0 else -1
+        if move in ("push", "pull") or py: dirx = 1 if line < "L32" else -1
+        fg_dx = dirx * (FG_TRAVEL_REAL if kind == "real" else FG_TRAVEL) * (boost or FG_BOOST.get(line, 1.0)) * PW * (e - 0.5)
+        bg_dx = dirx * BG_TRAVEL * PW * (e - 0.5)
+        fg_sc = sc * (1 + 0.035 * (e - 0.5) * (1 if move != "pull" else -1)); sc_bg = 1 + (sc - 1) * BG_ZOOM_SHARE
+        if slide: fg_sc = sc_bg = sc
+        cam_y = py * 0.03 * h * (0.5 - e)
+        for lsc, dx in ((fg_sc, cam_x + fg_dx), (sc_bg, cam_x + bg_dx)):
+            need_x = 1 / max(1e-3, 1 - 2 * abs(dx) / PW); need_y = 1 / max(1e-3, 1 - 2 * abs(cam_y) / h)
+            g = max(g, max(need_x, need_y) / lsc)
+    return g * 1.004
+
+def edge_guard(shot): return _guard(shot["line"], shot["move"], shot["kind"], layers.PH, bool(shot.get("slide")), shot.get("fg_boost"))
+
 def plate_frame(shot, u, qa=False, want_mask=False):
     L = layers.get(shot)
     bg, fg, a = L["bg"], L["fg"], L["alpha"].astype(np.float32)
@@ -104,10 +126,14 @@ def plate_frame(shot, u, qa=False, want_mask=False):
     cam_y = (py * (fg.shape[0] - layers.PH / sc) * (0.5 - e) * 0.9) if tall else py * 0.03 * layers.PH * (0.5 - e)
     dirx = 1 if px >= 0 else -1
     if shot["move"] in ("push", "pull") or py: dirx = 1 if shot["line"] < "L32" else -1
-    fg_dx = dirx * (FG_TRAVEL_REAL if shot["kind"] == "real" else FG_TRAVEL) * FG_BOOST.get(shot["line"], 1.0) * layers.PW * (e - 0.5)
+    fg_dx = dirx * (FG_TRAVEL_REAL if shot["kind"] == "real" else FG_TRAVEL) * shot.get("fg_boost", FG_BOOST.get(shot["line"], 1.0)) * layers.PW * (e - 0.5)
     bg_dx = dirx * BG_TRAVEL * layers.PW * (e - 0.5)
     fg_sc = sc * (1 + 0.035 * (e - 0.5) * (1 if shot["move"] != "pull" else -1))   # FG also scales a touch faster
     sc_bg = 1 + (sc - 1) * BG_ZOOM_SHARE
+    if shot.get("slide"):          # v1.1 seam fix: both layers share one zoom, parallax is sideways only, so a
+        fg_sc = sc_bg = sc         # near-horizontal ground edge never opens a gap under the FG
+    if shot.get("edge_guard"):     # v1.1: constant per-shot zoom so neither layer ever runs off the plate edge
+        g = edge_guard(shot); fg_sc *= g; sc_bg *= g
     B = warp(bg, base * sc_bg, cam_x + bg_dx, cam_y)
     # replicate the FG edge outwards so a parallax shift never exposes an empty strip at the frame edge
     F = warp(fg, base * fg_sc, cam_x + fg_dx, cam_y, border=cv2.BORDER_REPLICATE)
@@ -249,7 +275,8 @@ def end_card(u):
     return warp(fr, 1.0 + 0.04 * e, 0, 0)
 
 # ---------- timeline ----------
-FILM = json.load(open(ROOT / "build/shots.json"))
+import os
+FILM = json.load(open(ROOT / os.environ.get("OGX_SHOTS", "build/shots.json")))   # v1.1: OGX_SHOTS=build/v1.1/shots.json
 XF = FILM["xfade"]
 
 def shot_frame(s, t, qa=False, want_mask=False):

@@ -1,0 +1,122 @@
+{
+ "slice": 7,
+ "f0": 6100,
+ "f1": 6864,
+ "shots": [
+  {
+   "line": "L56",
+   "scene": "S08",
+   "t0": 247.435,
+   "t1": 254.178,
+   "text": "But on the evidence so far, Breunig says, highly accomplished art does not necessarily require a complex society.",
+   "move": "push_r",
+   "credit": "Nok kneeling figure · Honolulu Museum of Art (8348.1) · Photo: Hiart, CC0",
+   "kind": "real",
+   "asset": "assets/real/NOK02_Honolulu_8348.1_kneeling.jpg",
+   "real": "NOK02",
+   "overlay": "dust",
+   "view": {}
+  },
+  {
+   "line": "L57",
+   "scene": "S09",
+   "t0": 254.178,
+   "t1": 255.749,
+   "text": "The work is unfinished.",
+   "move": "push",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L57.png",
+   "overlay": "dust",
+   "desc": "overgrown trench, weeds, collapsed string lines",
+   "layer": {
+    "fill": "reflect"
+   },
+   "edge_guard": true
+  },
+  {
+   "line": "L58",
+   "scene": "S09",
+   "t0": 255.749,
+   "t1": 261.911,
+   "text": "Fieldwork stopped after a deadly attack in 2017; the team has not gone back to the excavation area.",
+   "move": "pan_r",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L58.png",
+   "overlay": "mist",
+   "desc": "an empty field camp at dusk, folded chairs",
+   "layer": {
+    "fill": "reflect",
+    "ground_only": true
+   },
+   "edge_guard": true
+  },
+  {
+   "line": "L59",
+   "scene": "S09",
+   "t0": 261.911,
+   "t1": 267.444,
+   "text": "Why Nok ended is still unknown; the team suggests environmental change as one possibility.",
+   "move": "pull",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L59.png",
+   "overlay": "rain",
+   "desc": "storm light moving across the plateau",
+   "layer": {
+    "fill": "reflect"
+   },
+   "edge_guard": true
+  },
+  {
+   "line": "L60",
+   "scene": "S09",
+   "t0": 267.444,
+   "t1": 269.494,
+   "text": "Gabriele Franke puts it this way.",
+   "move": "pan_l",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L60.png",
+   "overlay": "dust",
+   "desc": "plateau at last light (NOK05 not obtainable: Wikimedia returned HTTP 429 throughout the build)",
+   "layer": {
+    "fill": "reflect"
+   },
+   "edge_guard": true
+  },
+  {
+   "line": "L61",
+   "scene": "S09",
+   "t0": 269.494,
+   "t1": 276.874,
+   "text": "\"The 'mystery of the Nok culture' hasn't been solved – but today we have a much clearer understanding of what that mystery actually is.\"",
+   "move": "push_l",
+   "credit": "Nok seated figure · Louvre (70.1998.11.1) · Photo: Marie-Lan Nguyen, Public domain",
+   "kind": "real",
+   "asset": "assets/real/NOK03_Louvre_70.1998.11.1_seated.jpg",
+   "real": "NOK03",
+   "overlay": "dust",
+   "view": {}
+  },
+  {
+   "line": "L62",
+   "scene": "S09",
+   "t0": 276.874,
+   "t1": 280.979,
+   "text": "Great art – and, so far, no evidence of a great state.",
+   "move": "push",
+   "credit": "Nok terracotta head · Cleveland Museum of Art (1995.21) · CC0",
+   "kind": "real",
+   "asset": "assets/real/NOK04_Cleveland_1995.21_head.jpg",
+   "real": "NOK04",
+   "overlay": "dust",
+   "view": {
+    "scale_h": 1.3
+   }
+  }
+ ],
+ "out": "/home/user/Joemoyo-/ogx/nok/build/v1.1/parts/slice_07.mp4",
+ "out_qa": "/home/user/Joemoyo-/ogx/nok/build/v1.1/parts_qa/slice_07.mp4"
+}

@@ -1,7 +1,7 @@
 """2.5D layer separation. Depth Anything V2 (ViT-S, ONNX) -> near/far mask -> FG RGBA + inpainted BG plate.
 Results are cached per asset in build/layers/<id>.npz. Real museum photos become a photo panel (FG)
 over a blurred, darkened extension of the same photo (BG)."""
-import pathlib, numpy as np, cv2
+import pathlib, json, numpy as np, cv2
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DEPTH_ONNX = pathlib.Path("/tmp/claude-0/-home-user-Joemoyo-/312bc74c-7d59-509c-b717-3fa491a69736/scratchpad/models/depth_anything_v2_vits.onnx")
@@ -53,7 +53,57 @@ def ai_layers(path, target=(0.22, 0.45)):
     bg = (img * (1 - h) + fill * h).astype(np.uint8)
     return {"bg": bg, "fg": img, "alpha": alpha, "fg_area": float(alpha.mean()), "q": q}
 
-def real_layers(path, scale_h=1.18, crop=None):
+def _clone_fill(img, hole, period=56):
+    """v1.1 seam-safe BG: fill the hole under the FG with sharp texture mirrored from just above it, column by
+    column, instead of a blurred inpaint (the blur read as a smear band when the FG slid off it)."""
+    h = hole > 0
+    out = img.copy(); top = np.full(img.shape[1], -1, np.int32); prev = np.zeros(img.shape[1], bool)
+    cols = np.arange(img.shape[1])
+    for y in range(img.shape[0]):
+        r = h[y]; start = r & ~prev; top[start] = y; prev = r
+        if not r.any(): continue
+        i = y - top[r]; k = i % period; flip = (i // period) % 2 == 0
+        src = np.where(flip, top[r] - 1 - k, top[r] - period + k)
+        out[y, cols[r]] = img[np.clip(src, 0, img.shape[0] - 1), cols[r]]
+    return out
+
+def _reflect_fill(img, hole):
+    """v1.1 seam-safe BG for any edge direction: each hole pixel takes the pixel mirrored across its nearest
+    non-hole pixel, so the strip the FG uncovers shows sharp nearby texture instead of a blurred inpaint."""
+    src = (hole == 0).astype(np.uint8)
+    _, lab = cv2.distanceTransformWithLabels(1 - src, cv2.DIST_L2, 5, labelType=cv2.DIST_LABEL_PIXEL)
+    zy, zx = np.where(src > 0); lz = lab[zy, zx]
+    my = np.zeros(lab.max() + 1, np.int32); mx = np.zeros_like(my); my[lz] = zy; mx[lz] = zx
+    hy, hx = np.where(src == 0); qy, qx = my[lab[hy, hx]], mx[lab[hy, hx]]
+    ry = np.clip(2 * qy - hy, 0, img.shape[0] - 1); rx = np.clip(2 * qx - hx, 0, img.shape[1] - 1)
+    bad = src[ry, rx] == 0                      # mirrored point fell back into the hole: use the edge pixel
+    ry[bad], rx[bad] = qy[bad], qx[bad]
+    out = img.copy(); out[hy, hx] = img[ry, rx]
+    return out
+
+def ai_layers_v11(path, ground_only=False, hole_dilate=21, feather=11, edge=None, fill="reflect"):
+    """v1.1 layer split (opt-in per shot; v1.0 shots keep ai_layers): FG = near regions that touch the bottom of
+    the frame only (no floating islands such as a lone patch of tree crown), BG = the photo with the FG hole
+    filled by mirrored texture from just above it. `edge` (optional) = hand-drawn FG top edge as
+    [[x, y], ...] in 0-1 plate coordinates; everything below it is FG."""
+    img = cover(cv2.imread(str(path), cv2.IMREAD_COLOR), PW, PH)
+    if edge:
+        pts = np.array([[int(x * PW), int(y * PH)] for x, y in edge] + [[PW, PH], [0, PH]], np.int32)
+        mask = np.zeros((PH, PW), np.uint8); cv2.fillPoly(mask, [pts], 255, cv2.LINE_AA)
+    else:
+        mask = (ai_layers(path)["alpha"] > 0.5).astype(np.uint8) * 255
+        if ground_only:
+            n, lab, st, _ = cv2.connectedComponentsWithStats((mask > 0).astype(np.uint8))
+            keep = np.zeros_like(mask)
+            for k in range(1, n):
+                if st[k, cv2.CC_STAT_TOP] + st[k, cv2.CC_STAT_HEIGHT] >= PH - 2: keep[lab == k] = 255
+            mask = keep
+    alpha = cv2.GaussianBlur(mask, (0, 0), feather).astype(np.float32) / 255
+    hole = cv2.dilate(mask, np.ones((hole_dilate, hole_dilate), np.uint8))
+    bg = _reflect_fill(img, hole) if fill == "reflect" else _clone_fill(img, hole)
+    return {"bg": bg, "fg": img, "alpha": alpha, "fg_area": float(alpha.mean()), "q": None}
+
+def real_layers(path, scale_h=1.18, crop=None, max_up=1.25):
     """Museum or excavation photo: unaltered photo panel (FG) over a blurred extension (BG). The photo itself
     is never cropped for meaning or retouched; only scaled."""
     img = cv2.imread(str(path), cv2.IMREAD_COLOR)
@@ -67,7 +117,7 @@ def real_layers(path, scale_h=1.18, crop=None):
     if pw > PW * 0.9: pw = int(PW * 0.9); ph = int(img.shape[0] * pw / img.shape[1])
     # never upscale a real image more than 1.25x in the delivered 1920x1080 frame (plate->frame is W/PW)
     up = (pw / img.shape[1]) * (1920 / PW)
-    if up > 1.25: k = 1.25 / up; pw, ph = int(pw * k), int(ph * k)
+    if up > max_up: k = max_up / up; pw, ph = int(pw * k), int(ph * k)
     panel = cv2.resize(img, (pw, ph), interpolation=cv2.INTER_AREA)
     fg = np.zeros((max(PH, ph), PW, 3), np.uint8); alpha = np.zeros(fg.shape[:2], np.float32)
     x = (PW - pw) // 2; y = (fg.shape[0] - ph) // 2
@@ -78,13 +128,15 @@ def real_layers(path, scale_h=1.18, crop=None):
     return {"bg": bg, "fg": fg, "alpha": alpha, "fg_area": float(alpha.mean()), "q": None}
 
 def get(shot):
-    v = shot.get("view", {})
+    v = shot.get("view", {}); lo = shot.get("layer")      # "layer" = v1.1 seam-safe split options (opt-in)
     key = (shot.get("real") or shot["line"]) + ("_" + "_".join(f"{k}{v[k]}" for k in sorted(v)).replace(" ", "").replace(",", "-") if v else "")
+    if lo is not None:
+        import hashlib; key += "_v11_" + hashlib.md5(json.dumps(lo, sort_keys=True).encode()).hexdigest()[:8]
     cache = ROOT / "build/layers" / f"{key}.npz"
     if cache.exists():
         z = np.load(cache); return {k: z[k] for k in z.files}
     path = ROOT / shot["asset"]
-    L = real_layers(path, **v) if shot["kind"] == "real" else ai_layers(path)
+    L = real_layers(path, **v) if shot["kind"] == "real" else (ai_layers_v11(path, **lo) if lo is not None else ai_layers(path))
     cache.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(cache, bg=L["bg"], fg=L["fg"], alpha=L["alpha"].astype(np.float16))
     return L

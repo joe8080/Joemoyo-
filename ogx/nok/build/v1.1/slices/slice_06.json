@@ -1,0 +1,182 @@
+{
+ "slice": 6,
+ "f0": 5155,
+ "f1": 6100,
+ "shots": [
+  {
+   "line": "L48",
+   "scene": "S07",
+   "t0": 205.829,
+   "t1": 214.79,
+   "text": "At Pangwari, excavated between 2011 and 2014, they found a terracotta deposit in a secure archaeological context for the first time.",
+   "move": "push_r",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L48.png",
+   "overlay": "dust",
+   "desc": "generic close-up of a trowel cleaning red soil, no finds visible",
+   "name": {
+    "text": "Pangwari",
+    "t0": 206.048,
+    "t1": 208.848
+   },
+   "layer": {
+    "fill": "reflect"
+   },
+   "edge_guard": true
+  },
+  {
+   "line": "L49",
+   "scene": "S07",
+   "t0": 214.79,
+   "t1": 221.49,
+   "text": "The team interprets some deposits as graves, marked by upright stones in a row; no human remains survive.",
+   "move": "push",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L49.png",
+   "overlay": "mist",
+   "desc": "a row of plain upright field stones in grassland at dusk, no finds, no people",
+   "layer": {
+    "fill": "reflect"
+   },
+   "edge_guard": true,
+   "fg_boost": 1.3
+  },
+  {
+   "line": "L50",
+   "scene": "S08",
+   "t0": 221.49,
+   "t1": 223.949,
+   "text": "So what kind of society was this?",
+   "move": "pan_r",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L50.png",
+   "overlay": "mist",
+   "desc": "dusk over a dispersed farming landscape",
+   "layer": {
+    "fill": "reflect"
+   },
+   "edge_guard": true
+  },
+  {
+   "line": "L51",
+   "scene": "S08",
+   "t0": 223.949,
+   "t1": 228.698,
+   "text": "Breunig and Rupp concluded that Nok developed complexity only in terms of ritual.",
+   "move": "pull",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L51.png",
+   "overlay": "embers",
+   "desc": "a row of upright stones at night, low firelight",
+   "layer": {
+    "fill": "reflect"
+   },
+   "edge_guard": true
+  },
+  {
+   "line": "L52",
+   "scene": "S08",
+   "t0": 228.698,
+   "t1": 233.484,
+   "text": "They describe small groups of farmers, living autonomously in dispersed settlements.",
+   "move": "pan_l",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L52.png",
+   "overlay": "dust",
+   "desc": "a few homesteads spaced far apart across fields, morning",
+   "layer": {
+    "fill": "reflect"
+   },
+   "edge_guard": true
+  },
+  {
+   "line": "L53",
+   "scene": "S08",
+   "t0": 233.484,
+   "t1": 237.007,
+   "text": "The excavators found no evidence of a state or an elite.",
+   "move": "push_l",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L53.png",
+   "overlay": "dust",
+   "desc": "open hilltop, no structures, wind in grass",
+   "layer": {
+    "fill": "reflect"
+   },
+   "edge_guard": true
+  },
+  {
+   "line": "L54",
+   "scene": "S08",
+   "t0": 237.007,
+   "t1": 243.016,
+   "text": "That is not proof of absence: they stress that preservation is poor, and the data come from a limited area.",
+   "move": "tilt_up",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L54.png",
+   "overlay": "dust",
+   "desc": "acidic red soil, roots, a single sherd",
+   "layer": {
+    "fill": "reflect"
+   },
+   "edge_guard": true
+  },
+  {
+   "line": "L55",
+   "scene": "S08",
+   "t0": 243.016,
+   "t1": 247.435,
+   "text": "There might have been rulers or chiefs, they write, who left no status markers.",
+   "move": "pull_r",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L55.png",
+   "overlay": "dust",
+   "desc": "footprints fading on a dirt track",
+   "layer": {
+    "fill": "reflect"
+   },
+   "edge_guard": true
+  },
+  {
+   "line": "L56",
+   "scene": "S08",
+   "t0": 247.435,
+   "t1": 254.178,
+   "text": "But on the evidence so far, Breunig says, highly accomplished art does not necessarily require a complex society.",
+   "move": "push_r",
+   "credit": "Nok kneeling figure · Honolulu Museum of Art (8348.1) · Photo: Hiart, CC0",
+   "kind": "real",
+   "asset": "assets/real/NOK02_Honolulu_8348.1_kneeling.jpg",
+   "real": "NOK02",
+   "overlay": "dust",
+   "view": {}
+  },
+  {
+   "line": "L57",
+   "scene": "S09",
+   "t0": 254.178,
+   "t1": 255.749,
+   "text": "The work is unfinished.",
+   "move": "push",
+   "credit": null,
+   "kind": "ai",
+   "asset": "assets/ai/L57.png",
+   "overlay": "dust",
+   "desc": "overgrown trench, weeds, collapsed string lines",
+   "layer": {
+    "fill": "reflect"
+   },
+   "edge_guard": true
+  }
+ ],
+ "out": "/home/user/Joemoyo-/ogx/nok/build/v1.1/parts/slice_06.mp4",
+ "out_qa": "/home/user/Joemoyo-/ogx/nok/build/v1.1/parts_qa/slice_06.mp4"
+}
