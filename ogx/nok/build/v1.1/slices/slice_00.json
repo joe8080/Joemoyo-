@@ -87,12 +87,7 @@
    "asset": "assets/ai/L05.png",
    "overlay": "dust",
    "desc": "open savanna woodland, no buildings, long shadows",
-   "layer": {
-    "fill": "reflect",
-    "ground_only": true
-   },
-   "edge_guard": true,
-   "slide": true
+   "flat": true
   },
   {
    "line": "L06",
@@ -153,12 +148,7 @@
    "asset": "assets/ai/L09.png",
    "overlay": "dust",
    "desc": "wet alluvial gravels in an old tin-mine cutting, overcast",
-   "layer": {
-    "fill": "reflect",
-    "ground_only": true
-   },
-   "edge_guard": true,
-   "slide": true
+   "flat": true
   }
  ],
  "out": "/home/user/Joemoyo-/ogx/nok/build/v1.1/parts/slice_00.mp4",

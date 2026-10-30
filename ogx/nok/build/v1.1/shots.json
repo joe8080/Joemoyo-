@@ -93,12 +93,7 @@
    "asset": "assets/ai/L05.png",
    "overlay": "dust",
    "desc": "open savanna woodland, no buildings, long shadows",
-   "layer": {
-    "fill": "reflect",
-    "ground_only": true
-   },
-   "edge_guard": true,
-   "slide": true
+   "flat": true
   },
   {
    "line": "L06",
@@ -159,12 +154,7 @@
    "asset": "assets/ai/L09.png",
    "overlay": "dust",
    "desc": "wet alluvial gravels in an old tin-mine cutting, overcast",
-   "layer": {
-    "fill": "reflect",
-    "ground_only": true
-   },
-   "edge_guard": true,
-   "slide": true
+   "flat": true
   },
   {
    "line": "L10",
@@ -195,12 +185,7 @@
    "asset": "assets/ai/L11.png",
    "overlay": "dust",
    "desc": "yam mounds in a field, a scarecrow silhouette against sky, head not shown",
-   "layer": {
-    "fill": "reflect",
-    "ground_only": true
-   },
-   "edge_guard": true,
-   "slide": true
+   "flat": true
   },
   {
    "line": "L12",

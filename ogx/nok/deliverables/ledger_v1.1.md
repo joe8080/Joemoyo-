@@ -10,13 +10,13 @@ v1.1 = v1.0 plus QA's notes. Same voice, same mix, same 4:46 timing, same credit
 | L02 (v1.1 change) | 3.61–7.51 | real | assets/real/NOK01_Honolulu_8349.1_head.jpg | NOK01, see credits_v1.1.md (crop [0, 0, 1650, 1300]) | push | photo panel over blurred extension | Nok terracotta head · Honolulu Museum of Art (8349.1) · Photo: Hiart, CC0 |
 | L03 | 7.51–11.36 | ai | assets/ai/L03.png | OpenArt Wan 2.7 Image Pro (history FuRoRfg9xJ6OmmXqO2z0), AI still, unlabelled on screen | pull | seam-safe, edge guard | — |
 | L04 | 11.36–17.52 | ai | assets/ai/L04.png | OpenArt Wan 2.7 Image Pro (history SzTHRySzOr0mDCDYxGKz), AI still, unlabelled on screen | pan_l | seam-safe, edge guard | — |
-| L05 (v1.1 change) | 17.52–21.89 | ai | assets/ai/L05.png | OpenArt Wan 2.7 Image Pro (history QENlp0IbSRwGjke2tnMM), AI still, unlabelled on screen | pan_l | seam-safe ground-only, slide, edge guard | — |
+| L05 (v1.1 change) | 17.52–21.89 | ai | assets/ai/L05.png | OpenArt Wan 2.7 Image Pro (history QENlp0IbSRwGjke2tnMM), AI still, unlabelled on screen | pan_l | seam-safe | — |
 | L06 | 21.89–26.33 | ai | assets/ai/L06.png | OpenArt Wan 2.7 Image Pro (history xyXdiZs3MXevpcL4c2DQ), AI still, unlabelled on screen | tilt_up | seam-safe, edge guard | — |
 | L07 | 26.33–31.89 | gfx | map | Generated map (Natural Earth outlines, public domain), text-free | push | graphic layers | — |
 | L08 | 31.89–37.50 | ai | assets/ai/L08.png | OpenArt Wan 2.7 Image Pro (history pCzs5WiwW1CTsK1sEb00), AI still, unlabelled on screen | push_r | seam-safe, edge guard | — |
-| L09 (v1.1 change) | 37.50–42.31 | ai | assets/ai/L09.png | OpenArt Wan 2.7 Image Pro (history 5bkxzw0kjbSOmbrPJPVH), AI still, unlabelled on screen | pan_r | seam-safe ground-only, slide, edge guard | — |
+| L09 (v1.1 change) | 37.50–42.31 | ai | assets/ai/L09.png | OpenArt Wan 2.7 Image Pro (history 5bkxzw0kjbSOmbrPJPVH), AI still, unlabelled on screen | pan_r | seam-safe | — |
 | L10 | 42.31–45.02 | ai | assets/ai/L10.png | OpenArt Wan 2.7 Image Pro (history WdJALAfxShVJOAnyFkQI), AI still, unlabelled on screen | pan_r | seam-safe, edge guard | — |
-| L11 (v1.1 change) | 45.02–52.62 | ai | assets/ai/L11.png | OpenArt Wan 2.7 Image Pro (history Bvnp51N16nVYQnRCQjJZ), AI still, unlabelled on screen | pan_l | seam-safe ground-only, slide, edge guard | — |
+| L11 (v1.1 change) | 45.02–52.62 | ai | assets/ai/L11.png | OpenArt Wan 2.7 Image Pro (history Bvnp51N16nVYQnRCQjJZ), AI still, unlabelled on screen | pan_l | seam-safe | — |
 | L12 | 52.62–54.41 | ai | assets/ai/L12.png | OpenArt Wan 2.7 Image Pro (history pkNbLjJZxnKrEk4KR8vV), AI still, unlabelled on screen | pan_l | seam-safe, edge guard | — |
 | L13 | 54.41–57.99 | ai | assets/ai/L13.png | OpenArt Wan 2.7 Image Pro (history XgelEE27AlpZqhpuK3LE), AI still, unlabelled on screen | push_l | seam-safe, edge guard |  + name: Jemaa |
 | L14 | 57.99–62.91 | ai | assets/ai/L14.png | OpenArt Wan 2.7 Image Pro (history Si5Nz6lnuR5auURusCXm), AI still, unlabelled on screen | tilt_up | seam-safe, edge guard | — |

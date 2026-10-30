@@ -114,7 +114,23 @@ def _guard(line, move, kind, h, slide=False, boost=None):
 
 def edge_guard(shot): return _guard(shot["line"], shot["move"], shot["kind"], layers.PH, bool(shot.get("slide")), shot.get("fg_boost"))
 
+FLAT_PAN = 0.06            # v1.1 flat 2D shots: whole-still pan, % of plate width over the shot
+FLAT_ZOOM = (1.07, 1.10)   # slow push under the pan; 1.07 leaves margin so the pan never reaches the plate edge
+
+@functools.lru_cache(maxsize=4)
+def _flat_plate(asset): return layers.cover(cv2.imread(str(ROOT / asset), cv2.IMREAD_COLOR), layers.PW, layers.PH)
+
+def flat_frame(shot, u, want_mask=False):
+    """v1.1 (QA 30 Oct): no depth split at all. One layer = the whole still, a 2D camera pan with a slow push.
+    The mask is the whole frame (there is no background layer)."""
+    img = _flat_plate(shot["asset"]); e = ease(u)
+    dirx = -1 if shot["move"].endswith("_l") else 1
+    sc = FLAT_ZOOM[0] + (FLAT_ZOOM[1] - FLAT_ZOOM[0]) * e
+    out = warp(img, (W / layers.PW) * sc, dirx * FLAT_PAN * layers.PW * (e - 0.5), 0)
+    return (out, np.ones((H, W), np.float32)) if want_mask else out
+
 def plate_frame(shot, u, qa=False, want_mask=False):
+    if shot.get("flat"): return flat_frame(shot, u, want_mask)
     L = layers.get(shot)
     bg, fg, a = L["bg"], L["fg"], L["alpha"].astype(np.float32)
     scale, e, px, py = cam_params(shot, u)

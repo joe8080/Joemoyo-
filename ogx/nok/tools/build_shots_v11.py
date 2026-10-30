@@ -1,9 +1,9 @@
 """v1.1 shot list = the locked v1.0 build/shots.json plus QA's notes (30 Oct). v1.0 files are only read, never
 written: output goes to build/v1.1/shots.json. Voice, timing, length and credit lines are unchanged; no new stills.
   1. Parallax seams: every AI shot gets the seam-safe layer split (mirrored infill instead of a blurred inpaint)
-     and an edge guard (constant zoom so no layer runs off the plate). L05, L09, L11 also get a ground-only
-     split and sideways-only parallax ("slide"), with a pan instead of a push/pull; the sweep of every other AI
-     shot added L17, L41 (slide) and L58 (ground-only split).
+     and an edge guard (constant zoom so no layer runs off the plate), except L05, L09, L11, which per QA have no
+     depth split at all (flat 2D pan + push on the whole still). The sweep of every other AI shot added L17, L41
+     (sideways-only parallax, "slide") and L58 (ground-only split).
   2. L38 (modern conifers, metal roofs, factory smoke): reuses the on-brief L50 still, cropped to its homesteads
      and mirrored, so it doesn't read as the same frame at L50. Zero credits.
   3. L45 (cut bricks, roof-tile sherds): real photo instead, NOK06 panel c (terracotta fragments in a pit at Ido),
@@ -22,8 +22,11 @@ for s in v11["shots"]:
     if s["kind"] == "ai":
         s["layer"] = {"fill": "reflect"}
         s["edge_guard"] = True
+# QA file check (30 Oct, round 2): L05, L09, L11 get NO depth parallax at all, not even slide-only: a flat 2D pan
+# with a slow push on the whole still, plus the usual overlay.
 for ln, mv in (("L05", "pan_l"), ("L09", "pan_r"), ("L11", "pan_l")):
-    S[ln].update(layer={"fill": "reflect", "ground_only": True}, slide=True, move=mv)
+    for k in ("layer", "slide", "edge_guard"): S[ln].pop(k, None)
+    S[ln].update(flat=True, move=mv)
 # found in the sweep of the other AI shots: mirror ghost at the end of a push (L17 spoil-heap edge, L41 furnace
 # wall) -> sideways-only parallax with a pan; L58 awning cut out as a floating layer, tearing from its poles
 for ln, mv in (("L17", "pan_r"), ("L41", "pan_l")):

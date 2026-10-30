@@ -4,7 +4,7 @@
 set -e
 cd "$(dirname "$0")/.."
 B=build/v1.1
-OUT=deliverables/OGX_Nok_v1.1_REVIEW.mp4
+OUT=$B/OGX_Nok_v1.1_REVIEW.mp4          # producer 30 Oct: v1.1 exports live in build/v1.1/ (never in the repo)
 [ -e "$OUT" ] && { echo "refusing to overwrite $OUT"; exit 1; }
 mkdir -p $B/qa
 ls $B/parts/slice_*.mp4 | sort | sed "s#^#file '$PWD/#; s#\$#'#" > $B/parts/concat.txt
@@ -14,5 +14,5 @@ ffmpeg -v error -y -f concat -safe 0 -i $B/parts_qa/concat.txt -c copy $B/qa/pro
 ffmpeg -v error -i $B/video_only.mp4 -i audio/MASTER_mix.wav -map 0:v:0 -map 1:a:0 -c:v copy \
   -c:a aac -b:a 320k -ar 48000 -shortest -movflags +faststart "$OUT"
 ffmpeg -v error -y -i "$OUT" -vf scale=1280:720 -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 160k \
-  -movflags +faststart deliverables/OGX_Nok_v1.1_REVIEW_720p.mp4
+  -movflags +faststart $B/OGX_Nok_v1.1_REVIEW_720p.mp4
 ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT"

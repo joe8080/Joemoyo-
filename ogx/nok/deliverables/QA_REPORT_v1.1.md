@@ -8,7 +8,7 @@ File: `OGX_Nok_v1.1_REVIEW.mp4` · overlays-off proxy for motion checks: `proxy_
 | Loudness (≈ −14 LUFS, TP ≤ −1 dBTP) | -14.0 LUFS, -1.9 dBTP | PASS |
 | OCR text inventory (23 grabs: every 30 s, every credit, every name, end card) | 0 disallowed strings | PASS |
 | Real-image credits read back vs credits.md | min similarity 0.978 over 8 shots | PASS |
-| Parallax FG travel (floor 3 %) | min 3.14 %, median 4.56 % | PASS |
+| Parallax FG travel (floor 3 %) | min 3.14 %, median 4.58 % | PASS |
 | FG/BG ratio (floor 2) | min 2.17, median 3.65 | PASS |
 | freezedetect −50 dB (overlays off) | 0 frozen spans | PASS |
 
@@ -21,16 +21,16 @@ Allowed on-screen strings: `Excavation at the Nok site of Ido (cropped) · Louis
 | L01 | real | 3.61 | 6.31 | 0.07 | 84.24 | PASS |
 | L02 | real | 3.9 | 5.94 | 0.01 | 520.62 | PASS |
 | L03 | ai | 3.85 | 4.99 | 0.65 | 7.73 | PASS |
-| L04 | ai | 6.15 | 4.67 | 1.74 | 2.68 | PASS |
-| L05 | ai | 4.38 | 4.29 | 1.6 | 2.68 | PASS |
-| L06 | ai | 4.44 | 4.46 | 1.17 | 3.81 | PASS |
-| L07 | gfx | 5.57 | 5.02 | 0.05 | 100.37 | PASS |
+| L04 | ai | 6.15 | 4.69 | 1.76 | 2.66 | PASS |
+| L05 | ai | 4.38 | 5.82 | 0.0 | ∞ (flat BG) | PASS |
+| L06 | ai | 4.44 | 4.48 | 1.15 | 3.88 | PASS |
+| L07 | gfx | 5.57 | 5.09 | 0.05 | 112.28 | PASS |
 | L08 | ai | 5.61 | 4.02 | 1.56 | 2.57 | PASS |
-| L09 | ai | 4.81 | 4.92 | 1.71 | 2.88 | PASS |
-| L10 | ai | 2.71 | 4.76 | 0.43 | 11.06 | PASS |
-| L11 | ai | 7.6 | 4.7 | 1.19 | 3.96 | PASS |
-| L12 | ai | 1.8 | 5.36 | 1.78 | 3.02 | PASS |
-| L13 | ai | 3.57 | 6.4 | 1.05 | 6.11 | PASS |
+| L09 | ai | 4.81 | 5.83 | 0.0 | ∞ (flat BG) | PASS |
+| L10 | ai | 2.71 | 4.85 | 0.71 | 6.87 | PASS |
+| L11 | ai | 7.6 | 5.05 | 0.0 | ∞ (flat BG) | PASS |
+| L12 | ai | 1.8 | 5.32 | 1.76 | 3.02 | PASS |
+| L13 | ai | 3.57 | 6.35 | 1.01 | 6.3 | PASS |
 | L14 | ai | 4.92 | 4.57 | 1.82 | 2.51 | PASS |
 | L15 | ai | 4.15 | 4.23 | 1.13 | 3.74 | PASS |
 | L16 | ai | 3.95 | 4.4 | 1.14 | 3.87 | PASS |
