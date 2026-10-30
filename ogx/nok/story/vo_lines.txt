@@ -1,0 +1,62 @@
+L01	Triangular eyes, the pupils pierced right through.
+L02	Above them, an elaborate hairstyle, worked in fired clay.
+L03	This is Nok terracotta, from central Nigeria.
+L04	Its excavators describe Nok as the earliest large-scale sculptural tradition in sub-Saharan Africa.
+L05	Yet they found no evidence of a state, of towns, or of an elite.
+L06	So could small, scattered farming communities have made art on this scale?
+L07	The first of these terracottas was noticed in nineteen twenty-eight, during tin mining at the village of Nok.
+L08	The British archaeologist Bernard Fagg collected the finds, and gave them a name: the Nok culture.
+L09	Many of his pieces came from tin-mine gravels, moved from where they had first lain.
+L10	A separate find came in nineteen forty-three.
+L11	According to Fagg's later account, as retold in Archaeology magazine, a terracotta head had been used on a scarecrow in a yam field.
+L12	It was brought to him in Jos.
+L13	It is known as the Jemaa head, after the village where it was found.
+L14	In the wake of Fagg's publications, Nok pieces flooded the international art market.
+L15	Sites were dug out for sale, and the record of where things lay was lost.
+L16	Later, archaeologists from Gur-tuh University Frankfurt went looking.
+L17	All of the team's first thirty sites had been looted.
+L18	In their key study area, plundered sites dominate.
+L19	Forgeries became a known problem too.
+L20	Today, Nok terracottas are on the International Council of Museums' Red List of objects at risk.
+L21	Very few Nok figures come from recorded excavations, and complete ones are extremely rare.
+L22	That loss makes even a simple question hard. When?
+L23	Britannica still describes Nok as existing between about five hundred B C E and two hundred C E.
+L24	That range came from a handful of early radiocarbon and thermoluminescence dates.
+L25	Museum labels vary too: the Cleveland Museum of Art gives this head a thermoluminescence date of twenty to six hundred and twenty C E.
+L26	The Frankfurt team began fieldwork in two thousand and five, and from two thousand and nine its long-term project was funded by the German Research Foundation.
+L27	They excavated, built a pottery sequence, and gathered more than two hundred radiocarbon dates.
+L28	On their chronology, Nok began around fifteen hundred B C.
+L29	Its main phase ran from the ninth to the fourth century B C, when terracottas and iron appear.
+L30	And it ended around the turn of the Common Era.
+L31	The earliest furnace dates fall somewhere between eight hundred and four hundred B C.
+L32	But iron smelting by about eight hundred B C cannot yet be confirmed.
+L33	So who made the figures?
+L34	Art this accomplished, the thinking went, must have come from a complex society, with specialists to make it.
+L35	Peter Broy-nikh has said that, at first, his team assumed the same.
+L36	What they found was smaller.
+L37	Most sites cover roughly one or two hectares.
+L38	They look like brief occupations, scattered across the land.
+L39	No towns, no monuments and no central workshops have been found so far.
+L40	Charred grains show what people grew: pearl millet, alongside cowpeas.
+L41	Even the iron fits that picture: furnaces seem to have been used only once.
+L42	The team reads that as a sign of travelling specialists, not a central workshop.
+L43	As for iron objects, Broy-nikh says everything they recovered fits into one hand.
+L44	And the sculptures themselves turn up broken.
+L45	Fragments lie in pits, and often the pieces don't fit together.
+L46	The team suspects the figures were broken deliberately before burial.
+L47	Gabriele Frahn-keh says they can't prove it, but the pattern is striking.
+L48	At Pangwari, excavated between two thousand and eleven and two thousand and fourteen, they found a terracotta deposit in a secure archaeological context for the first time.
+L49	The team interprets some deposits as graves, marked by upright stones in a row; no human remains survive.
+L50	So what kind of society was this?
+L51	Broy-nikh and Rupp concluded that Nok developed complexity only in terms of ritual.
+L52	They describe small groups of farmers, living autonomously in dispersed settlements.
+L53	The excavators found no evidence of a state or an elite.
+L54	That is not proof of absence: they stress that preservation is poor, and the data come from a limited area.
+L55	There might have been rulers or chiefs, they write, who left no status markers.
+L56	But on the evidence so far, Broy-nikh says, highly accomplished art does not necessarily require a complex society.
+L57	The work is unfinished.
+L58	Fieldwork stopped after a deadly attack in twenty seventeen; the team has not gone back to the excavation area.
+L59	Why Nok ended is still unknown; the team suggests environmental change as one possibility.
+L60	Gabriele Frahn-keh puts it this way.
+L61	"The mystery of the Nok culture hasn't been solved, but today we have a much clearer understanding of what that mystery actually is."
+L62	Great art, made, as far as the evidence shows, without a great state.
