@@ -1,5 +1,5 @@
 # OGX Nok — "Nok: great art without a great state?" — narration LOCKED v1.0 (30 Oct 2026; Research lock-check Eden 23b6b02f, picture fixes applied)
-Written only from the OGX Research Nok evidence pack (Eden 6015c5ee-…). Claim IDs are the pack's. Not lock-checked by Research yet.
+Written only from the OGX Research Nok evidence pack (Eden 6015c5ee-…). Claim IDs are the pack's. Lock-checked v1.0, 30 Oct (Eden 65a68a79).
 Picture key: REAL = cleared image from the pack (one credit line from credits.md); GFX = animated graphic; AI = OpenArt still, unlabelled. One picture per line.
 Spoken text = narration as written (raw spellings, per producer 30 Oct: respell only a line the full-VO transcript mishears). `tools/vo_text.py` writes `vo_lines.txt`; this file is the master.
 
@@ -103,4 +103,4 @@ Real-image lines: L01 NOK01, L02 NOK01, L25 NOK04, L40 NOK06 (cropped, panel a),
 - L25 "labels" → "records" (same word count).
 - L40 NOK06 (Ido, CH22 pearl-millet paper); L49 generic standing stones (Ido is a feasting context, not graves).
 - L48 generic trowel close-up (must not read as the Pangwari deposit). No GFX text: the AI option is used.
-- L60 NOK05 (no claim about the object). L62 NOK01 credit re-shown.
+- L60: approved AI still (plateau at last light) standing in for NOK05, which could not be obtained (upload.wikimedia.org returned HTTP 429 throughout the build). L62 NOK01 credit re-shown.

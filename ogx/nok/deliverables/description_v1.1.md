@@ -1,8 +1,8 @@
 # Nok: great art without a great state? — description v1.1 (REVIEW draft, not published)
 
-Some of the earliest large-scale sculpture known from sub-Saharan Africa was made in central Nigeria, by the people archaeologists call the Nok culture. Yet the team that excavated Nok for more than a decade found no evidence of a state, of towns or of an elite. How could small, dispersed farming communities make art like this? This film follows the evidence: the first finds in 1928, the looting that followed, two very different datings, and the Frankfurt team's revised view that Nok was complex "only in terms of ritual".
+In central Nigeria, people archaeologists call the Nok culture made terracotta sculptures that their excavators describe as the earliest large-scale sculptural tradition in sub-Saharan Africa (Männel & Breunig 2016). How could small, dispersed farming communities make art like this? This film follows the evidence: the first finds in 1928, the looting that followed, two very different datings, and the Frankfurt team's revised view that Nok was complex "only in terms of ritual".
 
-Illustrative scenes are AI-generated stills. Museum objects and the excavation photograph are real and credited on screen. Objects are identified by museum and accession number only; their find-spots are not known to us and are not claimed.
+Illustrative scenes are AI-generated stills. Museum objects and the excavation photograph are real and credited on screen. Objects are identified by museum and accession number only; we do not give or claim a find-spot for any of them.
 
 ## Sources
 - Breunig, P. & Rupp, N. (2016) "An Outline of Recent Studies on the Nigerian Nok Culture", *Journal of African Archaeology* 14(3): 237–255. DOI 10.3213/2191-5784-10298 (CC BY 4.0). https://brill.com/view/journals/jaa/14/3/article-p237_1.xml
