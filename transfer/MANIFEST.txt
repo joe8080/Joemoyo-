@@ -1,0 +1,33 @@
+OGX Nok v1.0 REVIEW — transfer manifest (30 Oct 2026)
+Source branch: claude/pensive-cerf-dtmspd @ b3d12af
+Made with: base64 -w0 FILE | split -b 20000000 -d -a 3 - transfer/FILENAME.b64.part
+Rebuild: cat transfer/FILENAME.b64.part* | base64 -d > FILENAME   (then check sha256)
+
+FILE: OGX_Nok_v1.0_REVIEW.mp4
+  bytes:    150063108
+  md5:      722fe6f03210557c958edcdd3342eba0
+  sha256:   37d3a435329125c84731dc7719f5e5522e36e3c9a7f2ef9593bfdddd65be35e5
+  duration: 285.979000 s (ffprobe format=duration)
+  parts (in order):
+    OGX_Nok_v1.0_REVIEW.mp4.b64.part000  20000000 bytes
+    OGX_Nok_v1.0_REVIEW.mp4.b64.part001  20000000 bytes
+    OGX_Nok_v1.0_REVIEW.mp4.b64.part002  20000000 bytes
+    OGX_Nok_v1.0_REVIEW.mp4.b64.part003  20000000 bytes
+    OGX_Nok_v1.0_REVIEW.mp4.b64.part004  20000000 bytes
+    OGX_Nok_v1.0_REVIEW.mp4.b64.part005  20000000 bytes
+    OGX_Nok_v1.0_REVIEW.mp4.b64.part006  20000000 bytes
+    OGX_Nok_v1.0_REVIEW.mp4.b64.part007  20000000 bytes
+    OGX_Nok_v1.0_REVIEW.mp4.b64.part008  20000000 bytes
+    OGX_Nok_v1.0_REVIEW.mp4.b64.part009  20000000 bytes
+    OGX_Nok_v1.0_REVIEW.mp4.b64.part010  84144 bytes
+
+FILE: OGX_Nok_v1.0_REVIEW_720p.mp4
+  bytes:    43330119
+  md5:      06927202780e42a212dc816c042c7ff1
+  sha256:   6fc9fcbe6f429b1a07148df239c476e1f027de78df9a7d4c8a7dc1149dd311b9
+  duration: 285.994000 s (ffprobe format=duration)
+  parts (in order):
+    OGX_Nok_v1.0_REVIEW_720p.mp4.b64.part000  20000000 bytes
+    OGX_Nok_v1.0_REVIEW_720p.mp4.b64.part001  20000000 bytes
+    OGX_Nok_v1.0_REVIEW_720p.mp4.b64.part002  17773492 bytes
+
