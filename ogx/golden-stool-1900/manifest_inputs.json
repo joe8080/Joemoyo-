@@ -1,0 +1,28 @@
+{
+  "episode": "ogx-golden-stool-1900",
+  "manifest_version": "v2",
+  "supersedes": "CLAUDE_PACK_v1.md (08:49 UK, pre-lock; kept, not used)",
+  "box_root": "/workspace/ogx-productions/golden-stool-1900",
+  "note": "sha256 values are those recorded in the Eden hub at 10:08 UK, 30 Oct 2026. 'record' = no full hash recorded in the hub; the verifier records it on first read. Nothing here was read from the box by this session.",
+  "inputs": [
+    {"id": "NARRATION", "path": "script/SCRIPT_v1.5_clean_narration.md", "version": "v1.5 LOCKED (Chief 09:40 UK)", "sha256": "ea0177a0cbf874c2b5debdf844f7a7bfdd6ac24d6836889f4141ac1add53f421", "required": true, "expect_words": 835},
+    {"id": "ANNOTATED", "path": "script/SCRIPT_v1.5_annotated.md", "version": "v1.5 (annotations v1.8/v1.9 tracked separately)", "sha256": "d9ff4989669b2b11cba0e2b543264c8b13f6b0d5f9e56b504f9b2ca5615ab631", "required": true},
+    {"id": "LEDGER", "path": "research/LEDGER_v1.2.csv", "version": "v1.2", "sha256": "record", "required": true, "expect_rows": 41},
+    {"id": "FACTCHECK", "path": "factcheck/FACTCHECK_SCRIPT_v1.5.md", "version": "v1.5 PASS", "sha256": "record", "required": true},
+    {"id": "NAME_GUIDE", "path": "research/NAME_GUIDE_v1.1.md", "version": "v1.1", "sha256": "record", "required": true},
+    {"id": "REGISTER_MD", "path": "03_asset_register.md", "version": "register v12 (Archivist)", "sha256": "record", "required": true},
+    {"id": "REGISTER_CSV", "path": "03_asset_register.csv", "version": "register v12 (Archivist)", "sha256": "record", "required": true},
+    {"id": "HANDOFF", "path": "visuals_drafts/HANDOFF_v12.4.md", "version": "file name v12.4, internal v12.5d", "sha256": "4579dbbf7d62fa72cc346b9ffc2640579d92ca01148a7ef119b9160661174642", "required": true, "expect_text": "v12.5d"},
+    {"id": "SCENE_PLAN_MD", "path": "visuals_drafts/scene_plan.md", "version": "v12.4/v12.5", "sha256": "d2e3aad4d9397435f14046ae8c3ef0592835c1cc271a5fb8ab5acf4f3f202b8f", "required": true},
+    {"id": "SCENE_PLAN_CSV", "path": "visuals_drafts/scene_plan.csv", "version": "v12.4/v12.5 (46 scenes incl. end card, 354.1 s)", "sha256": "5fe2414493604c0555a86ea29d8c065d0cb82843abb535e2465d753aa99d3a41", "required": true, "expect_rows": 46},
+    {"id": "DESC_CREDITS", "path": "visuals_drafts/description_credits.md", "version": "v12.4 + OGL link line", "sha256": "e44d99c795be37609f641b4502f983ab501bcb88c635600a2b1aad5685fe7acd", "required": true},
+    {"id": "MAP_SPECS", "path": "visuals_drafts/map_specs.md", "version": "v12.5", "sha256": "record", "required": true},
+    {"id": "AI_PROMPTS", "path": "visuals_drafts/ai_prompts.md", "version": "v12 (AI-01 only; not used under Zero-AI)", "sha256": "record", "required": false},
+    {"id": "RATTRAY_CHECK", "path": "research/RATTRAY_CHECK.md", "version": "-", "sha256": "record", "required": false},
+    {"id": "EVIDENCE_PACK", "path": "research/EVIDENCE_PACK.md", "version": "box copy of Eden 2a5cd814", "sha256": "record", "required": false},
+    {"id": "T01_THUMB", "path": "assets/gs1900-T01_thumbnail-A-fb2-v9_lion-over-bartholomew-1896_1280x720.png", "version": "T01 v9 LOCKED", "sha256_prefix": "2096e22cb232", "required": true},
+    {"id": "RELEASE_PACK", "path": "/workspace/ogx-packs/golden-stool-1900/release_pack_v1_DRAFT.md", "version": "v1 DRAFT (frozen 10:00 UK)", "sha256": "record", "required": true},
+    {"id": "CHIEF_BRIEF", "path": "CHIEF_BRIEF_v1.md", "version": "v1", "sha256": "record", "required": false}
+  ],
+  "do_not_build_from": ["CLAUDE_PACK_v1.md", "script/SCRIPT_v1.md", "script/SCRIPT_v1.1*", "script/SCRIPT_v1.2*", "script/SCRIPT_v1.3*", "script/SCRIPT_v1.4*"]
+}
