@@ -23,3 +23,15 @@ outputs/reports/autotrade_log_*.md
 .vscode/
 .idea/
 *.swp
+
+# Public repo: no media and no encoded media on any branch (Night Producer, 30 Oct 2026)
+*.mp3
+*.wav
+*.mp4
+*.mov
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.b64.part*
+transfer/
