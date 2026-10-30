@@ -85,7 +85,7 @@ Museum pieces: no VO line implies a find-spot or provenance for the piece on scr
 - L45: "often" was mine; now Breunig's words, attributed (UR26).
 - L61: quote restored to the pack's exact punctuation.
 - L62: "without a great state" → "so far, no evidence of a great state" (hedge 3).
-- To verify when images arrive: L01 (eyes) must match NOK01 and L02 (hairstyle) must match NOK05.
+- Image check (done after download): L01 (eyes) matches NOK01. L02 (hairstyle) now also uses NOK01, tilted up to the hairstyle, per Research's lock-check; NOK05 is not used.
 Corrections: 1928 Nok (L07) and 1943 Jemaa (L10–L13) kept apart; Jemaa attributed to its single source. No looting percentage (L17–L18). No Kagara. No find-spots for museum pieces.
 
 ## On-screen credit lines (verbatim from credits.md, unlabelled form; Eden bba0f4d7)
