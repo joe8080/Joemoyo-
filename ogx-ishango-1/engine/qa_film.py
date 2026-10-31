@@ -121,7 +121,8 @@ def main(video, shots_path=None):
             rep.append(f"| {s['id']} (line {k + 1}) | {exp} | {got} | {sim:.3f} | {'PASS' if ok else 'FAIL'} |")
         if not s.get("credit"):
             continue
-        key = os.path.basename(s["image"]).replace("_marks", "")
+        key = os.path.basename(s["image"])
+        key = key if key.startswith("real_") else key.replace("_marks", "")
         if key.startswith("real_"):
             key = "Ishango_bone_(cropped).jpg"                # v1.2 proof: crops of the same real photo
         src = {"colA.png": "IshangoColumnA.png", "colB.png": "IshangoColumnB.png", "colC.png": "IshangoColumnC.png",

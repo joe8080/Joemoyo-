@@ -1,7 +1,27 @@
 # ogx-ishango-1 — STATUS
 
-**State (31 Oct 2026, ~06:35 UK): IDLE. v1.0 REVIEW (+720p, small 720p, noBYSA) and v1.1 natural (+noBYSA) exported and QA'd; Drive transfer blocked (connector takes inline content only). Nothing published. Media in the session only.**
-Nothing is published, uploaded, scheduled or posted. No stills, no full VO, no render yet. Older films and versions are untouched.
+**State (31 Oct 2026, UK): IDLE after follow-up 09. v1.2 PROOF (87.3 s, 1080p) built in work_proof/ from the frozen v1.1 natural cut; zero credits. v1.0 and v1.1 frozen (hashes re-checked OK). Nothing published, uploaded or transferred. Media in the session only.**
+Nothing is published, uploaded, scheduled or posted. Older films and versions are untouched.
+
+## Follow-up 09 (Chief: REQUEST CHANGES on v1.0): v1.2 PROOF, zero credits, nothing published or transferred
+- **File:** `work_proof/OGX_Ishango_v1.2_PROOF.mp4`. 87.32 s, 1920×1080, 25 fps, 149,687,240 bytes. Loudness −14.0 LUFS / −1.3 dBTP.
+  - sha256 `129b1575b9338ec9c2b0ab971ceca166d8b9f66a71aa1095555a4abbf7603ea3`
+  - md5 `b8a15ff28b3a696ff86f5639daba92b3`
+- **Source:** v1.1 natural 33.66–121.00 s (L08–L24). The v1.1 VO, music and ambience stems are reused; the VO is cut at the L24/L25 line boundary (119.62 s). No re-voicing, no word changes.
+- **Fixes:**
+  - **(a)** The AI bone stills 16–19 are gone. The real photo (credited, BY-SA flagged review-only) is the object of record on L16–L24.
+  - **(b)** Map labels: DR Congo, Lake Edward, Ishango.
+  - **(c)** Guided count: the drawing's groups light one at a time with numbers, beside the real photo. The deviation (no counting on the photo itself) and its reason are in the notes.
+  - **(d)** Cuts proposed in the notes only, not applied.
+  - **(e)** The name subtitles are removed from the L09 and L10 generated excavation scenes.
+- **QA from rendered frames:**
+  - Motion: 16/16 PASS, plus the L08 map override.
+  - Frozen segments: 0.
+  - Credit read-back: 15/16. L08 is the known OCR false fail, verified by eye.
+  - Reports: `qc/QA_REPORT_OGX_Ishango_v1.2_PROOF.md`, `qc/parallax_stats_v1.2_PROOF.csv`.
+- **Notes:** `work_proof/PROOF_NOTES.md` sits beside the file; the copy in git is `PROOF_NOTES_v1.2.md`.
+- **Credits used this follow-up:** 0 for every service (OpenArt, ElevenLabs, Higgsfield, Canva, Eden).
+- **Delivery:** none attempted, by instruction.
 
 ## Follow-ups 07–08 (05:45–06:35 UK): zero credits; nothing published, uploaded or pushed (media stays in the session)
 - **Voice check:** the VO take used ElevenLabs voice **"joe afrian british 1"**, voice id **FLcNu8oQgaYpRrmtMngB** (as reported by the generation).

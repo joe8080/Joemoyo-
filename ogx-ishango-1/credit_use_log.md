@@ -27,3 +27,5 @@ Times are UK (GMT), taken from the generation timestamps where the tool reported
 | 05:45–06:35 | all | follow-ups 07–08: small 720p copy, v1.1 natural cut, v1.1 natural noBYSA. Local renders only | 0 | — |
 
 **FINAL totals (06:35 UK, unchanged):** ElevenLabs 4,917 · OpenArt 700 · Eden AI ~3.2 · Higgsfield/Kling 0 · Canva 0.
+
+## Follow-up 09 (v1.2 PROOF): 0 credits on every service (OpenArt 0, ElevenLabs 0, Higgsfield 0, Canva 0, Eden 0). Totals unchanged.
