@@ -1,7 +1,24 @@
 # ogx-ishango-1 — STATUS
 
-**State (31 Oct 2026, ~05:10 UK): DONE: v1.0 REVIEW exported (1080p + 720p + _noBYSA alternate) and QA'd from rendered frames. Script v0.3 LOCKED. Nothing published. Exports in the session only.**
+**State (31 Oct 2026, ~06:35 UK): IDLE. v1.0 REVIEW (+720p, small 720p, noBYSA) and v1.1 natural (+noBYSA) exported and QA'd; Drive transfer blocked (connector takes inline content only). Nothing published. Media in the session only.**
 Nothing is published, uploaded, scheduled or posted. No stills, no full VO, no render yet. Older films and versions are untouched.
+
+## Follow-ups 07–08 (05:45–06:35 UK): zero credits; nothing published, uploaded or pushed (media stays in the session)
+- **Voice check:** the VO take used ElevenLabs voice **"joe afrian british 1"**, voice id **FLcNu8oQgaYpRrmtMngB** (as reported by the generation).
+- **Google Drive transfer: BLOCKED.** The Drive connector can write, but `create_file` only takes file content inline in the tool call (base64/text), with no local-file or resumable upload, so 44–494 MB media can't be sent from this session. No other route tried; nothing uploaded.
+- **v1.1 natural cut:** same locked VO take (sha256 8dbbefd5…, unchanged), no re-voicing, no word changes, no new generations. Only the take's own pauses (incl. its 0.8 s section breaks), the 1.2 s opening picture, the end tail and one end card. **Runtime 4:20.2, under 4:30 and NOT padded, by instruction.** Picture rules identical to v1.0. QA on rendered frames: loudness −14.0 LUFS / −1.3 dBTP PASS; 0 frozen segments; 44/44 moving shots PASS (FG min 3.11 %, ratio min 2.32); only allowed text; L08 credit verified by eye (OCR misread over map texture).
+- **v1.1 natural _noBYSA:** the same v1.1 cut with L03 → CC BY diagram, L12 → still 16, L42 → still 02 (exactly as v1.0 noBYSA), timed to the v1.1 timeline, v1.1 audio.
+- **Small review copy:** made from the v1.0 main cut (two-pass x264, 1.1 Mbit/s video + 128 kbit/s AAC).
+- **Untouched:** all v1.0 exports and the v1.1 natural file (sha256 re-checked OK).
+
+| File | Resolution | Runtime | Size | Loudness (I / TP) | sha256 | md5 |
+|---|---|---|---|---|---|---|
+| OGX_Ishango_v1.0_REVIEW_720p_small.mp4 | 1280×720 | 285.24 s (4:45.2) | 44,068,281 B (44.1 MB) | −14.1 LUFS / −1.3 dBTP | `1dab5ad7841189856d9add3b5c18acfba73c075c8cd62bdf707d0315de717795` | `2ddd89c40ba4da8c3e0df55f44affa58` |
+| OGX_Ishango_v1.1_REVIEW_natural.mp4 | 1920×1080 | 260.24 s (4:20.2) | 452,536,858 B (452.5 MB) | −14.0 LUFS / −1.3 dBTP | `bcf5ee71bf6286895dadd6980040fa6ef91bdbf00334ccdc181a1cf64e535914` | `e58e47a9b01e6568bc6265f36ba49bda` |
+| OGX_Ishango_v1.1_REVIEW_natural_noBYSA.mp4 | 1920×1080 | 260.24 s (4:20.2) | 447,822,629 B (447.8 MB) | −14.0 LUFS / −1.3 dBTP | `177a83a70384e6a5068ae3dec1265bf7df394429b9df64b82fb7216d4fb73c63` | `4addafcc95c60cfbd071248b63d84973` |
+
+- **Not changed tonight (logged for Research):** the L08 map credit and the bone photo author name.
+- **State: IDLE** after this summary, per the Night Producer.
 
 ## DONE (review cut): v1.0 REVIEW exports + QA — 31 Oct 2026, ~05:10 UK. Nothing published, uploaded, scheduled or posted.
 Exports are kept **in this session only** (`ogx-ishango-1/review/`, gitignored; never pushed). Ernest moves them to his private Drive himself.

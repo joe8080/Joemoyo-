@@ -24,3 +24,6 @@ Times are UK (GMT), taken from the generation timestamps where the tool reported
 **Running totals at 03:25 UK:** ElevenLabs 4,917 · OpenArt 700 · Eden AI ~3.2 · Canva 0 · Higgsfield/Kling 0.
 
 **FINAL totals for the session (05:10 UK):** ElevenLabs 4,917 · OpenArt 700 · Eden AI ~3.2 · Higgsfield/Kling 0 · Canva 0. All QA fixes after the first export were zero-credit.
+| 05:45–06:35 | all | follow-ups 07–08: small 720p copy, v1.1 natural cut, v1.1 natural noBYSA. Local renders only | 0 | — |
+
+**FINAL totals (06:35 UK, unchanged):** ElevenLabs 4,917 · OpenArt 700 · Eden AI ~3.2 · Higgsfield/Kling 0 · Canva 0.
