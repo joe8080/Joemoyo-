@@ -128,7 +128,7 @@ def render_count(spec, out, matte_out):
     cv2.rectangle(glow, (int(370 * ph_w / 891), int(200 * s)), (int(545 * ph_w / 891), int(1110 * s)), 1.0, -1)
     glow = cv2.GaussianBlur(glow, (0, 0), 14)[..., None]
     diag_src = cv2.cvtColor(cv2.imread(os.path.join(P, "stills", spec["diagram"])), cv2.COLOR_BGR2RGB)
-    dw = 980
+    dw = 1040
     dh = int(diag_src.shape[0] * dw / diag_src.shape[1])
     diag = cv2.resize(diag_src, (dw, dh), interpolation=cv2.INTER_NEAREST)
     diag = cv2.GaussianBlur(diag, (0, 0), 0.8)
@@ -139,7 +139,7 @@ def render_count(spec, out, matte_out):
     f_sum = E.font(E.F_SUB, 64)
     f_cred = E.font(E.F_LABEL, 24)
     ph_x0, ph_y0 = 110, (H - ph_h) // 2 - 30
-    dg_x0, dg_y0 = 820, (H - dh) // 2 + 30
+    dg_x0, dg_y0 = 790, (H - dh) // 2 + 30
     for i in range(n):
         t = E.ease(i / max(1, n - 1))
         tsec = i / FPS
@@ -178,12 +178,18 @@ def render_count(spec, out, matte_out):
             m[:, int(gx0 * dw) - 4:int(gx1 * dw) + 4] = 1.0
             amt = (0.9 if active else 0.45) * k
             dimg = dimg * (1 - amt * ink * m) + np.array(WARM, np.float32) * amt * ink * m
+            labels = [l_ for l_ in labels if abs(l_[0] - (dx0 + (gx0 + gx1) / 2 * dw)) > 1]
             labels.append((dx0 + (gx0 + gx1) / 2 * dw, dy0 - 64, label, 1.0 if active else 0.6, k))
         fr[dy0:dy0 + dh, max(0, dx0):min(W, dx0 + dw)] = dimg[:, max(0, -dx0):min(dw, W - dx0)]
         matte[dy0:dy0 + dh, max(0, dx0):min(W, dx0 + dw)] = 1.0
         fr = ov.apply(np.clip(fr, 0, 255).astype(np.uint8), i)
         img = Image.fromarray(fr)
         d = ImageDraw.Draw(img, "RGBA")
+        if spec.get("glow_from") is not None and tsec >= spec["glow_from"]:
+            ga = int(235 * min(1.0, (tsec - spec["glow_from"]) / 0.5))
+            bx = x0 + int(585 * pw / 891)
+            by0, by1 = y0 + int(200 * phh / 1230), y0 + int(1110 * phh / 1230)
+            d.line([(bx - 18, by0), (bx, by0), (bx, by1), (bx - 18, by1)], fill=(*WARM, ga), width=5)
         for (lx, ly, lab, op, k) in labels:
             tw = d.textlength(lab, font=f_num)
             d.text((lx - tw / 2 + 2, ly + 2), lab, font=f_num, fill=(0, 0, 0, int(180 * k * op)))
