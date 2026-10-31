@@ -1,7 +1,30 @@
 # ogx-ishango-1 — STATUS
 
-**State (31 Oct 2026, ~04:40 UK): SCRIPT v0.3 LOCKED (Research PASS). VO recorded. v1.0 REVIEW re-exporting after QA fixes; final QA follows. Nothing published.**
+**State (31 Oct 2026, ~05:10 UK): DONE: v1.0 REVIEW exported (1080p + 720p + _noBYSA alternate) and QA'd from rendered frames. Script v0.3 LOCKED. Nothing published. Exports in the session only.**
 Nothing is published, uploaded, scheduled or posted. No stills, no full VO, no render yet. Older films and versions are untouched.
+
+## DONE (review cut): v1.0 REVIEW exports + QA — 31 Oct 2026, ~05:10 UK. Nothing published, uploaded, scheduled or posted.
+Exports are kept **in this session only** (`ogx-ishango-1/review/`, gitignored; never pushed). Ernest moves them to his private Drive himself.
+| File | Resolution | Runtime | Size | Loudness (I / TP) | sha256 | md5 |
+|---|---|---|---|---|---|---|
+| OGX_Ishango_v1.0_REVIEW.mp4 | 1920×1080 | 285.24 s (4:45.2) | 494,435,762 bytes (494.4 MB) | −14.0 LUFS / −1.4 dBTP | `c175ba943f38203248c49379752eac120354d772145170d3eb4fed5491574d59` | `3705791449c04580f01ffc4214028d50` |
+| OGX_Ishango_v1.0_REVIEW_720p.mp4 | 1280×720 | 285.24 s (4:45.2) | 76,202,467 bytes (76.2 MB) | −14.0 LUFS / −1.4 dBTP | `bd376042e6355faeb7bdc2b2c079169752d62ad21351c4bd621a2a5fe0d155e3` | `d311b2dac4a3ad76bc9d1783ed4f5652` |
+| OGX_Ishango_v1.0_REVIEW_noBYSA.mp4 | 1920×1080 | 285.24 s (4:45.2) | 489,345,079 bytes (489.3 MB) | −14.0 LUFS / −1.4 dBTP | `8d642ad26b25143eb0af21229c5171115d1ea98dc2e77305f170c401547c902d` | `53c7f3934aa44011724d12652e067261` |
+
+- **Main cut** uses Ishango_bone_(cropped).jpg (CC BY-SA 4.0) on L03, L12 and L42: **review only, PENDING Ernest's BY-SA exception** (Chief allowed it for review; Research would keep it out).
+- **_noBYSA alternate** (same audio and timing): L03 → CC BY three-column diagram; L12 and L42 → approved AI stills (labelled). No BY-SA image. Zero credits.
+- **QA:** see `qc/QA_SUMMARY.md`. Runtime, loudness, freezedetect, parallax floors, OCR text inventory, credit read-back, AI labels and VO read-back all PASS (one OCR credit miss on L08 verified by eye). The first export failed visual QA (ghosting, smudges, doubling), was fixed at zero credits, and is kept aside, not handed over.
+- **Credits used (whole session):** ElevenLabs **4,917** (500 pronunciation test + 4,417 VO; Scribe 0) · OpenArt **700** (Wan 2.7 Image: 2 route tests + 45 stills incl. redos; the last redo was rejected and L15 reuses still 39) · Eden AI **~3.2** · Higgsfield/Kling **0** · Canva **0**. Music: original procedural bed, 0 credits.
+
+### Open items for Ernest
+1. **BY-SA exception** for Ishango_bone_(cropped).jpg (and confirm the author name Joeykentin vs "JhowieNitnek") — or choose the _noBYSA cut.
+2. **AI label**: "Reconstruction (AI)" on every AI still (Chief's 31 Oct ruling, from your 30 Oct standard). Confirm or overrule; it's one engine flag.
+3. **Ear checks**: a phone-speaker listen (L34) and a pronunciation ear-check (Heinzelin, Huylebrouck, Pletser, OrigineX). The read-back is exact, but nobody has listened in this session.
+4. **Music**: the review cut uses an original placeholder bed (no approved cue was reachable). Choose a final cue; if it's ElevenLabs Music, confirm commercial terms before publishing (L35).
+5. **Map marker** on L08: Ishango placed on the north-west shore near the Semliki outflow, position approximate. Research to confirm.
+6. **Engine**: rebuilt tonight because the Nok engine and RUNBOOK-v2 weren't reachable from this session. Chief to decide whether this rebuild (in `engine/`) replaces or merges with the Nok engine.
+7. **Review-copy size**: the house-standard draft asks for a review copy under 50 MB; the 720p copy is 76.2 MB. I can make a smaller one at no cost if wanted.
+8. Before any publish: Ernest's explicit yes; description.md ready (no placeholder citations).
 
 ## v1.0 REVIEW build (follow-up 06, 03:19 UK): LOCK → VO → render → QA → re-export
 - **Script v0.3 LOCKED** at 03:20 UK after OGX Research's PASS on the text (relayed by the Night Producer). Lock file sha256 11b9e6fbdce7c56d332d99028851f2d3e5dacc23b9095fb2c179f8a9c1986b40 (matches). Eden b69bd0e5 updated to "LOCKED".
@@ -9,7 +32,7 @@ Nothing is published, uploaded, scheduled or posted. No stills, no full VO, no r
 - **Picture:** 47 shots timed from the Scribe word timings (name subtitles and schematic group highlights land on the spoken words).
 - **First export failed my own visual QA** (rendered-frame contact sheet + crops): L09 figure ghosted (soft matte let the inpainted BG show through); L10 smudged halos round both men; L46 doubled walking figure (object inside the soft ground-split band); faint doubled reflections on L07/L41. Not handed over. Kept as `work/rejected_exports/*_REVIEW_prefixQA*` with hashes logged here.
 - **Fixes (zero credits):** ground-split blend narrowed 18 % → 8 % (re-rendered all 15 ground-split shots); L46 split moved below the figure; L09/L10 tried a hard matte (ghost gone, smudge remained), then switched to a ground split below the figures' feet, so people stay on the BG plane with nothing revealed behind them. Re-measured from rendered frames: all re-rendered shots PASS (L09 4.57 %/6.7; L10 3.12 %/3.1; L46 5.07 %/7.6). Checked by eye at start and end of each shot: no ghosting, smudge or doubling.
-- **Re-export in progress** (main 1080p + 720p + _noBYSA); then full film QA on the final files. Results below when done.
+- **Re-exported** (04:45–05:00 UK) and fully QA'd; see the DONE section above and qc/QA_SUMMARY.md.
 
 ## Script v0.3 DRAFT: Research FIX applied (follow-up 05, 03:11 UK). HOLD for Research's re-check; NOT LOCKED
 - **Changed from v0.2 (Research's wording, verbatim):** L15, L29, L34, L36, L40, L45. **L33** now uses Research's verified Smithsonian quote ("This fossil mammal bone has three rows of tally marks along its length. They may have been used to add or multiply."). All other lines unchanged (Research PASS).

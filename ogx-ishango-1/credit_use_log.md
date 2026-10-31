@@ -22,3 +22,5 @@ Times are UK (GMT), taken from the generation timestamps where the tool reported
 | 03:22 | ElevenLabs | Scribe transcription of the VO for word timings and the read-back (756/756 tokens identical to the lock) | 0 | 4,917 |
 
 **Running totals at 03:25 UK:** ElevenLabs 4,917 · OpenArt 700 · Eden AI ~3.2 · Canva 0 · Higgsfield/Kling 0.
+
+**FINAL totals for the session (05:10 UK):** ElevenLabs 4,917 · OpenArt 700 · Eden AI ~3.2 · Higgsfield/Kling 0 · Canva 0. All QA fixes after the first export were zero-credit.
