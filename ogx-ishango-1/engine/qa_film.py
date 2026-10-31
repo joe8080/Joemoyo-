@@ -23,7 +23,12 @@ ALLOWED_PATTERNS = [r"reconstruction", r"\(ai\)", r"wikimedia", r"commons", r"cc
                     r"joeykentin", r"albert1ls", r"nasa", r"landsat", r"origine", r"human", r"archives",
                     r"ishango", r"bone", r"heinzelin", r"jean", r"hubert", r"damas", r"pletser",
                     r"huylebrouck", r"marshack", r"olivier", r"keller", r"brooks", r"smith", r"the",
-                    r"^public", r"^domain", r"by-sa", r"^lands", r"^comm", r"^wiki", r"^reco", r"struction"]
+                    r"^public", r"^domain", r"by-sa", r"^lands", r"^comm", r"^wiki", r"^reco", r"struction",
+                    r"congo", r"lake", r"edward"]     # v1.2 proof: map labels (Chief fix b)
+RUNTIME = tuple(float(x) for x in os.environ.get("QA_RUNTIME", "270,330").split(","))
+
+
+H_ = 1080
 
 
 def probe_dur(f):
@@ -68,12 +73,12 @@ def main(video, shots_path=None):
     os.makedirs(G, exist_ok=True)
     shots = json.load(open(shots_path or f"{WORK}/render/shots.json"))
     dur = probe_dur(video)
-    rep = [f"# QA report — {os.path.basename(video)}", "", f"Runtime: **{dur:.2f} s ({int(dur // 60)}:{dur % 60:04.1f})** — target 4:30–5:30 → {'PASS' if 270 <= dur <= 330 else 'FAIL'}", ""]
+    rep = [f"# QA report — {os.path.basename(video)}", "", f"Runtime: **{dur:.2f} s ({int(dur // 60)}:{dur % 60:04.1f})** — target {RUNTIME[0]:.0f}–{RUNTIME[1]:.0f} s → {'PASS' if RUNTIME[0] <= dur <= RUNTIME[1] else 'FAIL'}", ""]
     # 1. OCR inventory
     times = [(round(t, 1), "30s-grid") for t in [k * 30 + 2 for k in range(int(dur // 30) + 1)] if t < dur - 0.5]
     for s in shots:
         mid = s["t0"] + s["dur"] / 2
-        if s.get("credit"):
+        if s.get("credit") or s.get("credits"):
             times.append((round(mid, 1), f"credit {s['id']}"))
         if s.get("subtitle"):
             times.append((round(s["t0"] + (s["subtitle"]["start"] + s["subtitle"]["end"]) / 2, 1), f"name {s['id']}"))
@@ -104,9 +109,21 @@ def main(video, shots_path=None):
             expected[m.group(1)] = m.group(2)
     fails = 0
     for s in shots:
+        for k, txt in enumerate(s.get("credits", [])):      # v1.2 count shots: two stacked credit lines
+            exp = next((v for v in expected.values() if norm_credit(v) == norm_credit(txt)), "?")
+            img = os.path.join(G, f"credit_{s['id']}_{k}.png")
+            bw = min(1000, 40 + int(len(txt) * 12.2))
+            grab(video, s["t0"] + s["dur"] / 2, img, f"crop={bw}:46:20:{H_ - 104 + k * 40},scale={bw * 3}:-1")
+            got = " ".join(ocr(img, psm="7", conf_min=0))
+            sim = difflib.SequenceMatcher(None, norm_credit(exp), norm_credit(got)).ratio()
+            ok = sim >= 0.9
+            fails += 0 if ok else 1
+            rep.append(f"| {s['id']} (line {k + 1}) | {exp} | {got} | {sim:.3f} | {'PASS' if ok else 'FAIL'} |")
         if not s.get("credit"):
             continue
         key = os.path.basename(s["image"]).replace("_marks", "")
+        if key.startswith("real_"):
+            key = "Ishango_bone_(cropped).jpg"                # v1.2 proof: crops of the same real photo
         src = {"colA.png": "IshangoColumnA.png", "colB.png": "IshangoColumnB.png", "colC.png": "IshangoColumnC.png",
                "colABC.png": "IshangoColumnA.png", "MAP_lake_edward.jpg": "Wfm_lake_edward_lake_george.jpg"}.get(key, key)
         exp = expected.get(src, "?")
