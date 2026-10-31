@@ -24,7 +24,8 @@ ALLOWED_PATTERNS = [r"reconstruction", r"\(ai\)", r"wikimedia", r"commons", r"cc
                     r"ishango", r"bone", r"heinzelin", r"jean", r"hubert", r"damas", r"pletser",
                     r"huylebrouck", r"marshack", r"olivier", r"keller", r"brooks", r"smith", r"the",
                     r"^public", r"^domain", r"by-sa", r"^lands", r"^comm", r"^wiki", r"^reco", r"struction",
-                    r"congo", r"lake", r"edward"]     # v1.2 proof: map labels (Chief fix b)
+                    r"congo", r"lake", r"edward",
+                    r"count", r"shown", r"published", r"drawing"]   # v1.3 drawing line (Chief ruling)     # v1.2 proof: map labels (Chief fix b)
 RUNTIME = tuple(float(x) for x in os.environ.get("QA_RUNTIME", "270,330").split(","))
 
 
