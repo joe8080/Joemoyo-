@@ -1,0 +1,24 @@
+# Never commit media from this film (public repo). Text and code only.
+research/images/
+research/sources/
+work/
+review/
+*.mp4
+*.mov
+*.webm
+*.mkv
+*.wav
+*.mp3
+*.m4a
+*.aac
+*.flac
+*.ogg
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.gif
+*.tif
+*.tiff
+*.psd
+*.b64
