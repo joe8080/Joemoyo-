@@ -29,3 +29,12 @@ None. No cut exists.
 1. Research pack in Eden: claim register, verified copies of the 2 Commons images, credits.md, and the date variants including Smithsonian "about 25,000".
 2. Engine/runbook and private transfer route confirmed by Chief.
 3. Then: pronunciation test, differentiation note, script (YouTube Script Studio + Write Like Joe), Research lock-check, stills, VO, render, QA.
+
+## Follow-up 01: Chief rulings received 31 Oct 2026 (stamped 00:25 UK); apply from the next run
+1. **AI labels ON:** every AI still carries a small on-screen "Reconstruction (AI)" label for its whole time on screen, plus a note in the description and ledger. Engine flag `ai_label` defaults ON for this film. ⚠️ This reverses Ernest's 29 Oct standing rule (L23: unlabelled "until Ernest rules otherwise"). Logged as a Chief ruling. **Chief: please confirm it is Ernest's own words** so QA judges against the right rule.
+2. Lean AI stills from OpenArt/Canva only. Higgsfield/Kling for motion only: max 6 clips, hard cap 62 credits.
+3. **Export route:** exports stay inside this session. Record sha256 + md5 for each and report file names and hashes; Ernest moves them to his private Drive himself. No media of any kind (mp4, images, audio, encoded) goes in the repo. Text and code only.
+4. The two CC BY-SA Commons images are allowed in the REVIEW cut only, both flagged "needs Ernest's exception before publish". PD/CC0/CC BY substitutes preferred. Claude can't reach commons.wikimedia.org from here, so Research needs to look for them.
+5. Connectors: ignored unless one blocks the build. None blocks the current stop; the blocker is the missing evidence pack, not a connector.
+
+**Effect on tonight: none.** Gate 3 still fails, so there is still no script and no build.
