@@ -1,6 +1,6 @@
 # ogx-ishango-1 — STATUS
 
-**State (31 Oct 2026, ~01:25 UK): SCRIPT v0.2 DRAFT (ledger-reconciled) READY FOR OGX RESEARCH LOCK-CHECK. NOT LOCKED.**
+**State (31 Oct 2026, ~01:35 UK): SCRIPT v0.2 DRAFT AWAITING OGX RESEARCH LOCK-CHECK (NOT LOCKED). Pictures, engine and pre-flight done in parallel; no VO recorded yet.**
 Nothing is published, uploaded, scheduled or posted. No stills, no full VO, no render yet. Older films and versions are untouched.
 
 ## Script draft posted for the lock-check: **v0.2** (supersedes v0.1)
@@ -67,6 +67,18 @@ Nothing is published, uploaded, scheduled or posted. No stills, no full VO, no r
 45 What we do know is this. Around twenty thousand years ago, someone at Ishango took this tool and cut these marks into it.
 46 Whatever they meant, that meaning was theirs.
 ```
+
+## Build progress while waiting for the lock-check (no VO recorded yet; script NOT locked)
+Time: 31 Oct 2026, ~01:35 UK (GMT).
+- **Stills: all 33 unique AI stills done and reviewed** (OpenArt · Wan 2.7 Image, 4K). Google/OpenAI models are excluded per brief §5; a Kling 3 Omni test was rejected (it put a boat in the scene and left the quartz off). 14 redos after per-still review: jointed long bones (C07 conflict), ruler-like ticks, "+"/"H"-shaped marks (OCR risk), metal-looking harpoons with modern rope, a modern window frame, a conifer forest. Every prompt carries "no modern buildings, bricks, metal roofs, factory smoke". Review notes per still: `work/stills/manifest.json` (stills stay in the session, not the repo). Lines 41 and 45 deliberately reuse the 07 and 01 stills as callbacks, with reversed moves.
+- **Real images:** the NASA Lake Edward image now downloaded (sha256 ba390a81… matches credits.md), so line 08 is a real PD locator (animated push-in, plain ring marker on the north-west shore, position approximate, no label). Bone photo (BY-SA, review only) on lines 03, 12 and 42. CC BY schematics on lines 20–24, 27, 28, 30 and 43: **cropped to the marks so the printed sums don't appear on screen**, with each group lit as the narrator says its number.
+- **Engine rebuilt** (`engine/ogx_engine.py`): FG/BG 2.5D layers (matting + inpainted BG plate), Nok motion settings, motion floors on, banned overlays (chapter cards, lower-third boxes, source cards, subscribe badge, map tags, credit pages) behind flags defaulting OFF that refuse to render if switched on, AI label ON, one credit line per real image, name subtitles. Each shot writes a rendered matte, so `engine/qa_motion.py` measures FG/BG travel from rendered frames.
+- **Test renders:** AI still: FG 4.25 %, ratio 4.3, PASS. Real photo: FG 4.02 %, ratio 16.4, PASS. Schematic: FG 4.43 %, ratio 5.6, PASS. Map: flat image, logged as MAP-OVERRIDE (24 % travel, no fake parallax).
+- **Music:** original procedural bed + lake ambience generated locally (0 credits); it thins under the readings section. Flagged as review-cut placeholder; no approved cue was reachable to reuse (L35).
+- **Higgsfield/Kling motion clips:** not used (0 of 6 clips, 0 of 62 credits).
+- **Pre-flight (L10):** every beat rendered as a 2 s slice with motion and OCR checks. Results go in `work/preflight/report.json` and are summarised here when done.
+- **Drafts:** `ledger.md` (claims documented/debated/inference + every picture asset by line) and `description.md` (full sources, reconstruction note, credits, ShareAlike flags). Both get finalised at script lock.
+- **Waiting on:** OGX Research lock-check of script v0.2 (posted above). After PASS (and any fixes): one full VO pass in "joe afrian british 1", Scribe word timings, render, mix (−14 LUFS, TP ≤ −1), QA, exports.
 
 ## Gate log (this session)
 | # | Gate | Result | Evidence |
