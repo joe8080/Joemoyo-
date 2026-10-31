@@ -107,7 +107,24 @@ def matte_ground(rgb, split=0.58, soft=0.18):
     return np.repeat(a, rgb.shape[1], axis=1)
 
 
+def matte_luma(rgb, lo=0.35, hi=0.55):
+    """Bright subject on a dark ground (bone macros): smooth luminance key, cleaned up."""
+    y = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY).astype(np.float32) / 255
+    y = cv2.GaussianBlur(y, (0, 0), 6)
+    a = np.clip((y - lo) / (hi - lo), 0, 1)
+    m = (a > 0.5).astype(np.uint8)
+    n, lab, stats, _ = cv2.connectedComponentsWithStats(m)
+    if n > 1:                                   # keep the largest bright region only
+        keep = 1 + int(np.argmax(stats[1:, cv2.CC_STAT_AREA]))
+        a = a * (lab == keep)
+    return cv2.GaussianBlur(a.astype(np.float32), (0, 0), 3)
+
+
 def build_layers(rgb, mode):
+    if mode == "luma":
+        a = matte_luma(rgb)
+        mode = "subject"   # inpaint the BG behind it like a matted subject
+        return _plate_from_alpha(rgb, a, mode)
     if mode == "subject":
         a = matte_subject(rgb)
         if a.mean() < 0.02 or a.mean() > 0.85:   # matting failed -> ground split
@@ -115,6 +132,10 @@ def build_layers(rgb, mode):
             mode = "ground"
     else:
         a = matte_ground(rgb)
+    return _plate_from_alpha(rgb, a, mode)
+
+
+def _plate_from_alpha(rgb, a, mode):
     # BG plate: inpaint the FG so revealed areas are plausible (avoid seam smears, L34)
     if mode == "subject":
         m = (a > 0.15).astype(np.uint8) * 255
