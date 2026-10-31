@@ -120,6 +120,50 @@ def stage_timing():
     print("lines", len(out), "| match ratio", round(ratio, 3), "| vo end", out[-1]["end"], "| weak lines", low)
 
 
+SECTION_STARTS = {8, 16, 19, 26, 37, 41, 46}
+
+
+def stage_space(line_gap=0.4, section_gap=1.0):
+    """Widen pauses between lines without touching words: split the VO only at the midpoint of the
+    silence between two lines and insert silence there. Shifts lines.json timings to match."""
+    import wave
+    import numpy as np
+    lines = json.load(open(f"{WORK}/timing/lines.json"))
+    src = f"{WORK}/vo/vo_full_48k.wav"
+    ff("-i", f"{WORK}/vo/vo_full.mp3", "-ar", "48000", "-ac", "1", src)
+    w = wave.open(src)
+    sr = w.getframerate()
+    x = np.frombuffer(w.readframes(w.getnframes()), np.int16)
+    pieces, shift, cut_prev = [], 0.0, 0
+    shifts = []
+    for i, L in enumerate(lines):
+        if i > 0:
+            prev = lines[i - 1]
+            mid = (prev["end"] + L["start"]) / 2
+            cut = int(mid * sr)
+            pieces.append(x[cut_prev:cut])
+            gap = line_gap + (section_gap if L["line"] in SECTION_STARTS else 0.0)
+            pieces.append(np.zeros(int(gap * sr), np.int16))
+            shift += gap
+            cut_prev = cut
+        shifts.append(shift)
+    pieces.append(x[cut_prev:])
+    y = np.concatenate(pieces)
+    with wave.open(f"{WORK}/vo/vo_spaced.wav", "wb") as o:
+        o.setnchannels(1)
+        o.setsampwidth(2)
+        o.setframerate(sr)
+        o.writeframes(y.tobytes())
+    for L, sh in zip(lines, shifts):
+        L["start"] = round(L["start"] + sh, 3)
+        L["end"] = round(L["end"] + sh, 3)
+        for wd in L["words"]:
+            wd["s"] = round(wd["s"] + sh, 3)
+            wd["e"] = round(wd["e"] + sh, 3)
+    json.dump(lines, open(f"{WORK}/timing/lines.json", "w"), indent=1)
+    print("spaced: +%.2f s, VO now %.2f s" % (shift, len(y) / sr))
+
+
 def stage_shots():
     lines = json.load(open(f"{WORK}/timing/lines.json"))
     plan = {p["line"]: p for p in json.load(open(f"{WORK}/plan.json"))}
@@ -206,7 +250,8 @@ def stage_mix():
     subprocess.run([sys.executable, f"{HERE}/music.py", A, str(total),
                     str(meta.get("thin0", 0)), str(meta.get("thin1", 0))], check=True)
     # VO stem placed at the offset, padded to full length
-    ff("-i", f"{WORK}/vo/vo_full.mp3", "-af",
+    vo_src = f"{WORK}/vo/vo_spaced.wav" if os.path.exists(f"{WORK}/vo/vo_spaced.wav") else f"{WORK}/vo/vo_full.mp3"
+    ff("-i", vo_src, "-af",
        f"adelay={int(off * 1000)}|{int(off * 1000)},apad=whole_dur={total},aformat=sample_rates=48000:channel_layouts=stereo",
        "-t", str(total), f"{A}/stem_vo.wav")
     ff("-i", f"{A}/music_bed.wav", "-af", "volume=-17dB", "-t", str(total), f"{A}/stem_music.wav")
@@ -244,6 +289,29 @@ def stage_export(version="v1.0"):
         for algo in ("md5sum", "sha256sum"):
             out = subprocess.run([algo, f], capture_output=True, text=True).stdout
             open(f + "." + algo[:-3], "w").write(out.replace(R + "/", ""))
+    print("exported", base)
+
+
+def stage_alt(version="v1.0"):
+    """No-BY-SA alternate: same timing and audio, L03/L12/L42 swapped for approved images."""
+    alt = json.load(open(f"{WORK}/render/shots_noBYSA_alt.json"))
+    subprocess.run([sys.executable, f"{HERE}/ogx_engine.py", f"{WORK}/render/shots_noBYSA_alt.json",
+                    f"{WORK}/stills", f"{WORK}/render/shots"], check=True)
+    swap = {a["id"][:-4]: a["id"] for a in alt}
+    shots = json.load(open(f"{WORK}/render/shots.json"))
+    with open(f"{WORK}/render/concat_noBYSA.txt", "w") as fh:
+        for sh in shots:
+            fh.write(f"file 'shots/{swap.get(sh['id'], sh['id'])}.mp4'\n")
+    ff("-f", "concat", "-safe", "0", "-i", f"{WORK}/render/concat_noBYSA.txt", "-c", "copy",
+       f"{WORK}/render/picture_noBYSA.mp4")
+    R = f"{ROOT}/review"
+    base = f"{R}/OGX_Ishango_{version}_REVIEW_noBYSA"
+    ff("-i", f"{WORK}/render/picture_noBYSA.mp4", "-i", f"{WORK}/audio/mix.wav", "-map", "0:v", "-map", "1:a",
+       "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-pix_fmt", "yuv420p", "-r", str(FPS),
+       "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", f"{base}.mp4")
+    for algo in ("md5sum", "sha256sum"):
+        out = subprocess.run([algo, f"{base}.mp4"], capture_output=True, text=True).stdout
+        open(f"{base}.mp4." + algo[:-3], "w").write(out.replace(R + "/", ""))
     print("exported", base)
 
 

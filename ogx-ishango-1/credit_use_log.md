@@ -18,3 +18,7 @@ Times are UK (GMT), taken from the generation timestamps where the tool reported
 
 **Running totals at 03:06 UK (hold):** ElevenLabs 500 · OpenArt 685 (balance read at start: 2,037) · Eden AI ~3.2 · Canva 0 · Higgsfield/Kling 0.
 **Running totals at 03:16 UK:** ElevenLabs 500 · OpenArt 700 · Eden AI ~3.2 (the v0.3 Eden note is a plain document, 0 credits) · Canva 0 · Higgsfield/Kling 0.
+| 03:21 | ElevenLabs | **full VO**, ONE take (generations_count=1) of the locked v0.3 text (sha256 11b9e6fb…6b40), eleven_multilingual_v2, voice "joe afrian british 1"; 252.45 s | 4,417 | 4,917 |
+| 03:22 | ElevenLabs | Scribe transcription of the VO for word timings and the read-back (756/756 tokens identical to the lock) | 0 | 4,917 |
+
+**Running totals at 03:25 UK:** ElevenLabs 4,917 · OpenArt 700 · Eden AI ~3.2 · Canva 0 · Higgsfield/Kling 0.

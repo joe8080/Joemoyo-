@@ -1,5 +1,5 @@
-# description.md — ogx-ishango-1 (DRAFT for the REVIEW cut; not for publishing)
-Status: draft written 31 Oct 2026 (UK). Nothing is published. Before any publish: Ernest's yes, his exception for the CC BY-SA photo, a confirmed author name for that photo, and a licence check on the music.
+# description.md — ogx-ishango-1 (for the v1.0 REVIEW cuts; not for publishing)
+Status: written 31 Oct 2026 (UK) for OGX_Ishango_v1.0_REVIEW (with the BY-SA bone photo, pending Ernest's exception) and OGX_Ishango_v1.0_REVIEW_noBYSA (bone photo replaced by approved images). Script v0.3 locked after OGX Research's PASS. Nothing is published. Before any publish: Ernest's yes, his exception for the CC BY-SA photo, a confirmed author name for that photo, and a licence check on the music.
 
 ---
 
@@ -7,7 +7,7 @@ Status: draft written 31 Oct 2026 (UK). Nothing is published. Before any publish
 
 A small bone handle with a fragment of quartz at one end, excavated beside Lake Edward in what is now the Democratic Republic of the Congo. The museum that holds it counts 168 notches, which appear to be grouped. Are they counting, a game, a calendar, or simply marks? We look at what is documented, what is debated, and how much the marks can really tell us about the people of Ishango who made them.
 
-**About the pictures.** Most scenes in this film are AI-generated reconstructions (made with OpenArt). They are labelled "Reconstruction (AI)" on screen. They are illustrations, not evidence: they do not show the real bone, the real site or real people. The real bone is shown only in the credited photograph. The notch diagrams are open-licensed drawings, cropped and highlighted. The lake locator is a NASA satellite image.
+**About the pictures.** Most scenes in this film are AI-generated reconstructions (made with OpenArt). They are labelled "Reconstruction (AI)" on screen (label ruling by Chief, 31 Oct; Ernest to confirm). They are illustrations, not evidence: they do not show the real bone, the real site or real people. The real bone is shown only in the credited photograph. The notch diagrams are open-licensed drawings, cropped and highlighted. The lake locator is a NASA satellite image.
 
 **What's documented and what's debated.**
 - Documented by the holding institution: the find (Jean de Heinzelin's excavations at Ishango, 1950), the object (a bone handle about 10 cm long with a quartz fragment), the museum's count of 168 marks in three columns, and the fishing community whose remains and bone harpoons were found at the site.
@@ -25,7 +25,7 @@ A small bone handle with a fragment of quartz at one end, excavated beside Lake 
 8. Rosenberg, D., Cabinet 28 (2007–08): https://www.cabinetmagazine.org/issues/28/rosenberg.php
 
 **Image credits**
-- Photo of the Ishango bone: Joeykentin · Wikimedia Commons · CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Ishango_bone_(cropped).jpg (cropped by Ponor from File:Ishango_bone.jpg). ⚠ ShareAlike licence: review cut only until Ernest grants an exception; author name to be confirmed (file page Joeykentin vs API "JhowieNitnek").
+- Photo of the Ishango bone (main review cut only; not in the _noBYSA cut): Joeykentin · Wikimedia Commons · CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Ishango_bone_(cropped).jpg (cropped by Ponor from File:Ishango_bone.jpg). ⚠ ShareAlike licence: review cut only until Ernest grants an exception; author name to be confirmed (file page Joeykentin vs API "JhowieNitnek").
 - Notch diagrams: Albert1ls · Wikimedia Commons · CC BY 2.5 — https://commons.wikimedia.org/wiki/File:IshangoColumnA.png, https://commons.wikimedia.org/wiki/File:IshangoColumnB.png, https://commons.wikimedia.org/wiki/File:IshangoColumnC.png. Changes: cropped to the marks (printed sums removed), recoloured, groups highlighted in time with the narration.
 - Lake Edward and Lake George: NASA Landsat · Wikimedia Commons · Public domain — https://commons.wikimedia.org/wiki/File:Wfm_lake_edward_lake_george.jpg. Changes: animated push-in, site marker added (position approximate).
 - AI reconstructions: generated with OpenArt (Wan 2.7 Image).
