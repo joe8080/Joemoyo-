@@ -1,38 +1,54 @@
-# ogx-ishango-1 — claim register (v0.1, 31 Oct 2026, UK time)
-Built from research/EVIDENCE_PACK_v1.md and research/credits.md (Night Producer follow-up 02). Sources are named the way the pack names them.
-**Ledger IDs are PROVISIONAL.** LEDGER_v1.csv hasn't arrived yet ("sent in the next message"). The C/D numbers below come from the pack's own references; where the pack gives no number, the cell says "pack §n". Once the ledger lands, reconcile every row against its "permitted narration" column.
-Status key: DOCUMENTED · DEBATED (attributed reading) · INFERENCE (our framing, never stated as a sourced fact)
+# ogx-ishango-1 — claim register v0.2 (script line → LEDGER_v1.csv)
+Supersedes v0.1 (provisional R-numbers). Each narrated line is mapped to the ledger claim(s) it relies on, with the ledger status and the ledger's permitted narration for comparison. INFERENCE = our framing, not a sourced fact.
 
-| ID | Claim as narrated (short) | Source as the pack names it | Pack ref | Status | Script lines |
-|---|---|---|---|---|---|
-| R01 | Ishango is on the Congolese shore of Lake Edward, in what is now DR Congo | Institute of Natural Sciences (museum page) | C01 | DOCUMENTED | 08 |
-| R02 | Near where the Semliki flows out of the lake (north-west shore) | credits.md note, file 6 (OGX Research) | credits #6 | DOCUMENTED (Research note; please confirm in lock-check) | 09 |
-| R03 | Hubert Damas found the site in 1935 | pack §2 | C04 | DOCUMENTED | 10 |
-| R04 | Belgian geologist Jean de Heinzelin excavated it; the museum says 1950 | museum page; 2024 brochure (1950 and 1959) | C02, C03 | DOCUMENTED | 11, 42 |
-| R05 | Held by the Institute of Natural Sciences, Brussels | museum | C05 | DOCUMENTED | 12 |
-| R06 | Lakeside fishers who made bone harpoons | pack §2 | C18 | DOCUMENTED | 13 |
-| R07 | Remains of at least nine people found | pack §2 | C19 | DOCUMENTED | 14 |
-| R08 | The marks were cut by someone in that community | — | — | INFERENCE (agency framing; it doesn't say what the marks mean) | 15, 45 |
-| R09 | Bone handle about 10 cm long, fragment of quartz at one end, probably a tool | museum | C06 | DOCUMENTED | 02, 16, 42 |
-| R10 | A mammal bone; which animal can no longer be told | museum | C07 | DOCUMENTED (no species named on screen or in VO) | 17 |
-| R11 | Purpose of the quartz: suggestions include engraving, tattooing or scarification | pack §2 | D07 | DEBATED | 18 |
-| R12 | The museum counts 168 notches in three columns | brochure p.19 | C08 | DOCUMENTED | 03, 20, 43 |
-| R13 | The notches "appear to be grouped" (museum's own hedge) | museum | C08 / brief | DOCUMENTED (hedge kept verbatim) | 20, 43 |
-| R14 | Column groups: 11, 13, 17, 19 (60) · 3, 6, 4, 8, 10, 5, 5, 7 (48) · 11, 21, 19, 9 (60) | brochure p.19; Pletser & Huylebrouck p.17 | C08, C10? | DOCUMENTED | 21–23 |
-| R15 | Some marks are worn; one group of five is hard to read; the 10 could be a 9 | Keller p.5; Pletser & Huylebrouck "10 (9+1 ?)", "5 (1+4 ?)" | C09 | DOCUMENTED (uncertainty) | 24, 43 |
-| R16 | De Heinzelin (1962): the marks seemed deliberately planned, perhaps "an arithmetical game" | de Heinzelin 1962 as quoted by Keller | D01 | DEBATED | 26 |
-| R17 | De Heinzelin noted doubling (3–6, 4–8, 5–10) and that 11, 13, 17, 19 are primes | de Heinzelin 1962 | D01, D02 | DEBATED | 27, 28 |
-| R18 | Pletser & Huylebrouck rejected the prime-number reading; the museum brochure says there isn't enough proof | Pletser & Huylebrouck 2016; brochure | D02 | DEBATED | 29 |
-| R19 | Pletser & Huylebrouck: a counting tool mixing bases 10 and 12, "oldest mathematical tool" (their claim) | Pletser & Huylebrouck 2016 | D03 | DEBATED (attributed; "widely accepted" not used) | 30 |
-| R20 | Marshack linked the marks to a lunar calendar | Marshack 1964/1972 via the brochure's summary | D04 | DEBATED | 31 |
-| R21 | Keller: the lunar reading is "now largely discredited" | Keller (BibNum) | D04 | DEBATED | 32 |
-| R22 | Smithsonian: the marks "may" be a tally | Smithsonian Human Origins | D05 | DEBATED | 33 |
-| R23 | Keller: worn or barely visible marks make any numeric reading suspect; "A notch may be nothing more than a mark" | Keller pp.4, 13 | D06 | DEBATED (Keller doesn't say "just decoration") | 34, 35 |
-| R24 | De Heinzelin suspected the marks were "more than pure decoration" | pack §6.5 | D01? | DEBATED | 36 |
-| R25 | Dates in the sources range from around 20,000 to about 25,000 years | museum page; 2024 brochure; Smithsonian; Pletser & Huylebrouck; Keller | pack §4 (C11–C15?) | DOCUMENTED range; no figure presented as settled | 38, 40, 42 |
-| R26 | The bone itself hasn't been dated directly; the dates come from the layers at the site | pack §4 explanation | pack §4 | DOCUMENTED | 39 |
-| R27 | Brooks & Smith (1987) place it in the late Pleistocene | Brooks & Smith 1987 (abstract) | C16 (numeric figures UNVERIFIED, not used) | DOCUMENTED (abstract wording only) | 40 |
-| R28 | No reading is proven | synthesis of D01–D06 | — | INFERENCE (fair summary of the pack) | 44 |
+| Line | Narration (v0.2) | Ledger IDs | Ledger status | Ledger permitted narration |
+|---|---|---|---|---|
+| 01 | A lake shore in central Africa, around twenty thousand years ago. Someone is holding a piece of bone about ten centimetres long. | C06, C12 (date), inference | C06: SOURCED; C12: SOURCED | It's a small bone handle, about ten centimetres long, with a sliver of quartz at its tip. / The layers it came from have been dated to roughly 20,000 to 25,000 years ago. |
+| 02 | At one end, a fragment of quartz. Along the sides, rows of small cut marks. | C06 | C06: SOURCED | It's a small bone handle, about ten centimetres long, with a sliver of quartz at its tip. |
+| 03 | Today, the museum that holds it counts one hundred and sixty-eight of them. | C08, C05 | C08: SOURCED; C05: SOURCED | The museum counts 168 marks, cut in three columns along the handle. / Today the bone is kept at the Institute of Natural Sciences in Brussels. |
+| 04 | And for decades, people have argued about what they mean. | — | — |  |
+| 05 | Is it a tally? A game? A calendar? Or marks we can't read at all? | D01, D03, D04, D06 | D01: CONTESTED; D03: CONTESTED; D04: CONTESTED; D06: SOURCED (Keller text read; reading itself CONTESTED) | Its finder suggested the marks might be an arithmetic game, though he admitted they might be chance. / Some mathematicians argue it was a counting tool, perhaps mixing tens and twelves. |
+| 06 | This is OrigineX, and this is the Ishango bone. | — | — |  |
+| 07 | Three questions. What is it, and where is it from? What do the marks show? And how much can they really tell us? | — | — |  |
+| 08 | Ishango sits on the Congolese shore of Lake Edward, in what is now the Democratic Republic of the Congo. | C01 | C01: SOURCED | Ishango lies on the shore of Lake Edward, in what is now the Democratic Republic of Congo. |
+| 09 | The site was found in 1935, by Hubert Damas. | C04 | C04: SOURCED | The site had been spotted in 1935; the dig came later. |
+| 10 | In 1950, when this was still the Belgian Congo, Jean de Heinzelin, a geologist from the Institute in Brussels, led excavations here. | C01, C03 | C01: SOURCED; C03: SOURCED | Ishango lies on the shore of Lake Edward, in what is now the Democratic Republic of Congo. / Belgian geologist Jean de Heinzelin led the dig. |
+| 11 | The museum that holds the bone says it was found during that dig. | C02 | C02: SOURCED | The museum that holds it says it was found during Jean de Heinzelin's excavations at Ishango in 1950. |
+| 12 | Today, it's held by the Institute of Natural Sciences in Brussels. | C05 | C05: SOURCED | Today the bone is kept at the Institute of Natural Sciences in Brussels. |
+| 13 | The people who lived at Ishango were lakeside fishers. They made harpoons from bone. | C19 | C19: SOURCED | They were lakeside fishers who carved barbed bone harpoons. |
+| 14 | The excavations also found the remains of at least nine people. | C18 | C18: SOURCED | People lived and fished here; their remains were found too. |
+| 15 | Whatever the marks mean, they were cut by someone in this community. | INFERENCE (agency) | INFERENCE |  |
+| 16 | It's a small bone handle, about ten centimetres long, with a sliver of quartz at its tip. It was probably part of a tool. | C06 | C06: SOURCED | It's a small bone handle, about ten centimetres long, with a sliver of quartz at its tip. |
+| 17 | It came from a mammal, but which animal, the museum says, can no longer be told. | C07 (no species) | C07: NOT DOCUMENTED | Say 'a mammal bone' only. Do not name a species. |
+| 18 | And the quartz? De Heinzelin suggested engraving or tattooing. The museum's brochure mentions the ritual scarification of skin. These are only hypotheses. | D07 | D07: CONTESTED | The quartz tip may have been used for fine cutting or engraving. |
+| 19 | Then there are the marks. | — | — |  |
+| 20 | The museum counts one hundred and sixty-eight notches, in three columns. And they appear to be grouped. | C08, C10 (hedge) | C08: SOURCED; C10: SOURCED | The museum counts 168 marks, cut in three columns along the handle. / In the museum's words, the notches 'appear to be grouped', with pairs such as three and six, four and eight, five and ten. |
+| 21 | On one side, groups of eleven, thirteen, seventeen and nineteen. Together, sixty. | C09 | C09: SOURCED | As the museum reads them, the columns hold groups of 11, 13, 17 and 19; 3, 6, 4, 8, 10, 5, 5 and 7; and 11, 21, 19 and 9 notches. Some marks are worn, so a few counts are uncertain. |
+| 22 | In the middle: three, six, four, eight, ten, five, five and seven. Forty-eight. | C09 | C09: SOURCED | As the museum reads them, the columns hold groups of 11, 13, 17 and 19; 3, 6, 4, 8, 10, 5, 5 and 7; and 11, 21, 19 and 9 notches. Some marks are worn, so a few counts are uncertain. |
+| 23 | And on the other side: eleven, twenty-one, nineteen and nine. Sixty again. | C09 | C09: SOURCED | As the museum reads them, the columns hold groups of 11, 13, 17 and 19; 3, 6, 4, 8, 10, 5, 5 and 7; and 11, 21, 19 and 9 notches. Some marks are worn, so a few counts are uncertain. |
+| 24 | But some marks are worn, so a few counts are uncertain. That ten, for one, could be a nine. | C09 | C09: SOURCED | As the museum reads them, the columns hold groups of 11, 13, 17 and 19; 3, 6, 4, 8, 10, 5, 5 and 7; and 11, 21, 19 and 9 notches. Some marks are worn, so a few counts are uncertain. |
+| 25 | So even the counting comes with a question mark. | C09 | C09: SOURCED | As the museum reads them, the columns hold groups of 11, 13, 17 and 19; 3, 6, 4, 8, 10, 5, 5 and 7; and 11, 21, 19 and 9 notches. Some marks are worn, so a few counts are uncertain. |
+| 26 | Jean de Heinzelin admitted the patterns might be chance. But in 1962 he wrote that they seemed deliberately planned, perhaps as an arithmetical game. | D01 | D01: CONTESTED | Its finder suggested the marks might be an arithmetic game, though he admitted they might be chance. |
+| 27 | He saw doubling in the middle column, and the museum points to the same pairs. Three and six. Four and eight. Five and ten. | D01, C10 | D01: CONTESTED; C10: SOURCED | Its finder suggested the marks might be an arithmetic game, though he admitted they might be chance. / In the museum's words, the notches 'appear to be grouped', with pairs such as three and six, four and eight, five and ten. |
+| 28 | He also noted that eleven, thirteen, seventeen and nineteen are prime numbers. | D01, D02 | D01: CONTESTED; D02: CONTESTED | Its finder suggested the marks might be an arithmetic game, though he admitted they might be chance. / The numbers 11, 13, 17 and 19 happen to be primes. Most researchers doubt the carvers meant that. |
+| 29 | Not everyone agrees. Pletser and Huylebrouck rejected the prime-number idea, and the museum says there isn't enough proof. | D02 | D02: CONTESTED | The numbers 11, 13, 17 and 19 happen to be primes. Most researchers doubt the carvers meant that. |
+| 30 | Their own conclusion, which they call unspectacular: probably a tool for counting events or things, kept by someone who mixed bases ten and twelve. | D03 | D03: CONTESTED | Some mathematicians argue it was a counting tool, perhaps mixing tens and twelves. |
+| 31 | Another reading, from the researcher Marshack, linked the marks to a lunar calendar. | D04 | D04: CONTESTED | One researcher argued it tracked the phases of the moon; most specialists don't accept that. |
+| 32 | Keller calls that idea now largely discredited. | D04 (Keller fn4) | D04: CONTESTED | One researcher argued it tracked the phases of the moon; most specialists don't accept that. |
+| 33 | The Smithsonian calls them tally marks, and says they may have been used to add or multiply. | D05, C13 | D05: CONTESTED; C13: SOURCED | Many think the marks record a count of something; nobody knows what. / The Smithsonian gives about 25,000 years. |
+| 34 | Keller is the most sceptical. Some marks are worn or barely visible, he says, and that makes any numeric reading suspect. | D06 | D06: SOURCED (Keller text read; reading itself CONTESTED) | Sceptics warn we may be reading our own maths into the marks. |
+| 35 | A notch, he writes, may be nothing more than a mark. | D06 | D06: SOURCED (Keller text read; reading itself CONTESTED) | Sceptics warn we may be reading our own maths into the marks. |
+| 36 | Even de Heinzelin only said he suspected the marks were more than pure decoration. | D08 (de Heinzelin quote) | D08: NOT DOCUMENTED | Possible to say: 'They may simply be decorative -- we can't tell.' Do not attribute a grip theory to anyone. |
+| 37 | So how old is it? That depends on who you ask. | C11–C14 | C11: SOURCED; C14: SOURCED | The museum dates it to nearly 20,000 years ago. / Some researchers give 22,000 years. |
+| 38 | The figures in the sources run from around twenty thousand years to about twenty-five thousand. | C11, C12, C13, C14 | C11: SOURCED; C12: SOURCED; C13: SOURCED; C14: SOURCED | The museum dates it to nearly 20,000 years ago. / The layers it came from have been dated to roughly 20,000 to 25,000 years ago. |
+| 39 | That's because the dates come from the layers at the site, not from the bone itself. | C12 | C12: SOURCED | The layers it came from have been dated to roughly 20,000 to 25,000 years ago. |
+| 40 | In 1987, a new study by Brooks and Smith pushed the site's age back, into the late Pleistocene, the last Ice Age. | C16 | C16: SOURCED (abstract); numeric figures UNVERIFIED | In the 1980s a new study pushed the site's age back into the last Ice Age. |
+| 41 | So, our three questions. | — | — |  |
+| 42 | What is it? A small bone handle with a quartz tip, found at Ishango on Lake Edward in 1950, and around twenty thousand years old. | C02, C06, C11, C12 | C02: SOURCED; C06: SOURCED; C11: SOURCED; C12: SOURCED | The museum that holds it says it was found during Jean de Heinzelin's excavations at Ishango in 1950. / It's a small bone handle, about ten centimetres long, with a sliver of quartz at its tip. |
+| 43 | What do the marks show? The museum counts one hundred and sixty-eight, in three columns, and they appear to be grouped. Some are worn, so not every count is certain. | C08, C10, C09 | C08: SOURCED; C10: SOURCED; C09: SOURCED | The museum counts 168 marks, cut in three columns along the handle. / In the museum's words, the notches 'appear to be grouped', with pairs such as three and six, four and eight, five and ten. |
+| 44 | And how much can they tell us? Less than we'd like. Counting, a game, a calendar, or simply marks: each reading has its defenders, and none is proven. | D01–D06, D08 | D01: CONTESTED; D06: SOURCED (Keller text read; reading itself CONTESTED); D08: NOT DOCUMENTED | Its finder suggested the marks might be an arithmetic game, though he admitted they might be chance. / Sceptics warn we may be reading our own maths into the marks. |
+| 45 | What we do know is this. Around twenty thousand years ago, someone at Ishango took this tool and cut these marks into it. | INFERENCE, C11/C12 | C11: SOURCED; C12: SOURCED | The museum dates it to nearly 20,000 years ago. / The layers it came from have been dated to roughly 20,000 to 25,000 years ago. |
+| 46 | Whatever they meant, that meaning was theirs. | INFERENCE | INFERENCE |  |
 
-## Deliberately NOT in the script (pack §10 and §7)
-Baboon or any other species · "first calculator" / "oldest mathematical object" / "Africans invented maths" as fact · lunar calendar as fact · "they knew prime numbers" · an exact date as settled fact · Egypt / source of the Nile · 8500 BC · hidden/suppressed/lost-knowledge framing · "the bone was carbon-dated" · "Keller says it is just decoration" · "widely accepted" · 1957/1960 as the find date · Lebombo (no ledger row) · de Heinzelin's original Holocene date (UNVERIFIED) · Brooks & Smith numeric ages (UNVERIFIED) · grip theory (NOT DOCUMENTED).
+## Ledger claims deliberately not narrated
+C07 baboon (NOT DOCUMENTED) · C15 Keller date (background only) · C17 early date (UNVERIFIED) · C20 second bone (optional, left out to avoid confusion) · D09 'oldest mathematical object' (CONTESTED; the line 30 'unspectacular' quote is used instead) · D10 hidden/suppressed (NOT DOCUMENTED). Line 09 Semliki (v0.1) cut: not in the ledger.
