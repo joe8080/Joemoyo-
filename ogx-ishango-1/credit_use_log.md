@@ -14,7 +14,7 @@ Times are UK (GMT), taken from the generation timestamps where the tool reported
 | — | Canva | not used | 0 | 0 |
 | — | Higgsfield/Kling video | not used (cap 6 clips / 62 credits) | 0 | 0 |
 | — | Music | procedural bed, generated locally (no ElevenLabs Music spend) | 0 | — |
-| 03:16 | OpenArt | one redo for L15 to match the Research FIX (excavation-layer traces instead of hands cutting a notch) | 15 | 700 |
+| 03:16 | OpenArt | one redo for L15 to match the Research FIX (excavation-layer traces). Rejected on review (whole fish, cartoon bones, metal-looking hook); L15 reuses still 39 instead | 15 | 700 |
 
 **Running totals at 03:06 UK (hold):** ElevenLabs 500 · OpenArt 685 (balance read at start: 2,037) · Eden AI ~3.2 · Canva 0 · Higgsfield/Kling 0.
 **Running totals at 03:16 UK:** ElevenLabs 500 · OpenArt 700 · Eden AI ~3.2 (the v0.3 Eden note is a plain document, 0 credits) · Canva 0 · Higgsfield/Kling 0.

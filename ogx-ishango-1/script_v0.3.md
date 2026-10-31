@@ -28,7 +28,7 @@ Refs are LEDGER_v1.csv claim IDs.
 | 12 | Today, it's held by the Institute of Natural Sciences in Brussels. | C05 | REAL: Ishango_bone_(cropped).jpg, second framing (BY-SA, review only) |
 | 13 | The people who lived at Ishango were lakeside fishers. They made harpoons from bone. | C19 | AI: bone harpoon points drying on a rock by the water |
 | 14 | The excavations also found the remains of at least nine people. | C18 | AI: quiet lakeside at dusk, no bodies shown |
-| 15 | Whatever the marks mean, the bone was found among the traces this community left. | C19, C18 (Research FIX wording) | AI: lakeside excavation layer with hearth charcoal, fish bones and broken bone harpoon fragments in the soil (redo; replaces the hands-cutting still to match the FIX)
+| 15 | Whatever the marks mean, the bone was found among the traces this community left. | C19, C18 (Research FIX wording) | AI: reuse of still 39 (stratified trench wall: the layers that held the community's traces), reversed move; replaces the hands-cutting still to match the FIX
 
 ## The object
 | # | Narration | Refs | Picture |

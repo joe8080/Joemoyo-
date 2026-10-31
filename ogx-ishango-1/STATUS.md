@@ -10,7 +10,7 @@ Nothing is published, uploaded, scheduled or posted. No stills, no full VO, no r
 - **Eden v0.3 item id: b69bd0e5-9162-4084-bf7d-dbe7846cede3** (title "YouTube Script: The Ishango bone (ogx-ishango-1) v0.3 DRAFT", read back and matching). v0.2 stays in 342592c3-60ae-40f0-ba2a-bb9daf5ee103.
 - **sha256 of narration_v0.3.txt:** 11b9e6fbdce7c56d332d99028851f2d3e5dacc23b9095fb2c179f8a9c1986b40
 - **756 words, 46 lines;** estimated VO ≈ 293 s at the measured 155 wpm, so ≈ 5:00–5:05 with the title card, end card and line gaps (target 4:30–5:30).
-- **Picture change for the FIX:** L15's still (hands cutting a notch) would have shown the attribution Research removed, so it gets one redo: an excavation layer with hearth charcoal, fish bones and harpoon fragments (OpenArt, 15 credits, logged). No other still changes.
+- **Picture change for the FIX:** L15's still (hands cutting a notch) would have shown the attribution Research removed. The one permitted redo (15 credits, logged) was **rejected on review**: fresh whole fish, cartoon-like bones and a metal-looking hook. So L15 now **reuses approved still 39** (stratified trench wall, reversed move; no further spend). No other still changes.
 - **Images (Research):** approved: IshangoColumnA/B/C, NASA Lake Edward, the 2 Virunga elephant shots (scenery only; not used in the cut). Ishango_bone_(cropped).jpg is PENDING Ernest's BY-SA exception (review cut only; lines 03, 12, 42). Ishango_Bone.jpg is never used. Every real image carries its credits.md line.
 
 ## HOLD — follow-up 04 (03:06 UK)
