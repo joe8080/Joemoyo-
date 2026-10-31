@@ -1,7 +1,15 @@
 # ogx-ishango-1 — STATUS
 
-**State (31 Oct 2026, 03:16 UK): SCRIPT v0.3 DRAFT (Research FIX applied) — ON HOLD for Research's re-check. NOT LOCKED. No VO recorded; no film rendered or exported.**
+**State (31 Oct 2026, ~04:40 UK): SCRIPT v0.3 LOCKED (Research PASS). VO recorded. v1.0 REVIEW re-exporting after QA fixes; final QA follows. Nothing published.**
 Nothing is published, uploaded, scheduled or posted. No stills, no full VO, no render yet. Older films and versions are untouched.
+
+## v1.0 REVIEW build (follow-up 06, 03:19 UK): LOCK → VO → render → QA → re-export
+- **Script v0.3 LOCKED** at 03:20 UK after OGX Research's PASS on the text (relayed by the Night Producer). Lock file sha256 11b9e6fbdce7c56d332d99028851f2d3e5dacc23b9095fb2c179f8a9c1986b40 (matches). Eden b69bd0e5 updated to "LOCKED".
+- **VO:** ONE take, ElevenLabs "joe afrian british 1", eleven_multilingual_v2, 4,417 credits, 252.45 s. Scribe read-back: **756/756 tokens identical to the locked text**. The VO ran faster than the test pace, so to reach the 4:30 floor I **widened pauses only**: the stem is split at the midpoint of each silence between lines (+0.4 s per line, +1.0 s more at 7 section starts) = +25.0 s. No words cut or changed, no re-voicing.
+- **Picture:** 47 shots timed from the Scribe word timings (name subtitles and schematic group highlights land on the spoken words).
+- **First export failed my own visual QA** (rendered-frame contact sheet + crops): L09 figure ghosted (soft matte let the inpainted BG show through); L10 smudged halos round both men; L46 doubled walking figure (object inside the soft ground-split band); faint doubled reflections on L07/L41. Not handed over. Kept as `work/rejected_exports/*_REVIEW_prefixQA*` with hashes logged here.
+- **Fixes (zero credits):** ground-split blend narrowed 18 % → 8 % (re-rendered all 15 ground-split shots); L46 split moved below the figure; L09/L10 tried a hard matte (ghost gone, smudge remained), then switched to a ground split below the figures' feet, so people stay on the BG plane with nothing revealed behind them. Re-measured from rendered frames: all re-rendered shots PASS (L09 4.57 %/6.7; L10 3.12 %/3.1; L46 5.07 %/7.6). Checked by eye at start and end of each shot: no ghosting, smudge or doubling.
+- **Re-export in progress** (main 1080p + 720p + _noBYSA); then full film QA on the final files. Results below when done.
 
 ## Script v0.3 DRAFT: Research FIX applied (follow-up 05, 03:11 UK). HOLD for Research's re-check; NOT LOCKED
 - **Changed from v0.2 (Research's wording, verbatim):** L15, L29, L34, L36, L40, L45. **L33** now uses Research's verified Smithsonian quote ("This fossil mammal bone has three rows of tally marks along its length. They may have been used to add or multiply."). All other lines unchanged (Research PASS).

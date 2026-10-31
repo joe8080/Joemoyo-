@@ -99,7 +99,7 @@ def matte_subject(rgb):
     return a
 
 
-def matte_ground(rgb, split=0.58, soft=0.18):
+def matte_ground(rgb, split=0.58, soft=0.08):
     """For landscapes: FG = lower ground plane, BG = sky/distance, soft horizon blend."""
     h = rgb.shape[0]
     y = np.linspace(0, 1, h, dtype=np.float32)[:, None]
@@ -120,22 +120,32 @@ def matte_luma(rgb, lo=0.35, hi=0.55):
     return cv2.GaussianBlur(a.astype(np.float32), (0, 0), 3)
 
 
-def build_layers(rgb, mode):
+def harden(a, lo=0.25, hi=0.55):
+    """Make a soft matte fully opaque inside the subject (no half-transparent ghosting)."""
+    m = np.clip((a - lo) / (hi - lo), 0, 1)
+    m = cv2.morphologyEx((m > 0.5).astype(np.uint8), cv2.MORPH_CLOSE, np.ones((25, 25), np.uint8)).astype(np.float32)
+    m = np.maximum(m, np.clip((a - lo) / (hi - lo), 0, 1))
+    return cv2.GaussianBlur(m, (0, 0), 2.0)
+
+
+def build_layers(rgb, mode, hard=False, split=0.58, inpaint_blur=6):
     if mode == "luma":
         a = matte_luma(rgb)
         mode = "subject"   # inpaint the BG behind it like a matted subject
         return _plate_from_alpha(rgb, a, mode)
     if mode == "subject":
         a = matte_subject(rgb)
+        if hard:
+            a = harden(a)
         if a.mean() < 0.02 or a.mean() > 0.85:   # matting failed -> ground split
-            a = matte_ground(rgb)
+            a = matte_ground(rgb, split)
             mode = "ground"
     else:
-        a = matte_ground(rgb)
-    return _plate_from_alpha(rgb, a, mode)
+        a = matte_ground(rgb, split)
+    return _plate_from_alpha(rgb, a, mode, inpaint_blur)
 
 
-def _plate_from_alpha(rgb, a, mode):
+def _plate_from_alpha(rgb, a, mode, inpaint_blur=6):
     # BG plate: inpaint the FG so revealed areas are plausible (avoid seam smears, L34)
     if mode == "subject":
         m = (a > 0.15).astype(np.uint8) * 255
@@ -144,7 +154,7 @@ def _plate_from_alpha(rgb, a, mode):
         srgb = cv2.resize(rgb, (rgb.shape[1] // 2, rgb.shape[0] // 2))
         inp = cv2.inpaint(srgb, sm, 9, cv2.INPAINT_TELEA)
         inp = cv2.resize(inp, (rgb.shape[1], rgb.shape[0]), interpolation=cv2.INTER_CUBIC)
-        blur = cv2.GaussianBlur(inp, (0, 0), 6)
+        blur = cv2.GaussianBlur(inp, (0, 0), inpaint_blur)
         mf = cv2.GaussianBlur(m.astype(np.float32) / 255, (0, 0), 12)[..., None]
         bg = (rgb * (1 - mf) + blur * mf).astype(np.uint8)
     else:
@@ -366,7 +376,8 @@ def render_shot(spec, out, matte_out, assets_dir):
     else:
         gmasks = []
         plate = cover(src, int(W * over), int(H * over))
-        bg_rgb, alpha, mode = build_layers(plate, spec.get("layer_mode", "subject"))
+        bg_rgb, alpha, mode = build_layers(plate, spec.get("layer_mode", "subject"), spec.get("matte_hard", False),
+                                          spec.get("ground_split", 0.58), spec.get("inpaint_blur", 6))
         fg_rgb = plate
     hl = spec.get("highlight")   # SCH: optional travelling highlight band (texture, not motion)
     ph, pw = fg_rgb.shape[:2]

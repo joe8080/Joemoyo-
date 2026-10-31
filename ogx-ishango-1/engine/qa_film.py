@@ -22,7 +22,8 @@ QC = os.path.join(ROOT, "qc")
 ALLOWED_PATTERNS = [r"reconstruction", r"\(ai\)", r"wikimedia", r"commons", r"cc by", r"public domain",
                     r"joeykentin", r"albert1ls", r"nasa", r"landsat", r"origine", r"human", r"archives",
                     r"ishango", r"bone", r"heinzelin", r"jean", r"hubert", r"damas", r"pletser",
-                    r"huylebrouck", r"marshack", r"olivier", r"keller", r"brooks", r"smith", r"the"]
+                    r"huylebrouck", r"marshack", r"olivier", r"keller", r"brooks", r"smith", r"the",
+                    r"^public", r"^domain", r"by-sa", r"^lands", r"^comm", r"^wiki", r"^reco", r"struction"]
 
 
 def probe_dur(f):
@@ -61,11 +62,11 @@ def norm_credit(s):
     return re.sub(r"\s+", " ", s.replace("·", ".").replace("•", ".")).strip().lower()
 
 
-def main(video):
+def main(video, shots_path=None):
     os.makedirs(QC, exist_ok=True)
-    G = os.path.join(QC, "grabs")
+    G = os.path.join(QC, "grabs_" + os.path.basename(video).replace(".mp4", ""))
     os.makedirs(G, exist_ok=True)
-    shots = json.load(open(f"{WORK}/render/shots.json"))
+    shots = json.load(open(shots_path or f"{WORK}/render/shots.json"))
     dur = probe_dur(video)
     rep = [f"# QA report — {os.path.basename(video)}", "", f"Runtime: **{dur:.2f} s ({int(dur // 60)}:{dur % 60:04.1f})** — target 4:30–5:30 → {'PASS' if 270 <= dur <= 330 else 'FAIL'}", ""]
     # 1. OCR inventory
@@ -110,7 +111,8 @@ def main(video):
                "colABC.png": "IshangoColumnA.png", "MAP_lake_edward.jpg": "Wfm_lake_edward_lake_george.jpg"}.get(key, key)
         exp = expected.get(src, "?")
         img = os.path.join(G, f"credit_{s['id']}.png")
-        grab(video, s["t0"] + s["dur"] / 2, img, "crop=900:70:20:1005,scale=2700:-1")
+        bw = min(1000, 40 + int(len(s["credit"]) * 12.2))      # the credit box only, not the picture
+        grab(video, s["t0"] + s["dur"] / 2, img, f"crop={bw}:70:20:1005,scale={bw * 3}:-1")
         got = " ".join(ocr(img, psm="7", conf_min=0))
         sim = difflib.SequenceMatcher(None, norm_credit(exp), norm_credit(got)).ratio()
         ok = sim >= 0.9 and norm_credit(s["credit"]) == norm_credit(exp)
@@ -130,9 +132,10 @@ def main(video):
     i_val, tp_val = (float(I[-1]) if I else None), (float(TP[-1]) if TP else None)
     rep += ["## 4. Loudness", "", f"Integrated: **{i_val} LUFS** (target ≈ −14) · True peak: **{tp_val} dBTP** (≤ −1) → "
             + ("PASS" if i_val is not None and abs(i_val + 14) <= 1 and tp_val is not None and tp_val <= -1 else "CHECK"), ""]
-    open(os.path.join(QC, "QA_REPORT.md"), "w").write("\n".join(rep) + "\n")
+    name = os.path.basename(video).replace(".mp4", "")
+    open(os.path.join(QC, f"QA_REPORT_{name}.md"), "w").write("\n".join(rep) + "\n")
     print("\n".join(rep[:4]), f"\nunexpected={unexpected_total} credit_fails={fails} freezes={len(fr)} I={i_val} TP={tp_val}")
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None)

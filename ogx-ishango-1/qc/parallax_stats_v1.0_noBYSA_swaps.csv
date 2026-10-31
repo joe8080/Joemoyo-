@@ -1,0 +1,4 @@
+shot,frames,fg_area,fg_travel_pct,bg_travel_pct,fg_bg_ratio,pass
+L03_alt,108,0.3,5.17,0.21,24.87,PASS
+L12_alt,97,0.111,3.03,0.86,3.53,PASS
+L42_alt,232,0.159,4.83,1.62,2.97,PASS
