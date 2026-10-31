@@ -1,7 +1,17 @@
 # ogx-ishango-1 — STATUS
 
-**State (31 Oct 2026, 03:06 UK): ON HOLD (follow-up 04) — OGX Research is lock-checking script v0.2. NOT LOCKED. No VO recorded; no film rendered or exported. Stills, engine and pre-flight are done; zero-credit prep only until the Night Producer relays PASS or FIX.**
+**State (31 Oct 2026, 03:16 UK): SCRIPT v0.3 DRAFT (Research FIX applied) — ON HOLD for Research's re-check. NOT LOCKED. No VO recorded; no film rendered or exported.**
 Nothing is published, uploaded, scheduled or posted. No stills, no full VO, no render yet. Older films and versions are untouched.
+
+## Script v0.3 DRAFT: Research FIX applied (follow-up 05, 03:11 UK). HOLD for Research's re-check; NOT LOCKED
+- **Changed from v0.2 (Research's wording, verbatim):** L15, L29, L34, L36, L40, L45. **L33** now uses Research's verified Smithsonian quote ("This fossil mammal bone has three rows of tally marks along its length. They may have been used to add or multiply."). All other lines unchanged (Research PASS).
+- **Correction:** my earlier STATUS line called v0.2's L33 "D05 exact". It was a paraphrase ("calls them tally marks, and says they may have been used to add or multiply"), not an exact quote. The Eden v0.2 note does hold that v0.2 text, but its title was never renamed from "v0.1". v0.2 is left as it was.
+- **Files:** `work/narration_v0.3.txt` (numbered narration; stays in the session) · `script_v0.3.md` (lines + claim refs + picture plan) · `script.md` / `script_v0.2.md` = v0.2, untouched.
+- **Eden v0.3 item id: b69bd0e5-9162-4084-bf7d-dbe7846cede3** (title "YouTube Script: The Ishango bone (ogx-ishango-1) v0.3 DRAFT", read back and matching). v0.2 stays in 342592c3-60ae-40f0-ba2a-bb9daf5ee103.
+- **sha256 of narration_v0.3.txt:** 11b9e6fbdce7c56d332d99028851f2d3e5dacc23b9095fb2c179f8a9c1986b40
+- **756 words, 46 lines;** estimated VO ≈ 293 s at the measured 155 wpm, so ≈ 5:00–5:05 with the title card, end card and line gaps (target 4:30–5:30).
+- **Picture change for the FIX:** L15's still (hands cutting a notch) would have shown the attribution Research removed, so it gets one redo: an excavation layer with hearth charcoal, fish bones and harpoon fragments (OpenArt, 15 credits, logged). No other still changes.
+- **Images (Research):** approved: IshangoColumnA/B/C, NASA Lake Edward, the 2 Virunga elephant shots (scenery only; not used in the cut). Ishango_bone_(cropped).jpg is PENDING Ernest's BY-SA exception (review cut only; lines 03, 12, 42). Ishango_Bone.jpg is never used. Every real image carries its credits.md line.
 
 ## HOLD — follow-up 04 (03:06 UK)
 OGX Research is lock-checking script v0.2 against the Eden final text. **No script lock, VO, render or export** until the Night Producer relays Research's PASS or FIX. A PASS from anyone else doesn't count. Meanwhile I'm doing only zero-credit prep. No new OpenArt stills unless a Research FIX needs them.
@@ -21,7 +31,7 @@ OGX Research is lock-checking script v0.2 against the Eden final text. **No scri
 
 ## Script draft posted for the lock-check: **v0.2** (supersedes v0.1)
 - **v0.2, 31 Oct ~01:25 UK:** reconciled line by line with research/LEDGER_v1.csv (follow-up 03). Refs in `script.md` and `claim_register.md` are now ledger IDs.
-- **Changed from v0.1:** lines 09–11 (Semliki line cut, as it isn't in the ledger; Damas → C04; de Heinzelin "a geologist from the Institute", Belgian Congo → C01/C03; "the museum … says it was found during that dig" → C02), 16 (C06 permitted wording), 18 (D07 attributed: de Heinzelin "engraving or tattooing", brochure "ritual scarification"), 24 (C09 permitted wording), 26 (D01: de Heinzelin's own "might be chance" hedge added), 27 (C10: the museum's pairs), 28, 30 (D03: their own "unspectacular conclusion" instead of "oldest mathematical tool"), 33 (D05 exact: "tally marks … may have been used to add or multiply"), 34 (flow), 39 (C12: layers, not the bone), 40 (C16 permitted wording + "last Ice Age"), 42.
+- **Changed from v0.1:** lines 09–11 (Semliki line cut, as it isn't in the ledger; Damas → C04; de Heinzelin "a geologist from the Institute", Belgian Congo → C01/C03; "the museum … says it was found during that dig" → C02), 16 (C06 permitted wording), 18 (D07 attributed: de Heinzelin "engraving or tattooing", brochure "ritual scarification"), 24 (C09 permitted wording), 26 (D01: de Heinzelin's own "might be chance" hedge added), 27 (C10: the museum's pairs), 28, 30 (D03: their own "unspectacular conclusion" instead of "oldest mathematical tool"), 33 (D05 paraphrase: "tally marks … may have been used to add or multiply"; corrected 03:16, it was not an exact quote), 34 (flow), 39 (C12: layers, not the bone), 40 (C16 permitted wording + "last Ice Age"), 42.
 - **Eden script item id: 342592c3-60ae-40f0-ba2a-bb9daf5ee103** (updated to v0.2, read back).
 - Passes: Claude draft → YouTube Script Studio (line 02) → Write Like Joe (05, 07, 18, 44; "By hand" on 15 rejected) → ledger reconciliation.
 - 46 lines · 733 words · ~284 s VO at the measured 155 wpm, so ~5:00 with the title card, end card and line gaps (target 4:30–5:30).
