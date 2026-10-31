@@ -16,7 +16,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-WORK = os.path.join(ROOT, "work")
+WORK = os.environ.get("OGX_WORK", os.path.join(ROOT, "work"))
 FPS = 25
 LEAD_IN = 1.2      # picture before first word
 LEAD = 0.25        # cut this long before each line's first word
@@ -31,29 +31,93 @@ def norm(w):
     return re.sub(r"[^a-z0-9\-]", "", w.lower().replace("’", "'"))
 
 
+_ONES = "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen".split()
+_TENS = "_ _ twenty thirty forty fifty sixty seventy eighty ninety".split()
+
+
+def _under_1000(n):
+    out = []
+    if n >= 100:
+        out += [_ONES[n // 100], "hundred"]
+        n %= 100
+        if n:
+            out.append("and")
+    if n >= 20:
+        out.append(_TENS[n // 10] + ("-" + _ONES[n % 10] if n % 10 else ""))
+    elif n or not out:
+        out.append(_ONES[n])
+    return out
+
+
+def num_words(tok):
+    """'168' -> one hundred and sixty-eight; '20,000' -> twenty thousand; '1935' -> nineteen thirty-five."""
+    raw = tok.replace(",", "")
+    if not raw.isdigit():
+        return [tok]
+    n = int(raw)
+    if 1100 <= n <= 1999 and "," not in tok:          # years as spoken
+        hi, lo = divmod(n, 100)
+        return _under_1000(hi) + (["hundred"] if lo == 0 else (["oh"] + _under_1000(lo) if lo < 10 else _under_1000(lo)))
+    out = []
+    if n >= 1000:
+        out += _under_1000(n // 1000) + ["thousand"]
+        n %= 1000
+        if n and n < 100:
+            out.append("and")
+    if n or not out:
+        out += _under_1000(n)
+    return out
+
+
+def expand(text_tokens):
+    """Normalise tokens (numbers -> words, hyphenated words split) keeping a back-reference."""
+    out, ref = [], []
+    for i, t in enumerate(text_tokens):
+        t = t.strip().strip(".,;:!?\"'()").lower()
+        if not t:
+            continue
+        for w in num_words(t):
+            for part in re.split(r"[-\s]+", w):
+                n = norm(part)
+                if n:
+                    out.append(n)
+                    ref.append(i)
+    return out, ref
+
+
 def stage_timing():
-    words = json.load(open(f"{WORK}/vo/words.json"))
-    words = [w for w in words if w.get("type", "word") == "word"]
+    import difflib
+    words = [w for w in json.load(open(f"{WORK}/vo/words.json")) if w.get("type", "word") == "word"]
     lines = [l.split(" ", 1)[1] for l in open(f"{WORK}/narration_lock.txt").read().strip().splitlines()]
-    out, wi = [], 0
-    for li, text in enumerate(lines, 1):
-        toks = [norm(t) for t in text.split() if norm(t)]
-        start_i = wi
-        # greedy alignment: consume as many transcript words as the line has tokens,
-        # tolerating number formatting ("20,000" vs "twenty thousand")
-        need = len(toks)
-        got, j = 0, wi
-        while j < len(words) and got < need:
-            t = norm(words[j]["text"])
-            got += 2 if re.fullmatch(r"\d{2},?\d{3}", words[j]["text"].strip(".,")) else 1
-            j += 1
-        seg = words[start_i:j]
-        wi = j
-        out.append({"line": li, "text": text, "start": seg[0]["start"], "end": seg[-1]["end"],
-                    "words": [{"w": s["text"], "s": s["start"], "e": s["end"]} for s in seg]})
+    s_tok, s_line = [], []
+    for li, text in enumerate(lines):
+        e, _ = expand(text.split())
+        s_tok += e
+        s_line += [li] * len(e)
+    v_tok, v_ref = expand([w["text"] for w in words])
+    sm = difflib.SequenceMatcher(None, s_tok, v_tok, autojunk=False)
+    s2v = {}
+    for a, b, n in sm.get_matching_blocks():
+        for k in range(n):
+            s2v[a + k] = v_ref[b + k]
+    ratio = sm.ratio()
+    out = []
+    for li, text in enumerate(lines):
+        idx = [k for k, l in enumerate(s_line) if l == li]
+        hits = [s2v[k] for k in idx if k in s2v]
+        if not hits:
+            raise SystemExit(f"line {li + 1} not found in transcript")
+        w0, w1 = min(hits), max(hits)
+        out.append({"line": li + 1, "text": text, "start": words[w0]["start"], "end": words[w1]["end"],
+                    "matched": round(len(hits) / max(1, len(idx)), 2),
+                    "words": [{"w": w["text"], "s": w["start"], "e": w["end"]} for w in words[w0:w1 + 1]]})
+    for a, b in zip(out, out[1:]):
+        if b["start"] < a["end"]:
+            raise SystemExit(f"overlap between lines {a['line']} and {b['line']}")
     os.makedirs(f"{WORK}/timing", exist_ok=True)
     json.dump(out, open(f"{WORK}/timing/lines.json", "w"), indent=1)
-    print("lines", len(out), "vo end", out[-1]["end"])
+    low = [(o["line"], o["matched"]) for o in out if o["matched"] < 0.8]
+    print("lines", len(out), "| match ratio", round(ratio, 3), "| vo end", out[-1]["end"], "| weak lines", low)
 
 
 def stage_shots():
@@ -73,8 +137,11 @@ def stage_shots():
         if p.get("subtitle_text"):
             first = norm(p.get("subtitle_cue", p["subtitle_text"].split()[0]))
             hit = next((w for w in L["words"] if norm(w["w"]).startswith(first)), L["words"][0])
-            p["subtitle"] = {"text": p["subtitle_text"], "start": round(rel(hit["s"]), 2),
-                             "end": round(min(p["dur"] - 0.2, rel(hit["s"]) + 2.6), 2)}
+            st = rel(hit["s"])
+            en = min(p["dur"] - 0.2, st + 2.6)
+            if en - st < 1.8:                       # short line: start earlier so it can be read
+                st = max(0.25, en - 1.8)
+            p["subtitle"] = {"text": p["subtitle_text"], "start": round(st, 2), "end": round(en, 2)}
         # schematic groups lit as their numbers are spoken
         if p.get("group_order"):
             col = groups[p["sch_col"]]["groups_left_to_right"]

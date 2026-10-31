@@ -3,7 +3,7 @@ Times are UK (GMT), taken from the generation timestamps where the tool reported
 | Time (UK) | Service | Item | Credits | Running total (service) |
 |---|---|---|---|---|
 | ~00:30 | OpenArt | account read | 0 | 0 |
-| 00:48 | ElevenLabs | pronunciation test, 2 takes (eleven_multilingual_v2, voice "joe afrian british 1") | 500 | 500 |
+| 00:48 | ElevenLabs | pronunciation test only: ONE TTS call of the 248-character test line, tool default = 2 takes × 250 (eleven_multilingual_v2, voice "joe afrian british 1"). No VO recorded. | 500 | 500 |
 | 00:50 | ElevenLabs | Scribe read-back of the test take | 0 | 500 |
 | ~00:31 | Eden AI | semantic search (kickoff) | ~0.2 | ~0.2 |
 | ~00:55 | Eden AI | YouTube Script Studio pass (max) | 2 | ~2.2 |
@@ -14,3 +14,5 @@ Times are UK (GMT), taken from the generation timestamps where the tool reported
 | — | Canva | not used | 0 | 0 |
 | — | Higgsfield/Kling video | not used (cap 6 clips / 62 credits) | 0 | 0 |
 | — | Music | procedural bed, generated locally (no ElevenLabs Music spend) | 0 | — |
+
+**Running totals at 03:06 UK (hold):** ElevenLabs 500 · OpenArt 685 (balance read at start: 2,037) · Eden AI ~3.2 · Canva 0 · Higgsfield/Kling 0.

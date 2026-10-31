@@ -1,7 +1,23 @@
 # ogx-ishango-1 — STATUS
 
-**State (31 Oct 2026, ~01:35 UK): SCRIPT v0.2 DRAFT AWAITING OGX RESEARCH LOCK-CHECK (NOT LOCKED). Pictures, engine and pre-flight done in parallel; no VO recorded yet.**
+**State (31 Oct 2026, 03:06 UK): ON HOLD (follow-up 04) — OGX Research is lock-checking script v0.2. NOT LOCKED. No VO recorded; no film rendered or exported. Stills, engine and pre-flight are done; zero-credit prep only until the Night Producer relays PASS or FIX.**
 Nothing is published, uploaded, scheduled or posted. No stills, no full VO, no render yet. Older films and versions are untouched.
+
+## HOLD — follow-up 04 (03:06 UK)
+OGX Research is lock-checking script v0.2 against the Eden final text. **No script lock, VO, render or export** until the Night Producer relays Research's PASS or FIX. A PASS from anyone else doesn't count. Meanwhile I'm doing only zero-credit prep. No new OpenArt stills unless a Research FIX needs them.
+
+### ElevenLabs spend so far: 500 credits, all on the pronunciation test
+- **One** text-to-speech call (31 Oct, 00:48 UK), model eleven_multilingual_v2, voice "joe afrian british 1", the 10-term test line (Ishango, Lake Edward, Jean de Heinzelin, late Pleistocene, "around 20,000 years ago", Pletser, Huylebrouck, Keller, Brooks, OrigineX; 248 characters). The tool's default produced **2 takes at 250 credits each = 500**.
+- Plus one Scribe transcription of the selected take for the read-back check: **0 credits** (tool reported 0).
+- **No partial or full VO has been recorded.** Running ElevenLabs total: **500** (see credit_use_log.md).
+
+### Zero-credit prep done during the hold (03:06 onwards)
+- **Fixed a timing bug before it could bite:** Scribe writes spoken numbers as digits ("20,000" in the test transcript), so "one hundred and sixty-eight" would come back as "168" and my first greedy aligner would have drifted every cut after line 03. The new aligner converts numbers to words on both sides (cardinals and spoken years) and sequence-matches the token streams.
+- **Dry run on a synthetic Scribe-style transcript** (digits for 168 / 20,000 / 25,000 / 1935, 1950, 1962, 1987), no render, no export, in `work/dryrun`: all 46 lines aligned (match ratio 1.0, no weak lines, no overlaps). Name subtitles and schematic group highlights land on the spoken words. Minimum readable time for a name subtitle is now 1.8 s (L09 "Hubert Damas" was 0.78 s). Mix stage on a silent stand-in VO: −13.9 LUFS integrated, −1.8 dBTP true peak.
+- Runtime check: the synthetic transcript ran faster than the real voice (≈170 vs the measured 155 wpm) and gave 4:26. At the real pace the cut lands ≈ 4:50–5:00. If the real VO comes in under 4:30, I'll widen the line gaps rather than pad with silence.
+
+### AI label ruling (clarified by the Night Producer)
+"Reconstruction (AI)" on every AI still is **Chief's ruling of 31 Oct 00:25**, based on Ernest's 30 Oct editorial standard (never present AI imagery as evidence; label reconstructions). It's not a direct quote from Ernest. The label stays ON for this review cut; Ernest confirms in the morning. The engine flag `ai_label` (default ON) can turn it off in one line if he rules otherwise.
 
 ## Script draft posted for the lock-check: **v0.2** (supersedes v0.1)
 - **v0.2, 31 Oct ~01:25 UK:** reconciled line by line with research/LEDGER_v1.csv (follow-up 03). Refs in `script.md` and `claim_register.md` are now ledger IDs.
