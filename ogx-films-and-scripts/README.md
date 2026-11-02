@@ -9,6 +9,7 @@ This is the home of OrigineX Human Archives (OGX) film-making: the production sk
 | `prompts/` | Director prompts, e.g. `next-film-prompt-v0.1.md` (MJ's gated next-film test). |
 | `films/adwa-1896/` | Reference film. `pipeline/` is the working code (render, maps, mix, captions, motion, voice split and patch). `docs/` holds the v1.5 change log, final script, production pack, SRT and the v05 voiced script. `voice-patch/` holds the v1.5 patch split. |
 | `films/isandlwana-1879/` | Second film, v1.0 private preview (built 22 Oct 2026). `docs/` holds the production pack (titles, thumbnails, Short, claim and rights ledgers, spend), QC statement, change log, voiced script and SRT. `pipeline/` is the editable project, including the HyperFrames sting sources. `thumbnails/` holds the 2 concepts. Also: the pre-production pack v0.1 and `LEARNING_LOG.md`. MJ's fact-check is still owed. |
+| `films/kingdom-of-kongo/` | Third film, **in development** (no media yet). `docs/dev-v0.1/` holds the existing-work inventory, research and claim ledger (Brásio MMA 1 page references), packaging, the script draft for Joe to record himself, the pronunciation guide, the scene plan and the asset register. |
 
 ## Not in git
 Media lives in the build workspace and Drive, not here: masters, review MP4s, voice and music audio, generated stills and motion clips, map tiles and fonts. Rebuild the maps with `pipeline/geo/fetch_tiles.py`, `build_terrain.py` and `build_s2.py`.
