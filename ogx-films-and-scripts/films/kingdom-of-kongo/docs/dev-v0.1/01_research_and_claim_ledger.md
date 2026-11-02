@@ -38,12 +38,12 @@ Prepared by Claude, 2 November 2026. Private.
 ## 2. Register of the letters
 | Ref | Date | From → to | Archive (per Brásio) | MMA 1 | Scribe | Read? |
 |---|---|---|---|---|---|---|
-| L1 | 5 Oct 1514 | Afonso → D. Manuel I | ATT CC I-16-28 | 294–323 | — | Captive passages read (pp. 313–316, approx.) |
+| L1 | 5 Oct 1514 | Afonso → D. Manuel I | PT/TT/CC/1/16/28 (confirmed in DigitArq) | 294–323 | — | Captive passages read (pp. 313–316, approx.) |
 | L2 | 25 May 1516 | Rui de Aguiar (vicar) → D. Manuel I | via Damião de Góis's chronicle | 361–362 | — | Read |
-| L3 | 6 July 1526 | Afonso → João III, "cidade de Congo" | **CC I-34-94** (footer). The table of contents OCR shows CC I-33-121, which conflicts (gap G4) | 468–471 | Dom João Teixeira | **Read in full** |
+| L3 | 6 July 1526 | Afonso → João III, "cidade de Congo" | **PT/TT/CC/1/34/94**, confirmed in the Torre do Tombo catalogue (DigitArq: digitised, 4 image files). CC I-33-121 is a different letter, of 18 Mar 1526 | 468–471 | Dom João Teixeira | **Read in full** |
 | L4 | 25 Aug 1526 (two letters) | Afonso → João III | CC I-34-127; CC I-32-99 | 475; 483 | — | Summaries only |
 | L5 | 15 Oct 1526 | Baltasar de Castro → João III | Gav. 20-4-21 | 485 | — | Not read |
-| L6 | 18 Oct 1526 | Afonso → João III | CC I-35-21 | 488–491 | Dom João Teixeira | **Read in full** |
+| L6 | 18 Oct 1526 | Afonso → João III | PT/TT/CC/1/35/21 (confirmed in DigitArq) | 488–491 | Dom João Teixeira | **Read in full** |
 | L7 | end of 1529 | João III → the king of Kongo | CVI doc. 32 | 521ff (the slave trade at 524–527, approx.; the priests' rules at 536–537) | — | Relevant sections read |
 | L8 | 1512 | D. Manuel → Simão da Silva (*Regimento*) | Leis 2-25 | 228–246 (the cargo passage at 239–240) | — | Cargo passage read |
 | L9 | 3–22 May 1518 | Leo X: bull and briefs on Henrique, Bishop of Utica | Bulas; Vatican | 414–421 | — | Titles and dates only |
