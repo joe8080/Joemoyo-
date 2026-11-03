@@ -30,3 +30,14 @@ Prepared by Claude, 3 November 2026. **Private. Joe approves any release.** v1 f
 2. Confirm ANTT reproduction terms for the DigitArq images (G3).
 3. Credit the CC BY / CC BY-SA images in the description.
 4. Joe's approval.
+
+---
+
+# v1.2 (3 November 2026, same day)
+Joe's notes on v1.1, and the fixes:
+| Note | Fix |
+|---|---|
+| Music too loud and on top of my voice; sidechain it; use the YouTube limits | Music is now set relative to the voice: about 22 dB under narration, about 9 dB under in the gaps. A sidechain ducker keyed from the narration (attack 15 ms, release 350 ms, up to 10 dB more) drops it whenever the voice speaks. Mastered to the YouTube target: -14 LUFS integrated, true peak capped at -1.5 dBTP. |
+| White hands instead of Black at about 2:09 and 3:57 | The two market clips (K6a, K6b) were remade on Higgsfield (Kling 3.0 Pro, 1080p, 10 s, about 30 Higgsfield credits) with Black Kongolese hands. Checked frame by frame. They appear at about 2:00, 3:40 and 6:30. The v1.1 clips are kept as K6a_v11_white / K6b_v11_white and are not used. |
+
+Credits: Higgsfield about 30. No new Artlist or ElevenLabs spend.

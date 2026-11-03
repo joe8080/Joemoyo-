@@ -57,12 +57,15 @@ def db(x):
     return 10 ** (x / 20)
 
 
+# v1.2: levels set relative to the voice (YouTube delivery: -14 LUFS, true peak <= -1.5 dBTP at mux),
+# plus a sidechain duck keyed from the narration so the music drops whenever Joe's voice speaks.
+vo_rms = np.sqrt(np.mean(vo[np.abs(vo) > 0.01] ** 2))
+mus *= vo_rms / (np.sqrt(np.mean(mus ** 2)) + 1e-9)
 step = SR // 100
-g = np.full(N // step + 1, -13.0)
+g = np.full(N // step + 1, -11.0)            # between sections: ~11 dB under the voice
 for name, d in secs.items():
-    s, e = d["start"], d["start"] + d["dur"]
-    g[int(s * 100):int(e * 100)] = -23.0
-g[:int(tl["lead_in"] * 100)] = -14.0
+    g[int(d["start"] * 100):int((d["start"] + d["dur"]) * 100)] = -24.0   # under narration: ~22-24 dB under
+g[:int(tl["lead_in"] * 100)] = -12.0
 
 
 def word_time(words, phrase):
@@ -78,12 +81,21 @@ m0 = word_time(w6, "Free people were being taken"); m1 = word_time(w6, "So he ma
 g[int((m0 - 0.8) * 100):int((m1 - 0.2) * 100)] = -60.0
 r7_end = secs["R7"]["start"] + secs["R7"]["dur"]
 g[int((r7_end - 2.0) * 100):int((r7_end + secs["R7"]["gap_after"] - 0.3) * 100)] = -60.0
-g[int(tl["end_card"] * 100):] = -12.0
-k = 60
-g = np.convolve(g, np.ones(k) / k, mode="same")
+g[int(tl["end_card"] * 100):] = -10.0
+g = np.convolve(g, np.ones(60) / 60, mode="same")
 env = np.interp(np.arange(N) / step, np.arange(len(g)), db(g)).astype(np.float32)
+# sidechain: envelope follower on the voice (attack 15 ms, release 350 ms), up to 10 dB extra duck
+a = np.abs(vo); blk = SR // 200; nb = len(a) // blk
+lvl = a[:nb * blk].reshape(nb, blk).max(axis=1)
+att, rel = np.exp(-5 / 15), np.exp(-5 / 350)
+e = np.zeros(nb, np.float32); cur = 0.0
+for i, x in enumerate(lvl):
+    cur = att * cur + (1 - att) * x if x > cur else rel * cur + (1 - rel) * x
+    e[i] = cur
+red_db = np.maximum(-np.clip(20 * np.log10(np.maximum(e, 1e-6) / 0.02), 0, None) * 0.6, -10.0)
+duck = np.interp(np.arange(N) / blk, np.arange(nb), db(red_db)).astype(np.float32)
 fade = np.ones(N, np.float32); fl = int(3 * SR); fade[-fl:] = np.linspace(1, 0, fl)
-mus = mus * (env * fade)[:, None] * 4.0      # cues levelled to 0.09 RMS; restore headroom
+mus = mus * (env * duck * fade)[:, None]
 
 mix = mus + vo[:, None] * db(-1.0)
 peak = np.abs(mix).max()

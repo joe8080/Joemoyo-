@@ -400,9 +400,9 @@ def card_layers(spec):
             "Text: A. Brásio (ed.), Monumenta Missionaria Africana, 1st series, vol. 1 (1952)",
             "Quotations are OGX working translations, to be checked against J. Thornton (ed.), 2023",
             "Images: The Met (CC0) · Naturalis (CC0) · Wikimedia Commons (credits in the description)",
-            "AI reconstructions (OpenArt stills, animated with Kling via Artlist) are labelled and illustrative, not records",
+            "AI reconstructions (OpenArt stills, animated with Kling via Artlist and Higgsfield) are labelled and illustrative, not records",
             "Narration: AI voice (ElevenLabs) · Music: original score generated with Artlist (Lyria 3 Pro)",
-            "OrigineX Human Archives · PRIVATE PREVIEW v1.1",
+            "OrigineX Human Archives · PRIVATE PREVIEW v1.2",
         ]
         f = fnt(SANS, 26, "Regular"); y = 360
         for ln in lines:
