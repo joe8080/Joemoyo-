@@ -393,20 +393,10 @@ def card_layers(spec):
         spaced(d, (W // 2, 600), spec["sub"], fnt(SANS, 30, "Medium"), CREAM, 8, True)
         layers.append((im, 0.0))
     elif st == "end":
+        # v1.3: clean end screen (no private-preview line, no source list; credits go in the description)
         im, d = new()
-        d.text((W // 2, 170), "KONGO, 1526", font=fnt(SERIF, 96, "Medium"), fill=GOLD, anchor="ma")
-        lines = [
-            "Letters: Arquivo Nacional da Torre do Tombo (DGLAB), PT/TT/CC/1/34/94 and PT/TT/CC/1/35/21",
-            "Text: A. Brásio (ed.), Monumenta Missionaria Africana, 1st series, vol. 1 (1952)",
-            "Quotations are OGX working translations, to be checked against J. Thornton (ed.), 2023",
-            "Images: The Met (CC0) · Naturalis (CC0) · Wikimedia Commons (credits in the description)",
-            "AI reconstructions (OpenArt stills, animated with Kling via Artlist and Higgsfield) are labelled and illustrative, not records",
-            "Narration: AI voice (ElevenLabs) · Music: original score generated with Artlist (Lyria 3 Pro)",
-            "OrigineX Human Archives · PRIVATE PREVIEW v1.2",
-        ]
-        f = fnt(SANS, 26, "Regular"); y = 360
-        for ln in lines:
-            d.text((W // 2, y), ln, font=f, fill=CREAM if "PRIVATE" not in ln else GOLD, anchor="ma"); y += 58
+        d.text((W // 2, 420), "KONGO, 1526", font=fnt(SERIF, 110, "Medium"), fill=GOLD, anchor="ma")
+        spaced(d, (W // 2, 590), "ORIGINEX HUMAN ARCHIVES", fnt(SANS, 30, "Medium"), CREAM, 8, True)
         layers.append((im, 0.0))
     out = (bg, [(np.asarray(l, dtype=np.float32), t) for l, t in layers])
     _card[k] = out
