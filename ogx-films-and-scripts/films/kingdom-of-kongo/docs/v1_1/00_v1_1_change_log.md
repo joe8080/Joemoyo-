@@ -70,3 +70,7 @@ Joe asked for the film to be posted on a schedule, with a comment that goes up w
 - **The letter pan at 277 s** now moves 41% less per frame (mean frame change 3.4, was 5.7). The figure stays higher than other shots because the page is dense handwriting, not because the pan is fast.
 - **One 2.8 s shot remains:** the 1668 map at 325.6 s. Not changed.
 - **Metricool check:** YouTube `notifySubscribers = false` is confirmed in the planner. That is YouTube's single "publish to subscriptions feed and notify subscribers" setting.
+- **How this maps to the two boxes Joe named:**
+  - Metricool's planner has one YouTube option, "Notify subscribers" (Metricool Help Center, "Schedule and Publish on YouTube"; September 2026 product update). It is set at upload. If left unset, subscribers are notified.
+  - The API field that holds it is `notifySubscribers`, and for this post it reads false.
+  - In YouTube Studio the same thing is a single checkbox, "Publish to subscriptions feed and notify subscribers". So both boxes are off for this upload.
