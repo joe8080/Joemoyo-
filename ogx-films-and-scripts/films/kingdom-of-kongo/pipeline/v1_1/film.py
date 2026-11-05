@@ -10,7 +10,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 W, H, FPS = 1920, 1080, 25
-XF = 0.6                       # dissolve length
+XF = 0.9                       # dissolve length (v1.4: softer)
 GOLD = (205, 166, 82); CREAM = (236, 226, 204); GREY = (168, 160, 146); DIM = (120, 112, 98)
 SERIF = "fonts/EBGaramond.ttf"; SANS = "fonts/Montserrat.ttf"
 B = "build"
@@ -47,11 +47,11 @@ def page(p, z0=1.0, z1=1.07, label=L_JUL, **kw):
 def still(src, r0=(0.03, 0.03, 0.97), r1=(0.0, 0.0, 1.0), label=None, **kw):
     d = dict(kind="fill", src=src, r0=r0, r1=r1, label=label); d.update(kw); return d
 
-def clip(name, label=AI, off=0.0, dark=None, fallback_r0=(0.0, 0.0, 1.0), fallback_r1=(0.06, 0.06, 0.94)):
+def clip(name, label=AI, off=0.0, dark=None, maxlen=None, fallback_r0=(0.0, 0.0, 1.0), fallback_r1=(0.06, 0.06, 0.94)):
     """name like 'K1a': motion clip clips/K1a.mp4 (v1.1: every AI image is a real motion clip)."""
     path = f"clips/{name}.mp4"
     if os.path.exists(path):
-        d = dict(kind="clip", src=path, label=label, off=off)
+        d = dict(kind="clip", src=path, label=label, off=off, maxlen=maxlen)
     else:
         d = still(f"ai/{name[:2]}.png", fallback_r0, fallback_r1, label=label)
     if dark:
@@ -70,7 +70,6 @@ PLAN = {
               attr="AFONSO I, KING OF KONGO, TO JOÃO III OF PORTUGAL, 6 JULY 1526 · " + TR, bg=P2)),
   ("Merchants are taking", card("quote", text="“…our people, sons of the land, sons of our nobles and vassals, and our relatives.”",
                                 attr="AFONSO I TO JOÃO III, 6 JULY 1526 · " + TR, bg=P2)),
-  ("And the land, he says", clip("K1b")),
  ],
  "R1": [
   (None, page(P1, 1.0, 1.10)),
@@ -99,7 +98,7 @@ PLAN = {
                                 label="KONGO RAFFIA CLOTH (CUSHION COVER), 17TH CENTURY · ETNOGRAFISKA MUSEET, STOCKHOLM · CC BY-SA")),
   ("Their money included", still(ARCH["NZIMBU"], (0.1, 0.05, 0.9), (0.25, 0.2, 0.75),
                                  label="NZIMBU SHELL (OLIVANCILLARIA NANA) · NATURALIS BIODIVERSITY CENTER · CC0")),
-  ("So long before", clip("K6a")),
+  ("So long before", clip("K6b")),
   ("The Portuguese joined", still(ARCH["BANSA1670"], (0.2, 0.2, 0.8), (0.0, 0.0, 1.0),
                                   label="THE CAPITAL AS IMAGINED BY A EUROPEAN ENGRAVER, 1670")),
  ],
@@ -124,12 +123,11 @@ PLAN = {
  ],
  "R5": [
   (None, doc(P2, (0.04, 0.02, 0.96), (0.10, 0.06, 0.76))),
-  ("The first was goods", clip("K6b")),
-  ("Those goods were spreading", clip("K6a", off=3.0)),
+  ("The first was goods", clip("K6a", maxlen=5.6)),
+  ("Those goods were spreading", clip("K6b", off=3.0)),
   ("For a king who held", still(ARCH["BANSA1670"], (0.3, 0.25, 0.8), (0.1, 0.1, 0.9),
                                  label="THE CAPITAL AS IMAGINED BY A EUROPEAN ENGRAVER, 1670")),
   ("The second was people", clip("K5b")),
-  ("and selling them", clip("K1b", off=5.0, dark=0.8)),
   ("In July, Afonso's answer", doc(P2, (0.05, 0.55, 0.95), (0.10, 0.60, 0.80))),
   ("Send us priests", page(P2, 1.0, 1.06)),
   ("It is our will", card("quote", text="“…it is our will that in these kingdoms there should be no trade in slaves, nor any outlet for them.”",
@@ -156,7 +154,6 @@ PLAN = {
   ("He suggested a fixed", still(ARCH["BANSA1670"], (0.35, 0.35, 0.85), (0.2, 0.2, 0.9),
                                  label="THE CAPITAL AS IMAGINED BY A EUROPEAN ENGRAVER, 1670")),
   ("Then he added this", page(dict(src=ARCH["JOAO3"]), 1.06, 1.14, label="JOÃO III OF PORTUGAL · ANTONIS MOR, 1552")),
-  ("But that wouldn't do", still(ARCH["SHIPS"], (0.4, 0.3, 1.0), (0.3, 0.25, 0.95), label="PORTUGUESE SHIPS · LIVRO DAS ARMADAS, c. 1568")),
   ("Better, he wrote", card("quote", text="“…more praiseworthy that 10,000 slaves … be taken from Kongo each year … than that it be said there is no trade.”",
                             attr="JOÃO III TO THE KING OF KONGO, c. 1529 · " + TR)),
   ("The same letter told", page(dict(src=ARCH["CRUCIFIX"]), 1.08, 1.0, label="KONGO CRUCIFIX, 16TH–17TH CENTURY · THE MET · CC0")),
@@ -167,11 +164,9 @@ PLAN = {
  ],
  "R8": [
   (None, page(P1, 1.10, 1.0)),
-  ("We can't know", clip("K3a", off=3.0)),
+  ("We can't know", clip("K3a", off=1.5)),
   ("Free people, his nobles", clip("K5b", off=3.0)),
-  ("Foreign goods were buying", clip("K6b", off=4.0)),
   ("In July, he asked", page(P2, 1.0, 1.06)),
-  ("By October, he was", page(O2, 1.04, 1.0, label=L_OCT)),
   ("What his letters show", clip("K2a", off=3.0)),
   ("And they show how fast", doc(P2, (0.36, 0.78, 0.80), (0.05, 0.40, 0.95))),
  ],
@@ -243,9 +238,16 @@ def rect16(im, r):
     return x0, y0, cw, ch
 
 
-def render_fill(spec, u):
+def render_fill(spec, u, dur=6.0):
     im = load(spec)
     a = rect16(im, spec["r0"]); b = rect16(im, spec["r1"]); e = ease(u)
+    # v1.4: cap move speed at ~1.6% of the picture width per second, so no pan or zoom looks rushed
+    w0 = im.size[0]
+    move = max(abs(b[0] - a[0]), abs(b[1] - a[1]), abs(b[2] - a[2])) / w0
+    cap = 0.016 * dur
+    if move > cap:
+        k = cap / move
+        b = tuple(a[n] + (b[n] - a[n]) * k for n in range(4))
     x, y, cw, ch = [a[k] + (b[k] - a[k]) * e for k in range(4)]
     fr = im.resize((W, H), Image.BICUBIC, box=(x, y, x + cw, y + ch))
     return np.asarray(fr, dtype=np.float32)
@@ -284,9 +286,16 @@ class ClipReader:
         src_len = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
                                         spec["src"]], capture_output=True, text=True).stdout.strip() or 6)
         off = spec.get("off", 0.0)
-        src_len = max(src_len - off, 1.0)
-        f = min(max(dur / src_len, 1.0), 1.8)          # slow down up to 1.8x, then hold
-        vf = (f"trim=start={off:.2f},setpts=PTS-STARTPTS,setpts={f:.4f}*PTS,fps={FPS},scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
+        avail = src_len - off
+        if spec.get("maxlen"):
+            avail = min(avail, spec["maxlen"])
+        avail = max(avail, 1.0)
+        # v1.4: Kling clips are 24 fps. Play every source frame once at 25 fps (tempo 24/25) when the clip
+        # is long enough; otherwise slow it a little and blend frames, instead of doubling frames or freezing.
+        tempo = min(max(dur / avail, 24 / 25), 1.8)
+        vf = (f"trim=start={off:.2f},setpts=PTS-STARTPTS,setpts={tempo:.4f}*PTS,"
+              f"framerate=fps={FPS}:interp_start=0:interp_end=255:scene=100,"
+              f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
               f"tpad=stop_mode=clone:stop_duration=60")
         self.p = subprocess.Popen(["ffmpeg", "-v", "error", "-i", spec["src"], "-vf", vf,
                                    "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], stdout=subprocess.PIPE)
@@ -442,7 +451,7 @@ def render_shot(spec, t, readers):
     u = local / max(dur, 0.1)
     k = spec["kind"]
     if k == "fill":
-        fr = render_fill(spec, u)
+        fr = render_fill(spec, u, dur)
     elif k == "fit":
         fr = render_fit(spec, u)
     elif k == "clip":

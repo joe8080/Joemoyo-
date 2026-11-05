@@ -45,3 +45,12 @@ Credits: Higgsfield about 30. No new Artlist or ElevenLabs spend.
 # v1.3 (4 November 2026)
 - End screen cleaned: only "KONGO, 1526" and "ORIGINEX HUMAN ARCHIVES". The private-preview line and the source list are gone from the picture.
 - The sources and licences (Torre do Tombo letters, Brásio, Wikimedia/CC images, The Met, Naturalis, AI and music credits) must go in the YouTube description instead. CC BY and CC BY-SA images need credit there.
+
+# v1.4 (5 November 2026): smoothness pass
+Joe: "a bit unsmooth at the start and middle". A frame-by-frame check of v1.3 found:
+1. Judder in every motion clip: the Kling clips are 24 fps, the film is 25 fps, so one frame doubled each second. Now every source frame plays once (4% faster). Where a clip is short for its slot it is slowed with blended frames, never doubled or frozen.
+2. Rushed camera moves on stills (letters, maps, engravings at about 2:10, 3:50, 4:40 and the end). Every pan and zoom is now capped at a slow, even speed.
+3. Flash cuts under 3 seconds removed (cold-open river clip, a 2-second dark coast shot, a ships shot, and two quick letter cuts plus a market clip in the close). The neighbouring shot now holds instead.
+4. A fast "whip" in one market clip (cloth flung across frame at 6 s) is trimmed out; a candle flicker avoided.
+5. Dissolves between shots lengthened from 0.6 s to 0.9 s.
+Sound, words and timing are unchanged from v1.3.
