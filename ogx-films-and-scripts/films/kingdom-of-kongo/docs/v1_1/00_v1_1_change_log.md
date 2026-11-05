@@ -59,7 +59,7 @@ Sound, words and timing are unchanged from v1.3.
 Joe asked for the film to be posted on a schedule, with a comment that goes up when it goes live.
 - **Scheduled** in Metricool for YouTube (OrigineX Human Archives): **Friday 6 November 2026, 16:00 UK time**, public. The file is v1.4 at 1080p.
 - **Title:** Why Kongo's King Wrote to Portugal About the Slave Trade (1526)
-- **Settings:** Education category; not made for kids; altered or synthetic content = yes (AI motion clips).
+- **Settings:** Education category; not made for kids; altered or synthetic content = yes (AI motion clips); subscriber notification OFF (Joe asked).
 - **Description:** sources, the archive references for both letters, all image credits (including the CC BY and CC BY-SA ones), the AI-reconstruction note, music and voice credits.
 - **First comment** (posted at go-live): "In July 1526 Afonso asked Portugal for no slave trade at all. By October he was making a law about who could be sold, after his own officials checked them. Which part surprised you most? Tell us below 👇"
 - **Still open, Joe's call:** translations not yet checked against Thornton 2023 (G1); Torre do Tombo reproduction terms not yet confirmed (G3). To hold the release, delete or move the post in the Metricool planner before 16:00 on 6 November.
