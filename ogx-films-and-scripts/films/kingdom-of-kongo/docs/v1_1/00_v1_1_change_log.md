@@ -63,3 +63,10 @@ Joe asked for the film to be posted on a schedule, with a comment that goes up w
 - **Description:** sources, the archive references for both letters, all image credits (including the CC BY and CC BY-SA ones), the AI-reconstruction note, music and voice credits.
 - **First comment** (posted at go-live): "In July 1526 Afonso asked Portugal for no slave trade at all. By October he was making a law about who could be sold, after his own officials checked them. Which part surprised you most? Tell us below 👇"
 - **Still open, Joe's call:** translations not yet checked against Thornton 2023 (G1); Torre do Tombo reproduction terms not yet confirmed (G3). To hold the release, delete or move the post in the Metricool planner before 16:00 on 6 November.
+
+## v1.4 final QC (whole film, frame by frame)
+- **No repeated or frozen frames anywhere** (the duplicate-frame rate is 0.00 in every shot). The 24→25 fps judder is gone.
+- **The flagged "jumps" are the dissolves.** The new 0.9 s dissolves now reach into the measuring window. Each flagged peak sits 0.44 s into its shot, which is the tail of the dissolve, not a glitch. K5a (63.9 s) and the letter at 246.9 s were clean in v1.3 and are flagged only for this reason.
+- **The letter pan at 277 s** now moves 41% less per frame (mean frame change 3.4, was 5.7). The figure stays higher than other shots because the page is dense handwriting, not because the pan is fast.
+- **One 2.8 s shot remains:** the 1668 map at 325.6 s. Not changed.
+- **Metricool check:** YouTube `notifySubscribers = false` is confirmed in the planner. That is YouTube's single "publish to subscriptions feed and notify subscribers" setting.
