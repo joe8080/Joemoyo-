@@ -74,3 +74,23 @@ Joe asked for the film to be posted on a schedule, with a comment that goes up w
   - Metricool's planner has one YouTube option, "Notify subscribers" (Metricool Help Center, "Schedule and Publish on YouTube"; September 2026 product update). It is set at upload. If left unset, subscribers are notified.
   - The API field that holds it is `notifySubscribers`, and for this post it reads false.
   - In YouTube Studio the same thing is a single checkbox, "Publish to subscriptions feed and notify subscribers". So both boxes are off for this upload.
+
+# Shorts (6 November 2026)
+Joe: "Can you post shorts". Three 9:16 Shorts were cut from the v1.4 film (`pipeline/v1_1/make_shorts.py`):
+- Blurred fill behind the 16:9 picture, a title banner, and burned captions taken from the script.
+- Caption timings come from a faster-whisper transcription of the film.
+- A "FULL FILM ON THE CHANNEL" end line.
+- Loudness: -14 LUFS.
+
+| Short | Content | Length | Scheduled (UK time) |
+|---|---|---|---|
+| 1 "Kongo's King Warned Portugal in 1526: 'Our Kingdom Is Being Lost'" | Cold open (R0) and why he wrote (R2) | 35 s | Sat 7 Nov, 16:00 |
+| 2 "In 1526, Kongo's King Made a Law About Who Could Be Sold" | The October law and the three officials (R6) | 33 s | Sun 8 Nov, 16:00 |
+| 3 "What Portugal Told Kongo's King in 1529" | João III's reply (R7) | 45 s | Mon 9 Nov, 16:00 |
+
+All three are scheduled in Metricool:
+- YouTube Short, public, Education, not made for kids.
+- AI content declared, subscriber notification off.
+- Each has a first comment pointing to the full film.
+
+Descriptions point to the full film's description for the sources and image credits.
