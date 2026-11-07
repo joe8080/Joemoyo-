@@ -1,0 +1,326 @@
+<title>Caracol 3D City Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@500;700&family=Alegreya+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: full-bleed WebGL terrain table; one compact field-notebook panel top-left, legend bottom. Single dark "night survey table" look. */
+:root{
+  --ground:#0f1512;       /* map table */
+  --panel:#16201b;        /* notebook card */
+  --line:#2c3a32;
+  --ink:#e9e4d6;          /* limestone white */
+  --muted:#a8ae9f;
+  --stucco-red:#c2563a;   /* painted stucco accent */
+  --causeway:#f1ead6;
+  --water:#5fa3b8;
+  --font-label:"Alegreya Sans SC", "Trebuchet MS", sans-serif;
+  --font-body:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:15px;overflow:hidden}
+#stage{position:fixed;inset:0}
+#stage canvas{display:block;width:100%;height:100%;touch-action:none}
+#labels{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.lbl{position:absolute;transform:translate(-50%,-100%);white-space:nowrap;font-family:var(--font-label);font-size:13px;letter-spacing:.06em;color:var(--ink);text-shadow:0 1px 3px #000,0 0 8px #000;pointer-events:auto;cursor:pointer;padding:2px 4px 6px}
+.lbl::after{content:"";position:absolute;left:50%;bottom:0;width:1px;height:6px;background:var(--ink);opacity:.7}
+.lbl.minor{font-size:11px;color:var(--muted)}
+.lbl:focus-visible{outline:2px solid var(--stucco-red);outline-offset:2px}
+
+.panel{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:max(16px,env(safe-area-inset-left,0px));width:min(330px,calc(100vw - 32px));max-height:calc(100% - 140px);overflow:auto;background:color-mix(in srgb,var(--panel) 92%,transparent);border:1px solid var(--line);border-radius:6px;padding:14px 16px;box-sizing:border-box;backdrop-filter:blur(6px)}
+.panel h1{font-family:var(--font-label);font-weight:700;font-size:22px;letter-spacing:.05em;margin:0;text-wrap:balance}
+.panel .sub{color:var(--muted);font-size:13px;margin:2px 0 12px}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0 0 12px;font-size:13px}
+.facts dt{font-family:var(--font-label);color:var(--stucco-red);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.facts dd{margin:0;color:var(--ink)}
+.group{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.group-title{font-family:var(--font-label);font-size:12px;letter-spacing:.1em;color:var(--muted);margin:10px 0 6px}
+button.chip{font:inherit;font-size:13px;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:999px;padding:5px 11px;cursor:pointer}
+button.chip[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+button.chip:hover{border-color:var(--muted)}
+button.chip:focus-visible{outline:2px solid var(--stucco-red);outline-offset:2px}
+#info{font-size:14px;line-height:1.45;border-top:1px solid var(--line);padding-top:10px;margin-top:4px;min-height:3em}
+#info b{font-family:var(--font-label);letter-spacing:.05em;font-weight:700}
+.note{font-size:12px;color:var(--muted);line-height:1.4;margin-top:10px}
+
+.legend{background:color-mix(in srgb,var(--panel) 85%,transparent);padding:6px 12px;border-radius:6px;position:fixed;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:center;font-size:12px;color:var(--muted);pointer-events:none}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:14px;height:8px;border-radius:2px;display:inline-block}
+.scale{font-variant-numeric:tabular-nums}
+
+@media (max-width:560px){
+  .panel{max-height:46%;padding:12px}
+  .panel h1{font-size:19px}
+  .facts{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div id="stage" aria-label="Interactive 3D map of Caracol. Drag to rotate, scroll or pinch to zoom."></div>
+<div id="labels"></div>
+
+<section class="panel" aria-label="Map controls">
+  <h1>Caracol, AD 650</h1>
+  <p class="sub">Cayo District, Belize · Vaca Plateau, ~500 m above sea level</p>
+  <dl class="facts">
+    <dt>43 m</dt><dd>Caana, still the tallest building in Belize</dd>
+    <dt>~200 km²</dt><dd>settled landscape mapped by LiDAR (2009)</dd>
+    <dt>100k+</dt><dd>estimated people at the city's peak</dd>
+    <dt>AD 562</dt><dd>Caracol defeats Tikal (Altar 21)</dd>
+  </dl>
+  <div class="group-title">VIEW</div>
+  <div class="group" id="views">
+    <button class="chip" id="v-city" aria-pressed="true">Whole city</button>
+    <button class="chip" id="v-core" aria-pressed="false">Epicentre</button>
+    <button class="chip" id="v-caana" aria-pressed="false">Caana</button>
+  </div>
+  <div class="group-title">LAYERS</div>
+  <div class="group" id="layers">
+    <button class="chip" id="l-cause" aria-pressed="true">Causeways</button>
+    <button class="chip" id="l-house" aria-pressed="true">Houses</button>
+    <button class="chip" id="l-terr" aria-pressed="true">Terraces</button>
+    <button class="chip" id="l-lbl" aria-pressed="true">Labels</button>
+    <button class="chip" id="l-spin" aria-pressed="false">Auto-rotate</button>
+  </div>
+  <div id="info" aria-live="polite">Tap any label to learn what it was. Drag to orbit, scroll or pinch to zoom.</div>
+  <p class="note">Schematic reconstruction based on published Caracol Archaeological Project findings. Layout is indicative, not survey-exact. Monuments and terrain are shown ×3 taller than true scale so they read at city size.</p>
+</section>
+
+<div class="legend" aria-hidden="true">
+  <span><i class="sw" style="background:var(--ink)"></i>Monuments</span>
+  <span><i class="sw" style="background:var(--causeway)"></i>Causeways (sacbeob)</span>
+  <span><i class="sw" style="background:#c9a15c"></i>House groups</span>
+  <span><i class="sw" style="background:#7d8a3e"></i>Terraced fields</span>
+  <span><i class="sw" style="background:var(--water)"></i>Reservoirs</span>
+  <span class="scale">Map area 20 × 20 km</span>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+// 1 world unit = 100 m horizontally.
+const W = 200, SEG = 300, VEX_MON = 3, U = 0.01; // U: 1 m in world units
+const stage = document.getElementById('stage');
+
+// ---------- noise ----------
+function hash(x,y){const s=Math.sin(x*127.1+y*311.7)*43758.5453;return s-Math.floor(s);}
+function vnoise(x,y){const ix=Math.floor(x),iy=Math.floor(y),fx=x-ix,fy=y-iy;
+  const u=fx*fx*(3-2*fx),v=fy*fy*(3-2*fy);
+  const a=hash(ix,iy),b=hash(ix+1,iy),c=hash(ix,iy+1),d=hash(ix+1,iy+1);
+  return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v;}
+function fbm(x,y){let s=0,a=.5,f=1;for(let i=0;i<5;i++){s+=a*vnoise(x*f,y*f);f*=2.03;a*=.5;}return s;}
+function ss(a,b,x){const t=Math.min(1,Math.max(0,(x-a)/(b-a)));return t*t*(3-2*t);}
+const CENTRE_H = 3.0;
+function heightAt(x,z){
+  let h = fbm(x*0.035+11, z*0.035+3)*5.2 + fbm(x*0.12, z*0.12)*0.9 - 0.6;
+  const r = Math.hypot(x,z);
+  const k = ss(2.5,9,r);
+  return CENTRE_H + (h-CENTRE_H)*k;
+}
+
+// ---------- renderer ----------
+const renderer = new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+stage.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+const FOG = new THREE.Color(0x1a2420);
+scene.background = FOG;
+scene.fog = new THREE.Fog(FOG, 90, 260);
+const camera = new THREE.PerspectiveCamera(45,1,0.05,600);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = .08;
+controls.maxPolarAngle = 1.42; controls.minDistance = 1.5; controls.maxDistance = 220;
+
+const sunDir = new THREE.Vector3(-0.6,0.75,0.35).normalize();
+scene.add(new THREE.HemisphereLight(0xf4ecd8,0x2a3a2c,0.75));
+const sun = new THREE.DirectionalLight(0xffe2b8,0.95); sun.position.copy(sunDir).multiplyScalar(100); scene.add(sun);
+
+// ---------- terrain ----------
+const tg = new THREE.PlaneGeometry(W,W,SEG,SEG); tg.rotateX(-Math.PI/2);
+const pos = tg.attributes.position;
+for(let i=0;i<pos.count;i++){pos.setY(i,heightAt(pos.getX(i),pos.getZ(i)));}
+tg.computeVertexNormals();
+const terrUniforms = {uTerr:{value:1},uLight:{value:sunDir},uFog:{value:FOG},uNear:{value:90},uFar:{value:260}};
+const terrMat = new THREE.ShaderMaterial({uniforms:terrUniforms,
+  vertexShader:`varying vec3 vN;varying vec3 vP;varying float vD;
+    void main(){vN=normal;vP=position;vec4 mv=modelViewMatrix*vec4(position,1.);vD=-mv.z;gl_Position=projectionMatrix*mv;}`,
+  fragmentShader:`uniform float uTerr;uniform vec3 uLight;uniform vec3 uFog;uniform float uNear,uFar;
+    varying vec3 vN;varying vec3 vP;varying float vD;
+    float h2(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+    float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h2(i),h2(i+vec2(1,0)),f.x),mix(h2(i+vec2(0,1)),h2(i+vec2(1,1)),f.x),f.y);}
+    void main(){
+      vec3 n=normalize(vN);float slope=1.-n.y;float r=length(vP.xz);
+      vec3 forest=vec3(.14,.25,.15),pine=vec3(.20,.29,.18),field=vec3(.45,.50,.25),soil=vec3(.48,.38,.25),milpa=vec3(.58,.56,.30);
+      float settled=1.-smoothstep(22.,75.,r);
+      float patchy=vn(vP.xz*.9)*.6+vn(vP.xz*3.1)*.4;
+      vec3 base=mix(forest,pine,smoothstep(.45,.75,vn(vP.xz*.18)));
+      base=mix(base,mix(field,milpa,patchy),settled*smoothstep(.15,.6,patchy+settled*.5));
+      float band=fract(vP.y*9.);
+      float riser=smoothstep(.80,.92,band);
+      float terr=uTerr*settled*smoothstep(.003,.03,slope)*(1.-smoothstep(.55,.75,slope));
+      vec3 tcol=mix(mix(field,milpa,.4),soil,riser);
+      base=mix(base,tcol,terr*.9);
+      float cl=1.-smoothstep(0.,.04,abs(fract(vP.y*1.)-.5)-.46);
+      base*=1.-cl*.18;
+      float diff=max(dot(n,normalize(uLight)),0.);
+      vec3 col=base*(.30+.95*diff);
+      col=mix(col,uFog,smoothstep(uNear,uFar,vD));
+      gl_FragColor=vec4(col,1.);
+    }`});
+scene.add(new THREE.Mesh(tg,terrMat));
+
+// ---------- materials ----------
+const stucco = new THREE.MeshStandardMaterial({color:0xefe8d6,roughness:.85});
+const plazaM = new THREE.MeshStandardMaterial({color:0xe2dac4,roughness:.95});
+const redM = new THREE.MeshStandardMaterial({color:0xb24a30,roughness:.8});
+const waterM = new THREE.MeshStandardMaterial({color:0x4f93a8,roughness:.25,metalness:.1});
+
+function box(w,h,d,mat,x,y,z,parent){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y+h/2,z);(parent||scene).add(m);return m;}
+// stepped pyramid; returns top y
+function stepped(x,z,y0,w,d,h,steps,parent,stairSide){
+  let y=y0;const sh=h/steps;
+  for(let i=0;i<steps;i++){const f=1-i*(0.55/steps);box(w*f,sh,d*f,stucco,x,y,z,parent);y+=sh;}
+  if(stairSide){ // stair ramp on +z face
+    const len=Math.hypot(h,d*0.32);const st=new THREE.Mesh(new THREE.BoxGeometry(w*0.22,0.02,len),stucco);
+    st.position.set(x,y0+h/2,z+d*0.5-d*0.16);st.rotation.x=-Math.atan2(h,d*0.32);(parent||scene).add(st);
+  }
+  return y;
+}
+function temple(x,z,y0,s,parent){ // temple room + roof comb
+  box(s*0.7,s*0.35,s*0.5,stucco,x,y0,z,parent);
+  box(s*0.72,s*0.06,s*0.04,redM,x,y0+s*0.25,z+s*0.26,parent);
+  box(s*0.36,s*0.35,s*0.08,redM,x,y0+s*0.35,z-s*0.1,parent);
+}
+const H = v => v*U*VEX_MON; // metres -> exaggerated world height
+
+// ---------- epicentre ----------
+const core = new THREE.Group(); scene.add(core);
+const g0 = CENTRE_H;
+// Plaza B (south of Caana) and Plaza A (south-west)
+box(2.4,0.04,1.6,plazaM,0,g0-0.02,1.7,core);
+box(2.2,0.04,1.8,plazaM,-2.9,g0-0.02,2.2,core);
+// Caana: 43 m acropolis, base ~120 x 100 m
+const caTop = stepped(0,0,g0,1.25,1.05,H(30),6,core,true);
+box(0.78,0.03,0.62,plazaM,0,caTop,0,core);
+const tN = stepped(0,-0.16,caTop,0.34,0.26,H(13),3,core,false); temple(0,-0.16,tN,0.22,core);
+const tE = stepped(0.28,0.08,caTop,0.22,0.2,H(9),3,core,false); temple(0.28,0.08,tE,0.16,core);
+const tW = stepped(-0.28,0.08,caTop,0.22,0.2,H(9),3,core,false); temple(-0.28,0.08,tW,0.16,core);
+// Plaza A buildings: A2 (south pyramid), A6 Temple of the Wooden Lintel (east, E-Group platform), A2 west pyramid
+const a6 = stepped(-1.95,2.2,g0,0.32,1.3,H(12),3,core,false); temple(-1.95,2.2,a6,0.2,core);  // long eastern E-Group platform w/ A6
+const a2 = stepped(-3.6,2.2,g0,0.55,0.55,H(24),5,core,false); temple(-3.6,2.2,a2,0.22,core);  // western E-Group pyramid
+const a3 = stepped(-2.9,3.25,g0,0.6,0.35,H(10),3,core,false);
+// ball courts: two parallel sloped ranges
+function ballcourt(x,z,rot){const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=rot||0;core.add(g);
+  box(0.12,H(4),0.55,stucco,-0.13,g0,0,g);box(0.12,H(4),0.55,stucco,0.13,g0,0,g);box(0.14,0.02,0.6,plazaM,0,g0,0,g);}
+ballcourt(-2.0,0.6,0); ballcourt(1.6,2.1,Math.PI/2);
+// palace range south of Plaza B
+stepped(0,2.75,g0,1.5,0.3,H(7),2,core,false);
+// stelae & altars in plaza B
+for(let i=0;i<6;i++){box(0.03,0.12,0.015,redM,-0.75+i*0.3,g0,1.25,core);const al=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,.02,12),stucco);al.position.set(-0.75+i*0.3,g0+0.01,1.33);core.add(al);}
+
+// ---------- reservoirs ----------
+const resPts=[[1.9,-1.2,0.45],[-1.4,-1.6,0.35],[-4.6,0.6,0.5],[3.2,1.0,0.3]];
+let rs=7; function rnd(){rs=(rs*16807)%2147483647;return (rs-1)/2147483646;}
+for(let i=0;i<46;i++){const a=rnd()*6.283,r=8+rnd()*52;resPts.push([Math.cos(a)*r,Math.sin(a)*r,0.18+rnd()*0.35]);}
+const resG=new THREE.Group();scene.add(resG);
+resPts.forEach(([x,z,rad])=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(rad,rad,0.06,24),waterM);m.position.set(x,heightAt(x,z)+0.01,z);resG.add(m);});
+
+// ---------- causeways ----------
+const causeG=new THREE.Group();scene.add(causeG);
+const causeMat=new THREE.MeshBasicMaterial({color:0xf1ead6,fog:true});
+const causeways=[ // [bearing deg (0=north, clockwise), length km]
+  [20,7.5],[62,5.5],[105,9.5],[150,6.5],[195,4.5],[235,8.2],[285,5.8],[330,6.8]];
+const termini=[];
+causeways.forEach(([deg,km])=>{
+  const a=deg*Math.PI/180, dx=Math.sin(a), dz=-Math.cos(a), L=km*10, start=4.6, wid=0.3, N=Math.ceil(L*2);
+  const px=-dz, pz=dx; const verts=[],idx=[];
+  for(let i=0;i<=N;i++){const t=start+(L-start)*i/N;const wob=Math.sin(t*0.09+deg)*0.6;
+    const cx=dx*t+px*wob, cz=dz*t+pz*wob;
+    for(const s of[-1,1]){const x=cx+px*wid*s/2,z=cz+pz*wid*s/2;verts.push(x,heightAt(x,z)+0.08,z);}
+    if(i<N){const b=i*2;idx.push(b,b+1,b+2,b+1,b+3,b+2);}}
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));g.setIndex(idx);
+  const m=new THREE.Mesh(g,causeMat);causeG.add(m);
+  const ex=dx*L+px*Math.sin(L*0.09+deg)*0.6, ez=dz*L+pz*Math.sin(L*0.09+deg)*0.6, ey=heightAt(ex,ez);
+  box(1.0,0.05,1.0,plazaM,ex,ey-0.02,ez,causeG);
+  const tt=stepped(ex,ez-0.2,ey,0.4,0.4,H(10),3,causeG,false);temple(ex,ez-0.2,tt,0.16,causeG);
+  termini.push([ex,ey,ez,km]);
+});
+
+// ---------- houses (courtyard groups) ----------
+const houseGeo=new THREE.BoxGeometry(0.08,0.05,0.08);
+const houseMat=new THREE.MeshStandardMaterial({color:0xc9a15c,roughness:.9});
+const MAXH=9000; const houses=new THREE.InstancedMesh(houseGeo,houseMat,MAXH);
+const dm=new THREE.Object3D(); let hc=0;
+function nearCause(x,z){for(const[deg] of causeways){const a=deg*Math.PI/180,dx=Math.sin(a),dz=-Math.cos(a);const t=x*dx+z*dz;if(t<0)continue;const d=Math.abs(x*-dz+z*dx);if(d<0.45)return true;}return false;}
+while(hc<MAXH){
+  const r=4+(-Math.log(1-rnd()*0.995))*17; if(r>95)continue;
+  const a=rnd()*6.283, gx=Math.cos(a)*r, gz=Math.sin(a)*r;
+  if(Math.hypot(gx,gz)<5.8)continue;
+  const n=3+Math.floor(rnd()*3), rot=rnd()*1.57;
+  for(let k=0;k<n&&hc<MAXH;k++){
+    const ang=rot+k*(6.283/n), x=gx+Math.cos(ang)*0.17, z=gz+Math.sin(ang)*0.17;
+    if(nearCause(x,z))continue;
+    dm.position.set(x,heightAt(x,z)+0.025,z);dm.rotation.y=ang;dm.updateMatrix();houses.setMatrixAt(hc++,dm.matrix);}
+}
+houses.instanceMatrix.needsUpdate=true; scene.add(houses);
+
+// ---------- labels ----------
+const labelsEl=document.getElementById('labels');
+const L=[
+ {n:'Caana',p:[0,caTop+H(13)+0.35,-0.16],d:'<b>Caana, "Sky Place"</b>. A 43 m acropolis, still the tallest structure in Belize. Its summit held three temples and the royal family\'s private palace courtyard.'},
+ {n:'Plaza B',p:[0.9,g0+0.15,1.7],d:'<b>Plaza B</b>. The great plaza at Caana\'s foot, lined with carved stelae and round altars recording Caracol\'s kings.'},
+ {n:'Plaza A · E-Group',p:[-2.9,g0+H(24)+0.4,2.2],d:'<b>Plaza A and the E-Group</b>. A western pyramid faces a long eastern platform, aligned to watch the sun rise at the solstices and equinoxes.'},
+ {n:'Temple of the Wooden Lintel',p:[-1.95,a6+0.4,2.55],minor:true,d:'<b>Structure A6, Temple of the Wooden Lintel</b>. One of Caracol\'s oldest temples, used for centuries and named for its original sapodilla-wood door beam.'},
+ {n:'Ball court',p:[-2.0,g0+0.22,0.6],minor:true,d:'<b>Ball court</b>. Two sloped stone ranges for the Mesoamerican ball game. A ball-court marker here records Caracol\'s wars with its rivals.'},
+ {n:'Reservoir',p:[1.9,g0+0.15,-1.2],minor:true,d:'<b>Reservoirs</b>. With no rivers on the plateau, the city ran on rainwater stored in hundreds of plastered reservoirs.'},
+ {n:'Terraced fields',p:[18,heightAt(18,-14)+0.8,-14],d:'<b>Agricultural terraces</b>. LiDAR revealed tens of thousands of stone terraces following the contours, growing maize, beans and squash right inside the city.'},
+ {n:'House groups',p:[-14,heightAt(-14,9)+0.6,9],d:'<b>Residential courtyard groups</b>. Families lived in clusters of 3–6 houses around a patio, spread like a garden city across about 200 km².'},
+ {n:'Causeway',p:[0,0,0],cause:true,d:'<b>Causeways (sacbeob)</b>. Raised, plastered roads radiating from the centre to outlying plazas up to 10 km away. They tied markets, farms and districts to the core.'},
+];
+const ct=termini[2]; const cMid=[ct[0]*0.5, heightAt(ct[0]*0.5,ct[2]*0.5)+0.6, ct[2]*0.5]; L[8].p=cMid;
+termini.forEach((t,i)=>{if(i%2===0)L.push({n:'Terminus · '+t[3]+' km',p:[t[0],t[1]+H(10)+0.5,t[2]],minor:true,cause:true,d:'<b>Causeway terminus group</b>. Each sacbe ends at a plaza group, a local hub for markets and administration. Real termini include Conchita, Pajaro, Ceiba and Cahal Pichik; positions here are schematic.'});});
+const info=document.getElementById('info');
+L.forEach(o=>{const el=document.createElement('button');el.className='lbl'+(o.minor?' minor':'');el.textContent=o.n;el.style.background='none';el.style.border='0';el.tabIndex=0;
+  el.addEventListener('click',()=>{info.innerHTML=o.d;});o.el=el;o.v=new THREE.Vector3(...o.p);labelsEl.appendChild(el);});
+
+// ---------- views ----------
+const VIEWS={city:{c:[62,52,78],t:[0,2,0]},core:{c:[5.5,7.5,9.5],t:[-1.2,3,1.2]},caana:{c:[2.6,4.6,3.6],t:[0,3.4,0.2]}};
+let tween=null;
+function go(k){const v=VIEWS[k];tween={t0:performance.now(),c0:camera.position.clone(),g0:controls.target.clone(),c1:new THREE.Vector3(...v.c),g1:new THREE.Vector3(...v.t)};
+  document.querySelectorAll('#views .chip').forEach(b=>b.setAttribute('aria-pressed',b.id==='v-'+k));}
+camera.position.set(...VIEWS.city.c);controls.target.set(...VIEWS.city.t);
+document.getElementById('v-city').onclick=()=>go('city');
+document.getElementById('v-core').onclick=()=>go('core');
+document.getElementById('v-caana').onclick=()=>go('caana');
+function toggle(id,fn){const b=document.getElementById(id);b.onclick=()=>{const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',on);fn(on);};}
+let showLabels=true;
+toggle('l-cause',on=>{causeG.visible=on;});
+toggle('l-house',on=>{houses.visible=on;});
+toggle('l-terr',on=>{terrUniforms.uTerr.value=on?1:0;});
+toggle('l-lbl',on=>{showLabels=on;});
+toggle('l-spin',on=>{controls.autoRotate=on;controls.autoRotateSpeed=0.6;});
+
+// ---------- loop ----------
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+window.addEventListener('resize',resize);resize();
+const tmp=new THREE.Vector3();
+function frame(now){
+  if(tween){const k=Math.min(1,(now-tween.t0)/1300),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+    camera.position.lerpVectors(tween.c0,tween.c1,e);controls.target.lerpVectors(tween.g0,tween.g1,e);if(k>=1)tween=null;}
+  controls.update();renderer.render(scene,camera);
+  const w=stage.clientWidth,h=stage.clientHeight,dist=camera.position.distanceTo(controls.target);
+  L.forEach(o=>{
+    let vis=showLabels&&!(o.cause&&!causeG.visible);
+    if(vis){tmp.copy(o.v).project(camera);if(tmp.z>1||tmp.z<-1)vis=false;
+      const fromCam=camera.position.distanceTo(o.v);
+      if(o.minor&&fromCam>(o.cause?140:28))vis=false;
+      if(!o.minor&&!o.cause&&o.p[0]*o.p[0]+o.p[2]*o.p[2]<30&&dist>120&&o.n!=='Caana')vis=false;}
+    o.el.hidden=!vis;
+    if(vis){o.el.style.left=((tmp.x+1)/2*w)+'px';o.el.style.top=((1-tmp.y)/2*h)+'px';}
+  });
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+})();
+</script>
