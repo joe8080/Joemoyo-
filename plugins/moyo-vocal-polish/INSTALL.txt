@@ -1,0 +1,27 @@
+MOYO VOCAL POLISH - INSTALL FOR FL STUDIO
+=========================================
+
+WINDOWS
+1. Copy the folder "MOYO Vocal Polish.vst3" into:
+   C:\Program Files\Common Files\VST3
+   (Windows asks for permission once. Click Continue.)
+2. Open FL Studio > Options > Manage plugins > click "Find more plugins".
+3. Find "MOYO Vocal Polish" in the list and tick the star to make it a favourite.
+4. On your vocal mixer track, open a slot and choose MOYO Vocal Polish.
+
+MAC
+1. Copy "MOYO Vocal Polish.vst3" into:
+   Macintosh HD > Library > Audio > Plug-Ins > VST3
+   Copy "MOYO Vocal Polish.component" into:
+   Macintosh HD > Library > Audio > Plug-Ins > Components
+2. The plugin is not signed with a paid Apple account, so run this once in Terminal:
+   sudo xattr -cr "/Library/Audio/Plug-Ins/VST3/MOYO Vocal Polish.vst3" "/Library/Audio/Plug-Ins/Components/MOYO Vocal Polish.component"
+3. In FL Studio: Options > Manage plugins > "Find more plugins".
+
+HOW TO USE (30 SECONDS)
+1. Put it on the vocal mixer track, after any pitch correction.
+2. Pick a preset from the top-right menu (or FL's preset arrow).
+3. Turn POLISH until the vocal sits forward in the mix.
+4. Use OUTPUT so the level matches when you bypass. Louder always sounds "better",
+   so match levels to judge it fairly.
+Double-click any knob to reset it.

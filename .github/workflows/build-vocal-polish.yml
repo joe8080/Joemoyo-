@@ -1,0 +1,90 @@
+name: Build MOYO Vocal Polish plugin
+
+on:
+  push:
+    paths:
+      - "plugins/moyo-vocal-polish/**"
+      - ".github/workflows/build-vocal-polish.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows
+            os: windows-latest
+          - name: Mac
+            os: macos-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: plugins/moyo-vocal-polish
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release --parallel 4
+
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          mkdir -p dist
+          cp -r "build/MoyoVocalPolish_artefacts/Release/VST3/MOYO Vocal Polish.vst3" dist/
+          cp INSTALL.txt dist/
+          cd dist && 7z a ../MOYO-Vocal-Polish-Windows.zip ./*
+
+      - name: Package (Mac)
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p dist
+          cp -R "build/MoyoVocalPolish_artefacts/Release/VST3/MOYO Vocal Polish.vst3" dist/
+          cp -R "build/MoyoVocalPolish_artefacts/Release/AU/MOYO Vocal Polish.component" dist/
+          # Ad-hoc signature so Apple Silicon Macs will load it.
+          codesign --force --deep -s - "dist/MOYO Vocal Polish.vst3"
+          codesign --force --deep -s - "dist/MOYO Vocal Polish.component"
+          cp INSTALL.txt dist/
+          cd dist && ditto -c -k --sequesterRsrc . ../MOYO-Vocal-Polish-Mac.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MOYO-Vocal-Polish-${{ matrix.name }}
+          path: plugins/moyo-vocal-polish/MOYO-Vocal-Polish-*.zip
+
+  release:
+    name: Publish download page
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Update the "MOYO Vocal Polish (latest)" release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: moyo-vocal-polish-latest
+          name: MOYO Vocal Polish (latest build)
+          target_commitish: ${{ github.sha }}
+          prerelease: true
+          make_latest: false
+          body: |
+            **MOYO Vocal Polish** for FL Studio.
+
+            1. Windows: download `MOYO-Vocal-Polish-Windows.zip`.
+            2. Mac: download `MOYO-Vocal-Polish-Mac.zip`.
+            3. Unzip and follow `INSTALL.txt` inside.
+
+            Built from commit ${{ github.sha }}.
+          files: dist/*.zip

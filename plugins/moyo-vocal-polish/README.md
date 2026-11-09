@@ -1,0 +1,42 @@
+# MOYO Vocal Polish
+
+A one-knob vocal chain for FL Studio (VST3 on Windows and Mac, plus AU on Mac).
+
+![MOYO Vocal Polish](docs/screenshot.png)
+
+## What each control does
+
+| Control | What it does |
+|---|---|
+| **POLISH** | The main knob. Raises the low cut (60–100 Hz), cuts boxiness at 300 Hz, adds compression (up to about 4:1), and adds presence at 3.2 kHz and sheen at 11 kHz. At 0% it does almost nothing. |
+| **WARMTH** | Tape-style saturation plus body at 180 Hz. |
+| **AIR** | Up to +7 dB high shelf at 11 kHz. |
+| **DE-ESS** | Turns down harsh "s" and "t" sounds (detects around 7 kHz, ducks everything above 4.5 kHz). |
+| **MIX** | Blends the dry and processed vocal. Under 100% gives parallel compression. |
+| **OUTPUT** | ±12 dB final level. |
+
+The meters show compression gain reduction, de-esser gain reduction, and output level.
+
+## Presets
+
+Default · Rap Lead · Smooth R&B · Bright Pop · Voiceover / YouTube · Gentle Touch · Parallel Crush
+
+## Signal chain (runs at 2× oversampling)
+
+Low cut → mud cut → warmth shelf → compressor (stereo-linked, soft knee, auto makeup) → saturation → de-esser → presence → air → mix → output.
+
+Latency is reported to the host, so FL Studio compensates for it automatically. The dry signal used by MIX is delayed to match, so there is no phasing at any setting.
+
+## Getting the plugin
+
+Every push that changes this folder builds Windows and Mac versions on GitHub Actions. The zips go to the **"MOYO Vocal Polish (latest build)"** release in this repo. See `INSTALL.txt` for install steps.
+
+## Building it yourself
+
+```bash
+cd plugins/moyo-vocal-polish
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
+```
+
+JUCE 8 is downloaded automatically. JUCE's licence is free for personal use and for small businesses under its revenue limit. Check the JUCE licence before selling the plugin.
