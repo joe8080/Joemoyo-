@@ -22,6 +22,7 @@ HOW TO USE (30 SECONDS)
 1. Put it on the vocal mixer track, after any pitch correction.
 2. Pick a preset from the top-right menu (or FL's preset arrow).
 3. Turn POLISH until the vocal sits forward in the mix.
-4. Use OUTPUT so the level matches when you bypass. Louder always sounds "better",
-   so match levels to judge it fairly.
-Double-click any knob to reset it.
+4. Click HEAR ORIGINAL (turns red) to hear your raw vocal, and click again to hear
+   MOYO. AUTO GAIN keeps both at the same loudness, so you judge the sound, not the volume.
+5. Want to compare two versions? Click B, change some knobs, then flip between A and B.
+Double-click any knob to reset it. The mouse wheel works too.

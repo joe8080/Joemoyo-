@@ -13,9 +13,9 @@ struct Preset
 // top-left of the plugin window).
 constexpr Preset presets[] = {
     { "Default",             50, 30, 30, 40, 100,  0.0f },
-    { "Rap Lead",            75, 45, 35, 50, 100, -1.0f },
+    { "Rap Lead",            75, 45, 35, 50, 100,  0.0f },
     { "Smooth R&B",          55, 55, 45, 45, 100,  0.0f },
-    { "Bright Pop",          65, 20, 70, 60, 100, -1.0f },
+    { "Bright Pop",          65, 20, 70, 60, 100,  0.0f },
     { "Voiceover / YouTube", 70, 25, 20, 55, 100,  0.0f },
     { "Gentle Touch",        25, 15, 15, 30, 100,  0.0f },
     { "Parallel Crush",     100, 70, 40, 60,  45,  0.0f },
@@ -23,6 +23,19 @@ constexpr Preset presets[] = {
 constexpr int numPresets = (int) (sizeof (presets) / sizeof (presets[0]));
 
 constexpr int smoothChunk = 32; // coefficients are refreshed every 32 oversampled samples
+
+// Parameters that A/B slots store and recall ("original" is a listening switch, not a setting).
+const char* const slotParams[] = { "polish", "warmth", "air", "deess", "mix", "input", "output", "autogain", "clipguard" };
+
+// Soft ceiling: untouched below -1 dBFS, rounds peaks off so they never pass 0 dBFS.
+inline float clipGuard (float x) noexcept
+{
+    constexpr float t = 0.8913f; // -1 dBFS
+    const float a = std::abs (x);
+    if (a <= t) return x;
+    const float y = t + (1.0f - t) * std::tanh ((a - t) / (1.0f - t));
+    return x < 0 ? -y : y;
+}
 } // namespace
 
 juce::AudioProcessorValueTreeState::ParameterLayout MoyoVocalPolishProcessor::createLayout()
@@ -42,6 +55,12 @@ juce::AudioProcessorValueTreeState::ParameterLayout MoyoVocalPolishProcessor::cr
     layout.add (std::make_unique<P> (ID { "deess",  1 }, "De-Ess", juce::NormalisableRange<float> (0, 100, 0.1f), 40.0f, pct));
     layout.add (std::make_unique<P> (ID { "mix",    1 }, "Mix",    juce::NormalisableRange<float> (0, 100, 0.1f), 100.0f, pct));
     layout.add (std::make_unique<P> (ID { "output", 1 }, "Output", juce::NormalisableRange<float> (-12, 12, 0.1f), 0.0f, db));
+    layout.add (std::make_unique<P> (ID { "input",  1 }, "Input",  juce::NormalisableRange<float> (-24, 24, 0.1f), 0.0f, db));
+
+    using B = juce::AudioParameterBool;
+    layout.add (std::make_unique<B> (ID { "original",  1 }, "Hear Original", false));
+    layout.add (std::make_unique<B> (ID { "autogain",  1 }, "Auto Gain",     true));
+    layout.add (std::make_unique<B> (ID { "clipguard", 1 }, "Clip Guard",    true));
     return layout;
 }
 
@@ -57,6 +76,10 @@ MoyoVocalPolishProcessor::MoyoVocalPolishProcessor()
     pDeess  = apvts.getRawParameterValue ("deess");
     pMix    = apvts.getRawParameterValue ("mix");
     pOutput = apvts.getRawParameterValue ("output");
+    pInput  = apvts.getRawParameterValue ("input");
+    pOriginal  = apvts.getRawParameterValue ("original");
+    pAutoGain  = apvts.getRawParameterValue ("autogain");
+    pClipGuard = apvts.getRawParameterValue ("clipguard");
 }
 
 bool MoyoVocalPolishProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
@@ -99,6 +122,13 @@ void MoyoVocalPolishProcessor::prepareToPlay (double sampleRate, int samplesPerB
     initSmooth (deessS,   osRate, pDeess->load()  * 0.01f);
     initSmooth (mixS,     sampleRate, pMix->load() * 0.01f);
     initSmooth (outGainS, sampleRate, moyo::dbToGain (pOutput->load()));
+    initSmooth (inGainS,  sampleRate, moyo::dbToGain (pInput->load()));
+    originalS.reset (sampleRate, 0.02); // 20 ms crossfade for clickless A/B
+    originalS.setCurrentAndTargetValue (pOriginal->load() > 0.5f ? 1.0f : 0.0f);
+    autoGainS.reset (sampleRate, 0.3);
+    autoGainS.setCurrentAndTargetValue (1.0f);
+    inPower = outPower = 0.0f;
+    powerCoef = (float) std::exp (-1.0 / (0.4 * sampleRate)); // ~400 ms loudness window
 
     updateFilters (polishS.getCurrentValue(), warmthS.getCurrentValue(), airS.getCurrentValue());
 }
@@ -221,9 +251,27 @@ void MoyoVocalPolishProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     airS.setTargetValue    (pAir->load()    * 0.01f);
     deessS.setTargetValue  (pDeess->load()  * 0.01f);
     mixS.setTargetValue    (pMix->load()    * 0.01f);
+    inGainS.setTargetValue  (moyo::dbToGain (pInput->load()));
     outGainS.setTargetValue (moyo::dbToGain (pOutput->load()));
+    originalS.setTargetValue (pOriginal->load() > 0.5f ? 1.0f : 0.0f);
+    const bool autoGainOn = pAutoGain->load() > 0.5f;
+    const bool guardOn = pClipGuard->load() > 0.5f;
 
-    // Keep a latency-aligned copy of the dry signal for the MIX knob.
+    // 1. Input gain (drives the compressor harder or softer).
+    float inPeak = 0.0f;
+    for (int i = 0; i < n; ++i)
+    {
+        const float g = inGainS.getNextValue();
+        for (int ch = 0; ch < numCh; ++ch)
+        {
+            float* d = buffer.getWritePointer (ch);
+            d[i] *= g;
+            inPeak = juce::jmax (inPeak, std::abs (d[i]));
+        }
+    }
+    inputPeakDb.store (moyo::gainToDb (inPeak));
+
+    // 2. Latency-aligned copy of the (input-gained) dry signal for MIX and HEAR ORIGINAL.
     if (dryBuffer.getNumSamples() < n) dryBuffer.setSize (numCh, n, false, false, true);
     for (int ch = 0; ch < numCh; ++ch)
     {
@@ -236,24 +284,48 @@ void MoyoVocalPolishProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         }
     }
 
+    // 3. The vocal chain, at 2x oversampling.
     juce::dsp::AudioBlock<float> block (buffer.getArrayOfWritePointers(), (size_t) numCh, (size_t) n);
     auto up = oversampler->processSamplesUp (block);
     processWet (up);
     oversampler->processSamplesDown (block);
 
+    // 4. Mix, auto gain, original/processed crossfade, output, clip guard.
+    const float chScale = 1.0f / (float) numCh;
     float peak = 0.0f;
     for (int i = 0; i < n; ++i)
     {
         const float mix = mixS.getNextValue();
+        const float ag = autoGainS.getNextValue();
+        const float orig = originalS.getNextValue();
         const float g = outGainS.getNextValue();
+
+        float dryPow = 0.0f, wetPow = 0.0f;
         for (int ch = 0; ch < numCh; ++ch)
         {
             float* out = buffer.getWritePointer (ch);
-            const float y = (mix * out[i] + (1.0f - mix) * dryBuffer.getSample (ch, i)) * g;
+            const float dry = dryBuffer.getSample (ch, i);
+            const float processed = mix * out[i] + (1.0f - mix) * dry;
+            dryPow += dry * dry;
+            wetPow += processed * processed;
+
+            float y = (orig * dry + (1.0f - orig) * processed * ag) * g;
+            if (guardOn) y = clipGuard (y);
             out[i] = y;
             peak = juce::jmax (peak, std::abs (y));
         }
+        inPower  = dryPow * chScale + powerCoef * (inPower  - dryPow * chScale);
+        outPower = wetPow * chScale + powerCoef * (outPower - wetPow * chScale);
     }
+
+    // Auto gain: match processed loudness to the input so louder never fools your ears.
+    // Holds its value through silence so it doesn't pump between phrases.
+    if (! autoGainOn)
+        autoGainS.setTargetValue (1.0f);
+    else if (inPower > 1.0e-6f && outPower > 1.0e-9f) // input above about -60 dBFS
+        autoGainS.setTargetValue (juce::jlimit (0.25f, 4.0f, std::sqrt (inPower / outPower)));
+    autoGainDb.store (moyo::gainToDb (autoGainS.getTargetValue()));
+
     outputPeakDb.store (moyo::gainToDb (peak));
 }
 
@@ -283,10 +355,48 @@ void MoyoVocalPolishProcessor::setCurrentProgram (int index)
     set ("output", pr.output);
 }
 
+juce::var MoyoVocalPolishProcessor::captureSettings() const
+{
+    auto* obj = new juce::DynamicObject();
+    for (auto* id : slotParams)
+        if (auto* v = apvts.getRawParameterValue (id))
+            obj->setProperty (id, v->load());
+    return juce::var (obj);
+}
+
+void MoyoVocalPolishProcessor::applySettings (const juce::var& settings)
+{
+    for (auto* id : slotParams)
+        if (settings.hasProperty (id))
+            if (auto* param = apvts.getParameter (id))
+                param->setValueNotifyingHost (param->convertTo0to1 ((float) settings[id]));
+}
+
+void MoyoVocalPolishProcessor::selectSlot (int slot)
+{
+    if (! juce::isPositiveAndBelow (slot, 2) || slot == activeSlot) return;
+    slots[(size_t) activeSlot] = captureSettings();
+    activeSlot = slot;
+    if (slots[(size_t) slot].isVoid())
+        slots[(size_t) slot] = captureSettings(); // first visit: start B as a copy of A
+    else
+        applySettings (slots[(size_t) slot]);
+}
+
+void MoyoVocalPolishProcessor::copyActiveSlotToOther()
+{
+    slots[(size_t) (1 - activeSlot)] = captureSettings();
+}
+
 void MoyoVocalPolishProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
+    slots[(size_t) activeSlot] = captureSettings();
     auto state = apvts.copyState();
     state.setProperty ("program", currentProgram, nullptr);
+    state.setProperty ("activeSlot", activeSlot, nullptr);
+    for (int i = 0; i < 2; ++i)
+        if (! slots[(size_t) i].isVoid())
+            state.setProperty (i == 0 ? "slotA" : "slotB", juce::JSON::toString (slots[(size_t) i], true), nullptr);
     if (auto xml = state.createXml())
         copyXmlToBinary (*xml, destData);
 }
@@ -298,6 +408,12 @@ void MoyoVocalPolishProcessor::setStateInformation (const void* data, int sizeIn
         {
             auto state = juce::ValueTree::fromXml (*xml);
             currentProgram = state.getProperty ("program", 0);
+            activeSlot = juce::jlimit (0, 1, (int) state.getProperty ("activeSlot", 0));
+            for (int i = 0; i < 2; ++i)
+            {
+                const auto json = state.getProperty (i == 0 ? "slotA" : "slotB").toString();
+                slots[(size_t) i] = json.isEmpty() ? juce::var() : juce::JSON::parse (json);
+            }
             apvts.replaceState (state);
         }
 }
