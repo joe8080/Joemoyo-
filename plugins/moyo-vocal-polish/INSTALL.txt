@@ -1,7 +1,13 @@
 MOYO VOCAL POLISH - INSTALL FOR FL STUDIO
 =========================================
 
-WINDOWS
+WINDOWS - EASY WAY
+1. Close FL Studio.
+2. Double-click "Install MOYO.bat" and click Yes when Windows asks.
+   (If Windows shows "Windows protected your PC", click More info > Run anyway.)
+3. Open FL Studio > Options > Manage plugins > "Find more plugins".
+
+WINDOWS - MANUAL WAY
 1. Copy the folder "MOYO Vocal Polish.vst3" into:
    C:\Program Files\Common Files\VST3
    (Windows asks for permission once. Click Continue.)

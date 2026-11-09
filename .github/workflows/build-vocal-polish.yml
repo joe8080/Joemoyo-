@@ -41,8 +41,34 @@ jobs:
         run: |
           mkdir -p dist
           cp -r "build/MoyoVocalPolish_artefacts/Release/VST3/MOYO Vocal Polish.vst3" dist/
-          cp INSTALL.txt dist/
+          cp INSTALL.txt "installer/Install MOYO.bat" dist/
           cd dist && 7z a ../MOYO-Vocal-Polish-Windows.zip ./*
+
+      - name: Test the one-click installer (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          MOYO_UNATTENDED: "1"
+        run: |
+          $dest = Join-Path $env:ProgramW6432 'Common Files\VST3\MOYO Vocal Polish.vst3'
+          $dll  = Join-Path $dest 'Contents\x86_64-win\MOYO Vocal Polish.vst3'
+
+          # Case 1: installer sitting next to the downloaded zip only (as if just downloaded).
+          $dl = Join-Path $env:RUNNER_TEMP 'fake-downloads'
+          New-Item -ItemType Directory -Force $dl | Out-Null
+          Copy-Item MOYO-Vocal-Polish-Windows.zip $dl
+          Copy-Item 'installer/Install MOYO.bat' $dl
+          & "$dl\Install MOYO.bat"
+          if ($LASTEXITCODE -ne 0) { throw "installer (zip mode) exited $LASTEXITCODE" }
+          if (-not (Test-Path -LiteralPath $dll)) { throw "plugin not installed (zip mode)" }
+          Write-Host "zip mode OK"
+
+          # Case 2: run from the unzipped folder, replacing the existing install.
+          & "$PWD\dist\Install MOYO.bat"
+          if ($LASTEXITCODE -ne 0) { throw "installer (folder mode) exited $LASTEXITCODE" }
+          if (-not (Test-Path -LiteralPath $dll)) { throw "plugin not installed (folder mode)" }
+          Write-Host "folder mode OK"
+          Get-ChildItem -Recurse $dest | Select-Object FullName, Length
 
       - name: Package (Mac)
         if: runner.os == 'macOS'
