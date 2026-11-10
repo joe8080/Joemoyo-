@@ -1,0 +1,492 @@
+{
+ "fps": 30,
+ "total_frames": 16488,
+ "audio": false,
+ "scenes": [
+  {
+   "id": "L01",
+   "section": "00",
+   "new_section": true,
+   "vis_start": 0,
+   "narr_start": 15,
+   "narr_end": 352,
+   "cues": [
+    15,
+    53,
+    197
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 362
+  },
+  {
+   "id": "L02",
+   "section": "00",
+   "new_section": false,
+   "vis_start": 362,
+   "narr_start": 378,
+   "narr_end": 803,
+   "cues": [
+    378,
+    542,
+    746
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 812
+  },
+  {
+   "id": "L03",
+   "section": "00",
+   "new_section": false,
+   "vis_start": 812,
+   "narr_start": 828,
+   "narr_end": 1128,
+   "cues": [
+    828,
+    889,
+    957,
+    1064
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 1138
+  },
+  {
+   "id": "L04",
+   "section": "00",
+   "new_section": false,
+   "vis_start": 1138,
+   "narr_start": 1154,
+   "narr_end": 1604,
+   "cues": [
+    1154,
+    1230,
+    1270,
+    1324,
+    1425,
+    1490
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 1649
+  },
+  {
+   "id": "L05",
+   "section": "01",
+   "new_section": true,
+   "vis_start": 1649,
+   "narr_start": 1721,
+   "narr_end": 2584,
+   "cues": [
+    1721,
+    1904,
+    2108,
+    2354,
+    2469
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 2592
+  },
+  {
+   "id": "L06",
+   "section": "01",
+   "new_section": false,
+   "vis_start": 2592,
+   "narr_start": 2609,
+   "narr_end": 2972,
+   "cues": [
+    2609,
+    2746,
+    2812,
+    2877
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 2980
+  },
+  {
+   "id": "L07",
+   "section": "01",
+   "new_section": false,
+   "vis_start": 2980,
+   "narr_start": 2997,
+   "narr_end": 3497,
+   "cues": [
+    2997,
+    3105,
+    3212,
+    3386
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 3506
+  },
+  {
+   "id": "L08",
+   "section": "01",
+   "new_section": false,
+   "vis_start": 3506,
+   "narr_start": 3522,
+   "narr_end": 4097,
+   "cues": [
+    3522,
+    3586,
+    3738,
+    3887,
+    4024
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 4130
+  },
+  {
+   "id": "L09",
+   "section": "02",
+   "new_section": true,
+   "vis_start": 4130,
+   "narr_start": 4202,
+   "narr_end": 5215,
+   "cues": [
+    4202,
+    4281,
+    4327,
+    4373,
+    4538,
+    4784,
+    4857,
+    4925,
+    5024
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 5224
+  },
+  {
+   "id": "L10",
+   "section": "02",
+   "new_section": false,
+   "vis_start": 5224,
+   "narr_start": 5240,
+   "narr_end": 6016,
+   "cues": [
+    5240,
+    5284,
+    5433,
+    5719,
+    5870
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 6024
+  },
+  {
+   "id": "L11",
+   "section": "02",
+   "new_section": false,
+   "vis_start": 6024,
+   "narr_start": 6041,
+   "narr_end": 6616,
+   "cues": [
+    6041,
+    6121,
+    6321,
+    6428
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 6625
+  },
+  {
+   "id": "L12",
+   "section": "03",
+   "new_section": true,
+   "vis_start": 6625,
+   "narr_start": 6697,
+   "narr_end": 7459,
+   "cues": [
+    6697,
+    6802,
+    6913,
+    6988,
+    7176,
+    7292
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 7468
+  },
+  {
+   "id": "L13",
+   "section": "03",
+   "new_section": false,
+   "vis_start": 7468,
+   "narr_start": 7485,
+   "narr_end": 8160,
+   "cues": [
+    7485,
+    7577,
+    7719,
+    7811,
+    7945
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 8169
+  },
+  {
+   "id": "L14",
+   "section": "03",
+   "new_section": false,
+   "vis_start": 8169,
+   "narr_start": 8185,
+   "narr_end": 8548,
+   "cues": [
+    8185,
+    8281,
+    8450
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 8581
+  },
+  {
+   "id": "L15",
+   "section": "04",
+   "new_section": true,
+   "vis_start": 8581,
+   "narr_start": 8653,
+   "narr_end": 9365,
+   "cues": [
+    8653,
+    8748,
+    8907,
+    8996,
+    9091,
+    9186,
+    9298
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 9374
+  },
+  {
+   "id": "L16",
+   "section": "04",
+   "new_section": false,
+   "vis_start": 9374,
+   "narr_start": 9391,
+   "narr_end": 9916,
+   "cues": [
+    9391,
+    9472,
+    9619,
+    9792
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 9925
+  },
+  {
+   "id": "L17",
+   "section": "04",
+   "new_section": false,
+   "vis_start": 9925,
+   "narr_start": 9942,
+   "narr_end": 10592,
+   "cues": [
+    9942,
+    10162,
+    10348,
+    10414
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 10600
+  },
+  {
+   "id": "L18",
+   "section": "05",
+   "new_section": true,
+   "vis_start": 10600,
+   "narr_start": 10672,
+   "narr_end": 11348,
+   "cues": [
+    10672,
+    10806,
+    10872,
+    10974,
+    11023,
+    11142
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 11356
+  },
+  {
+   "id": "L19",
+   "section": "05",
+   "new_section": false,
+   "vis_start": 11356,
+   "narr_start": 11373,
+   "narr_end": 12023,
+   "cues": [
+    11373,
+    11440,
+    11544,
+    11663,
+    11776,
+    11890
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 12032
+  },
+  {
+   "id": "L20",
+   "section": "05",
+   "new_section": false,
+   "vis_start": 12032,
+   "narr_start": 12049,
+   "narr_end": 12349,
+   "cues": [
+    12049,
+    12159,
+    12243,
+    12274
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 12358
+  },
+  {
+   "id": "L21",
+   "section": "05",
+   "new_section": false,
+   "vis_start": 12358,
+   "narr_start": 12374,
+   "narr_end": 12987,
+   "cues": [
+    12374,
+    12495,
+    12654,
+    12773,
+    12898
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 13014
+  },
+  {
+   "id": "L22",
+   "section": "06",
+   "new_section": true,
+   "vis_start": 13014,
+   "narr_start": 13086,
+   "narr_end": 13548,
+   "cues": [
+    13086,
+    13148,
+    13193,
+    13261,
+    13304,
+    13402,
+    13457
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 13557
+  },
+  {
+   "id": "L23",
+   "section": "06",
+   "new_section": false,
+   "vis_start": 13557,
+   "narr_start": 13574,
+   "narr_end": 13936,
+   "cues": [
+    13574,
+    13773
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 13945
+  },
+  {
+   "id": "L24",
+   "section": "06",
+   "new_section": false,
+   "vis_start": 13945,
+   "narr_start": 13962,
+   "narr_end": 14699,
+   "cues": [
+    13962,
+    14007,
+    14106,
+    14167,
+    14231,
+    14323,
+    14438,
+    14557
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 14732
+  },
+  {
+   "id": "L25",
+   "section": "07",
+   "new_section": true,
+   "vis_start": 14732,
+   "narr_start": 14804,
+   "narr_end": 15329,
+   "cues": [
+    14804,
+    14903,
+    15013,
+    15085,
+    15191
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 15338
+  },
+  {
+   "id": "L26",
+   "section": "07",
+   "new_section": false,
+   "vis_start": 15338,
+   "narr_start": 15355,
+   "narr_end": 15867,
+   "cues": [
+    15355,
+    15413,
+    15441,
+    15477,
+    15518,
+    15643,
+    15708,
+    15770
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 15876
+  },
+  {
+   "id": "L27",
+   "section": "07",
+   "new_section": false,
+   "vis_start": 15876,
+   "narr_start": 15893,
+   "narr_end": 16218,
+   "cues": [
+    15893,
+    16066
+   ],
+   "impact": [],
+   "riser": false,
+   "vis_end": 16488
+  }
+ ]
+}

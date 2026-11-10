@@ -1,0 +1,331 @@
+[
+ {
+  "id": "L01",
+  "section": "00",
+  "text": "Nvidia lost around a hundred and ninety billion dollars of market value on Monday. But the question investors are asking goes beyond the price of a chip.",
+  "marks": [
+   "Nvidia lost",
+   "a hundred and ninety billion",
+   "But the question"
+  ]
+ },
+ {
+  "id": "L02",
+  "section": "00",
+  "text": "Its founder and chief executive, Jensen Huang, has admitted being unfaithful to his wife. Nvidia's board has opened an independent investigation following reports of a foreign intelligence effort targeting him. And Washington wants answers.",
+  "marks": [
+   "Its founder",
+   "Nvidia's board",
+   "And Washington"
+  ]
+ },
+ {
+  "id": "L03",
+  "section": "00",
+  "text": "There are two dates to watch: earnings on November seventeenth, and a congressional briefing requested for the following day. They test very different things.",
+  "marks": [
+   "There are two dates",
+   "earnings on November",
+   "a congressional briefing",
+   "They test"
+  ]
+ },
+ {
+  "id": "L04",
+  "section": "00",
+  "text": "By the end of this video, you'll know what is confirmed, what remains alleged, and what could actually change the investment case. This is AI Finance Toolkit. Our research snapshot is the morning of November tenth.",
+  "marks": [
+   "By the end",
+   "what is confirmed",
+   "what remains alleged",
+   "what could actually change",
+   "This is AI Finance",
+   "Our research snapshot"
+  ],
+  "post": 1.2
+ },
+ {
+  "id": "L05",
+  "section": "01",
+  "text": "Start with the sequence, because it is easy to mix separate developments into one dramatic headline. In late October, the New York Times reported on Alice Huang, a former executive at Singapore-based Megaspeed. The newspaper reported that US intelligence had assessed her as a Chinese intelligence asset and examined her relationship with Jensen Huang. That is attributed reporting about an intelligence assessment. We cannot independently establish the underlying intelligence.",
+  "marks": [
+   "Start with the sequence",
+   "In late October",
+   "The newspaper reported",
+   "That is attributed",
+   "We cannot independently"
+  ]
+ },
+ {
+  "id": "L06",
+  "section": "01",
+  "text": "On November eighth, Jensen published a message to Nvidia employees. One sentence was unambiguous: “I was unfaithful to my wife.” His public email did not name the other person.",
+  "marks": [
+   "On November eighth",
+   "One sentence",
+   "I was unfaithful",
+   "His public email"
+  ]
+ },
+ {
+  "id": "L07",
+  "section": "01",
+  "text": "The board separately announced an independent investigation, overseen by independent directors with outside counsel. It said it had no reason to believe that national security or company secrets had been compromised, and expressed confidence in Jensen and the leadership team.",
+  "marks": [
+   "The board separately",
+   "overseen by",
+   "It said it had no reason",
+   "and expressed confidence"
+  ]
+ },
+ {
+  "id": "L08",
+  "section": "01",
+  "text": "Keep those distinctions in view. An admission about personal conduct does not establish every allegation surrounding it. Equally, a board expressing confidence does not mean its investigation is finished. China's foreign ministry has rejected the espionage allegations as groundless. That denial belongs in the account too.",
+  "marks": [
+   "Keep those distinctions",
+   "An admission about",
+   "Equally, a board",
+   "China's foreign ministry",
+   "That denial belongs"
+  ],
+  "post": 0.8
+ },
+ {
+  "id": "L09",
+  "section": "02",
+  "text": "Why does this become a stock-market story? Here is our analysis. First, leadership. A founder can be central to customer relationships, product direction and investor confidence. Uncertainty around that person can create uncertainty around the company, even before there is evidence that customers have changed their orders. That is leadership concentration risk. It does not mean Jensen is leaving. The board's published position supports his leadership. But investors can still ask how decisions, responsibilities and continuity would work if circumstances changed.",
+  "marks": [
+   "Why does this",
+   "Here is our analysis",
+   "First, leadership",
+   "A founder can be",
+   "Uncertainty around",
+   "That is leadership concentration",
+   "It does not mean",
+   "The board's published",
+   "But investors can still"
+  ]
+ },
+ {
+  "id": "L10",
+  "section": "02",
+  "text": "Second, policy. Nvidia sits inside a highly sensitive debate about access to advanced computing. If lawmakers respond with tighter export rules, security requirements or closer scrutiny of customers, the consequences could extend beyond one individual. That is a possible channel of impact, not a new restriction we are announcing. A political demand, a proposed law and an enacted rule are different things.",
+  "marks": [
+   "Second, policy",
+   "Nvidia sits inside",
+   "If lawmakers respond",
+   "That is a possible channel",
+   "A political demand"
+  ]
+ },
+ {
+  "id": "L11",
+  "section": "02",
+  "text": "Third, governance and legal process. Reuters reports that shareholders filed a proposed class action on Monday, alleging misleading disclosures. Those accusations have not been established by a court. The filing adds another process to follow; it does not tell us what the eventual outcome will be.",
+  "marks": [
+   "Third, governance",
+   "Reuters reports",
+   "Those accusations",
+   "The filing adds"
+  ]
+ },
+ {
+  "id": "L12",
+  "section": "03",
+  "text": "At the November ninth regular-session close, Nvidia was a hundred and seventy-eight dollars and sixty-seven cents, down four point two seven percent. Reuters put the day's market-value decline at approximately a hundred and ninety billion dollars. That is a change in the market's valuation of the shares. It is not a hundred and ninety billion dollars disappearing from Nvidia's cash balance.",
+  "marks": [
+   "At the November ninth",
+   "a hundred and seventy-eight",
+   "down four point",
+   "Reuters put",
+   "That is a change",
+   "It is not a hundred"
+  ]
+ },
+ {
+  "id": "L13",
+  "section": "03",
+  "text": "And the lawsuit was filed after the close. It cannot explain trading that had already happened earlier that day. Be careful with the wider decline as well. This story developed against existing concerns about AI spending. We should not assign every earlier price move to one cause simply because a compelling headline arrived later.",
+  "marks": [
+   "And the lawsuit",
+   "It cannot explain",
+   "Be careful with",
+   "This story developed",
+   "We should not assign"
+  ]
+ },
+ {
+  "id": "L14",
+  "section": "03",
+  "text": "The price tells you what investors paid. It does not, by itself, tell you whether the next price is higher or lower, or whether the business offers good value.",
+  "marks": [
+   "The price tells you",
+   "It does not, by itself",
+   "or whether the business"
+  ],
+  "post": 0.8
+ },
+ {
+  "id": "L15",
+  "section": "04",
+  "text": "So put the headlines beside the financial evidence. In its latest reported quarter, fiscal twenty twenty-seven's second quarter, Nvidia recorded ninety-six point two billion dollars in revenue. Eighty-nine billion of that came from data centres. Its reported gross margin was seventy-five percent. Those figures describe the quarter already reported in August. They are not this month's earnings.",
+  "marks": [
+   "So put the headlines",
+   "In its latest reported quarter",
+   "ninety-six point two",
+   "Eighty-nine billion",
+   "Its reported gross margin",
+   "Those figures describe",
+   "They are not this month"
+  ]
+ },
+ {
+  "id": "L16",
+  "section": "04",
+  "text": "For the third quarter, management guided to a hundred and eight billion dollars of revenue, plus or minus two percent. Its gross-margin outlook was seventy-four percent, plus or minus half a percentage point. The revenue outlook assumed no China data-centre compute revenue.",
+  "marks": [
+   "For the third quarter",
+   "a hundred and eight billion",
+   "Its gross-margin outlook",
+   "The revenue outlook assumed"
+  ]
+ },
+ {
+  "id": "L17",
+  "section": "04",
+  "text": "That last point matters: do not casually add a large China contribution to a forecast that explicitly excludes it. But excluding those sales does not remove every possible political, customer or reputational risk. These are company expectations. On November seventeenth, investors get to compare them with results and hear the next outlook.",
+  "marks": [
+   "That last point matters",
+   "But excluding those sales",
+   "These are company expectations",
+   "On November seventeenth"
+  ]
+ },
+ {
+  "id": "L18",
+  "section": "05",
+  "text": "The results are scheduled for around nine twenty in the evening UK time, with the earnings call at ten. For the business, ask whether revenue met guidance, whether margins held up, and what management says about future demand and deliveries. Listen for evidence of changed customer behaviour, rather than assuming either resilience or cancellations.",
+  "marks": [
+   "The results are scheduled",
+   "with the earnings call",
+   "For the business",
+   "whether margins held up",
+   "and what management says",
+   "Listen for evidence"
+  ]
+ },
+ {
+  "id": "L19",
+  "section": "05",
+  "text": "Then there is November eighteenth. Three House committee chairs requested a closed-door briefing, with a response or alternative date requested by November eleventh. A requested appearance is not the same as confirmed attendance. Their questions concern security and the reported relationships. Those are different from whether a quarterly sales figure beats expectations.",
+  "marks": [
+   "Then there is November",
+   "Three House committee",
+   "with a response",
+   "A requested appearance",
+   "Their questions concern",
+   "Those are different"
+  ]
+ },
+ {
+  "id": "L20",
+  "section": "05",
+  "text": "A strong earnings report could support confidence in demand. It would not complete the board's investigation, settle the lawsuit or answer every congressional question.",
+  "marks": [
+   "A strong earnings report",
+   "It would not complete",
+   "settle the lawsuit",
+   "or answer every"
+  ]
+ },
+ {
+  "id": "L21",
+  "section": "05",
+  "text": "Trump has also said the FBI is looking into the matter, and described Jensen telling him he did not know the woman was a spy. That is Trump's account of a private conversation. We should not present it as independent FBI confirmation, or a finding about what Jensen knew.",
+  "marks": [
+   "Trump has also said",
+   "and described Jensen",
+   "That is Trump's account",
+   "We should not present",
+   "or a finding"
+  ],
+  "post": 0.6
+ },
+ {
+  "id": "L22",
+  "section": "06",
+  "text": "Think in scenarios, not promises. In a constructive scenario, the investigation provides credible clarity, leadership remains stable, and the operating results support continuing customer demand. That could reduce uncertainty. It would not guarantee an immediate share-price recovery.",
+  "marks": [
+   "Think in scenarios",
+   "In a constructive scenario",
+   "the investigation provides",
+   "leadership remains stable",
+   "and the operating results",
+   "That could reduce",
+   "It would not guarantee"
+  ]
+ },
+ {
+  "id": "L23",
+  "section": "06",
+  "text": "In a middle scenario, demand holds up while the investigation and political scrutiny continue. A strong business can still trade under a cloud of uncertainty for a long time.",
+  "marks": [
+   "In a middle scenario",
+   "A strong business"
+  ]
+ },
+ {
+  "id": "L24",
+  "section": "06",
+  "text": "In an adverse scenario, new findings materially change the governance picture, policy becomes more restrictive, or operating guidance weakens. Any of those would require a fresh assessment. None should be stated as an event that has already occurred. We are not assigning probabilities or inventing price targets. We are identifying the evidence that would make each scenario more plausible.",
+  "marks": [
+   "In an adverse scenario",
+   "new findings",
+   "policy becomes",
+   "or operating guidance",
+   "Any of those",
+   "None should be",
+   "We are not assigning",
+   "We are identifying"
+  ],
+  "post": 0.8
+ },
+ {
+  "id": "L25",
+  "section": "07",
+  "text": "Before making a decision, ask four questions. What has actually been confirmed since my last review? Has the earnings outlook changed? Has a political proposal become an enforceable rule? And is my exposure small enough that I can handle an uncertain outcome?",
+  "marks": [
+   "Before making a decision",
+   "What has actually",
+   "Has the earnings outlook",
+   "Has a political proposal",
+   "And is my exposure"
+  ]
+ },
+ {
+  "id": "L26",
+  "section": "07",
+  "text": "Right now, the verified story is an admission, an open investigation and growing scrutiny, alongside a very large operating business awaiting its next results. Treat the allegations seriously. Keep their attribution intact. And judge the business using evidence as it arrives.",
+  "marks": [
+   "Right now",
+   "an admission",
+   "an open investigation",
+   "and growing scrutiny",
+   "alongside a very large",
+   "Treat the allegations",
+   "Keep their attribution",
+   "And judge the business"
+  ]
+ },
+ {
+  "id": "L27",
+  "section": "07",
+  "text": "Follow AI Finance Toolkit for more clear explanations of the companies behind the headlines. This is educational commentary, not a personal recommendation to buy or sell.",
+  "marks": [
+   "Follow AI Finance",
+   "This is educational"
+  ],
+  "post": 8.0
+ }
+]

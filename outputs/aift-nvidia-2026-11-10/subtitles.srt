@@ -1,0 +1,682 @@
+1
+00:00:00,500 --> 00:00:06,523
+Nvidia lost around a hundred and ninety
+billion dollars of market value on Monday.
+
+2
+00:00:06,563 --> 00:00:11,710
+But the question investors are asking
+goes beyond the price of a chip.
+
+3
+00:00:12,600 --> 00:00:15,417
+Its founder and chief
+executive, Jensen Huang,
+
+4
+00:00:15,457 --> 00:00:18,025
+has admitted being unfaithful to his wife.
+
+5
+00:00:18,065 --> 00:00:22,420
+Nvidia's board has opened an independent
+investigation following reports of a
+
+6
+00:00:22,460 --> 00:00:24,817
+foreign intelligence effort targeting him.
+
+7
+00:00:24,857 --> 00:00:26,727
+And Washington wants answers.
+
+8
+00:00:27,617 --> 00:00:31,569
+There are two dates to watch:
+earnings on November seventeenth,
+
+9
+00:00:31,609 --> 00:00:35,434
+and a congressional briefing
+requested for the following day.
+
+10
+00:00:35,474 --> 00:00:37,577
+They test very different things.
+
+11
+00:00:38,467 --> 00:00:43,891
+By the end of this video, you'll know
+what is confirmed, what remains alleged,
+
+12
+00:00:43,931 --> 00:00:47,464
+and what could actually
+change the investment case.
+
+13
+00:00:47,504 --> 00:00:49,615
+This is AI Finance Toolkit.
+
+14
+00:00:49,655 --> 00:00:53,427
+Our research snapshot is the
+morning of November tenth.
+
+15
+00:00:57,367 --> 00:00:58,809
+Start with the sequence,
+
+16
+00:00:58,849 --> 00:01:03,440
+because it is easy to mix separate
+developments into one dramatic headline.
+
+17
+00:01:03,480 --> 00:01:07,204
+In late October, the New York
+Times reported on Alice Huang,
+
+18
+00:01:07,244 --> 00:01:10,215
+a former executive at
+Singapore-based Megaspeed.
+
+19
+00:01:10,255 --> 00:01:14,494
+The newspaper reported that US
+intelligence had assessed her as a Chinese
+
+20
+00:01:14,534 --> 00:01:18,421
+intelligence asset and examined
+her relationship with Jensen Huang.
+
+21
+00:01:18,461 --> 00:01:22,276
+That is attributed reporting
+about an intelligence assessment.
+
+22
+00:01:22,316 --> 00:01:26,077
+We cannot independently establish
+the underlying intelligence.
+
+23
+00:01:26,967 --> 00:01:31,480
+On November eighth, Jensen published
+a message to Nvidia employees.
+
+24
+00:01:31,520 --> 00:01:35,858
+One sentence was unambiguous:
+“I was unfaithful to my wife.”
+
+25
+00:01:35,898 --> 00:01:39,010
+His public email did not
+name the other person.
+
+26
+00:01:39,900 --> 00:01:43,591
+The board separately announced
+an independent investigation,
+
+27
+00:01:43,631 --> 00:01:47,011
+overseen by independent
+directors with outside counsel.
+
+28
+00:01:47,051 --> 00:01:50,526
+It said it had no reason to
+believe that national security
+
+29
+00:01:50,566 --> 00:01:55,072
+or company secrets had been compromised,
+and expressed confidence in Jensen
+
+30
+00:01:55,112 --> 00:01:56,527
+and the leadership team.
+
+31
+00:01:57,417 --> 00:01:59,500
+Keep those distinctions in view.
+
+32
+00:01:59,540 --> 00:02:04,368
+An admission about personal conduct does
+not establish every allegation surrounding
+
+33
+00:02:04,408 --> 00:02:04,808
+it.
+
+34
+00:02:04,584 --> 00:02:09,535
+Equally, a board expressing confidence does
+not mean its investigation is finished.
+
+35
+00:02:09,575 --> 00:02:14,101
+China's foreign ministry has rejected
+the espionage allegations as groundless.
+
+36
+00:02:14,141 --> 00:02:16,543
+That denial belongs in the account too.
+
+37
+00:02:20,083 --> 00:02:22,672
+Why does this become a stock-market story?
+
+38
+00:02:22,712 --> 00:02:24,196
+Here is our analysis.
+
+39
+00:02:24,236 --> 00:02:25,721
+First, leadership.
+
+40
+00:02:25,761 --> 00:02:29,816
+A founder can be central to customer
+relationships, product direction
+
+41
+00:02:29,856 --> 00:02:31,241
+and investor confidence.
+
+42
+00:02:31,281 --> 00:02:35,398
+Uncertainty around that person can
+create uncertainty around the company,
+
+43
+00:02:35,438 --> 00:02:39,442
+even before there is evidence that
+customers have changed their orders.
+
+44
+00:02:39,482 --> 00:02:41,860
+That is leadership concentration risk.
+
+45
+00:02:41,900 --> 00:02:44,120
+It does not mean Jensen is leaving.
+
+46
+00:02:44,160 --> 00:02:47,432
+The board's published position
+supports his leadership.
+
+47
+00:02:47,472 --> 00:02:50,844
+But investors can still ask
+how decisions, responsibilities
+
+48
+00:02:50,884 --> 00:02:53,793
+and continuity would work
+if circumstances changed.
+
+49
+00:02:54,683 --> 00:02:56,110
+Second, policy.
+
+50
+00:02:56,150 --> 00:03:01,073
+Nvidia sits inside a highly sensitive
+debate about access to advanced computing.
+
+51
+00:03:01,113 --> 00:03:05,372
+If lawmakers respond with tighter
+export rules, security requirements
+
+52
+00:03:05,412 --> 00:03:07,366
+or closer scrutiny of customers,
+
+53
+00:03:07,406 --> 00:03:10,606
+the consequences could extend
+beyond one individual.
+
+54
+00:03:10,646 --> 00:03:15,626
+That is a possible channel of impact,
+not a new restriction we are announcing.
+
+55
+00:03:15,666 --> 00:03:20,477
+A political demand, a proposed law and
+an enacted rule are different things.
+
+56
+00:03:21,367 --> 00:03:23,984
+Third, governance and legal process.
+
+57
+00:03:24,024 --> 00:03:28,642
+Reuters reports that shareholders filed
+a proposed class action on Monday,
+
+58
+00:03:28,682 --> 00:03:30,656
+alleging misleading disclosures.
+
+59
+00:03:30,696 --> 00:03:34,218
+Those accusations have not
+been established by a court.
+
+60
+00:03:34,258 --> 00:03:36,963
+The filing adds another process to follow;
+
+61
+00:03:37,003 --> 00:03:40,493
+it does not tell us what the
+eventual outcome will be.
+
+62
+00:03:43,233 --> 00:03:47,455
+At the November ninth regular-session
+close, Nvidia was a hundred
+
+63
+00:03:47,495 --> 00:03:52,896
+and seventy-eight dollars and sixty-seven
+cents, down four point two seven percent.
+
+64
+00:03:52,936 --> 00:03:57,388
+Reuters put the day's market-value
+decline at approximately a hundred
+
+65
+00:03:57,428 --> 00:03:59,146
+and ninety billion dollars.
+
+66
+00:03:59,186 --> 00:04:03,015
+That is a change in the market's
+valuation of the shares.
+
+67
+00:04:03,055 --> 00:04:04,251
+It is not a hundred
+
+68
+00:04:04,291 --> 00:04:08,610
+and ninety billion dollars disappearing
+from Nvidia's cash balance.
+
+69
+00:04:09,500 --> 00:04:12,525
+And the lawsuit was filed after the close.
+
+70
+00:04:12,565 --> 00:04:17,246
+It cannot explain trading that had
+already happened earlier that day.
+
+71
+00:04:17,286 --> 00:04:20,311
+Be careful with the wider decline as well.
+
+72
+00:04:20,351 --> 00:04:24,787
+This story developed against
+existing concerns about AI spending.
+
+73
+00:04:24,827 --> 00:04:29,064
+We should not assign every earlier
+price move to one cause simply
+
+74
+00:04:29,104 --> 00:04:31,960
+because a compelling
+headline arrived later.
+
+75
+00:04:32,850 --> 00:04:35,997
+The price tells you what investors paid.
+
+76
+00:04:36,037 --> 00:04:41,928
+It does not, by itself, tell you whether
+the next price is higher or lower, or
+
+77
+00:04:41,968 --> 00:04:44,893
+whether the business offers good value.
+
+78
+00:04:48,433 --> 00:04:51,549
+So put the headlines beside
+the financial evidence.
+
+79
+00:04:51,589 --> 00:04:56,050
+In its latest reported quarter, fiscal
+twenty twenty-seven's second quarter,
+
+80
+00:04:56,090 --> 00:04:59,840
+Nvidia recorded ninety-six point
+two billion dollars in revenue.
+
+81
+00:04:59,880 --> 00:05:02,996
+Eighty-nine billion of that
+came from data centres.
+
+82
+00:05:03,036 --> 00:05:06,152
+Its reported gross margin
+was seventy-five percent.
+
+83
+00:05:06,192 --> 00:05:09,897
+Those figures describe the quarter
+already reported in August.
+
+84
+00:05:09,937 --> 00:05:12,143
+They are not this month's earnings.
+
+85
+00:05:13,033 --> 00:05:16,435
+For the third quarter,
+management guided to a hundred
+
+86
+00:05:16,475 --> 00:05:20,592
+and eight billion dollars of
+revenue, plus or minus two percent.
+
+87
+00:05:20,632 --> 00:05:24,190
+Its gross-margin outlook was
+seventy-four percent, plus
+
+88
+00:05:24,230 --> 00:05:26,349
+or minus half a percentage point.
+
+89
+00:05:26,389 --> 00:05:30,493
+The revenue outlook assumed no
+China data-centre compute revenue.
+
+90
+00:05:31,383 --> 00:05:32,915
+That last point matters:
+
+91
+00:05:32,955 --> 00:05:37,893
+do not casually add a large China
+contribution to a forecast that explicitly
+
+92
+00:05:37,933 --> 00:05:38,679
+excludes it.
+
+93
+00:05:38,719 --> 00:05:43,536
+But excluding those sales does not remove
+every possible political, customer
+
+94
+00:05:43,576 --> 00:05:44,878
+or reputational risk.
+
+95
+00:05:44,918 --> 00:05:47,096
+These are company expectations.
+
+96
+00:05:47,136 --> 00:05:51,357
+On November seventeenth, investors
+get to compare them with results
+
+97
+00:05:51,397 --> 00:05:53,010
+and hear the next outlook.
+
+98
+00:05:55,750 --> 00:06:00,413
+The results are scheduled for around
+nine twenty in the evening UK time,
+
+99
+00:06:00,453 --> 00:06:02,372
+with the earnings call at ten.
+
+100
+00:06:02,412 --> 00:06:07,402
+For the business, ask whether revenue
+met guidance, whether margins held up,
+
+101
+00:06:07,442 --> 00:06:11,372
+and what management says about
+future demand and deliveries.
+
+102
+00:06:11,412 --> 00:06:14,598
+Listen for evidence of
+changed customer behaviour,
+
+103
+00:06:14,638 --> 00:06:18,210
+rather than assuming either
+resilience or cancellations.
+
+104
+00:06:19,100 --> 00:06:21,280
+Then there is November eighteenth.
+
+105
+00:06:21,320 --> 00:06:25,785
+Three House committee chairs requested
+a closed-door briefing, with a response
+
+106
+00:06:25,825 --> 00:06:28,731
+or alternative date requested
+by November eleventh.
+
+107
+00:06:28,771 --> 00:06:32,483
+A requested appearance is not
+the same as confirmed attendance.
+
+108
+00:06:32,523 --> 00:06:36,288
+Their questions concern security
+and the reported relationships.
+
+109
+00:06:36,328 --> 00:06:40,727
+Those are different from whether a
+quarterly sales figure beats expectations.
+
+110
+00:06:41,617 --> 00:06:45,252
+A strong earnings report could
+support confidence in demand.
+
+111
+00:06:45,292 --> 00:06:49,250
+It would not complete the board's
+investigation, settle the lawsuit
+
+112
+00:06:49,290 --> 00:06:51,577
+or answer every congressional question.
+
+113
+00:06:52,467 --> 00:06:56,560
+Trump has also said the FBI
+is looking into the matter,
+
+114
+00:06:56,600 --> 00:07:01,744
+and described Jensen telling him he
+did not know the woman was a spy.
+
+115
+00:07:01,784 --> 00:07:05,718
+That is Trump's account of
+a private conversation.
+
+116
+00:07:05,758 --> 00:07:10,085
+We should not present it as
+independent FBI confirmation,
+
+117
+00:07:10,125 --> 00:07:12,843
+or a finding about what Jensen knew.
+
+118
+00:07:16,183 --> 00:07:18,237
+Think in scenarios, not promises.
+
+119
+00:07:18,277 --> 00:07:22,072
+In a constructive scenario, the
+investigation provides credible clarity,
+
+120
+00:07:22,112 --> 00:07:23,457
+leadership remains stable,
+
+121
+00:07:23,497 --> 00:07:26,707
+and the operating results support
+continuing customer demand.
+
+122
+00:07:26,747 --> 00:07:28,515
+That could reduce uncertainty.
+
+123
+00:07:28,555 --> 00:07:31,560
+It would not guarantee an
+immediate share-price recovery.
+
+124
+00:07:32,450 --> 00:07:36,767
+In a middle scenario, demand
+holds up while the investigation
+
+125
+00:07:36,807 --> 00:07:39,053
+and political scrutiny continue.
+
+126
+00:07:39,093 --> 00:07:44,493
+A strong business can still trade under
+a cloud of uncertainty for a long time.
+
+127
+00:07:45,383 --> 00:07:50,314
+In an adverse scenario, new findings
+materially change the governance picture,
+
+128
+00:07:50,354 --> 00:07:54,329
+policy becomes more restrictive,
+or operating guidance weakens.
+
+129
+00:07:54,369 --> 00:07:57,381
+Any of those would require
+a fresh assessment.
+
+130
+00:07:57,421 --> 00:08:01,224
+None should be stated as an
+event that has already occurred.
+
+131
+00:08:01,264 --> 00:08:05,180
+We are not assigning probabilities
+or inventing price targets.
+
+132
+00:08:05,220 --> 00:08:09,927
+We are identifying the evidence that
+would make each scenario more plausible.
+
+133
+00:08:13,467 --> 00:08:16,726
+Before making a decision,
+ask four questions.
+
+134
+00:08:16,766 --> 00:08:20,380
+What has actually been
+confirmed since my last review?
+
+135
+00:08:20,420 --> 00:08:22,795
+Has the earnings outlook changed?
+
+136
+00:08:22,835 --> 00:08:26,331
+Has a political proposal
+become an enforceable rule?
+
+137
+00:08:26,371 --> 00:08:30,927
+And is my exposure small enough that
+I can handle an uncertain outcome?
+
+138
+00:08:31,817 --> 00:08:35,937
+Right now, the verified story is an
+admission, an open investigation
+
+139
+00:08:35,977 --> 00:08:37,222
+and growing scrutiny,
+
+140
+00:08:37,262 --> 00:08:41,383
+alongside a very large operating
+business awaiting its next results.
+
+141
+00:08:41,423 --> 00:08:43,566
+Treat the allegations seriously.
+
+142
+00:08:43,606 --> 00:08:45,640
+Keep their attribution intact.
+
+143
+00:08:45,680 --> 00:08:48,860
+And judge the business using
+evidence as it arrives.
+
+144
+00:08:49,750 --> 00:08:54,867
+Follow AI Finance Toolkit for more clear
+explanations of the companies behind the
+
+145
+00:08:54,907 --> 00:08:55,503
+headlines.
+
+146
+00:08:55,543 --> 00:09:00,543
+This is educational commentary, not a
+personal recommendation to buy or sell.
