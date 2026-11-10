@@ -7,7 +7,7 @@ Each line has `marks`: phrases whose spoken start time becomes cue k for the sce
 import json, os, re, subprocess, sys
 HERE = os.path.dirname(os.path.abspath(__file__)); FPS = 30
 script = json.load(open(os.path.join(HERE, 'script.json')))
-PRE, SEC_GAP, GAP, END, WPS = 0.5, 2.7, 0.85, 1.0, 2.4
+PRE, SEC_GAP, GAP, END, WPS = 0.5, 3.4, 1.3, 1.0, 2.4
 words_p = os.path.join(HERE, 'words.json'); WORDS = json.load(open(words_p)) if os.path.exists(words_p) else {}
 def wav_dur(sid):
     p = os.path.join(HERE, '..', 'audio', 'proc', sid + '.wav')
@@ -15,7 +15,24 @@ def wav_dur(sid):
         return float(subprocess.check_output(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p]))
     return None
 norm = lambda w: re.sub(r"[^a-z0-9]", '', w.lower())
+_P = {}
+def pauses(sid):
+    if sid not in _P:
+        p = os.path.join(HERE, '..', 'audio', 'proc', sid + '.wav')
+        r = subprocess.run(['ffmpeg', '-i', p, '-af', 'silencedetect=n=-36dB:d=0.16', '-f', 'null', '-'], capture_output=True, text=True).stderr if os.path.exists(p) else ''
+        _P[sid] = [float(x) for x in re.findall(r'silence_end: ([\d.]+)', r)]
+    return _P[sid]
 def time_at(line, char_off, dur):
+    t = time_at0(line, char_off, dur)
+    if char_off == 0: return 0.0
+    prev = line['text'][:char_off].rstrip()
+    ps = pauses(line['id'])
+    if ps and prev and prev[-1] in '.?!:;,\u201d':          # phrase follows a punctuation pause: snap to the real pause end
+        win = 1.6 if prev[-1] in '.?!\u201d' else 1.0
+        c = min(ps, key=lambda x: abs(x - t))
+        if abs(c - t) <= win: return max(0.0, c - 0.05)
+    return t
+def time_at0(line, char_off, dur):
     """seconds after line start at which the character offset is spoken"""
     sid, text = line['id'], line['text']
     if sid in WORDS and WORDS[sid]:

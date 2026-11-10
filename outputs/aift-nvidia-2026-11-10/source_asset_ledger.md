@@ -47,11 +47,14 @@ Omitted on purpose: the BBC's "FBI declined to comment" line (source not opened)
 | Music bed | Synthesised in code for this film | Owned by AIFT |
 | Photographs, logos, X screenshots, broadcast footage | **None used** | No cleared photo of Jensen Huang was available, so the thumbnail and film use typography instead. The three X posts in the brief were not shown |
 
-## 5. Narration
+## 5. Narration and audio
 
-Voice intended: "joe afrian british 1" on ElevenLabs, model eleven_multilingual_v2, one take per line.
-
-**Not recorded.** All 27 lines were rejected by ElevenLabs on 10 Nov 2026 with: "Your subscription has a failed or incomplete payment. Complete the latest invoice to continue usage." Nothing was generated and nothing was charged. The lines were not re-fired. No other paid voice service was used.
+- Voice: "joe afrian british 1" (existing AIFT voice) on ElevenLabs, model eleven_multilingual_v2, one take per line, 27 lines, about 7,900 credits.
+- A first attempt was rejected by ElevenLabs for an unpaid invoice and cost nothing. The lines were recorded once after Joe confirmed the account was working.
+- Processing: silence trimmed, pace slowed 10% (about 155 words a minute), 48 kHz.
+- Music bed and transition sounds: synthesised in code for this film, ducked under the voice.
+- Final mix measured at −14.1 LUFS integrated, peak −1.0 dBFS.
+- Scene cues are placed from the pauses detected in the voice track, not from a word-by-word transcript. Worth one watch-through to confirm visuals land on the right words.
 
 ## 6. Not included, by instruction
 

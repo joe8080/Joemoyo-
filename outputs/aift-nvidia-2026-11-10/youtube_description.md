@@ -6,15 +6,15 @@ Nvidia closed at $178.67 on Monday 9 November 2026, down 4.27%, and Reuters put 
 
 Research snapshot: morning of 10 November 2026, UK time. Prices and events after that are not reflected.
 
-CHAPTERS (timed to the preview cut; re-time after the final voice track)
+CHAPTERS
 0:00 Why Nvidia fell: two dates to watch
-0:54 What actually happened
-2:17 Why investors care
-3:40 What the price move tells us
-4:46 Check the business
-5:53 Two dates, different questions
-7:13 Three scenarios
-8:11 Investor checklist and sources
+0:50 What actually happened
+2:13 Why investors care
+3:35 What the price move tells us
+4:31 Check the business
+5:39 Two dates, different questions
+6:54 Three scenarios
+7:52 Investor checklist and sources
 
 WHAT IS CONFIRMED, REPORTED AND UNRESOLVED
 • Confirmed: Jensen Huang's staff email of 8 November; the board's independent investigation; the House chairs' request for a closed-door briefing.
