@@ -1,0 +1,257 @@
+{
+ "fs": 48000,
+ "seed": 20261110,
+ "samples": 8462400,
+ "segments": [
+  {
+   "name": "lead_in",
+   "start": 0,
+   "length": 24000
+  },
+  {
+   "name": "sync_start",
+   "start": 24000,
+   "length": 12000,
+   "f0": 1000,
+   "f1": 8000
+  },
+  {
+   "name": "gap",
+   "start": 36000,
+   "length": 24000
+  },
+  {
+   "name": "ref_tone",
+   "start": 60000,
+   "length": 288000,
+   "freq": 1000,
+   "level_db": -18
+  },
+  {
+   "name": "noise_floor",
+   "start": 348000,
+   "length": 96000
+  },
+  {
+   "name": "sweep_36",
+   "start": 444000,
+   "length": 384000,
+   "f0": 20,
+   "f1": 22000,
+   "level_db": -36
+  },
+  {
+   "name": "gap",
+   "start": 828000,
+   "length": 96000
+  },
+  {
+   "name": "sweep_24",
+   "start": 924000,
+   "length": 384000,
+   "f0": 20,
+   "f1": 22000,
+   "level_db": -24
+  },
+  {
+   "name": "gap",
+   "start": 1308000,
+   "length": 96000
+  },
+  {
+   "name": "sweep_12",
+   "start": 1404000,
+   "length": 384000,
+   "f0": 20,
+   "f1": 22000,
+   "level_db": -12
+  },
+  {
+   "name": "gap",
+   "start": 1788000,
+   "length": 96000
+  },
+  {
+   "name": "sweep_3",
+   "start": 1884000,
+   "length": 384000,
+   "f0": 20,
+   "f1": 22000,
+   "level_db": -3
+  },
+  {
+   "name": "gap",
+   "start": 2268000,
+   "length": 96000
+  },
+  {
+   "name": "stairs_1k",
+   "start": 2364000,
+   "length": 1152000,
+   "freq": 1000,
+   "levels_db": [
+    -48,
+    -45,
+    -42,
+    -39,
+    -36,
+    -33,
+    -30,
+    -27,
+    -24,
+    -21,
+    -18,
+    -15,
+    -12,
+    -9,
+    -6,
+    -3
+   ],
+   "step_sec": 1.5
+  },
+  {
+   "name": "gap",
+   "start": 3516000,
+   "length": 144000
+  },
+  {
+   "name": "bursts_1k",
+   "start": 3660000,
+   "length": 1838400,
+   "freq": 1000,
+   "probe_db": -30,
+   "bursts": [
+    {
+     "level_db": -6,
+     "start": 96000,
+     "length": 2400,
+     "recovery": 240000
+    },
+    {
+     "level_db": -6,
+     "start": 338400,
+     "length": 12000,
+     "recovery": 240000
+    },
+    {
+     "level_db": -6,
+     "start": 590400,
+     "length": 48000,
+     "recovery": 240000
+    },
+    {
+     "level_db": -6,
+     "start": 878400,
+     "length": 192000,
+     "recovery": 480000
+    },
+    {
+     "level_db": -15,
+     "start": 1550400,
+     "length": 48000,
+     "recovery": 240000
+    }
+   ]
+  },
+  {
+   "name": "gap",
+   "start": 5498400,
+   "length": 144000
+  },
+  {
+   "name": "sc_tone_100",
+   "start": 5642400,
+   "length": 96000,
+   "freq": 100,
+   "level_db": -9
+  },
+  {
+   "name": "gap",
+   "start": 5738400,
+   "length": 96000
+  },
+  {
+   "name": "sc_tone_300",
+   "start": 5834400,
+   "length": 96000,
+   "freq": 300,
+   "level_db": -9
+  },
+  {
+   "name": "gap",
+   "start": 5930400,
+   "length": 96000
+  },
+  {
+   "name": "sc_tone_1000",
+   "start": 6026400,
+   "length": 96000,
+   "freq": 1000,
+   "level_db": -9
+  },
+  {
+   "name": "gap",
+   "start": 6122400,
+   "length": 96000
+  },
+  {
+   "name": "sc_tone_3000",
+   "start": 6218400,
+   "length": 96000,
+   "freq": 3000,
+   "level_db": -9
+  },
+  {
+   "name": "gap",
+   "start": 6314400,
+   "length": 96000
+  },
+  {
+   "name": "sc_tone_10000",
+   "start": 6410400,
+   "length": 96000,
+   "freq": 10000,
+   "level_db": -9
+  },
+  {
+   "name": "gap",
+   "start": 6506400,
+   "length": 96000
+  },
+  {
+   "name": "imd_60_7k",
+   "start": 6602400,
+   "length": 144000,
+   "f_low": 60,
+   "f_high": 7000,
+   "level_db": -12
+  },
+  {
+   "name": "gap",
+   "start": 6746400,
+   "length": 96000
+  },
+  {
+   "name": "program",
+   "start": 6842400,
+   "length": 1440000
+  },
+  {
+   "name": "gap",
+   "start": 8282400,
+   "length": 144000
+  },
+  {
+   "name": "sync_end",
+   "start": 8426400,
+   "length": 12000,
+   "f0": 8000,
+   "f1": 1000
+  },
+  {
+   "name": "lead_out",
+   "start": 8438400,
+   "length": 24000
+  }
+ ]
+}
