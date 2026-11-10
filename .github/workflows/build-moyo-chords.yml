@@ -1,0 +1,138 @@
+name: Build MOYO Chords plugin
+
+on:
+  push:
+    paths:
+      - "plugins/moyo-chords/**"
+      - ".github/workflows/build-moyo-chords.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows
+            os: windows-latest
+          - name: Mac
+            os: macos-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: plugins/moyo-chords
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DMOYO_BUILD_TESTS=ON
+
+      - name: Build
+        run: cmake --build build --config Release --parallel 4
+
+      - name: Engine tests (theory, generator, voicing, rhythm)
+        run: |
+          exe=$(find build -type f \( -name "MoyoChordsEngineTests" -o -name "MoyoChordsEngineTests.exe" \) | head -1)
+          "$exe"
+
+      - name: Plugin tests (MIDI handling, host sync, state, stuck-note stress test)
+        run: |
+          exe=$(find build -type f \( -name "MoyoChordsPluginTests" -o -name "MoyoChordsPluginTests.exe" \) | head -1)
+          "$exe"
+
+      - name: Host test (load the finished .vst3 like a DAW)
+        env:
+          # The Mac build machine has no screen session to open a plugin window on.
+          MOYO_SKIP_EDITOR: ${{ runner.os == 'macOS' && '1' || '' }}
+        run: |
+          exe=$(find build -type f \( -name "MoyoChordsHostTest" -o -name "MoyoChordsHostTest.exe" \) | head -1)
+          "$exe" "build/MoyoChords_artefacts/Release/VST3/MOYO Chords.vst3"
+
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          mkdir -p dist
+          cp -r "build/MoyoChords_artefacts/Release/VST3/MOYO Chords.vst3" dist/
+          cp INSTALL.txt "installer/Install MOYO Chords.bat" dist/
+          cd dist && 7z a ../MOYO-Chords-Windows.zip ./*
+
+      - name: Test the one-click installer (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          MOYO_UNATTENDED: "1"
+        run: |
+          $dest = Join-Path $env:ProgramW6432 'Common Files\VST3\MOYO Chords.vst3'
+          $dll  = Join-Path $dest 'Contents\x86_64-win\MOYO Chords.vst3'
+
+          # Case 1: installer sitting next to the downloaded zip only (as if just downloaded).
+          $dl = Join-Path $env:RUNNER_TEMP 'fake-downloads'
+          New-Item -ItemType Directory -Force $dl | Out-Null
+          Copy-Item MOYO-Chords-Windows.zip $dl
+          Copy-Item 'installer/Install MOYO Chords.bat' $dl
+          & "$dl\Install MOYO Chords.bat"
+          if ($LASTEXITCODE -ne 0) { throw "installer (zip mode) exited $LASTEXITCODE" }
+          if (-not (Test-Path -LiteralPath $dll)) { throw "plugin not installed (zip mode)" }
+          Write-Host "zip mode OK"
+
+          # Case 2: run from the unzipped folder, replacing the existing install.
+          & "$PWD\dist\Install MOYO Chords.bat"
+          if ($LASTEXITCODE -ne 0) { throw "installer (folder mode) exited $LASTEXITCODE" }
+          if (-not (Test-Path -LiteralPath $dll)) { throw "plugin not installed (folder mode)" }
+          Write-Host "folder mode OK"
+
+          # The installed copy must still load in a host.
+          $hostTest = Get-ChildItem -Recurse build -Filter MoyoChordsHostTest.exe | Select-Object -First 1
+          & $hostTest.FullName $dest
+          if ($LASTEXITCODE -ne 0) { throw "installed plugin failed the host test" }
+
+      - name: Package (Mac)
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p dist
+          cp -R "build/MoyoChords_artefacts/Release/VST3/MOYO Chords.vst3" dist/
+          cp -R "build/MoyoChords_artefacts/Release/AU/MOYO Chords.component" dist/
+          # Ad-hoc signature so Apple Silicon Macs will load it.
+          codesign --force --deep -s - "dist/MOYO Chords.vst3"
+          codesign --force --deep -s - "dist/MOYO Chords.component"
+          cp INSTALL.txt dist/
+          cd dist && ditto -c -k --sequesterRsrc . ../MOYO-Chords-Mac.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MOYO-Chords-${{ matrix.name }}
+          path: plugins/moyo-chords/MOYO-Chords-*.zip
+
+  release:
+    name: Publish download page
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Update the "MOYO Chords (latest)" release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: moyo-chords-latest
+          name: MOYO Chords (latest build)
+          target_commitish: ${{ github.sha }}
+          prerelease: true
+          make_latest: false
+          body: |
+            **MOYO Chords** for FL Studio: chord progression generator and player.
+
+            1. Windows: download `MOYO-Chords-Windows.zip`.
+            2. Mac: download `MOYO-Chords-Mac.zip`.
+            3. Unzip and follow `INSTALL.txt` inside.
+
+            Built from commit ${{ github.sha }}.
+          files: dist/*.zip

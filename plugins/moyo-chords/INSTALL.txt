@@ -1,0 +1,54 @@
+MOYO CHORDS - INSTALL AND QUICK START FOR FL STUDIO
+===================================================
+
+WINDOWS - EASY WAY
+1. Close FL Studio.
+2. Double-click "Install MOYO Chords.bat" and click Yes when Windows asks.
+   (If Windows shows "Windows protected your PC", click More info > Run anyway.)
+3. Open FL Studio > Options > Manage plugins > "Find more plugins".
+
+WINDOWS - MANUAL WAY
+1. Copy the folder "MOYO Chords.vst3" into:
+   C:\Program Files\Common Files\VST3
+2. Open FL Studio > Options > Manage plugins > "Find more plugins".
+
+MAC
+1. Copy "MOYO Chords.vst3" into:  Macintosh HD > Library > Audio > Plug-Ins > VST3
+   Copy "MOYO Chords.component" into:  Macintosh HD > Library > Audio > Plug-Ins > Components
+2. The plugin is not signed with a paid Apple account, so run this once in Terminal:
+   sudo xattr -cr "/Library/Audio/Plug-Ins/VST3/MOYO Chords.vst3" "/Library/Audio/Plug-Ins/Components/MOYO Chords.component"
+3. In FL Studio: Options > Manage plugins > "Find more plugins".
+
+LOADING IT
+MOYO Chords is an instrument. In the Channel Rack click + and choose MOYO Chords.
+
+QUICK START (ONE MINUTE)
+1. Pick KEY, SCALE and STYLE at the top.
+2. Press GENERATE. Press PLAY to hear it. Press GENERATE again until you like it.
+3. Like most of it? LOCK the chords you want to keep, then GENERATE again.
+   ROLL swaps one chord. VARY keeps the chords and changes their flavour.
+4. Drag the DRAG MIDI box into the Piano Roll of the instrument you want.
+   The chords land as notes you can edit.
+
+THREE WAYS TO USE THE CHORDS
+A. Drag MIDI out (simplest, always works)
+   Drag the DRAG MIDI box into a Piano Roll, or press SAVE MIDI.
+
+B. Play chords with one finger
+   Draw notes in MOYO Chords' own Piano Roll, or play a MIDI keyboard.
+   White keys from C5 (FL Studio's name for middle C) play chord 1, 2, 3, 4...
+   The next keys up play the same chords an octave higher.
+   Or choose "Keys: scale notes play chords" and every key plays the right chord for that note.
+
+C. Let it play along
+   Switch on PLAY WITH SONG. The progression plays in time whenever your song plays.
+
+DRIVING ANOTHER INSTRUMENT (optional)
+MOYO Chords also sends its notes out as MIDI, so it can play another VST instrument live:
+1. In MOYO Chords, click the cog (top left of the plugin window) > Settings tab.
+   Set MIDI "Output port" to a number, for example 1.
+2. Open the instrument you want to play, click its cog > Settings tab.
+   Set MIDI "Input port" to the same number.
+3. In MOYO Chords set the sound menu to "No sound".
+This has not been tested in FL Studio yet, and older FL Studio versions had trouble
+with MIDI output from VST3 plugins. If it does not work, use DRAG MIDI instead.
