@@ -1,0 +1,4 @@
+/* Loaded only when JavaScript is switched off: show the menu links inline. */
+.nav__toggle { display: none !important; }
+.nav__links { display: flex !important; overflow-x: auto; }
+.nav__links a { padding: .75rem .6rem; }

@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cut">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https://i.ytimg.com; font-src 'self'; frame-src https://www.youtube-nocookie.com; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Joe — Music, AI and ideas into reality</title>
+  <meta name="description" content="I'm Joe, a music producer and creator in Worthing, UK. Watch me make music, try out AI tools and build things I've always wanted to try. You'll see the process, the results and what I learn.">
+
+  <!-- PRE-LAUNCH: keeps the preview out of search engines. Delete this line on launch day. -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <meta name="theme-color" content="#F5EFE3" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1B1A17" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light">
+
+  <!-- Social sharing. On launch, change og:image to the full address, e.g. https://yourdomain.com/assets/og-image.png -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Joe">
+  <meta property="og:title" content="Joe — Come and see what we can create">
+  <meta property="og:description" content="Music, AI and ideas into reality. Real experiments, practical tools and creative work from Joe's studio in Worthing, UK.">
+  <meta property="og:image" content="assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Joe — Music. AI. Ideas into reality.">
+  <meta property="og:locale" content="en_GB">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Joe — Come and see what we can create">
+  <meta name="twitter:description" content="Music, AI and ideas into reality. Real experiments, practical tools and creative work.">
+  <meta name="twitter:image" content="assets/og-image.png">
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preload" href="assets/fonts/fraunces-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/instrument-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <noscript><link rel="stylesheet" href="noscript.css"></noscript>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- ═══════════ 1. NAVIGATION ═══════════ -->
+  <header class="nav" id="top">
+    <div class="nav__inner">
+      <a class="wordmark" href="#top" aria-label="Joe — back to top">Joe<span class="wordmark__dot" aria-hidden="true"></span></a>
+
+      <nav class="nav__links" id="nav-links" aria-label="Main">
+        <a href="#about">About</a>
+        <a href="#watch">Watch</a>
+        <a href="#projects">Projects</a>
+        <a href="#connect">Connect</a>
+      </nav>
+
+      <a class="btn btn--dark btn--sm nav__cta" data-link="youtubeChannelUrl" data-requires="youtubeChannelUrl" target="_blank" rel="noopener" hidden>
+        <svg class="icon" aria-hidden="true"><use href="#i-youtube"/></svg>
+        <span>Watch<span class="nav__cta-long"> on YouTube</span></span>
+      </a>
+
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+        <span class="nav__toggle-bars" aria-hidden="true"></span>
+        <span class="sr-only">Menu</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ═══════════ 2. HERO ═══════════ -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero__grid">
+        <div class="hero__copy">
+          <p class="eyebrow reveal">
+            <span>Music.</span> <span>AI.</span> <span>Ideas into reality.</span>
+          </p>
+          <h1 class="hero__title reveal" id="hero-title">
+            Come and see what we can <em>create.</em>
+          </h1>
+          <p class="hero__lede reveal">
+            I’m Joe. I’m making music, exploring AI and building things I’ve always wanted to try. I’ll show you the process, the results and what I learn along the way.
+          </p>
+          <div class="hero__actions reveal">
+            <a class="btn btn--gold btn--lg" href="#watch">
+              <svg class="icon" aria-hidden="true"><use href="#i-play"/></svg>
+              <span>Watch my journey</span>
+            </a>
+            <a class="btn btn--ghost btn--lg" href="#about">Meet Joe</a>
+          </div>
+        </div>
+
+        <figure class="hero__media reveal">
+          <!-- Shown when photos.portrait is set in content.js -->
+          <img class="hero__photo" data-requires="photos.portrait" data-optional data-src="photos.portrait" data-alt="photos.portraitAlt" width="1200" height="1500" fetchpriority="high" decoding="async" hidden>
+
+          <!-- Typography-led panel, used until a real photo is supplied -->
+          <div class="studio-card" data-fallback-for="photos.portrait">
+            <div class="studio-card__top">
+              <span class="rec"><span class="rec__dot" aria-hidden="true"></span>Studio</span>
+              <span>Worthing, UK</span>
+            </div>
+            <p class="studio-card__mono" aria-hidden="true">J</p>
+            <div class="meter" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="studio-card__bottom">
+              <span>Make</span><span aria-hidden="true">→</span><span>Test</span><span aria-hidden="true">→</span><span>Share</span>
+            </div>
+          </div>
+          <figcaption class="sr-only">Joe’s studio</figcaption>
+        </figure>
+      </div>
+
+      <div class="ticker" aria-hidden="true">
+        <div class="ticker__track">
+          <span>Beats</span><i>✦</i><span>Recording</span><i>✦</i><span>Hardware</span><i>✦</i><span>AI experiments</span><i>✦</i><span>Building in public</span><i>✦</i><span>What I learn</span><i>✦</i>
+          <span>Beats</span><i>✦</i><span>Recording</span><i>✦</i><span>Hardware</span><i>✦</i><span>AI experiments</span><i>✦</i><span>Building in public</span><i>✦</i><span>What I learn</span><i>✦</i>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ 3. START HERE ═══════════ -->
+    <section class="section start" id="watch" aria-labelledby="start-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="kicker"><span class="kicker__num">01</span> Start here</p>
+          <h2 class="section-title" id="start-title">New here? Start with this.</h2>
+          <p class="section-lede">A quick introduction to me, what I’m working on and what you can expect when you follow along.</p>
+        </div>
+
+        <div class="video reveal" data-requires="introVideoUrl" hidden>
+          <button class="video__facade" type="button" data-video="introVideoUrl">
+            <img class="video__thumb" alt="" width="1280" height="720" loading="lazy" decoding="async">
+            <span class="video__play" aria-hidden="true">
+              <svg class="icon"><use href="#i-play"/></svg>
+            </span>
+            <span class="video__label"><span class="sr-only">Play video: </span><span data-text="introVideoTitle">Meet Joe — start here</span></span>
+          </button>
+        </div>
+
+        <!-- Shown only when there is no intro video yet but the channel exists -->
+        <div class="video-fallback reveal" data-fallback-for="introVideoUrl" data-requires="youtubeChannelUrl" hidden>
+          <p>My intro video is on the way. In the meantime, everything I’ve made so far is on the channel.</p>
+        </div>
+
+        <div class="start__actions reveal" data-requires="youtubeChannelUrl" hidden>
+          <a class="btn btn--dark btn--lg" data-link="youtubeChannelUrl" target="_blank" rel="noopener">
+            <svg class="icon" aria-hidden="true"><use href="#i-youtube"/></svg>
+            <span>Watch on YouTube</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ 4. ABOUT ═══════════ -->
+    <section class="section about" id="about" aria-labelledby="about-title">
+      <div class="wrap about__grid">
+        <div class="about__head reveal">
+          <p class="kicker"><span class="kicker__num">02</span> About</p>
+          <h2 class="section-title" id="about-title">A bit about me.</h2>
+        </div>
+        <div class="about__body reveal">
+          <p class="about__text">
+            I’m Joe, a music producer and creator based in Worthing, UK. I’ve got a studio full of ideas and a growing curiosity about what AI can help us do. Here, you’ll find me trying things, making things and sharing what happens—so you can take something useful into your own projects.
+          </p>
+          <ul class="tags" aria-label="Quick facts">
+            <li>Music producer</li>
+            <li>Creator</li>
+            <li>Worthing, UK</li>
+          </ul>
+        </div>
+        <figure class="about__photo reveal" data-requires="photos.studio" hidden>
+          <img data-src="photos.studio" data-alt="photos.studioAlt" width="1600" height="1000" loading="lazy" decoding="async">
+        </figure>
+      </div>
+    </section>
+
+    <!-- ═══════════ 5 + 6. PROJECTS ═══════════ -->
+    <section class="section find" id="projects" aria-labelledby="find-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="kicker kicker--light"><span class="kicker__num">03</span> Projects</p>
+          <h2 class="section-title" id="find-title">What you’ll find here.</h2>
+        </div>
+
+        <ol class="pillars">
+          <li class="pillar reveal">
+            <div class="pillar__art" aria-hidden="true">
+              <!-- step sequencer -->
+              <svg viewBox="0 0 240 120" class="art-seq">
+                <g class="seq-grid"><rect x="9.5" y="11" width="11" height="20" class="on"/><rect x="23.5" y="11" width="11" height="20"/><rect x="37.5" y="11" width="11" height="20" class="on"/><rect x="51.5" y="11" width="11" height="20"/><rect x="65.5" y="11" width="11" height="20" class="on"/><rect x="79.5" y="11" width="11" height="20"/><rect x="93.5" y="11" width="11" height="20" class="on"/><rect x="107.5" y="11" width="11" height="20" class="on"/><rect x="121.5" y="11" width="11" height="20" class="on"/><rect x="135.5" y="11" width="11" height="20"/><rect x="149.5" y="11" width="11" height="20" class="on"/><rect x="163.5" y="11" width="11" height="20"/><rect x="177.5" y="11" width="11" height="20" class="on"/><rect x="191.5" y="11" width="11" height="20"/><rect x="205.5" y="11" width="11" height="20" class="on"/><rect x="219.5" y="11" width="11" height="20" class="on"/><rect x="9.5" y="37" width="11" height="20"/><rect x="23.5" y="37" width="11" height="20"/><rect x="37.5" y="37" width="11" height="20"/><rect x="51.5" y="37" width="11" height="20" class="on"/><rect x="65.5" y="37" width="11" height="20"/><rect x="79.5" y="37" width="11" height="20"/><rect x="93.5" y="37" width="11" height="20" class="on"/><rect x="107.5" y="37" width="11" height="20"/><rect x="121.5" y="37" width="11" height="20"/><rect x="135.5" y="37" width="11" height="20" class="on"/><rect x="149.5" y="37" width="11" height="20"/><rect x="163.5" y="37" width="11" height="20"/><rect x="177.5" y="37" width="11" height="20"/><rect x="191.5" y="37" width="11" height="20"/><rect x="205.5" y="37" width="11" height="20" class="on"/><rect x="219.5" y="37" width="11" height="20"/><rect x="9.5" y="63" width="11" height="20"/><rect x="23.5" y="63" width="11" height="20"/><rect x="37.5" y="63" width="11" height="20"/><rect x="51.5" y="63" width="11" height="20"/><rect x="65.5" y="63" width="11" height="20" class="on accent"/><rect x="79.5" y="63" width="11" height="20"/><rect x="93.5" y="63" width="11" height="20"/><rect x="107.5" y="63" width="11" height="20"/><rect x="121.5" y="63" width="11" height="20"/><rect x="135.5" y="63" width="11" height="20"/><rect x="149.5" y="63" width="11" height="20"/><rect x="163.5" y="63" width="11" height="20"/><rect x="177.5" y="63" width="11" height="20" class="on accent"/><rect x="191.5" y="63" width="11" height="20"/><rect x="205.5" y="63" width="11" height="20"/><rect x="219.5" y="63" width="11" height="20"/><rect x="9.5" y="89" width="11" height="20" class="on"/><rect x="23.5" y="89" width="11" height="20"/><rect x="37.5" y="89" width="11" height="20"/><rect x="51.5" y="89" width="11" height="20"/><rect x="65.5" y="89" width="11" height="20" class="on"/><rect x="79.5" y="89" width="11" height="20"/><rect x="93.5" y="89" width="11" height="20"/><rect x="107.5" y="89" width="11" height="20"/><rect x="121.5" y="89" width="11" height="20" class="on"/><rect x="135.5" y="89" width="11" height="20"/><rect x="149.5" y="89" width="11" height="20"/><rect x="163.5" y="89" width="11" height="20" class="on"/><rect x="177.5" y="89" width="11" height="20" class="on"/><rect x="191.5" y="89" width="11" height="20"/><rect x="205.5" y="89" width="11" height="20"/><rect x="219.5" y="89" width="11" height="20"/></g>
+                <rect class="playhead" x="8" y="5" width="14" height="110" rx="4"/>
+              </svg>
+            </div>
+            <span class="pillar__num">01</span>
+            <h3 class="pillar__title">Music &amp; the studio</h3>
+            <p>Beats, recording, hardware and the creative process.</p>
+          </li>
+
+          <li class="pillar pillar--lime reveal">
+            <div class="pillar__art" aria-hidden="true">
+              <!-- signal chain: idea → tool → result, with a honest "check" step -->
+              <svg viewBox="0 0 240 120" class="art-chain">
+                <path class="chain-line" d="M24 60 H216"/>
+                <circle cx="36" cy="60" r="14" class="node"/>
+                <rect x="96" y="40" width="48" height="40" rx="10" class="node node--tool"/>
+                <circle cx="204" cy="60" r="14" class="node"/>
+                <path class="pulse" d="M24 60 H216"/>
+                <text x="36" y="104" class="art-label">idea</text>
+                <text x="120" y="104" class="art-label">tool</text>
+                <text x="204" y="104" class="art-label">result</text>
+                <path d="M110 60 l6 6 l12 -12" class="tick"/>
+              </svg>
+            </div>
+            <span class="pillar__num">02</span>
+            <h3 class="pillar__title">AI you can actually use</h3>
+            <p>Practical experiments showing what tools can do, where they help and where they fall short.</p>
+          </li>
+
+          <li class="pillar reveal">
+            <div class="pillar__art" aria-hidden="true">
+              <!-- build timeline: idea → attempt (crossed out) → change → result -->
+              <svg viewBox="0 0 240 120" class="art-build">
+                <path d="M28 70 C 70 70, 70 40, 100 40 S 140 82, 170 70 S 200 46, 214 46" class="build-path"/>
+                <circle cx="28" cy="70" r="8" class="b-dot"/>
+                <g class="b-miss"><circle cx="100" cy="40" r="8" class="b-dot b-dot--x"/><path d="M95 35 l10 10 M105 35 l-10 10"/></g>
+                <circle cx="170" cy="70" r="8" class="b-dot"/>
+                <circle cx="214" cy="46" r="11" class="b-dot b-dot--end"/>
+                <text x="46" y="100" class="art-label">first idea</text>
+                <text x="170" y="100" class="art-label">changes</text>
+              </svg>
+            </div>
+            <span class="pillar__num">03</span>
+            <h3 class="pillar__title">Building in public</h3>
+            <p>Follow projects from the first idea through the attempts, changes and finished result.</p>
+          </li>
+        </ol>
+
+        <!-- 6. CURRENT PROJECT — hidden until real info is added in content.js -->
+        <article class="project reveal" data-requires="currentProject.title currentProject.description" hidden aria-labelledby="project-title">
+          <div class="project__media" data-requires="currentProject.image" hidden>
+            <img data-src="currentProject.image" data-alt="currentProject.imageAlt" width="1600" height="1000" loading="lazy" decoding="async">
+          </div>
+          <div class="project__body">
+            <p class="project__label">
+              <span class="rec__dot" aria-hidden="true"></span>
+              Current project <span class="project__status" data-text="currentProject.status" data-requires="currentProject.status" hidden></span>
+            </p>
+            <h3 class="project__title" id="project-title" data-text="currentProject.title"></h3>
+            <p class="project__desc" data-text="currentProject.description"></p>
+            <a class="btn btn--lime btn--lg" data-link="currentProject.videoUrl" data-requires="currentProject.videoUrl" target="_blank" rel="noopener" hidden>
+              <svg class="icon" aria-hidden="true"><use href="#i-play"/></svg>
+              <span data-text="currentProject.videoLabel">Watch the project video</span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ═══════════ 7. CONNECT ═══════════ -->
+    <section class="section connect" id="connect" aria-labelledby="connect-title">
+      <div class="wrap connect__grid">
+        <div class="reveal">
+          <p class="kicker"><span class="kicker__num">04</span> Connect</p>
+          <h2 class="connect__title" id="connect-title">Got an idea? <em>Let’s talk.</em></h2>
+          <p class="section-lede">If you make things, build useful tools or think we could create something interesting together, I’d love to hear from you.</p>
+        </div>
+
+        <div class="connect__actions reveal">
+          <a class="contact-row" data-link="youtubeChannelUrl" data-requires="youtubeChannelUrl" target="_blank" rel="noopener" hidden>
+            <span class="contact-row__icon"><svg class="icon" aria-hidden="true"><use href="#i-youtube"/></svg></span>
+            <span class="contact-row__text"><strong>YouTube</strong><span>Watch and subscribe</span></span>
+            <svg class="icon contact-row__arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </a>
+          <a class="contact-row" data-mailto="publicContactEmail" data-requires="publicContactEmail" hidden>
+            <span class="contact-row__icon"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg></span>
+            <span class="contact-row__text"><strong>Email me</strong><span data-text="publicContactEmail"></span></span>
+            <svg class="icon contact-row__arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </a>
+          <ul class="socials" aria-label="Elsewhere" hidden></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══════════ 8. FOOTER ═══════════ -->
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <div>
+        <p class="footer__mark">Joe<span class="wordmark__dot" aria-hidden="true"></span></p>
+        <p class="footer__tag">Music, AI and ideas into reality.</p>
+      </div>
+      <nav class="footer__links" aria-label="Footer">
+        <a data-link="youtubeChannelUrl" data-requires="youtubeChannelUrl" target="_blank" rel="noopener" hidden>YouTube</a>
+        <a data-mailto="publicContactEmail" data-requires="publicContactEmail" hidden>Contact</a>
+        <a href="#top">Back to top ↑</a>
+      </nav>
+    </div>
+    <div class="wrap footer__legal">
+      <p>© <span data-year>2026</span> Joe. Made in Worthing, UK.</p>
+    </div>
+  </footer>
+
+  <!-- Icons -->
+  <svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" fill="currentColor"/></symbol>
+    <symbol id="i-youtube" viewBox="0 0 24 24"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8ZM9.75 15.1V8.9L15.5 12l-5.75 3.1Z" fill="currentColor"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h15A1.5 1.5 0 0 1 21 6.5v11a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5v-11Zm1.8.4 7.2 5.6 7.2-5.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </svg>
+
+  <script src="content.js"></script>
+  <script src="site.js" defer></script>
+</body>
+</html>
