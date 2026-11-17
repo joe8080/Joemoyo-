@@ -48,6 +48,6 @@ Joe is a disabled quadruple amputee. Keep his touchpoints to a few taps, numbere
 ## Gotchas
 
 - Remote sandbox cannot reach Wikimedia or Google Drive downloads; npm is reachable. Fonts come from `public/fonts` (Cinzel via `@fontsource/cinzel`).
-- The Drive connector cannot download files over 10 MB. For a film's audio, ask Joe for a share link or a smaller audio-only export.
+- The Drive connector cannot download files over 10 MB. Route that worked for a 22 MB film (Dahomey, 17 Nov 2026): Zapier Google Drive "Retrieve File or Folder by ID" gives a temporary file link; `curl` it inside the Higgsfield sandbox; run the word timings and any cuts there; print the word timings back as text; upload the small audio (MP3, under 10 MB) with `media_upload`; Zapier "Upload File" copies it into Joe's Drive; then the Drive connector can download it here. Nothing is made public. Do not curl Drive or Higgsfield hosts from this container.
 - `GeoMap` takes `k` = map units per screen pixel: 2.1 shows West Africa, 0.25 the Bight of Benin, 0.08 a single town. Pass the same `k` to `Pin` so labels keep their size.
 - Captions sit at the bottom centre; keep scene text out of the lowest 170 px.

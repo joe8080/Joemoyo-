@@ -1,4 +1,4 @@
-# The Ghost Army of Dahomey: code film v2.0 (preview)
+# The Ghost Army of Dahomey: code film v2.0 (preview, with Joe's voice)
 Prepared by Claude, 17 November 2026. **Private. Joe approves any release.** The v1.1 film in Drive is untouched.
 
 ## What this is
@@ -9,10 +9,20 @@ Prepared by Claude, 17 November 2026. **Private. Joe approves any release.** The
 ## Status
 | Item | State |
 |---|---|
-| Pictures | Rendered, 8:30, 1080p30, captions on |
-| Joe's narration | **Not in yet.** The v1.1 film in Drive is 22 MB; the Drive connector stops at 10 MB and this sandbox cannot download from Drive. |
-| Timing | **Estimated** from word counts. It re-times itself to the voice once the audio is in (`data/words.py`, then `data/build_timeline.py dahomey`). |
-| Sound | Placeholder bed only |
+| Pictures | Rendered, 8:21, 1080p30, captions on |
+| Joe's narration | **In.** Taken from the v1.1 film's own soundtrack (voice with its music), so it is the approved voice, word for word. |
+| Cuts made to the audio | Two sentences removed, as the 29 October review asked: "We have gone with the two, and told you about the one." (was at 2:16) and "The museum notes say some were taken from a dead woman soldier." (was at 6:34). 40 ms fades at each join. |
+| Timing | **Real.** Word timings from the voice (`data/dahomey/words.json`, 1,246 words); 1,170 of 1,226 script words matched directly, the rest placed between their neighbours. Every scene, cue and caption follows the voice. |
+| Sound | The v1.1 mix, normalised to -14 LUFS, true peak -1.5 dBTP or lower |
+
+### How the audio got here (17 November 2026)
+The v1.1 review file in Drive is 22 MB and the Drive connector stops at 10 MB. Route used, all through Joe's own connected accounts and with nothing made public:
+1. Zapier (Google Drive) handed the private file to the Higgsfield edit sandbox.
+2. In the sandbox: word timings (faster-whisper small.en), the two sentences cut, audio exported as a 6 MB MP3.
+3. Zapier saved that MP3 into Joe's Drive as `OGX_Dahomey_v1_1_narration_cut_for_code_film.mp3` (private, top level of My Drive).
+4. The Drive connector downloaded it here (under 10 MB), checksum matched.
+
+Limits to know about: the source is the 480p review file, so the audio is 81 kbps AAC re-encoded once to MP3. It is clean for YouTube speech, but the original narration WAVs on the workstation would be better if a final master is wanted. The music under the voice jumps slightly at the two cuts.
 
 ## Fixes from the 29 October release review, built in
 | Review point | What v2.0 does |

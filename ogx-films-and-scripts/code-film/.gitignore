@@ -4,3 +4,4 @@ out/
 stills*/
 render.log
 audio/*/*.wav
+audio/*/*.mp3

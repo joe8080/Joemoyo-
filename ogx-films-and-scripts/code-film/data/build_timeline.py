@@ -13,7 +13,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); FPS = 30
 ep = sys.argv[1]; target = float(sys.argv[2]) if len(sys.argv) > 2 else None
 script = json.load(open(os.path.join(HERE, ep, 'script.json')))
 norm = lambda w: re.sub(r"[^a-z0-9]", "", w.lower().replace("é", "e").replace("à", "a").replace("ç", "c"))
-LEAD, PRE, END, GAP, SEC_GAP, WPS = 0.3, 1.2, 6.0, 0.55, 1.5, 2.9
+LEAD, PRE, END, GAP, SEC_GAP, WPS = 0.3, 1.2, float(os.environ.get("END", 6.0)), 0.55, 1.5, 2.9   # END: seconds held after the last word
 
 toks = []                                   # (line index, word index, display word)
 for i, s in enumerate(script):
