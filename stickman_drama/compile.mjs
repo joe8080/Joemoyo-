@@ -1,7 +1,12 @@
 // Turns an episode script (plain data) into a timed timeline + audio cue list.
 // Everything downstream (drawing, sound) is a pure function of this timeline.
+//
+// `voices` (optional) maps "<speaker>-<nn>" -> { dur, env } for recorded lines. When a line has a
+// voice clip its length drives the beat, the captions and the lip-sync; otherwise the line falls
+// back to timed captions with synthesised speech blips.
 
-const WORD_STEP = 0.2; // seconds between caption words
+const WORD_STEP = 0.2; // seconds between caption words when there is no voice clip
+const LINE_GAP = 0.26; // breath between voiced lines
 
 export function tokens(text) {
   // "*word*" or "*several words*" => highlighted
@@ -14,11 +19,13 @@ export function tokens(text) {
   });
 }
 
-export function compile(ep) {
+export function compile(ep, voices = {}) {
   const cast = ep.cast || {};
   const shots = [];
   const cues = [];
   const music = [{ t: 0, mood: ep.mood || 'tense' }];
+  const lineNo = {};
+  let voiced = false;
   let t = 0;
 
   ep.shots.forEach((src, index) => {
@@ -33,25 +40,42 @@ export function compile(ep) {
       const beat = { ...b, start: cur };
       if (b.say) {
         const think = b.who === 'think';
-        beat.words = tokens(b.say);
-        const step = think ? WORD_STEP * 0.85 : WORD_STEP;
-        let wt = cur + 0.06;
-        beat.wt = beat.words.map((w) => {
-          const at = wt;
-          wt += step + (/[.,!?…—]$/.test(w.t) ? 0.13 : 0);
-          return at;
-        });
-        beat.talkDur = wt - cur + 0.1;
+        const speaker = think ? 'you' : b.who;
+        lineNo[speaker] = (lineNo[speaker] || 0) + 1;
+        const key = `${speaker}-${String(lineNo[speaker]).padStart(2, '0')}`;
+        const clip = voices[key];
         const actor = cast[b.who];
+        beat.words = tokens(b.say);
         beat.tag = actor ? actor.name : think ? 'YOU · THINKING' : 'YOU';
         beat.col = actor ? actor.accent : think ? '#38bdf8' : '#22c55e';
-        const voice = actor ? actor.voice || 220 : think ? 330 : 440;
-        beat.wt.forEach((at, i) => cues.push({ t: at, kind: 'blip', voice, soft: think, n: i }));
-        beat.end = cur + (b.dur ?? Math.max(1.4, beat.talkDur + 0.85));
+        beat.vt = cur + (b.pre || 0); // moment the line starts being spoken
+
+        if (clip) {
+          voiced = true;
+          // spread the words across the clip in proportion to their length
+          const total = beat.words.reduce((s, w) => s + w.t.length + 1.5, 0);
+          let acc = 0;
+          beat.wt = beat.words.map((w) => { const at = beat.vt + 0.03 + (acc / total) * Math.max(0.2, clip.dur - 0.25); acc += w.t.length + 1.5; return at; });
+          if (clip.words && clip.words.length === beat.words.length) { beat.wt = clip.words.map((x) => beat.vt + x); beat.exact = true; }
+          beat.talkDur = clip.dur;
+          beat.env = clip.env;
+          cues.push({ t: beat.vt, kind: 'voice', key, think });
+          beat.end = beat.vt + clip.dur + (b.gap ?? LINE_GAP);
+        } else {
+          const step = think ? WORD_STEP * 0.85 : WORD_STEP;
+          let wt = beat.vt + 0.06;
+          beat.wt = beat.words.map((w) => { const at = wt; wt += step + (/[.,!?…—]$/.test(w.t) ? 0.13 : 0); return at; });
+          beat.talkDur = wt - beat.vt + 0.1;
+          const voice = actor ? actor.voice || 220 : think ? 330 : 440;
+          beat.wt.forEach((at, i) => cues.push({ t: at, kind: 'blip', voice, soft: think, n: i }));
+          beat.end = beat.vt + (b.dur ?? Math.max(1.4, beat.talkDur + 0.85));
+        }
       } else {
         beat.end = cur + (b.wait ?? b.dur ?? 1);
       }
-      if (b.fx === 'boom') cues.push({ t: cur, kind: 'boom' });
+      const fxAt = beat.vt ?? cur;
+      beat.fxAt = fxAt;
+      if (b.fx === 'boom') cues.push({ t: fxAt, kind: 'boom' });
       if (b.fx === 'heart') cues.push({ t: cur, kind: 'heart', dur: beat.end - cur });
       if (b.sfx) cues.push({ t: cur + (b.sfxAt || 0), kind: b.sfx, dur: beat.end - cur });
       if (b.music) music.push({ t: cur, mood: b.music });
@@ -102,6 +126,16 @@ export function compile(ep) {
     shots.push(shot);
   });
 
+  // "follow" sticker held over the final shot so the video ends on the punchline, not a slide
+  let outro = null;
+  if (ep.outro && shots.length) {
+    const last = shots.at(-1);
+    outro = { text: ep.outro, footer: ep.footer || '', start: last.end - 0.1, dur: 1.9 };
+    last.end += outro.dur;
+    t = last.end;
+    cues.push({ t: outro.start, kind: 'pop' });
+  }
+
   const segs = music
     .sort((a, b) => a.t - b.t)
     .map((m, i, arr) => ({ mood: m.mood, t0: m.t, t1: i + 1 < arr.length ? arr[i + 1].t : t }))
@@ -111,6 +145,8 @@ export function compile(ep) {
     meta: {
       id: ep.id,
       cast,
+      voiced,
+      outro,
       pov: tokens(ep.pov),
       disclaimer: ep.disclaimer || 'A made-up story for entertainment & education.',
     },

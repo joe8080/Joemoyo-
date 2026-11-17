@@ -74,7 +74,9 @@
       if (b.who === name && (b.emo || b.pose)) ch = b;
       if (b.react && b.react[name]) ch = b.react[name];
       if (ch) { prev = cur; cur = { emo: ch.emo || cur.emo, pose: ch.pose || cur.pose, at: b.start }; }
-      talk = b.who === name && t < b.start + (b.talkDur || 0);
+      const vt = b.vt ?? b.start;
+      talk = b.who === name && t >= vt && t < vt + (b.talkDur || 0);
+      if (talk) talk = b.env ? (b.env[Math.floor((t - vt) * 30)] || 0) : 0.2 + 0.8 * Math.abs(Math.sin(t * 17));
     }
     return { cur, prev, k: ease((t - cur.at) / 0.2), talk };
   }
@@ -84,7 +86,7 @@
     const emo = st.cur.emo, since = t - st.cur.at;
     const jump = emo === 'shock' ? -h * 0.035 * Math.sin(clamp(since / 0.32) * Math.PI) : 0;
     const fy = (a.py ?? (a.y || 0.7) * H) + jump;
-    const bob = Math.sin(t * 2.1 + (a.seed || 0) * 2) * h * 0.004 + (st.talk ? Math.sin(t * 15) * h * 0.004 : 0);
+    const bob = Math.sin(t * 2.1 + (a.seed || 0) * 2) * h * 0.004 + (st.talk ? -st.talk * h * 0.008 : 0);
     const droop = emo === 'sad' || emo === 'cry' ? h * 0.014 : 0;
     const hy = fy - h + r + bob + droop, neck = hy + r, sh = neck + h * 0.035, hip = neck + h * 0.34;
     const tremble = emo === 'angry' || emo === 'nervous' ? Math.sin(t * 46) * h * 0.003 : 0;
@@ -144,10 +146,10 @@
     }
 
     const my = cy + r * 0.45, mw = r * 0.5;
-    const open = talk ? Math.abs(Math.sin(t * 17)) : 0;
+    const open = talk || 0;
     ctx.strokeStyle = INK; ctx.lineWidth = lw; ctx.fillStyle = INK;
-    if (talk && open > 0.35 && E.mouth !== 'o') {
-      ctx.beginPath(); ctx.ellipse(cx, my, mw * 0.55, mw * (0.18 + open * 0.42), 0, 0, 7); ctx.fill();
+    if (open > 0.14 && E.mouth !== 'o') {
+      ctx.beginPath(); ctx.ellipse(cx, my + mw * 0.05, mw * (0.5 + open * 0.12), mw * (0.12 + open * 0.6), 0, 0, 7); ctx.fill();
     } else if (E.mouth === 'flat') line(cx - mw * 0.7, my, cx + mw * 0.7, my, lw, INK, 0.5);
     else if (E.mouth === 'smile') { ctx.beginPath(); ctx.moveTo(cx - mw, my - mw * 0.2); ctx.quadraticCurveTo(cx, my + mw * 0.8, cx + mw, my - mw * 0.2); ctx.stroke(); }
     else if (E.mouth === 'frown') { ctx.beginPath(); ctx.moveTo(cx - mw * 0.9, my + mw * 0.35); ctx.quadraticCurveTo(cx, my - mw * 0.5, cx + mw * 0.9, my + mw * 0.35); ctx.stroke(); }
@@ -246,9 +248,9 @@
     return { mode, since: t - at };
   }
   function povArm(x1, y1, x2, y2, r = 64) { line(x1, y1, x2, y2, 46, INK, 3); circ(x2, y2, r, 13, '#fff'); }
-  function povHands(mode, since, t, shot) {
+  function povHands(mode, since, t, shot, amp = 0) {
     if (mode === 'none') return;
-    const by = Math.sin(t * 1.7) * 9, sh = mode === 'fists' ? Math.sin(t * 44) * 6 : 0;
+    const by = Math.sin(t * 1.7) * 9 - amp * 34, sh = mode === 'fists' ? Math.sin(t * 44) * 6 : 0;
     const lift = mode === 'fists' ? -90 : 0;
     if (mode === 'phone') {
       ctx.save(); ctx.translate(540, 1790 + by); ctx.rotate(-0.06 + Math.sin(t * 1.1) * 0.01);
@@ -451,9 +453,12 @@
   function camera(beat, t) {
     let s = 1, ox = 0, oy = 0;
     if (beat) {
-      const bt = t - beat.start, bd = beat.end - beat.start;
+      const bt = t - (beat.fxAt ?? beat.start), bd = beat.end - (beat.fxAt ?? beat.start);
+      if (bt < 0) return { s: 1.025, ox: Math.sin(t * 0.7) * 7, oy: Math.sin(t * 0.93 + 1) * 6 };
       if (beat.fx === 'boom') { const d = Math.exp(-bt * 6); ox = Math.sin(t * 90) * 28 * d; oy = Math.cos(t * 77) * 28 * d; s = 1 + 0.17 * easeOut(bt / 0.1) + 0.03 * (bt / bd); }
       if (beat.fx === 'zoom') s = 1 + 0.16 * ease(bt / bd);
+      // gentle punch-in whenever the other person speaks, so a long two-hander still has rhythm
+      if (!beat.fx && beat.words && beat.who !== 'you' && beat.who !== 'think') s = 1 + 0.07 * easeOut(bt / 0.18);
       if (beat.fx === 'shake') { ox = Math.sin(t * 80) * 9; oy = Math.cos(t * 63) * 9; s = 1.05; }
     }
     ox += Math.sin(t * 0.7) * 7; oy += Math.sin(t * 0.93 + 1) * 6; s *= 1.025;
@@ -462,8 +467,8 @@
 
   function impact(beat, t) {
     if (!beat || beat.fx !== 'boom') return;
-    const bt = t - beat.start, a = Math.exp(-bt * 5);
-    if (a < 0.03) return;
+    const bt = t - (beat.fxAt ?? beat.start), a = Math.exp(-bt * 5);
+    if (bt < 0 || a < 0.03) return;
     ctx.fillStyle = `rgba(255,255,255,${0.55 * Math.exp(-bt * 16)})`; ctx.fillRect(0, 0, W, H);
     ctx.fillStyle = `rgba(21,21,21,${0.75 * a})`;
     const cx = W / 2, cy = 700, fr = Math.floor(t * 15);
@@ -486,13 +491,13 @@
   }
 
   function caption(beat, t, cy) {
-    if (!beat || !beat.words) return;
+    if (!beat || !beat.words || t < (beat.vt ?? beat.start)) return;
     const think = beat.who === 'think', px = think ? 60 : 68, lh = think ? 78 : 88;
     font(px, 900, think);
     const lines = wrap(beat.words, 930);
     let y = cy - ((lines.length - 1) * lh) / 2;
     // speaker tag
-    const ts = backOut((t - beat.start) / 0.18);
+    const ts = backOut((t - (beat.vt ?? beat.start)) / 0.18);
     ctx.save(); ctx.translate(W / 2, y - lh / 2 - 44); ctx.scale(ts, ts); font(30, 900);
     const tw = ctx.measureText(beat.tag).width + 44;
     ctx.fillStyle = '#111'; rr(-tw / 2 + 4, -24 + 5, tw, 52, 26); ctx.fill();
@@ -557,6 +562,18 @@
     ctx.globalAlpha = 1;
   }
 
+  function outro(t) {
+    const o = window.TL.meta.outro;
+    if (!o || t < o.start) return;
+    const k = t - o.start, s = backOut(k / 0.28) * (1 + 0.035 * Math.sin(t * 7));
+    ctx.save(); ctx.translate(W / 2, 1470); ctx.scale(s, s); ctx.rotate(-0.02); font(60, 900);
+    const w = ctx.measureText(o.text).width + 170;
+    ctx.fillStyle = '#111'; rr(-w / 2 + 10, -58 + 12, w, 116, 58); ctx.fill();
+    ctx.fillStyle = YEL; rr(-w / 2, -58, w, 116, 58); ctx.fill();
+    text(o.text + '  →', 0, 4, '#111', 'center', 'middle'); ctx.restore();
+    if (o.footer) { ctx.globalAlpha = clamp((k - 0.2) / 0.3); font(30, 700); ctx.lineWidth = 8; ctx.strokeStyle = 'rgba(255,255,255,.85)'; ctx.lineJoin = 'round'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.strokeText(o.footer, W / 2, 1590); text(o.footer, W / 2, 1590, '#222', 'center', 'middle'); ctx.globalAlpha = 1; }
+  }
+
   let grainPat = null;
   function grain() {
     if (!grainPat) {
@@ -584,12 +601,15 @@
       if (shot.type === 'scene') {
         background(shot.bg, t);
         for (const [name, def] of Object.entries(shot.actors || {})) figure(def, actorState(shot, name, def, t), t);
-        const hs = handState(shot, t); povHands(hs.mode, hs.since, t, shot);
+        const hs = handState(shot, t);
+        const mine = beat && beat.who === 'you' && beat.env && t >= beat.vt ? beat.env[Math.floor((t - beat.vt) * 30)] || 0 : 0;
+        povHands(hs.mode, hs.since, t, shot, mine);
       } else drawPhone(shot, t);
       ctx.restore();
       impact(beat, t);
       banner(t);
       caption(beat, t, shot.type === 'phone' ? 1610 : 1470);
+      outro(t);
     }
     if (shot.index > 0 && lt < 0.1) { ctx.fillStyle = `rgba(255,255,255,${0.5 * (1 - lt / 0.1)})`; ctx.fillRect(0, 0, W, H); }
     grain();

@@ -1,55 +1,45 @@
-// Episode 2 — The Crash
+// Episode 2 — The Crash (comedy sketch, voiced)
 export default {
   id: 'ep2-the-crash',
-  pov: 'POV: you open your portfolio during a *market crash*',
-  mood: 'tense',
-  disclaimer: 'A made-up story for entertainment & education. Not financial advice. Capital at risk.',
-  cast: { gary: { name: 'GARY', look: 'glasses', accent: '#2563eb', voice: 165 } },
+  pov: 'POV: your coworker becomes a *stock market expert*',
+  mood: 'comedy',
+  outro: 'Follow for more',
+  footer: 'Comedy sketch. Not financial advice.',
+  cast: { gary: { name: 'GARY', look: 'glasses', accent: '#2563eb' } },
   shots: [
     {
       type: 'phone', app: 'portfolio', heart: true,
-      data: { base: 20800, from: 20800, to: 15988, at: 0.3, dur: 2.0, trend: 'crash' },
-      beats: [{ wait: 1.2 }, { who: 'think', say: 'Down *£4,812*. In *one* week.', fx: 'boom' }],
+      data: { base: 20800, from: 20800, to: 15988, at: 0.2, dur: 1.8, trend: 'crash' },
+      beats: [{ who: 'gary', say: 'Oof. Is that your *portfolio*? That is a *lot* of red.', pre: 0.5 }],
     },
     {
       type: 'scene', bg: 'office', hands: 'phone', actors: { gary: { emo: 'smug', pose: 'crossed' } },
       beats: [
-        { who: 'gary', say: 'Told you. I sold *everything* yesterday.', emo: 'smug', pose: 'crossed' },
-        { who: 'gary', say: 'It’s going to *zero*. Get out while you still can!', emo: 'laugh', pose: 'pointUp', fx: 'zoom' },
-        { who: 'think', say: 'Maybe he’s right… maybe I should *sell*.', react: { gary: { emo: 'smug', pose: 'hips' } } },
+        { who: 'you', say: 'It’s a *long-term* investment, Gary.' },
+        { who: 'gary', say: 'Sell *everything*. I sold yesterday. I’m basically a *genius*.', emo: 'smug', pose: 'pointUp' },
+        { who: 'you', say: 'Didn’t you buy at the *top* last month?', react: { gary: { emo: 'awkward', pose: 'idle' } } },
+        { who: 'gary', say: 'I bought at *a* top. Not *the* top.', emo: 'angry', pose: 'crossed', pre: 0.4 },
+        { who: 'you', say: 'So where’s your money *now*?' },
+        { who: 'gary', say: 'Somewhere *safe*. My brother-in-law has a *coin*. It’s got a *dog* on it.', emo: 'happy', pose: 'open', fx: 'zoom' },
+        { who: 'think', say: 'He’s put his pension in a *dog*.', react: { gary: { emo: 'smug', pose: 'hips' } } },
+        { who: 'gary', say: 'You’ll see. Two years from now, I’ll be on a *yacht*.', emo: 'laugh', pose: 'cheer' },
       ],
     },
-    {
-      type: 'phone', app: 'portfolio', heart: true,
-      data: { base: 20800, from: 15988, to: 15988, trend: 'crash', sell: { at: 0.5, dur: 3.6 } },
-      beats: [
-        { wait: 0.6 },
-        { who: 'think', say: 'One tap. And the pain *stops*.', fx: 'shake' },
-        { who: 'think', say: '…but so does the *plan*.' },
-      ],
-    },
-    { type: 'card', text: 'THE PLAN', sub: 'Invest every month. 10+ years. Don’t panic.', dur: 2.6, music: 'none' },
-    {
-      type: 'scene', bg: 'office', hands: 'idle', actors: { gary: { emo: 'smug', pose: 'hips' } }, music: 'tense',
-      beats: [
-        { who: 'you', say: 'I’m not selling. I’m sticking to the *plan*.', react: { gary: { emo: 'neutral', pose: 'idle' } } },
-        { who: 'gary', say: 'You’re *insane*.', emo: 'shock', pose: 'handsUp', fx: 'boom' },
-      ],
-    },
-    { type: 'card', text: '2 YEARS LATER', dur: 1.5, music: 'win' },
+    { type: 'card', text: '2 YEARS LATER', dur: 1.3 },
     {
       type: 'phone', app: 'portfolio',
-      data: { base: 20800, from: 15988, to: 31460, at: 0.3, dur: 2.2, trend: 'moon', time: '08:30' },
-      beats: [{ wait: 1.6 }, { who: 'think', say: 'Same funds. Same plan. *Up 51%*.', sfx: 'cash' }],
+      data: { base: 20800, from: 15988, to: 31460, at: 0.2, dur: 1.8, trend: 'moon', time: '08:30' },
+      beats: [{ who: 'think', say: 'I did absolutely *nothing*. For two years.', pre: 0.9, sfx: 'cash', sfxAt: 0.3 }],
     },
     {
       type: 'scene', bg: 'office', hands: 'phone', actors: { gary: { emo: 'nervous', pose: 'think' } },
       beats: [
-        { who: 'gary', say: 'So… is it *safe* to get back in now?', emo: 'nervous', pose: 'think' },
-        { who: 'you', say: 'You’ve been in *cash* this whole time?!', react: { gary: { emo: 'awkward', pose: 'idle' } } },
-        { who: 'gary', say: '…I was waiting for the *dip*.', emo: 'cry', pose: 'facepalm', fx: 'boom' },
+        { who: 'gary', say: 'So, hypothetically. Is it too late to get back *in*?', emo: 'nervous', pose: 'think' },
+        { who: 'you', say: 'How’s the *dog coin*?', react: { gary: { emo: 'awkward', pose: 'idle' } } },
+        { who: 'gary', say: '…The dog *ran away*.', emo: 'sad', pose: 'idle', pre: 0.5 },
+        { who: 'you', say: 'And the *yacht*?' },
+        { who: 'gary', say: '…It’s more of a *bus pass*.', emo: 'cry', pose: 'facepalm', pre: 0.6, fx: 'boom' },
       ],
     },
-    { type: 'end', lesson: 'Time *in* the market beats *timing* the market.', cta: 'Follow for more' },
   ],
 };
