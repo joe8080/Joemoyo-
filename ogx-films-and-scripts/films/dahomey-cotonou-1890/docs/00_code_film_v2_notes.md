@@ -12,6 +12,13 @@ Joe's verdict on v2.0: "where's the images... that doesn't look like documentary
 - **Caption fixes so the text matches the voice:** S26 now reads "At half past nine", S31 names Toffa.
 - Code: `code-film/remotion/src/episodes/dahomey/doc.tsx` (scene table `DOC`). Picture list and sources: `code-film/data/dahomey/images.json`. Pictures are not in git; the zips are in Joe's Drive.
 
+### QC on the v2.1 render (17 November 2026)
+- Files (local, not in git): `code-film/remotion/out/OGX_Dahomey_Cotonou_1890_code_v2_1_1080p.mp4` (581 MB, 1920x1080, 30 fps, 15,039 frames, 8:21) and `..._v2_1_preview_720p.mp4` (92 MB). The v2.0 diagram cut is kept beside them as `OGX_Dahomey_code_v2_0_diagram_cut_1080p.mp4`.
+- Loudness: -14.1 LUFS integrated, true peak -2.2 dBFS.
+- 28 frames pulled across the whole film: pictures, lower thirds, counters, stamps, framed prints and captions all present; captions match the spoken word at the frames checked.
+- Rendered in 13 chunks of 40 seconds and joined; frames either side of two joins checked, no freeze or jump.
+- Two render failures on the way, both fixed: the browser crashed on the 7,063 x 10,080 map scan (now 1,920 px wide, scrolled with a transform), and the disk filled (chunks are now re-encoded as they finish; `render_chunks.sh`).
+
 ### Still to check (Joe or MJ)
 1. Three names are spoken but not in the captions, because I could not confirm the spelling from the audio: the officer leading the 4th company's section at first light (S25), the commander of the three-gun battery (S26), and the author of the April 1890 report (S45). The captions say "a section", "the three-gun battery" and "a French report".
 2. Archive rights follow the contact sheet in the Drive folder ("granted" items only). dh07 and dh17 are marked pending there and are not used.
