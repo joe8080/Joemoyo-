@@ -1,52 +1,455 @@
 [
- {"id":"S01","sec":"open","text":"Cotonou. The night of the third of March, 1890.","cues":["night"]},
- {"id":"S02","sec":"open","text":"A storm had battered the coast since seven in the evening, and the garrison of 359 men waited in the dark.","cues":["garrison"]},
- {"id":"S03","sec":"open","text":"Most of them were African: Senegalese tirailleurs in red chéchias, and Gabonese who had landed from the cruiser Sané two weeks before. A few were European marine officers and artillerymen.","cues":["Senegalese","cruiser","A few"]},
- {"id":"S04","sec":"open","text":"They had been warned by spies that an attack was coming, and they watched in thirds through the night.","cues":["watched"]},
- {"id":"S05","sec":"open","text":"Just before five, the lieutenant commanding the north bastion, a young marine officer named Compérat, heard something moving in the brush. He warned his men in a whisper.","cues":["lieutenant","heard","He warned"]},
- {"id":"S06","sec":"open","text":"Then bells sounded. Ten paces from the wall, an army rose.","cues":["Ten paces","an army"]},
- {"id":"S07","sec":"open","text":"At its head marched the women soldiers of the Kingdom of Dahomey. So what can we actually prove about them?","cues":["women soldiers","So what"]},
- {"id":"S08","sec":"title","text":"This is the story of the women soldiers of Dahomey.","cues":[]},
- {"id":"S09","sec":"who","text":"Their name was Agojie. It means, roughly, make way for me, or I fall on you. They were a standing corps, probably formed as a palace guard in the 1720s.","cues":["It means","They were","probably"]},
- {"id":"S10","sec":"who","text":"By the late 1870s, they numbered about 1,500.","cues":["they numbered"]},
- {"id":"S11","sec":"who","text":"Their training was brutal: climbing thorn hedges, wrestling, survival exercises lasting days.","cues":["climbing","wrestling","survival"]},
- {"id":"S12","sec":"who","text":"They fought with muskets, blades and amulets. Their colonel wore silver horns in her hair.","cues":["blades","amulets","Their colonel"]},
- {"id":"S13","sec":"who","text":"And according to Governor Bayol, who saw the march, the women led the column. Behind them came the fetish priests and the royal guards. And behind them, the regular troops.","cues":["the women led","Behind them","royal guards","regular troops"]},
- {"id":"S14","sec":"battle","text":"The attack came in two columns.","cues":["two columns"]},
- {"id":"S15","sec":"battle","text":"The left, with the women's regiment and perhaps a thousand men, struck the half-built fort on the lagoon.","cues":["struck"]},
- {"id":"S16","sec":"battle","text":"The right was delayed by the thick woods and came later. Nothing came at the centre.","cues":["Nothing"]},
- {"id":"S17","sec":"battle","text":"Several thousand attackers in total. The sources disagree, and no reliable count exists.","cues":["The sources"]},
- {"id":"S18","sec":"battle","text":"One eyewitness disagrees. Foà, the trader who was there, writes that the corps of women soldiers was not engaged that day, and that a few took part of their own accord, while the rest watched from a short distance.","cues":["Foà","not engaged","a few","the rest"]},
- {"id":"S19","sec":"battle","text":"Two accounts put the women at the head of the column. One says they watched it.","cues":["One says"],"cut_after":"We have gone with the two, and told you about the one."},
- {"id":"S20","sec":"battle","text":"The women and men pulled apart the stakes of the palisade and fired through the gaps. Some climbed onto the stockade and were bayoneted, and their bodies fell inside.","cues":["fired through","Some climbed"]},
- {"id":"S21","sec":"battle","text":"Compérat was hit three times. One bullet broke his shoulder blade. He stayed in command and told his sergeant: Stay at your post. I am wounded too, and I am not complaining.","cues":["One bullet","He stayed","Stay at","I am wounded"]},
- {"id":"S22","sec":"battle","text":"On the left, the Agor post was briefly abandoned. Lemoyne's second company of Senegalese tirailleurs arrived, fired at ten paces, and charged with the bayonet.","cues":["second company","charged"]},
- {"id":"S23","sec":"battle","text":"Some attackers lay flat to let the charge pass over them, then rose and fired into the tirailleurs' backs. One section turned about and killed them.","cues":["then rose","One section"]},
- {"id":"S24","sec":"battle","text":"The cruiser Sané shelled the woods from offshore.","cues":["shelled"]},
- {"id":"S25","sec":"battle","text":"At first light, a section of the fourth company reached the fort with bayonets fixed, and the fighting became hand-to-hand. By dawn, Oudard's section opened oblique fire from the centre, and Pansier's company completed the rout on the right.","cues":["reached the fort","By dawn","completed"]},
- {"id":"S26","sec":"battle","text":"At 6:15, the Dahomeans attacked again and were stopped at two hundred metres. They re-formed several times, and each time the shells from the Sané and the three-gun battery broke them up. At nine, the last attackers left. The fight had lasted about four and a half hours.","cues":["stopped","They re-formed","At nine","The fight"]},
- {"id":"S27","sec":"cost","text":"Eight French soldiers were killed, including two artillerymen hit at their guns. Twenty-six were wounded. Inside the lines, 127 of the dead were counted. Seven of them were women. Another count exists that gives a different number, but the figure from the primary account is 127.","cues":["Twenty-six","Inside the lines","Seven","Another count"]},
- {"id":"S28","sec":"cost","text":"According to Governor Bayol, a young woman soldier he had watched carry out her first execution in Abomey was at Cotonou. He had called her Nanisca.","cues":["a young woman","He had called"]},
- {"id":"S29","sec":"cost","text":"He saw his chief gunner beheaded by a fighter he recognised as her, and later found her body, with a curved cleaver tied to her wrist and a carbine covered in cowries.","cues":["later found","a carbine"]},
- {"id":"S30","sec":"cost","text":"Another French account says a woman soldier killed the gunner, but does not name her. The identification is Bayol's alone.","cues":["but does not","The identification"]},
- {"id":"S31","sec":"cost","text":"The dead were beheaded, and their heads were sent in sealed sacks to the French-allied king of Porto-Novo.","cues":["sent"]},
- {"id":"S32","sec":"cost","text":"Foà, a trader who was present, records that two or three women were found alive on the field. One was very young and gravely wounded. None survived.","cues":["two or three","One was","None"]},
- {"id":"S33","sec":"origin","text":"Who were these women, and what had prepared them for this?","cues":[]},
- {"id":"S34","sec":"origin","text":"A standing army of women, probably formed as a palace guard in the 1720s. About 600 from the 1760s to the 1840s. King Gezo expanded the corps to as many as 6,000. By the late 1870s, perhaps 1,500.","cues":["About 600","King Gezo","By the late"]},
- {"id":"S35","sec":"origin","text":"Their training included climbing thorn hedges, wrestling, and survival exercises of up to nine days. They were not a legend invented by a newspaper or a film. They were a real institution, with a structure, a chain of command, and a history longer than most European armies.","cues":["They were not","They were a real","a chain","a history"]},
- {"id":"S36","sec":"images","text":"But the images we often see are not the battle.","cues":["not the battle"]},
- {"id":"S37","sec":"images","text":"An illustration from 1851 by Frederick Forbes shows a woman soldier named Seh-Dong-Hong-Beh. In the full plate, she is holding a severed head. It is not a photograph, and it is not 1890.","cues":["In the full","It is not","and it is"]},
- {"id":"S38","sec":"images","text":"A postcard from the early 1900s by François-Edmond Fortier is captioned as showing survivors. It is not the battle either.","cues":["It is not"]},
- {"id":"S39","sec":"images","text":"French newspapers printed dramatic images within days of the fighting. One showed women holding severed heads, but Le Petit Parisien gave them horned helmets that a historian has called certainly fictitious.","cues":["One showed","but Le Petit","certainly"]},
- {"id":"S40","sec":"images","text":"And some of the photographs circulating online show performers at European exhibitions, not soldiers at war.","cues":["not soldiers"]},
- {"id":"S41","sec":"objects","text":"Objects taken from the battlefield on the fourth of March are in the Musée du quai Branly in Paris today. Nine items, including necklaces, amulets, a whistle and a horn, were gifted by a trader named Foà in 1891.","cues":["Nine items","were gifted"]},
- {"id":"S42","sec":"objects","text":"Some contain human remains and are subject to restitution claims by Benin.","cues":["restitution"],"cut_before":"The museum notes say some were taken from a dead woman soldier."},
- {"id":"S43","sec":"after","text":"The war did not end at Cotonou. In October 1890, a deal was reached at Ouidah. Dahomey respected the Porto-Novo protectorate and accepted the French occupation of Cotonou for an annual payment. But the French parliament never ratified it.","cues":["In October","Dahomey respected","But the French"]},
- {"id":"S44","sec":"after","text":"In 1892, France returned with a larger force under General Dodds and the Foreign Legion, and a new rifle appeared. The famous dawn attack at Dogba, with soldiers running from tents, belongs to that war, not to this one.","cues":["The famous","belongs"]},
- {"id":"S45","sec":"after","text":"The women soldiers fought again. And a French report from April 1890 already called them harpies drunk on trade gin. That is a colonial voice, not a fact.","cues":["harpies","That is"]},
- {"id":"S46","sec":"after","text":"The Kingdom of Dahomey resisted French expansion. It also practised slavery. Both are true.","cues":["It also","Both"]},
- {"id":"S47","sec":"after","text":"The last known veteran, Nawi, died in 1979. She had been a soldier in a kingdom that no longer existed, fighting a war she did not start.","cues":["She had been"]},
- {"id":"S48","sec":"close","text":"The images we have are not the battle. The battle is in the words of the people who were there. An officer who stayed at his post with a broken shoulder. Governor Bayol, who watched a young woman he called Nanisca. A trader who picked up objects from the dead and sent them to a museum.","cues":["The battle is","An officer","Governor Bayol","A trader"]},
- {"id":"S49","sec":"close","text":"The women soldiers of Dahomey were real. Getting the date and the evidence right is how we tell their story without inventing it.","cues":["Getting"]},
- {"id":"S50","sec":"close","text":"This has been OrigineX Human Archives. If you think this record is worth keeping, please subscribe.","cues":["If you"]}
+ {
+  "id": "S01",
+  "sec": "open",
+  "text": "Cotonou. The night of the third of March, 1890.",
+  "cues": [
+   "night"
+  ]
+ },
+ {
+  "id": "S02",
+  "sec": "open",
+  "text": "A storm had battered the coast since seven in the evening, and the garrison of 359 men waited in the dark.",
+  "cues": [
+   "garrison"
+  ]
+ },
+ {
+  "id": "S03",
+  "sec": "open",
+  "text": "Most of them were African: Senegalese tirailleurs in red chéchias, and Gabonese who had landed from the cruiser Sané two weeks before. A few were European marine officers and artillerymen.",
+  "cues": [
+   "Senegalese",
+   "cruiser",
+   "A few"
+  ]
+ },
+ {
+  "id": "S04",
+  "sec": "open",
+  "text": "They had been warned by spies that an attack was coming, and they watched in thirds through the night.",
+  "cues": [
+   "watched"
+  ]
+ },
+ {
+  "id": "S05",
+  "sec": "open",
+  "text": "Just before five, the lieutenant commanding the north bastion, a young marine officer named Compérat, heard something moving in the brush. He warned his men in a whisper.",
+  "cues": [
+   "lieutenant",
+   "heard",
+   "He warned"
+  ]
+ },
+ {
+  "id": "S06",
+  "sec": "open",
+  "text": "Then bells sounded. Ten paces from the wall, an army rose.",
+  "cues": [
+   "Ten paces",
+   "an army"
+  ]
+ },
+ {
+  "id": "S07",
+  "sec": "open",
+  "text": "At its head marched the women soldiers of the Kingdom of Dahomey. So what can we actually prove about them?",
+  "cues": [
+   "women soldiers",
+   "So what"
+  ]
+ },
+ {
+  "id": "S08",
+  "sec": "title",
+  "text": "This is the story of the women soldiers of Dahomey.",
+  "cues": []
+ },
+ {
+  "id": "S09",
+  "sec": "who",
+  "text": "Their name was Agojie. It means, roughly, make way for me, or I fall on you. They were a standing corps, probably formed as a palace guard in the 1720s.",
+  "cues": [
+   "It means",
+   "They were",
+   "probably"
+  ]
+ },
+ {
+  "id": "S10",
+  "sec": "who",
+  "text": "By the late 1870s, they numbered about 1,500.",
+  "cues": [
+   "they numbered"
+  ]
+ },
+ {
+  "id": "S11",
+  "sec": "who",
+  "text": "Their training was brutal: climbing thorn hedges, wrestling, survival exercises lasting days.",
+  "cues": [
+   "climbing",
+   "wrestling",
+   "survival"
+  ]
+ },
+ {
+  "id": "S12",
+  "sec": "who",
+  "text": "They fought with muskets, blades and amulets. Their colonel wore silver horns in her hair.",
+  "cues": [
+   "blades",
+   "amulets",
+   "Their colonel"
+  ]
+ },
+ {
+  "id": "S13",
+  "sec": "who",
+  "text": "And according to Governor Bayol, who saw the march, the women led the column. Behind them came the fetish priests and the royal guards. And behind them, the regular troops.",
+  "cues": [
+   "the women led",
+   "Behind them",
+   "royal guards",
+   "regular troops"
+  ]
+ },
+ {
+  "id": "S14",
+  "sec": "battle",
+  "text": "The attack came in two columns.",
+  "cues": [
+   "two columns"
+  ]
+ },
+ {
+  "id": "S15",
+  "sec": "battle",
+  "text": "The left, with the women's regiment and perhaps a thousand men, struck the half-built fort on the lagoon.",
+  "cues": [
+   "struck"
+  ]
+ },
+ {
+  "id": "S16",
+  "sec": "battle",
+  "text": "The right was delayed by the thick woods and came later. Nothing came at the centre.",
+  "cues": [
+   "Nothing"
+  ]
+ },
+ {
+  "id": "S17",
+  "sec": "battle",
+  "text": "Several thousand attackers in total. The sources disagree, and no reliable count exists.",
+  "cues": [
+   "The sources"
+  ]
+ },
+ {
+  "id": "S18",
+  "sec": "battle",
+  "text": "One eyewitness disagrees. Foà, the trader who was there, writes that the corps of women soldiers was not engaged that day, and that a few took part of their own accord, while the rest watched from a short distance.",
+  "cues": [
+   "Foà",
+   "not engaged",
+   "a few",
+   "the rest"
+  ]
+ },
+ {
+  "id": "S19",
+  "sec": "battle",
+  "text": "Two accounts put the women at the head of the column. One says they watched it.",
+  "cues": [
+   "One says"
+  ],
+  "cut_after": "We have gone with the two, and told you about the one."
+ },
+ {
+  "id": "S20",
+  "sec": "battle",
+  "text": "The women and men pulled apart the stakes of the palisade and fired through the gaps. Some climbed onto the stockade and were bayoneted, and their bodies fell inside.",
+  "cues": [
+   "fired through",
+   "Some climbed"
+  ]
+ },
+ {
+  "id": "S21",
+  "sec": "battle",
+  "text": "Compérat was hit three times. One bullet broke his shoulder blade. He stayed in command and told his sergeant: Stay at your post. I am wounded too, and I am not complaining.",
+  "cues": [
+   "One bullet",
+   "He stayed",
+   "Stay at",
+   "I am wounded"
+  ]
+ },
+ {
+  "id": "S22",
+  "sec": "battle",
+  "text": "On the left, the Agor post was briefly abandoned. Lemoyne's second company of Senegalese tirailleurs arrived, fired at ten paces, and charged with the bayonet.",
+  "cues": [
+   "second company",
+   "charged"
+  ]
+ },
+ {
+  "id": "S23",
+  "sec": "battle",
+  "text": "Some attackers lay flat to let the charge pass over them, then rose and fired into the tirailleurs' backs. One section turned about and killed them.",
+  "cues": [
+   "then rose",
+   "One section"
+  ]
+ },
+ {
+  "id": "S24",
+  "sec": "battle",
+  "text": "The cruiser Sané shelled the woods from offshore.",
+  "cues": [
+   "shelled"
+  ]
+ },
+ {
+  "id": "S25",
+  "sec": "battle",
+  "text": "At first light, a section of the fourth company reached the fort with bayonets fixed, and the fighting became hand-to-hand. By dawn, Oudard's section opened oblique fire from the centre, and Pansier's company completed the rout on the right.",
+  "cues": [
+   "reached the fort",
+   "By dawn",
+   "completed"
+  ]
+ },
+ {
+  "id": "S26",
+  "sec": "battle",
+  "text": "At 6:15, the Dahomeans attacked again and were stopped at two hundred metres. They re-formed several times, and each time the shells from the Sané and the three-gun battery broke them up. At half past nine, the last attackers left. The fight had lasted about four and a half hours.",
+  "cues": [
+   "stopped",
+   "They re-formed",
+   "At half",
+   "The fight"
+  ]
+ },
+ {
+  "id": "S27",
+  "sec": "cost",
+  "text": "Eight French soldiers were killed, including two artillerymen hit at their guns. Twenty-six were wounded. Inside the lines, 127 of the dead were counted. Seven of them were women. Another count exists that gives a different number, but the figure from the primary account is 127.",
+  "cues": [
+   "Twenty-six",
+   "Inside the lines",
+   "Seven",
+   "Another count"
+  ]
+ },
+ {
+  "id": "S28",
+  "sec": "cost",
+  "text": "According to Governor Bayol, a young woman soldier he had watched carry out her first execution in Abomey was at Cotonou. He had called her Nanisca.",
+  "cues": [
+   "a young woman",
+   "He had called"
+  ]
+ },
+ {
+  "id": "S29",
+  "sec": "cost",
+  "text": "He saw his chief gunner beheaded by a fighter he recognised as her, and later found her body, with a curved cleaver tied to her wrist and a carbine covered in cowries.",
+  "cues": [
+   "later found",
+   "a carbine"
+  ]
+ },
+ {
+  "id": "S30",
+  "sec": "cost",
+  "text": "Another French account says a woman soldier killed the gunner, but does not name her. The identification is Bayol's alone.",
+  "cues": [
+   "but does not",
+   "The identification"
+  ]
+ },
+ {
+  "id": "S31",
+  "sec": "cost",
+  "text": "The dead were beheaded, and their heads were sent in sealed sacks to Toffa, the French-allied king of Porto-Novo.",
+  "cues": [
+   "sent"
+  ]
+ },
+ {
+  "id": "S32",
+  "sec": "cost",
+  "text": "Foà, a trader who was present, records that two or three women were found alive on the field. One was very young and gravely wounded. None survived.",
+  "cues": [
+   "two or three",
+   "One was",
+   "None"
+  ]
+ },
+ {
+  "id": "S33",
+  "sec": "origin",
+  "text": "Who were these women, and what had prepared them for this?",
+  "cues": []
+ },
+ {
+  "id": "S34",
+  "sec": "origin",
+  "text": "A standing army of women, probably formed as a palace guard in the 1720s. About 600 from the 1760s to the 1840s. King Gezo expanded the corps to as many as 6,000. By the late 1870s, perhaps 1,500.",
+  "cues": [
+   "About 600",
+   "King Gezo",
+   "By the late"
+  ]
+ },
+ {
+  "id": "S35",
+  "sec": "origin",
+  "text": "Their training included climbing thorn hedges, wrestling, and survival exercises of up to nine days. They were not a legend invented by a newspaper or a film. They were a real institution, with a structure, a chain of command, and a history longer than most European armies.",
+  "cues": [
+   "They were not",
+   "They were a real",
+   "a chain",
+   "a history"
+  ]
+ },
+ {
+  "id": "S36",
+  "sec": "images",
+  "text": "But the images we often see are not the battle.",
+  "cues": [
+   "not the battle"
+  ]
+ },
+ {
+  "id": "S37",
+  "sec": "images",
+  "text": "An illustration from 1851 by Frederick Forbes shows a woman soldier named Seh-Dong-Hong-Beh. In the full plate, she is holding a severed head. It is not a photograph, and it is not 1890.",
+  "cues": [
+   "In the full",
+   "It is not",
+   "and it is"
+  ]
+ },
+ {
+  "id": "S38",
+  "sec": "images",
+  "text": "A postcard from the early 1900s by François-Edmond Fortier is captioned as showing survivors. It is not the battle either.",
+  "cues": [
+   "It is not"
+  ]
+ },
+ {
+  "id": "S39",
+  "sec": "images",
+  "text": "French newspapers printed dramatic images within days of the fighting. One showed women holding severed heads, but Le Petit Parisien gave them horned helmets that a historian has called certainly fictitious.",
+  "cues": [
+   "One showed",
+   "but Le Petit",
+   "certainly"
+  ]
+ },
+ {
+  "id": "S40",
+  "sec": "images",
+  "text": "And some of the photographs circulating online show performers at European exhibitions, not soldiers at war.",
+  "cues": [
+   "not soldiers"
+  ]
+ },
+ {
+  "id": "S41",
+  "sec": "objects",
+  "text": "Objects taken from the battlefield on the fourth of March are in the Musée du quai Branly in Paris today. Nine items, including necklaces, amulets, a whistle and a horn, were gifted by a trader named Foà in 1891.",
+  "cues": [
+   "Nine items",
+   "were gifted"
+  ]
+ },
+ {
+  "id": "S42",
+  "sec": "objects",
+  "text": "Some contain human remains and are subject to restitution claims by Benin.",
+  "cues": [
+   "restitution"
+  ],
+  "cut_before": "The museum notes say some were taken from a dead woman soldier."
+ },
+ {
+  "id": "S43",
+  "sec": "after",
+  "text": "The war did not end at Cotonou. In October 1890, a deal was reached at Ouidah. Dahomey respected the Porto-Novo protectorate and accepted the French occupation of Cotonou for an annual payment. But the French parliament never ratified it.",
+  "cues": [
+   "In October",
+   "Dahomey respected",
+   "But the French"
+  ]
+ },
+ {
+  "id": "S44",
+  "sec": "after",
+  "text": "In 1892, France returned with a larger force under General Dodds and the Foreign Legion, and a new rifle appeared. The famous dawn attack at Dogba, with soldiers running from tents, belongs to that war, not to this one.",
+  "cues": [
+   "The famous",
+   "belongs"
+  ]
+ },
+ {
+  "id": "S45",
+  "sec": "after",
+  "text": "The women soldiers fought again. And a French report from April 1890 already called them harpies drunk on trade gin. That is a colonial voice, not a fact.",
+  "cues": [
+   "harpies",
+   "That is"
+  ]
+ },
+ {
+  "id": "S46",
+  "sec": "after",
+  "text": "The Kingdom of Dahomey resisted French expansion. It also practised slavery. Both are true.",
+  "cues": [
+   "It also",
+   "Both"
+  ]
+ },
+ {
+  "id": "S47",
+  "sec": "after",
+  "text": "The last known veteran, Nawi, died in 1979. She had been a soldier in a kingdom that no longer existed, fighting a war she did not start.",
+  "cues": [
+   "She had been"
+  ]
+ },
+ {
+  "id": "S48",
+  "sec": "close",
+  "text": "The images we have are not the battle. The battle is in the words of the people who were there. An officer who stayed at his post with a broken shoulder. Governor Bayol, who watched a young woman he called Nanisca. A trader who picked up objects from the dead and sent them to a museum.",
+  "cues": [
+   "The battle is",
+   "An officer",
+   "Governor Bayol",
+   "A trader"
+  ]
+ },
+ {
+  "id": "S49",
+  "sec": "close",
+  "text": "The women soldiers of Dahomey were real. Getting the date and the evidence right is how we tell their story without inventing it.",
+  "cues": [
+   "Getting"
+  ]
+ },
+ {
+  "id": "S50",
+  "sec": "close",
+  "text": "This has been OrigineX Human Archives. If you think this record is worth keeping, please subscribe.",
+  "cues": [
+   "If you"
+  ]
+ }
 ]

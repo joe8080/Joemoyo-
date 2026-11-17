@@ -51,3 +51,13 @@ Joe is a disabled quadruple amputee. Keep his touchpoints to a few taps, numbere
 - The Drive connector cannot download files over 10 MB. Route that worked for a 22 MB film (Dahomey, 17 Nov 2026): Zapier Google Drive "Retrieve File or Folder by ID" gives a temporary file link; `curl` it inside the Higgsfield sandbox; run the word timings and any cuts there; print the word timings back as text; upload the small audio (MP3, under 10 MB) with `media_upload`; Zapier "Upload File" copies it into Joe's Drive; then the Drive connector can download it here. Nothing is made public. Do not curl Drive or Higgsfield hosts from this container.
 - `GeoMap` takes `k` = map units per screen pixel: 2.1 shows West Africa, 0.25 the Bight of Benin, 0.08 a single town. Pass the same `k` to `Pin` so labels keep their size.
 - Captions sit at the bottom centre; keep scene text out of the lowest 170 px.
+
+## Documentary mode (pictures, not just diagrams)
+Joe's standard for an OGX film is a documentary look: full-frame pictures with lower thirds. A film made only of diagrams and cards was rejected on 17 Nov 2026 ("that doesn't look like documentary"). Default to this mode.
+
+- Use `episodes/dahomey/doc.tsx` as the pattern: a `DOC` table gives each scene its pictures (`shots`, each with a move: in, out, left, right, up, down, tiltdown, or `frame` for a framed print) and overlays (`lower`, `big`, `quote`, `head`, `title`, `stamp`, `inset`, `chip`). Times are cue indexes, so everything follows the voice.
+- Effects are code, not AI video: `rain`, `smoke`, `lamp`, and dust by default.
+- Pictures go in `remotion/public/<ep>/` and stay out of git; list them and their sources in `data/<ep>/images.json`.
+- Where to find pictures: the painted stills of an earlier cut are usually in Joe's OpenArt or Higgsfield history (search the prompts for place names); real period images are in the film's Drive folder, with a contact sheet that says which are cleared. Wikimedia Commons can be reached from the Higgsfield sandbox, not from here.
+- Every painted still must carry the "RECONSTRUCTION" note; every real image "ARCHIVE" plus its source. Never show severed heads or human remains; crop or leave out.
+- Keep maps and diagrams for the few lines that need them (routes, the order of an attack).

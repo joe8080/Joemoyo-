@@ -108,12 +108,12 @@ export const Captions: React.FC<{words: [string, number][]; len: number}> = ({wo
     </div></div>);
 };
 // scene wrapper: soft push-in, quick out
-export const SceneShell: React.FC<{len: number; children: React.ReactNode; tag?: Tag; source?: string; chapter?: string; bare?: boolean}> = ({len, children, tag, source, chapter, bare}) => {
-  const f = useCurrentFrame(); const pin = ease(f, 0, 12); const pout = lin(f, len - 7, len);
+export const SceneShell: React.FC<{len: number; children: React.ReactNode; tag?: Tag; source?: string; chapter?: string; bare?: boolean; xfade?: boolean}> = ({len, children, tag, source, chapter, bare, xfade}) => {
+  const f = useCurrentFrame(); const pin = ease(f, 0, xfade ? 14 : 12); const pout = xfade ? 0 : lin(f, len - 7, len); const tail = lin(f, len - 6, len);
   return (<AbsoluteFill>
-    <AbsoluteFill style={{opacity: pin * (1 - pout), transform: `scale(${0.975 + 0.025 * pin + 0.02 * pout})`}}>{children}</AbsoluteFill>
-    {!bare && <Brand chapter={chapter} />}
-    {(tag || source) && <div style={{opacity: pin * (1 - pout)}}><Source tag={tag} text={source} /></div>}
+    <AbsoluteFill style={{opacity: pin * (1 - pout), transform: xfade ? undefined : `scale(${0.975 + 0.025 * pin + 0.02 * pout})`}}>{children}</AbsoluteFill>
+    {!bare && <div style={{opacity: xfade ? 1 - tail : 1}}><Brand chapter={chapter} /></div>}
+    {(tag || source) && <div style={{opacity: pin * (1 - (xfade ? tail : pout))}}><Source tag={tag} text={source} /></div>}
   </AbsoluteFill>);
 };
 

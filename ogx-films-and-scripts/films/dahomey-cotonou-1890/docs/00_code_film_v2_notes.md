@@ -1,6 +1,22 @@
 # The Ghost Army of Dahomey: code film v2.0 (preview, with Joe's voice)
 Prepared by Claude, 17 November 2026. **Private. Joe approves any release.** The v1.1 film in Drive is untouched.
 
+## v2.1: documentary cut (17 November 2026)
+Joe's verdict on v2.0: "where's the images... that doesn't look like documentary". He was right: v2.0 was all diagrams. v2.1 puts the pictures back.
+
+- **Painted stills:** the 66 reconstructions made for v1.1 were found in Joe's OpenArt history (27 October) at 2304x1296 and are used full-frame. 62 of them appear; s54 (the single necklace the review rejected) is left out.
+- **Real period images:** Bayol's 1889 route map (full-frame, tilting from Abomey down to Kotonou), the 1894 wharf photograph (full-frame), and framed prints of Bayol's portrait, the 1890 Frey engraving, the 1895 drawing, the 1793 Dalzel engraving, the 1892 Dodds engraving, the Forbes 1851 plate (top half only) and the Fortier postcard. The last two came from Wikimedia Commons (public domain); the rest from the Drive folder "Dahomey".
+- **Made in code:** every move (push, pull, pan, tilt), every cross-dissolve, rain over the storm scenes, drifting smoke over the fighting, lamp flicker on the desk scenes, dust motes, lower thirds, counters, quotes, stamps, captions. No AI video. No credits spent.
+- **Honesty labels:** every painted still carries "RECONSTRUCTION · painted for this film, not a period image" (or "ILLUSTRATION · ... not the museum's objects / not the original pages"). Every real image carries "ARCHIVE" and its source.
+- **Kept as graphics:** the attack map (S14 to S16), the Porto-Novo map (S31) and the end card.
+- **Caption fixes so the text matches the voice:** S26 now reads "At half past nine", S31 names Toffa.
+- Code: `code-film/remotion/src/episodes/dahomey/doc.tsx` (scene table `DOC`). Picture list and sources: `code-film/data/dahomey/images.json`. Pictures are not in git; the zips are in Joe's Drive.
+
+### Still to check (Joe or MJ)
+1. Three names are spoken but not in the captions, because I could not confirm the spelling from the audio: the officer leading the 4th company's section at first light (S25), the commander of the three-gun battery (S26), and the author of the April 1890 report (S45). The captions say "a section", "the three-gun battery" and "a French report".
+2. Archive rights follow the contact sheet in the Drive folder ("granted" items only). dh07 and dh17 are marked pending there and are not used.
+3. The earlier list below still applies (battle map layout, name spellings).
+
 ## What this is
 - A rebuild of the Dahomey / Cotonou 1890 film made **entirely in code** (Remotion). No AI images, no AI video, no credits spent.
 - 50 scenes, one per narration line, following the v1.1 narration word for word (taken from the v1.1 film's captions).

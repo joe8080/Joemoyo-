@@ -5,6 +5,7 @@ import {Backdrop, Grain, SceneShell, Captions, Tag} from '../../kit';
 import TL from './timeline.json';
 import * as A from './scenesA';
 import * as B from './scenesB';
+import {DOC, DocScene, Bg} from './doc';
 
 const S: Record<string, React.FC<A.P>> = {...(A as any), ...(B as any)};
 const FOA = "Foà's plan, published 1895";
@@ -12,11 +13,11 @@ const MAPNOTE = `Schematic, not to scale. Place names from ${FOA}; layout simpli
 const LOC = 'Locator map: modern coastline and borders (Natural Earth). Not a period map.';
 // [evidence tag, source line, chapter chip]
 const META: Record<string, [Tag | undefined, string | undefined, string | undefined]> = {
-  S01: ['DIAGRAM', LOC, undefined],
+  S01: ['CONTEXT', 'Cotonou, on the coast of present-day Benin', undefined],
   S02: ['PRIMARY ACCOUNT', 'Garrison figure as given in the French account of the battle', 'COTONOU · 3–4 MARCH 1890'],
   S03: ['PRIMARY ACCOUNT', 'Composition of the garrison as given in the French account', 'COTONOU · 3–4 MARCH 1890'],
   S04: ['PRIMARY ACCOUNT', 'From the French account of the night of 3 March', 'COTONOU · 3–4 MARCH 1890'],
-  S05: ['DIAGRAM', 'Schematic of the north bastion. Not to scale.', 'COTONOU · 4 MARCH 1890'],
+  S05: ['PRIMARY ACCOUNT', 'From the French account of the night of 3–4 March', 'COTONOU · 4 MARCH 1890'],
   S06: ['PRIMARY ACCOUNT', 'From the French account of the attack', 'COTONOU · 4 MARCH 1890'],
   S07: ['ACCORDING TO BAYOL', "Governor Jean Bayol's account. One eyewitness disagrees, as the film shows later", 'COTONOU · 4 MARCH 1890'],
   S08: [undefined, undefined, undefined],
@@ -31,8 +32,8 @@ const META: Record<string, [Tag | undefined, string | undefined, string | undefi
   S19: ['DISPUTED', 'Bayol and Nicolas against Foà', 'THE ATTACK'],
   S20: ['PRIMARY ACCOUNT', 'From the French accounts of the fight at the stockade', 'THE ATTACK'],
   S21: ['PRIMARY ACCOUNT', 'Quoted in a French account of the battle', 'THE ATTACK'],
-  S22: ['DIAGRAM', MAPNOTE, 'THE COUNTER-ATTACK'], S23: ['PRIMARY ACCOUNT', 'From the French account. Diagram only.', 'THE COUNTER-ATTACK'],
-  S24: ['DIAGRAM', MAPNOTE, 'THE COUNTER-ATTACK'], S25: ['DIAGRAM', MAPNOTE, 'THE COUNTER-ATTACK'],
+  S22: ['PRIMARY ACCOUNT', 'From the French account of the counter-attack', 'THE COUNTER-ATTACK'], S23: ['PRIMARY ACCOUNT', 'From the French account of the counter-attack', 'THE COUNTER-ATTACK'],
+  S24: ['PRIMARY ACCOUNT', 'The cruiser Sané supported the garrison from offshore', 'THE COUNTER-ATTACK'], S25: ['PRIMARY ACCOUNT', 'From the French account of the counter-attack', 'THE COUNTER-ATTACK'],
   S26: ['PRIMARY ACCOUNT', 'Times as given in the French account; all approximate', 'THE COUNTER-ATTACK'],
   S27: ['PRIMARY ACCOUNT', 'A single primary account: Nicolas, via Ortus. Secondary sources differ.', 'THE COST'],
   S28: ['ONE WITNESS', "Governor Bayol's account", 'THE COST'], S29: ['ONE WITNESS', "Governor Bayol's account", 'THE COST'],
@@ -49,7 +50,7 @@ const META: Record<string, [Tag | undefined, string | undefined, string | undefi
   S40: ['CONTEXT', 'Exhibition troupes toured Europe in the 1890s', 'THE PICTURES'],
   S41: ['MUSEUM RECORD', 'musée du quai Branly – Jacques Chirac, inv. 71.1891.22.186; Cousin, Tassi & Yéhouétomé (2022)', 'THE OBJECTS'],
   S42: ['MUSEUM RECORD', 'Human remains are not shown in this film', 'THE OBJECTS'],
-  S43: ['CONTEXT', LOC, 'AFTER COTONOU'], S44: ['CONTEXT', 'The 1892 campaign is a separate war', 'AFTER COTONOU'],
+  S43: ['CONTEXT', 'The Ouidah arrangement of October 1890', 'AFTER COTONOU'], S44: ['CONTEXT', 'The 1892 campaign is a separate war', 'AFTER COTONOU'],
   S45: ['CONTEXT', 'Quoted to show the language of the time', 'AFTER COTONOU'], S46: ['CONTEXT', undefined, 'AFTER COTONOU'],
   S47: ['CONTEXT', 'Nawi was recorded as the last known veteran', 'AFTER COTONOU'],
   S48: [undefined, undefined, undefined], S49: [undefined, undefined, undefined], S50: [undefined, undefined, undefined],
@@ -61,12 +62,13 @@ export const CAPTIONS = true;
 export const Video: React.FC = () => (
   <AbsoluteFill style={{background: '#0B0907'}}>
     <Backdrop />
-    {TL.scenes.map((s) => { const Comp = S[s.id]; const len = s.end - s.start; const [tag, source, chapter] = META[s.id] || [];
-      return (<Sequence key={s.id} from={s.start} durationInFrames={len} name={s.id}>
-        <SceneShell len={len} tag={tag} source={source} chapter={chapter} bare={s.id === 'S08' || s.id === 'S50'}>
-          {Comp ? <Comp cues={s.cues} len={len} /> : null}
+    {TL.scenes.map((s, i) => { const Comp = S[s.id]; const doc = DOC[s.id]; const len = s.end - s.start; const [tag, source, chapter] = META[s.id] || [];
+      const over = doc && i + 1 < TL.scenes.length ? 14 : 0; // the picture runs on under the next scene's dissolve
+      return (<Sequence key={s.id} from={s.start} durationInFrames={len + over} name={s.id}>
+        <SceneShell len={len} tag={tag} source={source} chapter={chapter} bare={s.id === 'S08' || s.id === 'S50'} xfade={!!doc}>
+          {doc ? <DocScene doc={doc} cues={s.cues} len={len} /> : Comp ? <>{s.id === 'S50' && <Bg img="s43.jpg" len={len} />}<Comp cues={s.cues} len={len} /></> : null}
         </SceneShell>
-        {CAPTIONS && !NO_CAPTIONS.has(s.id) && <Captions words={s.words as [string, number][]} len={len} />}
+        {CAPTIONS && !NO_CAPTIONS.has(s.id) && <Sequence durationInFrames={len}><Captions words={s.words as [string, number][]} len={len} /></Sequence>}
       </Sequence>); })}
     <Grain />
   </AbsoluteFill>
