@@ -8,7 +8,7 @@ import {C, DISPLAY, SERIF, MONO, clamp, Rain, Stamp} from '../../kit';
 type Move = 'in' | 'out' | 'left' | 'right' | 'up' | 'down' | 'tiltdown';
 type Fx = 'rain' | 'smoke' | 'lamp' | 'dust';
 type T = {cue?: number; at?: number; until?: number; untilAt?: number};
-export type Shot = T & {img: string; move?: Move; fx?: Fx; credit?: string; frame?: number /* show as a framed print this many px tall, on a blurred copy of itself */};
+export type Shot = T & {img: string; move?: Move; fx?: Fx; credit?: string; tall?: number /* tiltdown: picture height in px at 1920 wide */; frame?: number /* show as a framed print this many px tall, on a blurred copy of itself */};
 export type Ov = T & (
   | {k: 'lower'; text: string}
   | {k: 'big'; value: number | string; pre?: string; label: string; x?: number; y?: number; color?: string}
@@ -36,8 +36,11 @@ const Picture: React.FC<{s: Shot; start: number; end: number}> = ({s, start, end
       <div style={{alignSelf: 'flex-start', background: '#EDE3CB', padding: 16, boxShadow: '0 30px 90px rgba(0,0,0,0.8)', transform: `scale(${0.93 + 0.06 * p}) rotate(-0.7deg)`, transformOrigin: 'left center'}}>
         <Img src={src} style={{height: s.frame, display: 'block', filter: 'contrast(1.03)'}} /></div>
     </AbsoluteFill></AbsoluteFill>);
+  if (m === 'tiltdown') return (<AbsoluteFill style={{opacity: op, background: '#0B0907', overflow: 'hidden'}}>
+    <Img src={src} style={{position: 'absolute', left: 0, top: 0, width: 1920, transform: `translateY(${-((s.tall ?? 2740) - 1080) * (0.04 + 0.88 * p)}px)`, filter: 'sepia(0.25) contrast(1.05) brightness(0.92)'}} />
+  </AbsoluteFill>);
   return (<AbsoluteFill style={{opacity: op, background: '#0B0907'}}>
-    <Img src={src} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: m === 'tiltdown' ? `50% ${4 + 88 * p}%` : '50% 50%',
+    <Img src={src} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 50%',
       transform: `scale(${sc}) translate(${tx}%, ${ty}%)`, filter: arch ? 'sepia(0.25) contrast(1.05) brightness(0.92)' : 'saturate(0.94) contrast(1.05)'}} />
   </AbsoluteFill>);
 };
@@ -163,7 +166,7 @@ export const DOC: Record<string, Doc> = {
     {k: 'big', value: 8, label: 'FRENCH SOLDIERS KILLED', at: 12, until: 1, x: 110, y: 150, color: C.blue}, {k: 'big', value: 26, label: 'WOUNDED', cue: 0, until: 1, x: 110, y: 480, color: C.blue},
     {k: 'big', value: 127, label: 'DAHOMEAN DEAD · COUNTED INSIDE THE LINES', cue: 1, until: 3, x: 110, y: 200}, {k: 'lower', text: 'SEVEN OF THEM WERE WOMEN', cue: 2, until: 3},
     {k: 'lower', text: 'ANOTHER COUNT EXISTS · THE PRIMARY ACCOUNT SAYS 127', cue: 3}]},
-  S28: {shots: [{img: 'a_bayolmap1889.jpg', move: 'tiltdown', credit: 'Bayol’s route, Kotonou to Abomey, Nov–Dec 1889. Service géographique des colonies.'}, {img: 's35.jpg', move: 'in', cue: 1}], ov: [{k: 'chip', text: BAYOL, at: 10}, {k: 'inset', img: 'a_bayol.jpg', cap: 'Governor Jean Bayol. Press engraving, 1890.', at: 16, until: 1, w: 270}, {k: 'lower', text: 'ABOMEY · DECEMBER 1889', at: 20}, {k: 'lower', text: 'THEN COTONOU', cue: 0, until: 1}, {k: 'quote', text: 'Nanisca', by: 'THE NAME IS BAYOL’S', cue: 1}]},
+  S28: {shots: [{img: 'a_bayolmap1889.jpg', move: 'tiltdown', tall: 2740, credit: 'Bayol’s route, Kotonou to Abomey, Nov–Dec 1889. Service géographique des colonies.'}, {img: 's35.jpg', move: 'in', cue: 1}], ov: [{k: 'chip', text: BAYOL, at: 10}, {k: 'inset', img: 'a_bayol.jpg', cap: 'Governor Jean Bayol. Press engraving, 1890.', at: 16, until: 1, w: 270}, {k: 'lower', text: 'ABOMEY · DECEMBER 1889', at: 20}, {k: 'lower', text: 'THEN COTONOU', cue: 0, until: 1}, {k: 'quote', text: 'Nanisca', by: 'THE NAME IS BAYOL’S', cue: 1}]},
   S29: {shots: [{img: 's36.jpg', move: 'in', fx: 'smoke'}, {img: 's32.jpg', move: 'left', cue: 0}], ov: [{k: 'chip', text: BAYOL, at: 10}, {k: 'lower', text: 'THE CHIEF GUNNER', at: 16}, {k: 'lower', text: 'HE LATER FOUND HER BODY', cue: 0}, {k: 'lower', text: 'A CLEAVER · A CARBINE COVERED IN COWRIES', cue: 1}]},
   S30: {shots: [{img: 's64.jpg', move: 'in', fx: 'lamp'}], ov: [{k: 'lower', text: 'A SECOND FRENCH ACCOUNT', at: 10}, {k: 'lower', text: 'IT DOES NOT NAME HER', cue: 0}, {k: 'stamp', text: 'BAYOL ALONE', cue: 1, x: 1180, y: 270, color: C.amber}]},
   S32: {shots: [{img: 's37.jpg', move: 'in'}, {img: 's26.jpg', move: 'out', cue: 2}], ov: [{k: 'lower', text: 'FOÀ WAS PRESENT', at: 10}, {k: 'lower', text: 'TWO OR THREE WOMEN FOUND ALIVE', cue: 0}, {k: 'lower', text: 'ONE VERY YOUNG · GRAVELY WOUNDED', cue: 1}, {k: 'lower', text: 'NONE SURVIVED', cue: 2}]},
