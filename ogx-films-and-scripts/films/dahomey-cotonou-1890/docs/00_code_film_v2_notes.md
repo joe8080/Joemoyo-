@@ -24,6 +24,12 @@ The v1.1 review file in Drive is 22 MB and the Drive connector stops at 10 MB. R
 
 Limits to know about: the source is the 480p review file, so the audio is 81 kbps AAC re-encoded once to MP3. It is clean for YouTube speech, but the original narration WAVs on the workstation would be better if a final master is wanted. The music under the voice jumps slightly at the two cuts.
 
+### QC on the voiced render (17 November 2026)
+- Files (local, not in git): `code-film/remotion/out/OGX_Dahomey_Cotonou_1890_code_v2_1080p.mp4` (260 MB, 1920x1080, 30 fps, 8:21) and `..._preview_720p.mp4` (31 MB).
+- Loudness: -14.1 LUFS integrated, true peak -2.2 dBFS.
+- Sync: 12 frames pulled at known word times (359, "army rose", "thousand", "shoulder", 127, Nanisca, 6,000, "not 1890", Benin, "both are true", 1979, subscribe); the caption and the on-screen cue matched the spoken word on 11. "Nanisca" lights about 0.7 s late because the transcriber spelt it differently; 56 of 1,226 words are placed between neighbours this way.
+- Short scenes (S14, S19, S24, S33, S36: 3 to 4 s each) checked at their last frames: all animations finish before the cut.
+
 ## Fixes from the 29 October release review, built in
 | Review point | What v2.0 does |
 |---|---|
