@@ -18,6 +18,7 @@ env/
 
 # Auto-trader runtime logs (regenerated on every run)
 outputs/reports/autotrade_log_*.md
+outputs/reports/copytrade_log_*.md
 
 # IDE
 .vscode/

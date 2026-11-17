@@ -29,6 +29,7 @@ python main.py autotrade --symbols NFLX,AVGO,COIN,IWM,SMH --interval 5 \
 | `ALPACA_API_SECRET_KEY` | yes | paper secret |
 | `ALPACA_PAPER` | yes | `true` |
 | `SUPABASE_URL` / `SUPABASE_SERVICE_KEY` | optional | durable logging |
+| `ALPACA_COPY_API_KEY_ID` / `ALPACA_COPY_API_SECRET_KEY` | optional | turns on the copy-trade sleeve; keys of a **second** paper account (see `docs/COPY_SLEEVE.md`) |
 
 ## Deploy options (pick one)
 

@@ -465,6 +465,63 @@ def validate(symbols, start):
 
 
 @cli.command()
+@click.option("--budget", default=10000.0, show_default=True,
+              help="Most the sleeve may have invested at once")
+@click.option("--cash-per-trade", default=1000.0, show_default=True, help="Max dollars per idea")
+@click.option("--max-positions", default=10, show_default=True, help="Max holdings at once")
+@click.option("--max-new-per-day", default=3, show_default=True, help="Max new positions per day")
+@click.option("--max-signal-age-days", default=10, show_default=True,
+              help="Ignore ideas made public longer ago than this")
+@click.option("--max-trade-lag-days", default=60, show_default=True,
+              help="Ignore ideas whose original trade is older than this")
+@click.option("--min-conviction", default=3, show_default=True, help="Minimum scout conviction (1-5)")
+@click.option("--trailing-stop-pct", default=8.0, show_default=True,
+              help="Exit if price falls this % from its peak since entry (0=off)")
+@click.option("--stop-loss-pct", default=0.0, show_default=True,
+              help="Exit if price falls this % below entry (0=off)")
+@click.option("--daily-loss-limit", default=300.0, show_default=True,
+              help="Stop opening positions once the day's loss hits this (0=off)")
+@click.option("--once", is_flag=True, help="Run a single cycle instead of looping")
+@click.option("--interval", default=30, show_default=True, help="Minutes between cycles when looping")
+@click.option("--dry-run", is_flag=True, help="Show decisions without placing orders or marking ideas")
+def copytrade(budget, cash_per_trade, max_positions, max_new_per_day, max_signal_age_days,
+              max_trade_lag_days, min_conviction, trailing_stop_pct, stop_loss_pct,
+              daily_loss_limit, once, interval, dry_run):
+    """
+    Run the copy-trade paper sleeve: act on trade ideas the scout (Grok Bot)
+    dropped into the Supabase signal inbox, inside hard risk caps.
+
+    Trades its OWN Alpaca paper account (ALPACA_COPY_API_KEY_ID /
+    ALPACA_COPY_API_SECRET_KEY) so the swing/intraday test is never disturbed.
+    See docs/COPY_SLEEVE.md.
+
+    \b
+    python main.py copytrade --once --dry-run
+    python main.py copytrade --once
+    """
+    import time as _time
+    from agents.copy_trader import CopyTrader
+    try:
+        trader = CopyTrader(
+            budget=budget, cash_per_trade=cash_per_trade, max_positions=max_positions,
+            max_new_per_day=max_new_per_day, max_signal_age_days=max_signal_age_days,
+            max_trade_lag_days=max_trade_lag_days, min_conviction=min_conviction,
+            trailing_stop_pct=trailing_stop_pct, stop_loss_pct=stop_loss_pct,
+            daily_loss_limit=daily_loss_limit, dry_run=dry_run,
+        )
+        while True:
+            trader.run_once()
+            if once:
+                break
+            _time.sleep(interval * 60)
+    except (EnvironmentError, ValueError) as e:
+        console.print(f"[bold red]Copy-Trader Error:[/bold red] {e}")
+        sys.exit(1)
+    except KeyboardInterrupt:
+        console.print("\n[bold yellow]Copy sleeve stopped.[/bold yellow]")
+
+
+@cli.command()
 @click.option("--symbols", "-s",
               default="SPY,QQQ,AAPL,MSFT,NVDA,GOOGL,AMZN,META,TSLA,AMD",
               show_default=True, help="The engine's watchlist")

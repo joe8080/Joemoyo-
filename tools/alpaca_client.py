@@ -29,8 +29,14 @@ class AlpacaClient:
 
     API_VERSION = "v2"
 
-    def __init__(self, paper: bool | None = None):
-        if not settings.alpaca_api_key_id or not settings.alpaca_api_secret_key:
+    def __init__(self, paper: bool | None = None,
+                 key_id: str | None = None, secret_key: str | None = None):
+        # key_id/secret_key let a second engine (the copy-trade sleeve) run on
+        # its OWN Alpaca paper account; by default the main account's keys from
+        # the environment are used, exactly as before.
+        key_id = key_id or settings.alpaca_api_key_id
+        secret_key = secret_key or settings.alpaca_api_secret_key
+        if not key_id or not secret_key:
             raise EnvironmentError(
                 "Alpaca credentials not configured. "
                 "Add ALPACA_API_KEY_ID and ALPACA_API_SECRET_KEY to your .env file. "
@@ -46,8 +52,8 @@ class AlpacaClient:
         self.data_feed = os.environ.get("ALPACA_DATA_FEED", "sip").strip().lower()
         self.base_url = PAPER_BASE_URL if self.paper else LIVE_BASE_URL
         self.headers = {
-            "APCA-API-KEY-ID": settings.alpaca_api_key_id,
-            "APCA-API-SECRET-KEY": settings.alpaca_api_secret_key,
+            "APCA-API-KEY-ID": key_id,
+            "APCA-API-SECRET-KEY": secret_key,
             "Content-Type": "application/json",
         }
 
@@ -312,6 +318,10 @@ class AlpacaClient:
     # ------------------------------------------------------------------ #
     #  Clock / market status                                              #
     # ------------------------------------------------------------------ #
+
+    def get_asset(self, symbol: str) -> dict:
+        """Asset record for a symbol (tradable, status, class, exchange)."""
+        return self._request("GET", self._trading_url(f"assets/{symbol.upper()}"))
 
     def get_clock(self) -> dict:
         """Market clock: whether the market is open and next open/close times."""

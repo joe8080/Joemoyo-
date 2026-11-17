@@ -73,6 +73,40 @@ def _get(table: str, query: str = "select=*") -> list:
         return []
 
 
+def _patch(table: str, query: str, fields: dict) -> list | None:
+    """Update rows matching `query`. Returns the updated rows, or None on failure."""
+    if not enabled():
+        return None
+    try:
+        r = requests.patch(f"{_URL}/rest/v1/{table}?{query}",
+                           headers=_headers({"Prefer": "return=representation"}),
+                           json=fields, timeout=_TIMEOUT)
+        if r.status_code >= 300:
+            print(f"[supabase] {table} update failed {r.status_code}: {r.text[:160]}")
+            return None
+        return r.json()
+    except Exception as e:  # noqa: BLE001
+        print(f"[supabase] {table} update error: {e}")
+        return None
+
+
+def _get_strict(table: str, query: str) -> list | None:
+    """Like _get, but returns None (not []) on failure so callers can tell
+    'nothing there' from 'could not look'."""
+    if not enabled():
+        return None
+    try:
+        r = requests.get(f"{_URL}/rest/v1/{table}?{query}",
+                         headers=_headers(), timeout=_TIMEOUT)
+        if r.status_code >= 300:
+            print(f"[supabase] {table} read failed {r.status_code}: {r.text[:160]}")
+            return None
+        return r.json()
+    except Exception as e:  # noqa: BLE001
+        print(f"[supabase] {table} read error: {e}")
+        return None
+
+
 # ---- write paths ---------------------------------------------------------- #
 
 def log_trade(row: dict) -> bool:
@@ -145,3 +179,66 @@ def get_manual_entries() -> list:
 def heartbeat(note: str, mode: str = "") -> bool:
     """Liveness ping — lets us confirm the runner is up and Supabase is reachable."""
     return _post("bot_heartbeats", {"note": note, "mode": mode})
+
+
+# ---- copy-trade sleeve: signal inbox + its own journal --------------------- #
+# The scout (Grok Bot) writes ideas via the submit_signal() database function;
+# only the copy engine, holding the service key, reads and updates them here.
+
+def _q(value) -> str:
+    """URL-encode a value interpolated into a PostgREST filter, so a '+' in a
+    timestamp offset or any stray character can never alter the query."""
+    return requests.utils.quote(str(value), safe="")
+
+
+def get_new_signals(limit: int = 50) -> list | None:
+    """Unprocessed signals, oldest first. None means the inbox was unreachable."""
+    return _get_strict("bot_signals",
+                       f"select=*&status=eq.new&order=created_at.asc&limit={limit}")
+
+
+def get_stuck_signals(older_than_iso: str) -> list:
+    """Signals claimed but never finished (engine died mid-order)."""
+    return _get("bot_signals",
+                f"select=*&status=eq.executing&processed_at=lt.{_q(older_than_iso)}")
+
+
+def claim_signal(signal_id: int, now_iso: str) -> bool:
+    """Atomically move a signal new -> executing. False if it could not be
+    claimed (already taken, or Supabase unreachable) — then DO NOT trade it."""
+    rows = _patch("bot_signals", f"id=eq.{int(signal_id)}&status=eq.new",
+                  {"status": "executing", "processed_at": now_iso})
+    return bool(rows)
+
+
+def finish_signal(signal_id: int, status: str, reason: str, now_iso: str,
+                  **extra) -> bool:
+    fields = {"status": status, "status_reason": (reason or "")[:300],
+              "processed_at": now_iso}
+    fields.update({k: v for k, v in extra.items() if v is not None})
+    return _patch("bot_signals", f"id=eq.{int(signal_id)}", fields) is not None
+
+
+def count_copy_buys_since(since_iso: str) -> int | None:
+    """Buy signals acted on since `since_iso`. None if it could not be counted."""
+    rows = _get_strict("bot_signals",
+                       "select=id&side=eq.buy&status=in.(executing,executed)"
+                       f"&processed_at=gte.{_q(since_iso)}")
+    return None if rows is None else len(rows)
+
+
+def last_copied_buy(symbol: str) -> dict | None:
+    rows = _get("bot_signals",
+                f"select=*&symbol=eq.{_q(symbol)}&side=eq.buy&status=eq.executed"
+                "&order=processed_at.desc&limit=1")
+    return rows[0] if rows else None
+
+
+def log_copy_trade(row: dict) -> bool:
+    return _post("bot_copy_trades", {k: row.get(k) for k in
+                 ("signal_id", "symbol", "action", "qty", "price", "est_cost",
+                  "entry_price", "pnl_pct", "exit_reason", "reason", "status")})
+
+
+def snapshot_copy(row: dict) -> bool:
+    return _post("bot_copy_snapshots", row, on_conflict="snapshot_date")

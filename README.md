@@ -129,6 +129,16 @@ python main.py trade --action execute --instruction "Buy $500 of AAPL at market"
 python main.py trade --action execute --instruction "Sell half my TSLA position"
 ```
 
+**Copy-trade sleeve** — a separate paper experiment. A scout (Grok Bot) drops
+"smart money" trade ideas into a Supabase inbox; this engine decides which
+become paper trades, inside fixed caps, on its own Alpaca paper account. Off
+until its keys are set. Full guide: [`docs/COPY_SLEEVE.md`](docs/COPY_SLEEVE.md).
+
+```bash
+python main.py copytrade --once --dry-run   # show decisions, change nothing
+python main.py copytrade --once             # one real paper cycle
+```
+
 **Automated loop** — a deterministic SMA-crossover momentum strategy you can
 leave running unattended on the paper account. No LLM call per cycle by default,
 so it's free to run continuously and every decision is logged to

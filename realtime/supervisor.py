@@ -13,6 +13,12 @@ everything onto the always-on Railway container:
                             hours (same cadence the GitHub cron used; the
                             engine itself no-ops when the market is closed).
   3. Daily coach          — once per weekday after the close.
+  4. Copy-trade sleeve    — one --once cycle every 30 min during US market
+                            hours, ONLY when its own paper-account keys
+                            (ALPACA_COPY_API_KEY_ID / _SECRET_KEY) and Supabase
+                            are configured. It acts on ideas the scout (Grok
+                            Bot) left in the signal inbox; see
+                            docs/COPY_SLEEVE.md. Off by default.
 
 Credentials come from the host env (ALPACA_API_KEY_ID / ALPACA_API_SECRET_KEY,
 SUPABASE_URL / SUPABASE_SERVICE_KEY) exactly as before.
@@ -51,6 +57,23 @@ SWING_CMD = [
 
 COACH_CMD = [PY, "main.py", "coach"]
 
+# Caps live here, in the repo, on purpose: the scout can suggest ideas but can
+# never change how much the sleeve is allowed to risk.
+COPY_CMD = [
+    PY, "main.py", "copytrade", "--once",
+    "--budget", "10000", "--cash-per-trade", "1000", "--max-positions", "10",
+    "--max-new-per-day", "3", "--trailing-stop-pct", "8",
+    "--daily-loss-limit", "300",
+]
+COPY_INTERVAL_S = 30 * 60
+
+
+def copy_enabled() -> bool:
+    env = os.environ
+    return bool(env.get("ALPACA_COPY_API_KEY_ID") and env.get("ALPACA_COPY_API_SECRET_KEY")
+                and env.get("SUPABASE_URL")
+                and (env.get("SUPABASE_SERVICE_KEY") or env.get("SUPABASE_KEY")))
+
 SWING_INTERVAL_S = 30 * 60
 SWING_UTC_HOURS = range(13, 21)   # 13:00–20:59 UTC ≈ US market hours; the
                                   # engine additionally gates on the real clock
@@ -73,10 +96,14 @@ def run_job(name: str, cmd: list[str]) -> None:
 
 
 def main() -> None:
-    log("booting: intraday(loop) + swing(30m, market hours) + coach(daily)")
+    copy_on = copy_enabled()
+    log("booting: intraday(loop) + swing(30m, market hours) + coach(daily) + "
+        + ("copy sleeve(30m, market hours)" if copy_on
+           else "copy sleeve OFF (ALPACA_COPY_* keys or Supabase not set)"))
     intraday = None
     intraday_backoff = 30
     last_swing = 0.0
+    last_copy = 0.0
     last_coach_day = None
 
     while True:
@@ -99,6 +126,11 @@ def main() -> None:
                 and time.time() - last_swing >= SWING_INTERVAL_S):
             last_swing = time.time()
             run_job("swing", SWING_CMD)
+
+        if (copy_on and weekday and now.hour in SWING_UTC_HOURS
+                and time.time() - last_copy >= COPY_INTERVAL_S):
+            last_copy = time.time()
+            run_job("copy", COPY_CMD)
 
         if weekday and now.hour >= COACH_UTC_HOUR and last_coach_day != date.today():
             last_coach_day = date.today()
