@@ -1,0 +1,94 @@
+# House styles. Edit freely: every new project copies its preset, so changes
+# here never alter a video already in progress.
+#
+#   wpm           narration pace, words per minute
+#   shot_seconds  average seconds each picture stays on screen
+#   hero_every    animate every Nth shot with a paid video model (0 = stills only)
+#   scene_chars   most characters sent to the voice tool in one job
+#   music_db      music level under the voice, in decibels
+
+history: &history
+  brand: history_channel
+  label: History documentary, widescreen
+  aspect: "16:9"
+  resolution: [1920, 1080]
+  fps: 30
+  wpm: 145
+  shot_seconds: 7
+  hero_every: 0
+  scene_chars: 1500
+  style: >-
+    cinematic historical illustration, painterly realism, dramatic low-key
+    lighting, muted earth tones, subtle film grain, no text, no watermark
+  voice: deep, measured documentary narrator, British English
+  music: slow cinematic orchestral, low strings, sparse percussion
+  music_db: -20
+  motion: [zoom_in, pan_right, zoom_out, pan_left]
+
+history_short:
+  <<: *history
+  label: History short, vertical
+  aspect: "9:16"
+  resolution: [1080, 1920]
+  shot_seconds: 3
+
+finance: &finance
+  brand: finance_channel
+  label: Finance explainer, widescreen
+  aspect: "16:9"
+  resolution: [1920, 1080]
+  fps: 30
+  wpm: 155
+  shot_seconds: 5
+  hero_every: 0
+  scene_chars: 1500
+  style: >-
+    clean modern editorial illustration, flat shapes, navy and gold palette,
+    generous empty space, no text, no logos, no watermark
+  voice: clear, calm, confident explainer, British English
+  music: light minimal electronic, steady pulse, unobtrusive
+  music_db: -22
+  motion: [zoom_in, zoom_out]
+
+finance_short:
+  <<: *finance
+  label: Finance short, vertical
+  aspect: "9:16"
+  resolution: [1080, 1920]
+  shot_seconds: 3
+
+studio_promo:
+  brand: music_studio
+  label: Music studio promo, vertical
+  aspect: "9:16"
+  resolution: [1080, 1920]
+  fps: 30
+  wpm: 150
+  shot_seconds: 3
+  hero_every: 2
+  scene_chars: 1500
+  style: >-
+    moody recording studio photography, warm tungsten light, shallow depth of
+    field, analogue gear, no text, no watermark
+  voice: warm, friendly, energetic
+  music: modern soulful beat, warm bass
+  music_db: -16
+  motion: [zoom_in, pan_left, zoom_out, pan_right]
+
+store_ad:
+  brand: shopify_store
+  label: Store product ad, vertical
+  aspect: "9:16"
+  resolution: [1080, 1920]
+  fps: 30
+  wpm: 160
+  shot_seconds: 2.5
+  hero_every: 2
+  scene_chars: 1500
+  style: >-
+    bright clean product photography, soft studio light, pastel backdrop,
+    crisp detail, no text, no watermark
+  voice: upbeat, friendly, trustworthy
+  music: bright upbeat pop, claps, feel-good
+  music_db: -16
+  motion: [zoom_in, zoom_out]

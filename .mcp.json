@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "studio": {
+      "command": "python",
+      "args": ["-m", "studio.server"]
+    }
+  }
+}

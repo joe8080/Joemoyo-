@@ -1,0 +1,119 @@
+# Which connected tool gets each kind of job, best first.
+# This order is a starting point, not a measured ranking: reorder a list to
+# change the studio's first choice. If a tool is over budget or fails, the
+# studio falls back to the next one down.
+#
+#   wallet     whose credits pay; spending caps are set per wallet
+#   connector  the connector's name in Claude ("Highfield" is Higgsfield)
+#   quote      how to get the live price before spending (null when free)
+
+voiceover:
+  - id: elevenlabs_speech
+    wallet: elevenlabs
+    connector: ElevenLabs
+    tool: creative_generate_speech
+    paid: true
+    quote: "Call creative_generate_speech with estimate_only: true and the same text, voice and model."
+    why: Dedicated voice tool, so narration is the first job it gets.
+    notes: >-
+      Pass generations_count: 1 (it defaults to 2, which doubles the cost).
+      Take voice_id from creative_list_voices. Never call twice to retry.
+      Poll creative_get_flow_run_status until done.
+  - id: artlist_voiceover
+    wallet: artlist
+    connector: Artlist
+    tool: generate_voiceover
+    paid: true
+    quote: "Call get_generation_cost with kind: voiceover and the same text and voiceId."
+    why: Fallback voice.
+    notes: At most 5000 characters of text per job.
+  - id: higgsfield_speech
+    wallet: higgsfield
+    connector: Highfield
+    tool: generate_audio
+    paid: true
+    quote: Call estimate_audio_cost with the same params.
+    why: Second fallback voice.
+    notes: Find a speech model with models_explore (type audio).
+
+image:
+  - id: openart_image
+    wallet: openart
+    connector: OPEN_ART
+    tool: openart_generate_image
+    paid: true
+    quote: Call openart_model_cost with the same model, mode and params.
+    why: Many image models with a cheapest-first price list; suits the many stills a long video needs.
+    notes: Use openart_generate_image_batch for several shots at once.
+  - id: higgsfield_image
+    wallet: higgsfield
+    connector: Highfield
+    tool: generate_image
+    paid: true
+    quote: Call estimate_image_cost with the same params.
+    why: Fallback stills; also the natural choice when the shot will be animated on Higgsfield.
+    notes: Use generate_image_batch for several shots, then jobs_wait.
+  - id: artlist_image
+    wallet: artlist
+    connector: Artlist
+    tool: generate_image
+    paid: true
+    quote: "Call get_generation_cost with kind: image and the same prompt, model and settings."
+    why: Second fallback stills.
+    notes: Use generate_batch for several shots at once.
+
+motion:
+  - id: higgsfield_video
+    wallet: higgsfield
+    connector: Highfield
+    tool: generate_video
+    paid: true
+    quote: Call estimate_video_cost with the same params.
+    why: Video is Higgsfield's main strength, so animated hero shots go here first.
+    notes: >-
+      Reference images must be a Higgsfield job id or an uploaded media id, not
+      a URL. Import a still made elsewhere with media_import_url first.
+  - id: openart_video
+    wallet: openart
+    connector: OPEN_ART
+    tool: openart_generate_video
+    paid: true
+    quote: Call openart_model_cost with the same model, mode and params.
+    why: Fallback animation.
+    notes: ""
+  - id: artlist_video
+    wallet: artlist
+    connector: Artlist
+    tool: generate_video
+    paid: true
+    quote: "Call get_generation_cost with kind: video and the same prompt, model and settings."
+    why: Second fallback animation.
+    notes: ""
+
+music:
+  - id: artlist_catalog
+    wallet: artlist
+    connector: Artlist
+    tool: search_music
+    paid: false
+    quote: null
+    why: Real licensed tracks under the Artlist plan, with no generation credits spent.
+    notes: >-
+      Search and pick first, then call download_track once: every download
+      counts toward the daily download limit.
+  - id: artlist_music
+    wallet: artlist
+    connector: Artlist
+    tool: generate_music
+    paid: true
+    quote: "Call get_generation_cost with kind: music and the same prompt and settings."
+    why: Custom generated track when the catalog has nothing that fits.
+    notes: ""
+  - id: higgsfield_music
+    wallet: higgsfield
+    connector: Highfield
+    tool: generate_audio
+    paid: true
+    quote: Call estimate_audio_cost with the same params.
+    why: Fallback generated music.
+    notes: Find a music model with models_explore (type audio).

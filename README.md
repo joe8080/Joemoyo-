@@ -16,6 +16,26 @@ All brands → **MarketingAgent**
 
 ---
 
+## Studio: script to finished video
+
+`studio/` turns a script into a finished MP4. It sends each job (voiceover, pictures,
+animated shots, music) to the best connected generation tool, refuses any spend past
+the cap you approved, remembers every result, and assembles the video locally.
+
+In a Claude session on this repo, just ask: "make the history video about X". The
+`studio` skill in `.claude/skills/studio/` runs the steps.
+
+| File | What it holds |
+|---|---|
+| `studio/presets.yaml` | House styles per channel: look, voice, music, pacing |
+| `studio/routes.yaml` | Which tool gets each kind of job, and the fallback order |
+| `outputs/studio/<title>/project.json` | One video's plan, links, quotes and spend |
+
+By hand: `pip install -r studio/requirements.txt`, then `python -m studio --help`.
+Tests: `pip install -r requirements-dev.txt && pytest`.
+
+---
+
 ## Quick Start
 
 ### 1. Install dependencies

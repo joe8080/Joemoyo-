@@ -23,3 +23,8 @@ outputs/reports/autotrade_log_*.md
 .vscode/
 .idea/
 *.swp
+
+# Studio media: re-downloadable from the links kept in each project.json
+outputs/studio/*/assets/
+outputs/studio/*/build/
+outputs/studio/*/*.mp4
