@@ -129,12 +129,49 @@ python -m studio fix gig.mp4 --music --lufs -14    # live music: rebalance harsh
 
 The original file is never changed; a `_fixed` copy is written next to it.
 
+## Plugins
+
+Small single-purpose processors you can chain, tune and extend.
+
+```bash
+python -m studio plugins                              # list every plugin, chain and setting
+python -m studio plug gig clip.mp4                    # live music from a phone: tone, harshness, level
+python -m studio plug gig-video clip.mp4              # the same plus full-frame stabilisation
+python -m studio plug voice interview.wav             # hum, noise, level
+python -m studio plug matchtone,level take.wav --set matchtone.ref=record_i_love.wav
+python -m studio plug gig clip.mp4 --set deharsh.max_cut=8 --set level.lufs=-16
+```
+
+| Plugin | Kind | What it does |
+|---|---|---|
+| `matchtone` | audio | Matches tonal balance to a finished-mix target, or to a reference track (`ref=`) |
+| `deharsh` | audio | Dynamic treble tamer: cuts harsh highs only in the moments they swamp the mids |
+| `declip` | audio | Rebuilds clipped peaks (best on original, uncompressed recordings) |
+| `dehum` | audio | Finds and notches 50/60 Hz mains hum |
+| `denoise` | audio | Reduces steady noise and hiss under speech |
+| `level` | audio | Sets loudness (LUFS) and keeps peaks under a ceiling |
+| `steady` | video | Stabilises; `frame=full` keeps the whole picture, `frame=crop` zooms in slightly |
+| `sharpen` | video | Crisps soft footage (cannot undo motion blur) |
+| `fps` | video | Locks a wobbly frame rate, or smooths choppy footage (`mode=blend` / `flow`) |
+
+Running a chain on a video leaves the picture untouched unless the chain has a video plugin,
+and the sound stays exactly in sync.
+
+### Your own plugins
+
+Drop a `.py` file in `studio_plugins/` (next to the `studio` folder) or in `~/.studio/plugins/`.
+It is loaded automatically and shows up in `python -m studio plugins`.
+`studio_plugins/example_plugin.py` is a working template: one audio plugin (`warmth`) and one
+personal chain (`joe-gig`).
+
 ## Limits worth knowing
 
 - The upscale is a sharp resize, not AI detail invention.
 - Clipping repair works best on original recordings (not ones already compressed to MP3/AAC).
 - Brightness repair cannot tell a moody night scene from an under-exposed one: use `--check` first, or `--strength light`.
 - The built-in `ambient` music is a simple placeholder bed. Use your own tracks for finals.
+- No trained AI models are built in, so there is no motion deblur, no stem separation (pulling
+  vocals or drums apart) and no AI upscaling. Those need tools like Topaz Video or iZotope RX.
 - AI image and video generation is not built in; generate shots with your connected tools and drop the files into `assets/`.
 
 ## Tests

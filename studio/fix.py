@@ -320,10 +320,7 @@ def plan_audio(m, strength="normal", music=False, target_lufs=-16.0):
         amt = min(0.85, 0.65 * k)
         gains = [clamp((t - b) * amt, -12.0, 5.0) for t, b in zip(MUSIC_TARGET, m["bands"])]
         if max(abs(g) for g in gains) > 3.0:
-            pts = [(30, gains[0] * 0.5)] + list(zip(BANDS, gains)) + [(19000, gains[-1])]
-            chain.append("firequalizer=gain='cubic_interpolate(f)':gain_entry='"
-                         + ";".join(f"entry({fq},{g:.1f})" for fq, g in pts) + "'")
-            bits = []
+            bits = []                      # the correction itself is done by the matchtone + deharsh plugins
             treble = max(m["bands"][6] - MUSIC_TARGET[6], m["bands"][7] - MUSIC_TARGET[7])
             bass = MUSIC_TARGET[0] - m["bands"][0]
             mud = max(m["bands"][1] - MUSIC_TARGET[1], m["bands"][2] - MUSIC_TARGET[2])
@@ -334,7 +331,7 @@ def plan_audio(m, strength="normal", music=False, target_lufs=-16.0):
             if mud > 4:
                 bits.append(f"boomy low-mids ({mud:.0f} dB too strong)")
             finds.append(("audio", "Unbalanced tone: " + (", ".join(bits) or "uneven frequency balance"),
-                          "rebalanced toward a normal mix"))
+                          "matched to a finished-mix balance and dynamically de-harshed"))
     if music and (m.get("true_peak") or -9) > -0.3:
         finds.append(("audio", f"Overloaded peaks ({m['true_peak']:+.1f} dB true peak)",
                       "level brought down under the ceiling (distortion already recorded cannot be undone)"))
@@ -439,7 +436,8 @@ def plan_video(m, m2, curve, strength="normal", stabilize="auto", upscale=None):
 # ================================================================ doing
 
 def fix(src, out=None, audio=True, video=True, strength="normal", stabilize="auto", upscale=None,
-        target_lufs=-16.0, music=False, report_only=False, log=print):
+        target_lufs=-16.0, music=False, report_only=False, log=print, frame="full"):
+    """frame: 'full' stabilises without cropping the picture; 'crop' zooms in slightly instead."""
     src = Path(src)
     if not src.is_file():
         raise StudioError(f"File not found: {src}")
@@ -493,15 +491,27 @@ def fix(src, out=None, audio=True, video=True, strength="normal", stabilize="aut
             smooth = int(clamp(round(rate * 0.6 * STRENGTH[strength]), 8, 60))
             # The stabiliser only accepts planar YUV; pin the format on both sides so later
             # colour filters cannot make ffmpeg hand it RGB.
-            tr = (f"format=yuv420p,vidstabtransform=input=t.trf:smoothing={smooth}:optzoom=1:"
-                  f"interpol=bicubic:crop=black,format=yuv420p")
+            how = "optzoom=0:zoom=0:interpol=bicubic:crop=keep" if frame == "full" else \
+                "optzoom=1:interpol=bicubic:crop=black"
+            tr = f"format=yuv420p,vidstabtransform=input=t.trf:smoothing={smooth}:{how},format=yuv420p"
             i = 1 if vf and vf[0].startswith("bwdif") else 0
             vf.insert(i, tr)
         cmd = [FFMPEG, "-v", "error", "-y", "-i", str(src.resolve())]
+        a_map = "0:a:0"
         if fix_audio:
             log("Repairing the audio...")
+            a_src = src
+            if music and any("Unbalanced tone" in f[1] for f in real):
+                from . import plugins as PL
+                from .voice import read_audio, write_wav
+                y, notes = PL.run_audio(read_audio(src), PL.resolve("matchtone,deharsh"))
+                res["plugin_notes"] = notes
+                a_src = Path(tmp) / "music.wav"
+                write_wav(a_src, y)
+                cmd += ["-i", str(a_src)]
+                a_map = "1:a:0"
             chain = ",".join(af)
-            ln = _loudness(src, chain or None)
+            ln = _loudness(a_src, chain or None)
             if ln:
                 norm = (f"loudnorm=I={target_lufs}:TP=-1.5:LRA=11:measured_I={ln['input_i']}:"
                         f"measured_TP={ln['input_tp']}:measured_LRA={ln['input_lra']}:"
@@ -522,12 +532,12 @@ def fix(src, out=None, audio=True, video=True, strength="normal", stabilize="aut
             else:
                 cmd += ["-c:v", "copy"]
             if a:
-                cmd += ["-map", "0:a:0", "-c:a", "aac", "-b:a", "192k"] if fix_audio else ["-map", "0:a:0", "-c:a", "copy"]
+                cmd += ["-map", a_map, "-c:a", "aac", "-b:a", "256k"] if fix_audio else ["-map", "0:a:0", "-c:a", "copy"]
             cmd += ["-movflags", "+faststart"]
         else:
             codec = {".mp3": ["-c:a", "libmp3lame", "-b:a", "192k"], ".m4a": ["-c:a", "aac", "-b:a", "192k"],
                      ".flac": ["-c:a", "flac"]}.get(out.suffix.lower(), ["-c:a", "pcm_s16le"])
-            cmd += ["-vn", *codec]
+            cmd += ["-map", a_map, "-vn", *codec]
         tmp_out = out.with_name(out.stem + ".part" + out.suffix)
         p = subprocess.run(cmd + [str(tmp_out.resolve())], cwd=tmp, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if p.returncode:
@@ -603,6 +613,8 @@ def format_report(res):
         L.append(f"  {'Measure':<44}{'before':>9}{'after':>9}")
         for name, x, y in rows:
             L.append(f"  {name:<44}{x:>9}{y:>9}")
+    for n in res.get("plugin_notes", []):
+        L.append("  plugin " + n)
     if res.get("note"):
         L.append(res["note"])
     if res.get("output"):

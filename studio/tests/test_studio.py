@@ -207,3 +207,89 @@ class RepairTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class PluginTests(unittest.TestCase):
+    """The plugin maths, on synthetic audio where the right answer is known."""
+
+    def _noise(self, seconds=6, seed=1):
+        rng = np.random.default_rng(seed)
+        return rng.standard_normal(int(seconds * 48000)).astype(np.float32) * 0.05
+
+    def _band(self, x, lo, hi):
+        f = np.fft.rfftfreq(len(x), 1 / 48000)
+        X = np.fft.rfft(x)
+        X[(f < lo) | (f > hi)] = 0
+        return np.fft.irfft(X, len(x)).astype(np.float32)
+
+    def test_matchtone_moves_a_harsh_recording_toward_the_target(self):
+        from studio import plugins as PL
+        n = self._noise()
+        x = n + 5.0 * self._band(n, 5000, 9000)                              # full-range, far too much treble
+        st = np.stack([x, x], axis=1)
+        y, rep = PL.matchtone(st, 48000)
+        self.assertLess(rep["error_after"], rep["error_before"] * 0.6)
+        before = PL.third_octave(x)[14]                                      # the 8 kHz band
+        after = PL.third_octave(y.mean(axis=1))[14]
+        self.assertLess(after, before - 8)
+        self.assertEqual(y.shape, st.shape)
+
+    def test_matchtone_can_follow_a_reference_track(self):
+        from studio import plugins as PL
+        with tempfile.TemporaryDirectory() as d:
+            n = self._noise(seed=2)
+            dark = self._band(n, 100, 2000) + 0.05 * self._band(n, 2000, 12000)
+            write_wav(Path(d) / "ref.wav", dark * 4)
+            bright = self._band(n, 100, 2000) + 1.0 * self._band(n, 2000, 12000)
+            y, rep = PL.matchtone(np.stack([bright, bright], axis=1), 48000, ref=str(Path(d) / "ref.wav"), amount=1.0)
+            self.assertLess(rep["error_after"], rep["error_before"])
+
+    def test_deharsh_only_acts_when_treble_flares(self):
+        from studio import plugins as PL
+        n = self._noise(8, seed=3)
+        mids = self._band(n, 400, 2500)
+        hiss = self._band(n, 5000, 9000)
+        gate = np.zeros(len(n), dtype=np.float32)
+        gate[48000 * 4:] = 1.0                                               # treble blast in the second half only
+        x = mids + hiss * (0.05 + 4.0 * gate)
+        y, rep = PL.deharsh(np.stack([x, x], axis=1), 48000)
+        y = y.mean(axis=1)
+        e = lambda v, a, b: float(np.sqrt(np.mean(self._band(v[a:b], 5000, 9000) ** 2)))
+        quiet_in, quiet_out = e(x, 48000, 48000 * 3), e(y, 48000, 48000 * 3)
+        loud_in, loud_out = e(x, 48000 * 5, 48000 * 7), e(y, 48000 * 5, 48000 * 7)
+        self.assertGreater(quiet_out, quiet_in * 0.9)                        # calm passage left alone
+        self.assertLess(loud_out, loud_in * 0.5)                             # flare pulled down by 6 dB or more
+        self.assertGreater(rep["peak"], 6)
+
+    def test_chain_settings_and_errors(self):
+        from studio import plugins as PL
+        steps = PL.resolve("gig", {"level.lufs": "-16", "deharsh.max_cut": "6"})
+        self.assertEqual([p.name for p, _ in steps], ["matchtone", "deharsh", "level"])
+        self.assertEqual(steps[2][1]["lufs"], -16.0)
+        self.assertEqual(steps[1][1]["max_cut"], 6.0)
+        with self.assertRaises(StudioError):
+            PL.resolve("nonsense")
+        with self.assertRaises(StudioError):
+            PL.resolve("gig", {"level.volume": "3"})
+
+    def test_your_own_plugins_folder_is_loaded(self):
+        from studio import plugins as PL
+        PL.load_user_plugins()
+        self.assertIn("warmth", PL.REGISTRY)
+        self.assertIn("joe-gig", PL.CHAINS)
+
+    @unittest.skipUnless(HAVE_FFMPEG, "needs ffmpeg")
+    def test_plug_keeps_the_picture_and_the_length(self):
+        from studio import plugins as PL
+        with tempfile.TemporaryDirectory() as d:
+            src = Path(d) / "clip.mp4"
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "testsrc2=s=320x180:r=25:d=4",
+                            "-f", "lavfi", "-i", "anoisesrc=d=4:c=pink:a=0.3", "-shortest", "-pix_fmt", "yuv420p",
+                            "-c:a", "aac", str(src)], check=True)
+            res = PL.run(src, "gig", log=lambda *_: None)
+            info = json.loads(subprocess.run(["ffprobe", "-v", "error", "-show_streams", "-show_format", "-of", "json",
+                                              res["output"]], stdout=subprocess.PIPE).stdout)
+            kinds = sorted(s["codec_type"] for s in info["streams"])
+            self.assertEqual(kinds, ["audio", "video"])
+            self.assertAlmostEqual(float(info["format"]["duration"]), 4.0, delta=0.15)
+            self.assertEqual(len(res["notes"]), 3)

@@ -78,6 +78,19 @@ give every scene its `say` text: scenes are cut to the spoken words automaticall
 Inside a project: `"fix": true` on a video `visual` repairs that clip before use, and
 `"voice": {"clean": true, ...}` cleans narration files.
 
+### Plugins (single jobs, chains, and Joe's own)
+
+- List: `python -m studio plugins`. Run: `python -m studio plug <chain-or-plugins> <file>`.
+- Gig or live-music sound: `python -m studio plug gig <file>` (tone match, de-harsh, -14 LUFS).
+  Joe chose this sound by ear on real footage: do not make it brighter without asking.
+- Match a record he likes: `--set matchtone.ref=<track>`.
+- Change one setting: `--set plugin.setting=value`. Stabilise without cropping: `steady` with
+  `frame=full` (this is also the default inside `fix`).
+- Joe's own plugins live in `studio_plugins/*.py`. To add one, copy `example_plugin.py`, write
+  the maths, add a test, and run it on a real file before saying it works.
+- Sound can only be judged by measurement here. For anything Joe will publish, make short
+  level-matched options and let him pick by ear.
+
 Be straight about limits: upscaling does not invent detail, clipping repair is weaker on already
 compressed files, and a deliberately dark scene will be brightened unless you use `--strength light`.
 

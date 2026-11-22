@@ -105,8 +105,28 @@ def _fix(args):
     from . import fix as F
     res = F.fix(args.input, out=args.out, audio=not args.no_audio, video=not args.no_video,
                 strength=args.strength, stabilize=args.stabilize, upscale=args.upscale,
-                target_lufs=args.lufs, music=args.music, report_only=args.check)
+                target_lufs=args.lufs, music=args.music, report_only=args.check, frame=args.frame)
     print(F.format_report(res))
+
+
+def _plugins(args):
+    from . import plugins as PL
+    print(PL.describe())
+
+
+def _plug(args):
+    from . import plugins as PL
+    overrides = {}
+    for item in args.set or []:
+        if "=" not in item:
+            raise StudioError(f"--set expects plugin.setting=value (got '{item}').")
+        k, v = item.split("=", 1)
+        overrides[k.strip()] = v.strip()
+    res = PL.run(args.input, args.chain, out=args.out, overrides=overrides)
+    print("\nDone:")
+    for n in res["notes"]:
+        print("  " + n)
+    print(f"\nFile: {res['output']}")
 
 
 def _demo(args):
@@ -160,10 +180,22 @@ def main(argv=None):
     p.add_argument("--no-audio", action="store_true", help="leave the audio untouched")
     p.add_argument("--no-video", action="store_true", help="leave the picture untouched")
     p.add_argument("--stabilize", choices=["auto", "on", "off"], default="auto")
+    p.add_argument("--frame", choices=["full", "crop"], default="full",
+                   help="when stabilising: 'full' keeps the whole picture, 'crop' zooms in slightly")
     p.add_argument("--upscale", help="target height, e.g. 1080 or 2160")
     p.add_argument("--lufs", type=float, default=-16.0, help="target loudness (default -16)")
     p.add_argument("--music", action="store_true", help="the audio is music, not speech (skip voice clean-up)")
     p.set_defaults(fn=_fix)
+
+    p = sub.add_parser("plugins", help="list plugins, chains and their settings")
+    p.set_defaults(fn=_plugins)
+
+    p = sub.add_parser("plug", help="run a plugin or chain on a file, e.g.  plug gig clip.mp4")
+    p.add_argument("chain", help="a chain name, or plugin names separated by commas")
+    p.add_argument("input")
+    p.add_argument("--out", help="output file (default: <name>_plug.<ext>)")
+    p.add_argument("--set", action="append", metavar="plugin.setting=value", help="change a setting (repeatable)")
+    p.set_defaults(fn=_plug)
 
     p = sub.add_parser("new", help="start a new project folder")
     p.add_argument("name")
