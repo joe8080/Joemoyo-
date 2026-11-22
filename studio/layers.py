@@ -165,7 +165,7 @@ class Title(_Stack):
         rows = []
         if s.get("kicker"):
             sz = c.px(30)
-            rows.append(self.text_row(str(s["kicker"]).upper(), "heading", sz, c.col("accent"),
+            rows.append(self.text_row(str(s["kicker"]).upper(), "heading", sz, c.col(s.get("kicker_color", "accent")),
                                       c.px(22), tracking=sz * 0.18))
             rows.append(self.rule_row(c.px(90), c.px(5), c.col("accent"), c.px(30)))
         txt = str(s.get("text", ""))
