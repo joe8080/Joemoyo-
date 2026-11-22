@@ -1,0 +1,65 @@
+{
+  "title": "The Boring Habit",
+  "description": "Demo: a 45-second finance explainer. Figures are an illustration (7% a year, monthly), not a forecast.",
+  "brand": "wealth",
+  "formats": ["16:9", "9:16"],
+  "voice": {"provider": "piper", "voice": "en_GB-alan-medium", "speed": 1.0},
+  "captions": true,
+  "music": "ambient",
+  "progress": true,
+  "watermark": "STUDIO DEMO",
+  "scenes": [
+    {
+      "id": "hook",
+      "chapter": "The question",
+      "say": "What if getting rich had nothing to do with picking winners?",
+      "visual": {"src": "assets/city_lights.jpg", "motion": "push_in", "dim": 0.15},
+      "overlays": [
+        {"type": "title", "kicker": "Money, simply", "text": "The boring habit that builds real wealth"}
+      ]
+    },
+    {
+      "id": "habit",
+      "chapter": "The habit",
+      "say": "Here is the habit. Five hundred pounds a month, into a low cost index fund, every single month.",
+      "visual": "grid",
+      "transition": "slide_left",
+      "overlays": [
+        {"type": "stat", "value": 500, "prefix": "£", "label": "Invested every month", "sub": "Automatically. No stock picking."}
+      ]
+    },
+    {
+      "id": "growth",
+      "chapter": "What it grows into",
+      "say": "At seven percent a year, that grows to around six hundred and ten thousand pounds in thirty years. You only paid in one hundred and eighty thousand.",
+      "visual": {"src": "assets/flow.mp4", "loop": true, "dim": 0.35},
+      "transition": "fade",
+      "overlays": [
+        {"type": "chart", "kind": "line", "title": "£500 a month at 7% a year", "prefix": "£", "draw": 5.5,
+         "data": [["Start", 0], ["5 yrs", 35796], ["10 yrs", 86542], ["15 yrs", 158481], ["20 yrs", 260463], ["25 yrs", 405036], ["30 yrs", 609985]]},
+        {"type": "label", "text": "Illustration, not a forecast", "corner": "tr", "tone": "muted", "at": 1.0}
+      ]
+    },
+    {
+      "id": "why",
+      "chapter": "Why it works",
+      "say": "Three things do the heavy lifting. Time in the market. Low fees. And never interrupting the compounding.",
+      "visual": {"src": "assets/market_glow.jpg", "motion": "pan_right"},
+      "transition": "zoom",
+      "overlays": [
+        {"type": "bullets", "title": "What does the work", "numbered": true, "at": 1.2, "every": 1.5,
+         "items": ["Time in the market", "Low fees", "Never interrupting the compounding"]}
+      ]
+    },
+    {
+      "id": "close",
+      "chapter": "The takeaway",
+      "say": "Boring wins. Start small, automate it, and let time do the rest.",
+      "visual": {"src": "assets/horizon.jpg", "motion": "pull_out"},
+      "transition": "fade",
+      "overlays": [
+        {"type": "quote", "text": "Boring wins. Start small, automate it, and let time do the rest.", "by": "Education only, not financial advice"}
+      ]
+    }
+  ]
+}

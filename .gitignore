@@ -23,3 +23,10 @@ outputs/reports/autotrade_log_*.md
 .vscode/
 .idea/
 *.swp
+
+# Studio renders and caches
+.studio_cache/
+studio/examples/demo/out/
+studio/examples/demo/assets/
+*_fixed.mp4
+*_fixed.wav
