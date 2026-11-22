@@ -261,6 +261,16 @@ class PluginTests(unittest.TestCase):
         self.assertLess(loud_out, loud_in * 0.5)                             # flare pulled down by 6 dB or more
         self.assertGreater(rep["peak"], 6)
 
+    def test_presence_lifts_only_the_vocal_range(self):
+        from studio import plugins as PL
+        n = self._noise(seed=5)
+        y, _ = PL.presence(np.stack([n, n], axis=1), 48000, amount=3.0)
+        y = y.mean(axis=1)
+        lv = lambda v, a, b: 20 * np.log10(np.sqrt(np.mean(self._band(v, a, b) ** 2)))
+        self.assertAlmostEqual(lv(y, 2500, 3100) - lv(n, 2500, 3100), 3.0, delta=0.5)
+        self.assertAlmostEqual(lv(y, 100, 300) - lv(n, 100, 300), 0.0, delta=0.3)
+        self.assertAlmostEqual(lv(y, 12000, 16000) - lv(n, 12000, 16000), 0.0, delta=0.3)
+
     def test_chain_settings_and_errors(self):
         from studio import plugins as PL
         steps = PL.resolve("gig", {"level.lufs": "-16", "deharsh.max_cut": "6"})

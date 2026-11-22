@@ -123,8 +123,10 @@ def _read(path):
         max_boost=(3.0, "largest boost in dB (kept small: boosting what a mic missed adds mud)"),
         max_cut=(16.0, "largest cut in dB"),
         protect=(True, "never boost 2-4 kHz, where harshness lives"),
+        voice_guard=(16.0, "largest cut allowed in the vocal range 1.8-4.5 kHz, in dB (lower keeps voices clearer)"),
         lowcut=(45.0, "remove rumble below this frequency in Hz (0 = off)"))
-def matchtone(x, sr, target="live", ref="", amount=0.85, max_boost=3.0, max_cut=16.0, protect=True, lowcut=45.0):
+def matchtone(x, sr, target="live", ref="", amount=0.85, max_boost=3.0, max_cut=16.0, protect=True,
+              voice_guard=16.0, lowcut=45.0):
     if ref:
         if not Path(ref).is_file():
             raise StudioError(f"matchtone: reference track not found: {ref}")
@@ -138,6 +140,7 @@ def matchtone(x, sr, target="live", ref="", amount=0.85, max_boost=3.0, max_cut=
     g = np.clip((tgt - cur) * clamp(float(amount)), -abs(float(max_cut)), abs(float(max_boost)))
     if protect:
         g[8:12] = np.minimum(g[8:12], 0.0)
+    g[8:12] = np.maximum(g[8:12], -abs(float(voice_guard)))        # 2 kHz to 4 kHz bands
     lf = np.log2(np.array(THIRDS, dtype=float))
 
     def gain_fn(power, f):
@@ -184,6 +187,21 @@ def deharsh(x, sr, low=4200.0, high=11000.0, threshold=-9.0, ratio=0.75, max_cut
     y = stft_apply(x, gain_fn, n=2048, hop=512)
     return y, {"note": f"tamed harsh treble: average cut {stats['mean']:.1f} dB, up to {stats['peak']:.1f} dB, "
                        f"working {stats['busy']:.0f}% of the time", **stats}
+
+
+@plugin("presence", "audio", "Bring voices forward (or push them back): a smooth lift centred on the vocal range.",
+        amount=(2.5, "lift in dB; negative pushes voices back"),
+        centre=(2800.0, "centre frequency in Hz"),
+        width=(1.3, "width in octaves"))
+def presence(x, sr, amount=2.5, centre=2800.0, width=1.3):
+    amount, centre, width = float(amount), float(centre), max(0.3, float(width))
+
+    def gain_fn(power, f):
+        octs = np.log2(np.maximum(f, 20.0) / centre)
+        db = amount * np.exp(-0.5 * (octs / (width / 2.355)) ** 2)
+        return np.broadcast_to(10 ** (db / 20), power.shape)
+
+    return stft_apply(x, gain_fn), {"note": f"vocal range {'lifted' if amount >= 0 else 'cut'} {abs(amount):.1f} dB around {centre:.0f} Hz"}
 
 
 @plugin("declip", "audio", "Rebuild flattened (clipped) peaks. Works best on original, uncompressed recordings.",
