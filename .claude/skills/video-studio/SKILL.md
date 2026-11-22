@@ -42,6 +42,8 @@ Never upload, schedule or publish anything without Joe's explicit "approve".
 - Stills: leave `motion` out (auto cycles moves) or pick one. Use `focus: [x, y]` to keep a face
   or object in frame, especially for 9:16 crops of wide pictures.
 - Video clips: `fit: "blur"` keeps the whole frame on vertical; `dim: 0.3` when text sits on top.
+  `"sound": true` keeps the clip's own audio (gigs, interviews); set `"scrim": false` on a title
+  that should not darken the footage.
 - Captions: `pop` or `box` for Shorts, `clean` for documentaries. Turn off per scene with
   `"captions": false` (for example over a quote that is already on screen).
 - Finance content is education only: keep the "not financial advice" line and label illustrations.
@@ -67,7 +69,9 @@ give every scene its `say` text: scenes are cut to the spoken words automaticall
 
 1. Diagnose: `python -m studio fix <file> --check`. Tell Joe what it found in plain words.
 2. Repair: `python -m studio fix <file>` (add `--strength light|strong`, `--stabilize on|off`,
-   `--upscale 1080`, `--music` for songs, `--no-audio` / `--no-video` to touch only one side).
+   `--upscale 1080`, `--no-audio` / `--no-video` to touch only one side). For live music or songs
+   ALWAYS add `--music --lufs -14`: it rebalances harsh, thin phone-mic sound and skips voice
+   clean-up (without it, loud music is mistaken for noise).
 3. Read the before/after table it prints and report the numbers that changed.
 4. The original is untouched; the result is `<name>_fixed.<ext>`.
 

@@ -148,9 +148,11 @@ def _fade(clip, fin, fout):
     return clip
 
 
-def build_mix(total, voices, music=None, effects=(), voice_lufs=-16.0, progress=None):
+def build_mix(total, voices, music=None, effects=(), voice_lufs=-16.0, progress=None, clips=(),
+              clip_lufs=-14.0, clip_duck_db=-12.0):
     """Assemble the soundtrack.
 
+    clips:   [(path, in_point, timeline_start, duration, fade_in, fade_out, gain_db)] sound of video clips
     voices:  [(path, start_seconds)]
     music:   {"file"| "synth", "level_lufs", "duck_db", "start", "fade_in", "fade_out"} or None
     effects: [(name_or_path, start_seconds, gain_db)]
@@ -203,6 +205,29 @@ def build_mix(total, voices, music=None, effects=(), voice_lufs=-16.0, progress=
             bed *= g.astype(np.float32)[:, None]
         _fade(bed, float(music.get("fade_in", 0.8)), float(music.get("fade_out", 2.0)))
         mix += bed
+
+    if clips:
+        bus = np.zeros((n, 2), dtype=np.float32)
+        for path, t_in, t0, dur, f_in, f_out, gain_db in clips:
+            try:
+                clip = read_audio(path, start=t_in, duration=dur)
+            except StudioError:
+                continue                                   # a clip with no sound track
+            if len(clip) < 64:
+                continue
+            _fade(clip, max(0.02, f_in), max(0.03, f_out))
+            _place(bus, clip * float(10 ** (gain_db / 20)), t0)
+        bus = _gain_to(bus, clip_lufs)
+        if voices and clip_duck_db:
+            idx = np.nonzero(active)[0]
+            env = np.zeros_like(active)
+            for i in idx:
+                env[max(0, i - 20): i + 35] = 1.0
+            kern = np.hanning(61)
+            sm = np.convolve(env, kern / kern.sum(), mode="same")
+            bus *= (10 ** (clip_duck_db * np.interp(np.arange(n), np.arange(len(sm)) * 480, sm) / 20)
+                    ).astype(np.float32)[:, None]
+        mix += bus
 
     for i, (name, start, gain_db) in enumerate(effects):
         clip = sfx(name, i) if name in SFX_NAMES else read_audio(name)

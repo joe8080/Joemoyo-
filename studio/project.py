@@ -248,11 +248,23 @@ def prepare(pr, log=print):
             effects.append((name, sc["start"] + float(fx.get("at", 0.0)), float(fx.get("gain_db", -10.0))))
 
     audio_cfg = pr.get("audio") or {}
+    clips = []
+    for i, sc in enumerate(scenes):
+        v = sc["visual"]
+        snd = v.get("sound") if v["type"] == "video" else None
+        if snd:
+            nxt = scenes[i + 1]["trans_dur"] if i + 1 < len(scenes) and scenes[i + 1]["transition"] != "cut" else 0.0
+            f_in = sc["trans_dur"] if sc["transition"] != "cut" else 0.0
+            gain = float(snd.get("volume_db", 0.0)) if isinstance(snd, dict) else 0.0
+            clips.append([v["src"], float(v.get("start", 0.0)), sc["start"], sc["dur"] + nxt, f_in,
+                          nxt if i + 1 < len(scenes) else 1.2, gain])
     plan = {
         "title": pr.get("title") or Path(pr["_file"]).stem, "slug": slugify(pr.get("title") or Path(pr["_file"]).stem),
         "dir": base, "cache": str(cache), "kit": kit, "fps": fps, "formats": formats,
         "captions": cap_cfg, "words": words, "scenes": scenes, "total": total,
-        "music": music, "voices": voices, "effects": effects,
+        "music": music, "voices": voices, "effects": effects, "clips": clips,
+        "clip_lufs": float(audio_cfg.get("clip_lufs", -14.0)),
+        "clip_duck_db": float(audio_cfg.get("clip_duck_db", -12.0)),
         "voice_lufs": float(audio_cfg.get("voice_lufs", -16.0)),
         "finish": {"grain": 0.08, "vignette": 0.2, "crf": 18, **(pr.get("finish") or {})},
         "progress": pr.get("progress", False), "watermark": pr.get("watermark"),

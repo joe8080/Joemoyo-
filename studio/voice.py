@@ -144,9 +144,14 @@ def map_times(script_words, timed):
 
 # ---------------------------------------------------------------- audio io
 
-def read_audio(path, sr=SR, filters=None):
-    """Decode any audio file to float32 stereo at `sr`."""
-    cmd = [FFMPEG, "-v", "error", "-i", str(path)]
+def read_audio(path, sr=SR, filters=None, start=None, duration=None):
+    """Decode any audio file (or part of one) to float32 stereo at `sr`."""
+    cmd = [FFMPEG, "-v", "error"]
+    if start:
+        cmd += ["-ss", f"{max(0.0, float(start)):.4f}"]
+    if duration:
+        cmd += ["-t", f"{float(duration):.4f}"]
+    cmd += ["-i", str(path), "-vn"]
     if filters:
         cmd += ["-af", filters]
     cmd += ["-f", "f32le", "-ac", "2", "-ar", str(sr), "-"]

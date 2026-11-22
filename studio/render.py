@@ -39,7 +39,8 @@ class SceneRenderer:
                                      v.get("motion", "auto"), focus, span, i)
         elif v["type"] == "video":
             self.src = S.VideoSource(v["src"], W, H, fps, v.get("start", 0.0), v.get("speed", 1.0),
-                                     v.get("fit", "cover"), focus, v.get("grade", "none"), v.get("loop", False))
+                                     v.get("fit", "cover"), focus, v.get("grade", "none"), v.get("loop", False),
+                                     v.get("zoom", 1.0), v.get("bg_dim", 0.12))
         else:
             self.src = S.StillSource(S.card_image(v["card"], ctx.kit, W, H, i), W, H, fps,
                                      v.get("motion", "drift"), focus, span, i)
@@ -183,7 +184,8 @@ def render(project_path, formats=None, draft=False, jobs=None, use_cache=True, o
     log(f"Timeline: {len(plan['scenes'])} scenes, {fmt_time(plan['total'])} ({plan['total']:.1f}s) at {plan['fps']} fps")
 
     log("Mixing sound...")
-    mix = A.build_mix(plan["total"], plan["voices"], plan["music"], plan["effects"], plan["voice_lufs"])
+    mix = A.build_mix(plan["total"], plan["voices"], plan["music"], plan["effects"], plan["voice_lufs"],
+                      clips=plan["clips"], clip_lufs=plan["clip_lufs"], clip_duck_db=plan["clip_duck_db"])
     wav = cache / "mix.wav"
     A.save(wav, mix)
 

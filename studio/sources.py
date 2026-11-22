@@ -105,16 +105,21 @@ class VideoSource:
     """A video clip decoded through ffmpeg, fitted to the frame (cover crop or blurred fill)."""
 
     def __init__(self, path, W, H, fps, start=0.0, speed=1.0, fit="cover", focus=(0.5, 0.5),
-                 grade="none", loop=False):
+                 grade="none", loop=False, zoom=1.0, bg_dim=0.12):
         self.path, self.W, self.H, self.fps = str(path), W, H, fps
         self.start, self.speed, self.loop = float(start), float(speed) or 1.0, loop
         fx, fy = clamp(focus[0]), clamp(focus[1])
         sw, sh = video_size(path)
         g = grade_filter(grade)
         if fit == "blur" and abs(sw / sh - W / H) > 0.02:
+            # Whole picture over a blurred, dimmed copy of itself. `zoom` enlarges the picture
+            # (trimming its edges) so it fills more of a tall frame.
+            z = max(1.0, float(zoom))
+            fw, fh = int(round(W * z / 2)) * 2, int(round(H * z / 2)) * 2
             vf = (f"split[a][b];[a]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
-                  f"boxblur=24:4,eq=brightness=-0.12[bg];"
-                  f"[b]scale={W}:{H}:force_original_aspect_ratio=decrease[fg];"
+                  f"boxblur=24:4,eq=brightness=-{clamp(float(bg_dim), 0, 0.8):.2f}[bg];"
+                  f"[b]scale={fw}:{fh}:force_original_aspect_ratio=decrease,"
+                  f"crop='min(iw,{W})':'min(ih,{H})':'(iw-min(iw,{W}))*{fx:.4f}':'(ih-min(ih,{H}))*{fy:.4f}'[fg];"
                   f"[bg][fg]overlay=(W-w)/2:(H-h)/2")
         elif fit in ("cover", "blur"):
             vf = (f"scale={W}:{H}:force_original_aspect_ratio=increase,"

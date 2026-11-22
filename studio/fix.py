@@ -24,6 +24,10 @@ import numpy as np
 
 from .util import FFMPEG, StudioError, clamp, digest, file_sig, lerp, probe, run
 
+# Octave bands and where a finished music mix normally sits in each (dB relative to the mids).
+BANDS = (63, 125, 250, 500, 1000, 2000, 4000, 8000, 14000)
+MUSIC_TARGET = (1.0, 2.0, 1.5, 0.5, -0.5, -2.0, -5.0, -9.0, -14.0)
+
 AUDIO_ONLY_EXT = {".wav", ".mp3", ".m4a", ".flac", ".aac", ".ogg", ".opus"}
 STRENGTH = {"light": 0.6, "normal": 1.0, "strong": 1.5}
 
@@ -124,6 +128,13 @@ def measure_audio(path, max_seconds=600):
         hi = P[(f > 5000) & (f < 9000)].mean()
         mid = P[(f > 300) & (f < 3500)].mean()
         m["sibilance_db"] = 10 * math.log10((hi + 1e-20) / (mid + 1e-20))
+        # Tonal balance: octave-band levels relative to the midrange (250 Hz - 2 kHz).
+        lv = []
+        for c in BANDS:
+            sel = (f >= c / 1.414) & (f < c * 1.414)
+            lv.append(10 * math.log10(P[sel].sum() + 1e-20))
+        ref = float(np.mean(lv[2:6]))
+        m["bands"] = [round(x - ref, 2) for x in lv]
         lowp = P[(f > 12) & (f < 44)].mean()
         m["rumble_db"] = 10 * math.log10((lowp + 1e-20) / (mid + 1e-20))
     ln = _loudness(path)
@@ -304,6 +315,29 @@ def plan_audio(m, strength="normal", music=False, target_lufs=-16.0):
     if not music and strength == "strong" and m.get("sibilance_db", -99) > -12 and m["snr_db"] > 35:
         chain.append(f"deesser=i={clamp(0.3 * k, 0.15, 0.6):.2f}:m=0.5:f=0.5")
         finds.append(("audio", "Harsh 's' sounds", "softened"))
+    if music and m.get("bands"):
+        # Phone mics at gigs come out thin and fizzy: pull each band part-way to a normal mix balance.
+        amt = min(0.85, 0.65 * k)
+        gains = [clamp((t - b) * amt, -12.0, 5.0) for t, b in zip(MUSIC_TARGET, m["bands"])]
+        if max(abs(g) for g in gains) > 3.0:
+            pts = [(30, gains[0] * 0.5)] + list(zip(BANDS, gains)) + [(19000, gains[-1])]
+            chain.append("firequalizer=gain='cubic_interpolate(f)':gain_entry='"
+                         + ";".join(f"entry({fq},{g:.1f})" for fq, g in pts) + "'")
+            bits = []
+            treble = max(m["bands"][6] - MUSIC_TARGET[6], m["bands"][7] - MUSIC_TARGET[7])
+            bass = MUSIC_TARGET[0] - m["bands"][0]
+            mud = max(m["bands"][1] - MUSIC_TARGET[1], m["bands"][2] - MUSIC_TARGET[2])
+            if treble > 4:
+                bits.append(f"harsh treble ({treble:.0f} dB too strong)")
+            if bass > 6:
+                bits.append(f"thin bass ({bass:.0f} dB short)")
+            if mud > 4:
+                bits.append(f"boomy low-mids ({mud:.0f} dB too strong)")
+            finds.append(("audio", "Unbalanced tone: " + (", ".join(bits) or "uneven frequency balance"),
+                          "rebalanced toward a normal mix"))
+    if music and (m.get("true_peak") or -9) > -0.3:
+        finds.append(("audio", f"Overloaded peaks ({m['true_peak']:+.1f} dB true peak)",
+                      "level brought down under the ceiling (distortion already recorded cannot be undone)"))
     if not music and (m.get("lra") or 0) > 11:
         chain.append("dynaudnorm=f=300:g=17:p=0.9:m=6")
         finds.append(("audio", f"Uneven volume (swings of {m['lra']:.0f} LU)", "levelled"))
@@ -414,7 +448,7 @@ def fix(src, out=None, audio=True, video=True, strength="normal", stabilize="aut
     info, v, a, dur = _streams(src)
     if not v and not a:
         raise StudioError(f"{src.name} has no audio or video to repair.")
-    res = {"input": str(src), "output": None, "findings": [], "before": {}, "after": {}}
+    res = {"input": str(src), "output": None, "findings": [], "before": {}, "after": {}, "music": music}
     af, vf, stab, fps = [], [], False, None
     if a and audio:
         log("Listening to the audio...")
@@ -451,13 +485,16 @@ def fix(src, out=None, audio=True, video=True, strength="normal", stabilize="aut
             log("Studying the camera movement...")
             pre = ",".join(x for x in vf if x.startswith("bwdif"))
             p = subprocess.run([FFMPEG, "-v", "error", "-y", "-i", str(src.resolve()), "-an",
-                                "-vf", (pre + "," if pre else "") + "vidstabdetect=shakiness=7:accuracy=15:result=t.trf",
+                                "-vf", (pre + "," if pre else "") + "format=yuv420p,vidstabdetect=shakiness=7:accuracy=15:result=t.trf",
                                 "-f", "null", "-"], cwd=tmp, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             if p.returncode or not (Path(tmp) / "t.trf").is_file():
                 raise StudioError("Stabiliser analysis failed:\n" + p.stderr.decode("utf-8", "replace")[-500:])
             rate = res["before"]["video"]["fps"] or 30
             smooth = int(clamp(round(rate * 0.6 * STRENGTH[strength]), 8, 60))
-            tr = f"vidstabtransform=input=t.trf:smoothing={smooth}:optzoom=1:interpol=bicubic:crop=black"
+            # The stabiliser only accepts planar YUV; pin the format on both sides so later
+            # colour filters cannot make ffmpeg hand it RGB.
+            tr = (f"format=yuv420p,vidstabtransform=input=t.trf:smoothing={smooth}:optzoom=1:"
+                  f"interpol=bicubic:crop=black,format=yuv420p")
             i = 1 if vf and vf[0].startswith("bwdif") else 0
             vf.insert(i, tr)
         cmd = [FFMPEG, "-v", "error", "-y", "-i", str(src.resolve())]
@@ -541,10 +578,16 @@ def format_report(res):
         x, y = b["audio"], a["audio"]
         if x.get("lufs") is not None and y.get("lufs") is not None:
             rows.append(("Loudness (LUFS)", f"{x['lufs']:.1f}", f"{y['lufs']:.1f}"))
-        rows.append(("Noise floor (dB)", f"{x['floor_db']:.0f}", f"{y['floor_db']:.0f}"))
-        rows.append(("Voice above noise (dB)", f"{x['snr_db']:.0f}", f"{y['snr_db']:.0f}"))
+        if not res.get("music"):
+            rows.append(("Noise floor (dB)", f"{x['floor_db']:.0f}", f"{y['floor_db']:.0f}"))
+            rows.append(("Voice above noise (dB)", f"{x['snr_db']:.0f}", f"{y['snr_db']:.0f}"))
         rows.append(("Hum (dB over surroundings)", f"{x['hum_db']:.0f}", f"{y['hum_db']:.0f}"))
         rows.append(("Clipped samples (%)", f"{x['clipped_pct']:.2f}", f"{y['clipped_pct']:.2f}"))
+        if x.get("bands") and y.get("bands"):
+            rows.append(("Treble vs mids at 8 kHz (dB)", f"{x['bands'][7]:+.0f}", f"{y['bands'][7]:+.0f}"))
+            rows.append(("Bass vs mids at 63 Hz (dB)", f"{x['bands'][0]:+.0f}", f"{y['bands'][0]:+.0f}"))
+        if x.get("true_peak") is not None and y.get("true_peak") is not None:
+            rows.append(("True peak (dB)", f"{x['true_peak']:+.1f}", f"{y['true_peak']:+.1f}"))
     if "video" in b and "video" in a:
         x, y = b["video"], a["video"]
         rows.append(("Brightness (0-255)", f"{x['luma']:.0f}", f"{y['luma']:.0f}"))

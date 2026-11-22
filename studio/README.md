@@ -80,7 +80,7 @@ A full working example is in `studio/examples/demo/project.json`.
 |---|---|
 | `say` | narration text; also drives the captions |
 | `audio` | your own narration file for this scene (instead of the built-in voice) |
-| `visual` | image or video path, a card name (`gradient`, `grid`, `spotlight`, `solid`), or an object: `{"src", "motion", "focus": [x, y], "grade", "dim", "fit": "cover" \| "blur", "start", "speed", "loop", "fix": true}` |
+| `visual` | image or video path, a card name (`gradient`, `grid`, `spotlight`, `solid`), or an object: `{"src", "motion", "focus": [x, y], "grade", "dim", "fit": "cover" \| "blur", "start", "speed", "loop", "fix": true, "sound": true}` (`sound` keeps a video clip's own audio, e.g. live music) |
 | `overlays` | list of graphics (below) |
 | `transition` | `cut`, `fade`, `dip`, `flash`, `zoom`, `slide_left/right/up/down`, `wipe_left/right` |
 | `duration` | minimum length in seconds (scenes are otherwise as long as their narration) |
@@ -124,7 +124,7 @@ python -m studio fix interview.mp4                 # normal strength
 python -m studio fix interview.mp4 --strength strong
 python -m studio fix voiceover.wav --lufs -16
 python -m studio fix clip.mp4 --stabilize on --upscale 1080
-python -m studio fix song.wav --music              # leave musical dynamics alone
+python -m studio fix gig.mp4 --music --lufs -14    # live music: rebalance harsh/thin phone sound, no voice clean-up
 ```
 
 The original file is never changed; a `_fixed` copy is written next to it.
