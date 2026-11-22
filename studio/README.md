@@ -104,6 +104,7 @@ Every overlay takes `at` (seconds into the scene) and optionally `for` (how long
 | `label` | `text`, `corner`: `tl` / `tr` / `bl` / `br`, `tone`: `accent` / `alert` / `muted` |
 | `text` | `text`, `x`, `y`, `size`, `role`, `color` |
 | `image` | `src`, `x`, `y`, `width`, `frame`, `rotate`, `opacity` |
+| `bars` | cinema-style black bars; `ratio` (default 2.2) |
 
 ## Narration options
 

@@ -122,7 +122,10 @@ class VideoSource:
                   f"crop='min(iw,{W})':'min(ih,{H})':'(iw-min(iw,{W}))*{fx:.4f}':'(ih-min(ih,{H}))*{fy:.4f}'[fg];"
                   f"[bg][fg]overlay=(W-w)/2:(H-h)/2")
         elif fit in ("cover", "blur"):
-            vf = (f"scale={W}:{H}:force_original_aspect_ratio=increase,"
+            # Fill the frame. `zoom` above 1 punches in on the focus point (a tighter "second camera").
+            z = max(1.0, float(zoom))
+            cw, ch = int(round(W * z / 2)) * 2, int(round(H * z / 2)) * 2
+            vf = (f"scale={cw}:{ch}:force_original_aspect_ratio=increase,"
                   f"crop={W}:{H}:(iw-{W})*{fx:.4f}:(ih-{H})*{fy:.4f}")
         else:
             raise StudioError(f"Unknown fit '{fit}'. Use 'cover' or 'blur'.")

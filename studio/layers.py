@@ -620,9 +620,28 @@ class Chart(Overlay):
         T.paste(canvas, img, self.x0, self.y0 + self.th, self.stage(t, 0, dur=0.4) * o)
 
 
+class Bars(Overlay):
+    """Cinema-style black bars top and bottom (letterbox)."""
+
+    def build(self):
+        c = self.ctx
+        ratio = float(self.spec.get("ratio", 2.2))
+        self.h = max(0, int(round((c.H - c.W / ratio) / 2)))
+        self.at = float(self.spec.get("at", 0.0))
+
+    def draw(self, canvas, t):
+        if self.h <= 0:
+            return
+        c = self.ctx
+        h = int(self.h * ease_out_cubic((t - self.at) / 0.6)) if self.at > 0 else self.h
+        if h > 0:
+            canvas.paste((0, 0, 0), (0, 0, c.W, h))
+            canvas.paste((0, 0, 0), (0, c.H - h, c.W, c.H))
+
+
 OVERLAYS = {
     "title": Title, "stat": Stat, "quote": Quote, "bullets": Bullets, "lower_third": LowerThird,
-    "label": Label, "text": Text, "image": Picture, "chart": Chart,
+    "label": Label, "text": Text, "image": Picture, "chart": Chart, "bars": Bars,
 }
 
 
