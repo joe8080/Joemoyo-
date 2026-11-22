@@ -274,8 +274,9 @@ class PluginTests(unittest.TestCase):
     def test_chain_settings_and_errors(self):
         from studio import plugins as PL
         steps = PL.resolve("gig", {"level.lufs": "-16", "deharsh.max_cut": "6"})
-        self.assertEqual([p.name for p, _ in steps], ["matchtone", "deharsh", "level"])
-        self.assertEqual(steps[2][1]["lufs"], -16.0)
+        self.assertEqual([p.name for p, _ in steps], ["matchtone", "deharsh", "presence", "level"])
+        self.assertEqual(steps[3][1]["lufs"], -16.0)
+        self.assertEqual(steps[0][1]["voice_guard"], 2.0)
         self.assertEqual(steps[1][1]["max_cut"], 6.0)
         with self.assertRaises(StudioError):
             PL.resolve("nonsense")
@@ -302,4 +303,4 @@ class PluginTests(unittest.TestCase):
             kinds = sorted(s["codec_type"] for s in info["streams"])
             self.assertEqual(kinds, ["audio", "video"])
             self.assertAlmostEqual(float(info["format"]["duration"]), 4.0, delta=0.15)
-            self.assertEqual(len(res["notes"]), 3)
+            self.assertEqual(len(res["notes"]), 4)

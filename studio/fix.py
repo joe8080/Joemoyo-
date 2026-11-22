@@ -504,7 +504,8 @@ def fix(src, out=None, audio=True, video=True, strength="normal", stabilize="aut
             if music and any("Unbalanced tone" in f[1] for f in real):
                 from . import plugins as PL
                 from .voice import read_audio, write_wav
-                y, notes = PL.run_audio(read_audio(src), PL.resolve("matchtone,deharsh"))
+                steps = [st for st in PL.resolve("gig") if st[0].name != "level"]   # loudness is set below
+                y, notes = PL.run_audio(read_audio(src), steps)
                 res["plugin_notes"] = notes
                 a_src = Path(tmp) / "music.wav"
                 write_wav(a_src, y)

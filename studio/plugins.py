@@ -327,10 +327,14 @@ def fps(info, workdir, rate=30, mode="lock"):
 
 # ================================================================ ready-made chains
 
-chain("gig", "Live music filmed on a phone: fix the tone, tame the harshness, set the level.",
+# The "voice forward" balance, picked by ear on real gig footage: keep the vocal range, tame only
+# the top, lift the singer a little.
+GIG = [("matchtone", {"voice_guard": 2.0}), ("deharsh", {"low": 6500.0, "max_cut": 6.0}),
+       ("presence", {"amount": 2.5}), ("level", {"lufs": -14.0})]
+chain("gig", "Live music filmed on a phone: fix the tone, keep the voice forward, tame the top, set the level.", GIG)
+chain("gig-video", "The 'gig' sound chain plus full-frame stabilisation.", [("steady", {"frame": "full"})] + GIG)
+chain("gig-smooth", "A darker, smoother gig sound (stronger treble control, voice sits further back).",
       ["matchtone", "deharsh", ("level", {"lufs": -14.0})])
-chain("gig-video", "The 'gig' sound chain plus full-frame stabilisation.",
-      [("steady", {"frame": "full"}), "matchtone", "deharsh", ("level", {"lufs": -14.0})])
 chain("voice", "Spoken word: remove hum and noise, set the level.",
       ["dehum", "denoise", ("level", {"lufs": -16.0})])
 

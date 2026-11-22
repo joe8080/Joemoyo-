@@ -29,5 +29,6 @@ def warmth(x, sr, amount=2.0):
 
 
 # Your own one-word chain: built-in plugins and your own, in the order you want them.
-chain("joe-gig", "Joe's gig sound: tone match, tame harshness, a touch of warmth, level.",
-      ["matchtone", "deharsh", ("warmth", {"amount": 1.0}), ("level", {"lufs": -14.0})])
+chain("joe-gig", "Joe's gig sound: the built-in 'gig' voice-forward balance plus a touch of warmth.",
+      [("matchtone", {"voice_guard": 2.0}), ("deharsh", {"low": 6500.0, "max_cut": 6.0}),
+       ("presence", {"amount": 2.5}), ("warmth", {"amount": 1.0}), ("level", {"lufs": -14.0})])
